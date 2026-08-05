@@ -394,8 +394,7 @@ function HomePage() {
         {/* ================= HERO SECTION ================= */}
         <main
           id="hero"
-          aria-labelledby="hero-title"
-          className="relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8"
+          className="relative z-10 mx-auto flex min-h-[85vh] w-full max-w-7xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8"
         >
           <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
             {/* ---------- Hero Content ---------- */}
@@ -532,12 +531,12 @@ function HomePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="order-2 grid grid-cols-1 gap-4 lg:col-span-5"
             >
-              {metrics.map((m, idx) => (
+              {metrics.map((m) => (
                 <motion.button
                   key={m.kind}
                   whileHover={{ scale: 1.02, x: 5 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setSpotlight(m.kind)}
+                  onClick={() => setSpotlight(m.kind as any)}
                   className="group relative flex items-center gap-4 rounded-3xl border border-border/50 bg-card/40 p-5 text-left backdrop-blur-md transition-all hover:border-primary/30 hover:bg-card/60 hover:shadow-xl"
                 >
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -565,289 +564,10 @@ function HomePage() {
           </div>
         </main>
 
-        <div className="flex-1" /> {/* Spacer */}
-                      className="inline-flex items-center gap-1 normal-case tracking-normal"
-                      style={{ color: "var(--pc-home-onhero-fg)" }}
-                      title="Diferença média entre o menor e o maior preço do mesmo produto, considerando itens com diferença relevante entre mercados."
-                    >
-                      <TrendingDown className="h-3 w-3" aria-hidden />
-                      <strong className="pc-num font-semibold">
-                        {Number(economy!.avgSavingsPct).toLocaleString("pt-BR", {
-                          minimumFractionDigits: 1,
-                          maximumFractionDigits: 1,
-                        })}
-                        %
-                      </strong>
-                      <span className="text-[11px] opacity-80">de economia média</span>
-                    </span>
-                  </>
-                ) : null}
+        <div className="flex-1" />
 
-              </div>
-
-              <h1
-                id="hero-title"
-                className="max-w-[15ch] text-[clamp(2.8rem,9vw,5.5rem)] font-extrabold leading-[0.92] tracking-[-0.05em] sm:text-[clamp(3.5rem,10vw,6.5rem)]"
-                style={{ color: "var(--foreground)" }}
-              >
-                O melhor preço <span className="relative inline-block">
-                  <span className="relative z-10 text-primary">antes</span>
-                  <span className="absolute -bottom-1 left-0 h-[20%] w-full bg-primary/15 -rotate-1" aria-hidden />
-                </span> de comprar
-              </h1>
-
-              <p
-                className="max-w-[52ch] text-[clamp(1rem,2vw,1.2rem)] font-medium leading-relaxed tracking-tight text-muted-foreground/90 sm:text-[clamp(1.1rem,2.2vw,1.4rem)]"
-              >
-                A plataforma definitiva para monitorar preços em tempo real nos mercados de Feijó. Compare ofertas, economize tempo e garanta o valor mais baixo em cada compra.
-              </p>
-
-              {/* ---------- Busca centralizada ---------- */}
-              <div className="relative mt-2 w-full max-w-2xl lg:mt-4" ref={searchAnchorRef}>
-                <form
-                  onSubmit={submitSearch}
-                  className="group relative flex items-center transition-transform duration-300 focus-within:scale-[1.01]"
-                >
-                  <div
-                    className="absolute inset-y-0 left-0 flex items-center pl-5 text-muted-foreground transition-colors group-focus-within:text-brand"
-                    aria-hidden
-                  >
-                    <Search className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
-                  </div>
-                  <input
-                    type="search"
-                    value={q}
-                    onChange={(e) => {
-                      setQ(e.target.value);
-                      setSuggestOpen(true);
-                    }}
-                    onFocus={() => setSuggestOpen(true)}
-                    placeholder="Buscar produto ou mercado…"
-                    className="h-14 w-full rounded-2xl border border-border bg-white/50 dark:bg-slate-900/50 pl-14 pr-32 text-[17px] font-semibold text-foreground placeholder:text-muted-foreground/60 backdrop-blur-2xl transition-all hover:bg-white dark:hover:bg-slate-900 focus:border-primary/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-8 focus:ring-primary/5 sm:h-16 sm:pl-16 sm:text-[19px]"
-                  />
-                  <div className="absolute right-2 top-2 h-10 sm:right-2.5 sm:top-2.5 sm:h-11">
-                    <Button
-                      type="submit"
-                      disabled={!q.trim()}
-                      className="h-full rounded-xl bg-primary px-6 text-[15px] font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
-                    >
-                      Buscar
-                    </Button>
-                  </div>
-                </form>
-
-                {/* Sugestões de busca flutuantes */}
-                <HomeSearchSuggestions
-                  ref={suggestRef}
-                  open={suggestOpen}
-                  onClose={() => setSuggestOpen(false)}
-                  query={q}
-                  isLoggedOut={isLoggedOut}
-                  onBlocked={() => setGateOpen(true)}
-                  anchorRef={searchAnchorRef}
-                />
-              </div>
-
-              {/* Buscas em alta no Hero */}
-              <div className="flex flex-wrap items-center gap-2 pt-2 sm:gap-3">
-                <span className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground/60">Destaques:</span>
-                {heroPopular.map((term) => (
-                  <button
-                    key={term}
-                    onClick={() => goToPopular(term)}
-                    className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] font-semibold text-foreground/80 shadow-sm transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary active:scale-95"
-                  >
-                    {term}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-
-            {/* ---------- Coluna de dados ---------- */}
-            <aside className="order-2 min-w-0 lg:col-span-5 animate-reveal [animation-delay:150ms]" aria-label="Indicadores da plataforma">
-              <div
-                className="rounded-3xl border border-border/50 p-6 backdrop-blur-xl shadow-2xl bg-card/60"
-              >
-                <div
-                  className="grid grid-cols-1 gap-1 sm:grid-cols-3 lg:grid-cols-1"
-                  role="region"
-                  aria-label="Painel de economia em tempo real"
-                >
-                  {metrics.map((m) => (
-                    <div
-                      key={m.kind}
-                      className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card p-5 transition-all hover:bg-card hover:border-primary/40 cursor-pointer shadow-sm active:scale-[0.98]"
-                      onClick={() => setSpotlight(m.kind as any)}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
-                            {m.label}
-                          </span>
-                          <div className="flex items-baseline gap-1">
-                            <span className="pc-num text-2xl font-extrabold text-foreground sm:text-3xl tracking-tighter">
-                              {m.value}
-                            </span>
-                             <span className="text-[11.5px] font-bold text-brand bg-brand/10 px-2 py-0.5 rounded-lg border border-brand/20">
-                              {m.trend}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="rounded-xl bg-primary/5 p-2 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-                          <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
-                        </div>
-                      </div>
-                      <p className="mt-3 text-[13px] leading-relaxed font-medium text-muted-foreground">
-                        {m.sublabel}
-                      </p>
-                      
-                      {/* Efeito de brilho no hover */}
-                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                    </div>
-                  ))}
-                </div>
-
-                {livePanel.failed && (
-                  <p
-                    role="status"
-                    className="mt-3 rounded-xl border border-destructive/20 px-3 py-2 text-[11.5px] leading-snug bg-destructive/5 text-destructive/80"
-                  >
-                    {livePanel.errorMessage}
-                  </p>
-                )}
-
-                {/* ============ Parceiros ============
-                    Muro de plaquetas claras: hierarquia = eyebrow + contagem,
-                    depois cards com logo em alta densidade, nome do mercado
-                    em cápsula inferior (revela em hover para não competir
-                    com os preços) e um CTA "Ver todos" sempre visível. */}
-                <div
-                  className="mx-1 mb-1 mt-1 rounded-2xl bg-muted/30 border border-border/40 p-4 hidden min-[360px]:block"
-                >
-                  <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="h-3 w-3 text-primary/60" aria-hidden />
-                      <span
-                        className={EYEBROW}
-                      >
-                        Onde comparamos
-                      </span>
-                      {partners.length > 0 && (
-                        <span
-                          className="rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums"
-                          style={{
-                            color: "var(--foreground)",
-                            background: "var(--muted)",
-                            border: "1px solid var(--border)",
-                          }}
-                          aria-label={`${partners.length} mercados parceiros`}
-                        >
-                          {partners.length}
-                        </span>
-                      )}
-                    </div>
-                    <Link
-                      to="/estabelecimentos"
-                      aria-label="Ver todos os mercados parceiros"
-                      className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2"
-                      style={{
-                        color: "var(--primary)",
-                      }}
-                    >
-                      Ver todos →
-                    </Link>
-                  </div>
-
-                  <ul
-                    role="list"
-                    className="flex items-stretch gap-2 overflow-x-auto no-scrollbar py-0.5"
-                  >
-                    {storesQ.isLoading
-                      ? Array.from({ length: 5 }).map((_, i) => (
-                          <li
-                            key={`sk-${i}`}
-                            aria-hidden
-                            className="grid shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
-                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)", height: "clamp(42px, 4.6vh, 52px)", width: "clamp(42px, 4.6vh, 52px)" }}
-                          >
-                            <span
-                              className="h-full w-full animate-pulse rounded-lg"
-                              style={{ background: "color-mix(in oklab, #0b1b3a 8%, #ffffff)" }}
-                            />
-                          </li>
-                        ))
-                      : partners.map((s: any, i: number) => {
-                          const label = s?.name ?? "Mercado parceiro";
-                          // Slug determinístico (mesma regra do resolver de estabelecimentos)
-                          const storeSlug = s?.name ? slugifyEstablishment(s.name) : null;
-                          return (
-                            <li key={s?.id ?? i} className="shrink-0">
-                              <Link
-                                {...(storeSlug
-                                  ? ({ to: "/estabelecimento/$slug", params: { slug: storeSlug } } as const)
-                                  : ({ to: "/estabelecimentos" } as const))}
-                                aria-label={`Ver produtos e preços de ${label}`}
-
-                                className="group relative flex flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_12px_-4px_rgba(3,10,28,0.25)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_8px_16px_-6px_rgba(3,10,28,0.35)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
-                                style={{
-                                  borderColor: "rgba(15, 27, 61, 0.12)",
-                                  ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
-                                  height: "clamp(44px, 4.8vh, 54px)",
-                                  width: "clamp(44px, 4.8vh, 54px)",
-                                }}
-                              >
-                                <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
-                                {s?.logoUrl ? (
-                                  <img
-                                    src={s.logoUrl}
-                                    alt=""
-                                    width={128}
-                                    height={128}
-                                    loading="eager"
-                                    decoding="async"
-                                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.06]"
-                                  />
-                                ) : (
-                                  <span
-                                    className="grid h-full w-full place-items-center rounded-lg text-[16px] font-extrabold"
-                                    style={{
-                                      background: "color-mix(in oklab, #0b1b3a 6%, #ffffff)",
-                                      color: "#0b1b3a",
-                                    }}
-                                    aria-hidden
-                                  >
-                                    {label.trim().charAt(0).toUpperCase()}
-                                  </span>
-                                )}
-                                </span>
-                                {/* Caption profissional padrão do sistema */}
-                                <StoreCaption name={label} placement="top" />
-                              </Link>
-                            </li>
-                          );
-                        })}
-
-                  </ul>
-
-                </div>
-              </div>
-
-            </aside>
-          </div>
-
-
-          {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="my-4 border-border/10" aria-hidden />
-
-          {/* ================= FAIXA INFERIOR =================
-              Dois blocos com molduras próprias para não misturar conceitos:
-              à esquerda as CATEGORIAS (navegação por seção da loja), à direita
-              as AÇÕES do produto (Histórico, Colaborar, Plus, Explorar). Cada
-              bloco tem rótulo e contorno próprios; as células são horizontais
-              (ícone à esquerda do rótulo) e mais baixas, ganhando densidade. */}
+        {/* ================= FAIXA INFERIOR ================= */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid shrink-0 gap-3 lg:grid-cols-12">
             {/* Categorias */}
             <nav
