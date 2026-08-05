@@ -1,25 +1,26 @@
-import { createFileRoute, Link, useNavigate, useLoaderData } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, useNavigate, useLoaderData } from "@tanstack/react-router";
+import { lazy, Suspense, useRef, useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Search,
   ArrowRight,
   TrendingDown,
   ShieldCheck,
   Package,
-  LineChart,
-  Users,
-  Sparkles,
-  Grid3x3,
   LayoutGrid,
+  Zap,
+  MousePointer2,
+  ListChecks,
+  ChevronRight,
+  Plus
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Button } from "@/components/ui/button";
 
-import { buildLivePanel, type LivePanelMetric, type LivePanelKind } from "@/lib/live-panel";
+import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listTrendingSearches } from "@/lib/search-trends.functions";
@@ -31,25 +32,15 @@ import {
   HomeSearchSuggestions,
   type HomeSearchSuggestionsHandle,
 } from "@/components/home/HomeSearchSuggestions";
-import {
-  consumeGuest,
-} from "@/lib/guest-quota";
-import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
+import { consumeGuest } from "@/lib/guest-quota";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
-import { normalizeSearchText } from "@/lib/text-normalize";
 import homeHeroImg from "@/assets/home-hero.jpg";
+import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 
-const importExplorePanel = () => import("@/components/home/ExplorePanel");
-const ExplorePanel = lazy(() =>
-  importExplorePanel().then((m) => ({ default: m.ExplorePanel })),
-);
-const preloadExplorePanel = () => {
-  void importExplorePanel();
-};
+const ExplorePanel = lazy(() => import("@/components/home/ExplorePanel").then(m => ({ default: m.ExplorePanel })));
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -64,45 +55,29 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "PreçoCerto — Comparador inteligente de mercados em Feijó/AC" },
+      { title: "PreçoCerto — Inteligência Real para Economizar em Feijó/AC" },
+      { name: "description", content: "A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista." }
     ],
   }),
   component: HomePage,
 });
 
-import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
-import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
-import { categoryIcon } from "@/lib/category-icons";
-import {
-  ProductCategoryIcon,
-  detectFoodCategory,
-} from "@/components/ds/ProductCategoryIcon";
-
-const P = { gold: "var(--pc-home-gold)" };
-const TILE = "group flex h-14 w-full min-w-0 items-center gap-3.5 rounded-2xl border border-border/50 bg-card/50 pl-4 pr-5 text-left transition-all duration-500 ease-out hover:bg-card hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20";
-const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-10 w-10 bg-primary/5 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors";
-const TILE_ICON = "h-5 w-5";
-const TILE_LABEL = "min-w-0 flex-1 truncate text-[15px] font-bold tracking-tight text-foreground/80 group-hover:text-foreground";
-const EYEBROW = "text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60";
-
 const HOME_HUBS: CategorySlug[] = ["supermercados", "acougues", "hortifruti", "padarias", "bebidas", "limpeza", "higiene", "farmacias", "pet"];
 const CATEGORIES = HOME_HUBS.map((slug) => {
   const def = categoryBySlug(slug)!;
-  return { key: def.slug, label: def.short, full: def.label, coverage: hubCoverageLabel(def.slug), Icon: categoryIcon(def.slug) };
+  return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
+const SECTION_TITLE = "text-xs font-black uppercase tracking-[0.2em] text-primary/70 mb-4";
+const GLASS_CARD = "rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-xl shadow-2xl transition-all duration-500";
+
 function HomePage() {
-  const catLabel = useCategoryLabelWithFallback();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
-  const [spotlight, setSpotlight] = useState<any | null>(null);
   const [allCatsOpen, setAllCatsOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
-  const [pendingTerm, setPendingTerm] = useState<string | null>(null);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const suggestRef = useRef<HomeSearchSuggestionsHandle | null>(null);
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -111,144 +86,295 @@ function HomePage() {
   const popularQ = useQuery({ queryKey: ["home-trending-searches"], queryFn: () => trendingFn({ data: { limit: 24 } } as any), staleTime: 15_000 });
   useSearchTrendsRealtime(["home-trending-searches"]);
 
-  const trendRows = useMemo(() => (popularQ.data ?? []).map((p: any) => ({ query: String(p?.query ?? "").trim(), count: Number(p?.count ?? 0), dayCount: Number(p?.dayCount ?? 0), hot: Boolean(p?.hot) })).filter((p: { query: string }) => p.query.length >= 2), [popularQ.data]);
-  const popularAll: string[] = useMemo(() => {
-    const real = trendRows.map((p: { query: string }) => p.query);
-    return real.length >= 3 ? real : ["arroz", "feijão", "leite", "óleo", "café", "açúcar"];
-  }, [trendRows]);
+  const trendRows = useMemo(() => (popularQ.data ?? []).map((p: any) => ({ query: String(p?.query ?? "").trim() })).filter((p: { query: string }) => p.query.length >= 2), [popularQ.data]);
+  const popularAll = useMemo(() => trendRows.length >= 3 ? trendRows.map((p: any) => p.query) : ["arroz", "feijão", "leite", "óleo", "café", "açúcar"], [trendRows]);
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
-  const trendingPopular = useMemo(() => {
-    const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, 10);
-  }, [popularAll]);
 
   const { stats, economy } = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
   const livePanel = buildLivePanel({ stats, economy, statsLoading: false, economyLoading: false, statsError: stats == null, economyError: economy == null });
-  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({ ...m, Icon: { markets: ShieldCheck, products: Package, savings: TrendingDown }[m.kind], trend: { markets: "+2 novos", products: "Hoje", savings: "↑ 2.4% var." }[m.kind], sublabel: { markets: "Mercados locais com preços auditados em Feijó.", products: "Cesta básica e limpeza monitorados diariamente.", savings: "Diferença média entre o maior e o menor preço hoje." }[m.kind] }));
+  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({ 
+    ...m, 
+    Icon: { markets: ShieldCheck, products: Package, savings: TrendingDown }[m.kind],
+    description: { markets: "Mercados locais auditados", products: "Itens monitorados hoje", savings: "Diferença média de preço" }[m.kind]
+  }));
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
     if (isLoggedOut && consumeGuest("search", query).blocked) { setGateOpen(true); return; }
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), region: getStoredRegionKey() });
+    trackEvent("search_query", { q: query.toLowerCase(), region: getStoredRegionKey() });
     navigate({ to: "/buscar", search: { q: query } as any });
   };
+
   const goToPopular = (term: string) => {
-    const query = term.trim();
-    if (!query || pendingTerm) return;
-    setPendingTerm(query); setQ(query); setSuggestOpen(false);
-    if (isLoggedOut && consumeGuest("search", query).blocked) { setPendingTerm(null); setGateOpen(true); return; }
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), from: "alta", region: getStoredRegionKey() });
-    void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() => setPendingTerm(null));
+    setQ(term);
+    if (isLoggedOut && consumeGuest("search", term).blocked) { setGateOpen(true); return; }
+    navigate({ to: "/buscar", search: { q: term, from: "alta" } as any });
   };
 
   return (
-    <div className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth contain-layout bg-background text-foreground font-sans">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-        <img src={homeHeroImg} alt="" loading="eager" fetchPriority="high" className="h-full w-full object-cover object-center scale-[1.04] blur-[1px] saturate-[1.1]" style={{ opacity: 0.55 }} />
+    <div className="pc-home relative flex min-h-screen flex-col bg-[#020617] text-white selection:bg-primary/30">
+      {/* Background Layer */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <img 
+          src={homeHeroImg} 
+          alt="" 
+          className="h-full w-full object-cover object-center scale-105 opacity-30 blur-[1px] saturate-[1.2]" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-[#020617]/95 to-[#020617]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(79,70,229,0.15)_0%,transparent_50%)]" />
       </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(circle at 20% 30%, rgba(3, 7, 18, 0.6) 0%, rgba(3, 7, 18, 0.85) 100%)" }} />
-      
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <SiteHeader variant="overlay" showThemeToggle />
-        <main id="hero" className="relative z-10 mx-auto flex min-h-[85vh] w-full max-w-7xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="order-1 flex flex-col gap-6 lg:col-span-7 lg:pr-8">
-              <div className="flex flex-col gap-3">
-                <div className="inline-flex max-w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary backdrop-blur-sm"><span>Ao vivo · Feijó/AC</span></div>
-                <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-7xl">O melhor preço <br /><span className="text-primary">antes</span> de comprar</h1>
-                <p className="max-w-xl text-lg text-muted-foreground">Economize comparando preços em Feijó em tempo real.</p>
-              </div>
-              <motion.div ref={searchAnchorRef} className="relative group w-full max-w-2xl">
-                <form onSubmit={submitSearch} className="relative flex items-center overflow-hidden rounded-2xl border border-primary/20 bg-card/60 p-1.5 shadow-2xl backdrop-blur-xl transition-all duration-300 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 group-hover:bg-card/80">
-                  <div className="flex h-12 w-12 items-center justify-center text-primary/70"><Search className="h-6 w-6" /></div>
-                  <input type="text" value={q} onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} onFocus={() => setSuggestOpen(true)} placeholder="O que você quer economizar hoje?" className="h-full flex-1 bg-transparent px-2 text-lg font-bold placeholder:text-muted-foreground/40 focus:outline-none" />
-                  <Button type="submit" size="lg" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary font-bold shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]">Buscar <ArrowRight className="ml-2 h-5 w-5" /></Button>
-                </form>
-                <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="flex flex-wrap items-center gap-6"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -4 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button
-                    size="lg"
-                    onClick={() => navigate({ to: "/app" })}
-                    className="h-16 rounded-2xl bg-primary px-10 text-xl font-black text-primary-foreground shadow-[0_20px_50px_-12px_rgba(var(--pc-primary-rgb),0.5)] transition-all hover:bg-primary/90 hover:shadow-[0_30px_60px_-12px_rgba(var(--pc-primary-rgb),0.6)]"
-                  >
-                    Acessar Aplicativo
-                    <LayoutGrid className="ml-3 h-6 w-6" />
-                  </Button>
-                </motion.div>
 
-                <div className="flex flex-col gap-1.5 px-2">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">
-                    Sugestões em alta
-                  </span>
-                  <div className="flex flex-wrap gap-4">
+      <div className="relative z-10 flex flex-col">
+        <SiteHeader variant="overlay" showThemeToggle />
+        
+        <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 items-start">
+            
+            {/* Left Column: Hero Content */}
+            <div className="lg:col-span-7 flex flex-col gap-8">
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-6"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500/90">Ao vivo · Feijó/AC</span>
+                </div>
+                
+                <h1 className="text-5xl font-black tracking-tight sm:text-7xl lg:text-[80px] leading-[0.95]">
+                  Inteligência <br />
+                  real para <br />
+                  <span className="italic font-extrabold text-white/90">economizar</span>
+                </h1>
+                
+                <p className="max-w-lg text-lg font-medium text-white/50 leading-relaxed">
+                  A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista.
+                </p>
+
+                {/* Search Bar */}
+                <div ref={searchAnchorRef} className="relative w-full max-w-xl group">
+                  <form onSubmit={submitSearch} className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 focus-within:border-primary/50 focus-within:ring-8 focus-within:ring-primary/10 group-hover:bg-white/[0.08]">
+                    <div className="flex h-12 w-12 items-center justify-center text-primary"><Search className="h-6 w-6" /></div>
+                    <input 
+                      type="text" 
+                      value={q} 
+                      onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} 
+                      onFocus={() => setSuggestOpen(true)}
+                      placeholder="Buscar produto ou mercado..." 
+                      className="h-full flex-1 bg-transparent px-2 text-lg font-bold placeholder:text-white/20 focus:outline-none" 
+                    />
+                    <Button type="submit" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary hover:bg-primary/90 font-black shadow-xl">
+                      Buscar <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </form>
+                  <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
+                  
+                  <div className="mt-4 flex flex-wrap gap-4 items-center">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Mais buscados:</span>
                     {heroPopular.map((term) => (
-                      <button
-                        key={term}
-                        onClick={() => goToPopular(term)}
-                        className="text-sm font-bold text-foreground/80 transition-all hover:text-primary hover:translate-x-1"
-                      >
-                        #{term}
+                      <button key={term} onClick={() => goToPopular(term)} className="text-xs font-bold text-white/60 hover:text-primary transition-colors">
+                        {term}
                       </button>
                     ))}
                   </div>
                 </div>
               </motion.div>
+            </div>
+
+            {/* Right Column: Metrics & Quick Actions */}
+            <div className="lg:col-span-5 flex flex-col gap-6">
+              {/* Metrics Grid */}
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className={cn(GLASS_CARD, "p-8 flex flex-col gap-8")}
+              >
+                {metrics.map((m, idx) => (
+                  <div key={m.kind} className="flex items-center gap-6 group">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                      <m.Icon className="h-7 w-7" />
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">{m.label}</span>
+                        {idx === 2 && <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[9px] font-bold text-amber-500">↑ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[9px] font-bold text-primary">+2 novos</span>}
+                      </div>
+                      <span className="text-3xl font-black tabular-nums">{m.value}</span>
+                      <p className="text-xs font-medium text-white/30">{m.description}</p>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                   <div className="flex -space-x-3">
+                      {[1,2,3,4,5,6].map(i => (
+                        <div key={i} className="h-8 w-8 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
+                          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="" />
+                        </div>
+                      ))}
+                      <div className="h-8 w-8 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[10px] font-bold">+10</div>
+                   </div>
+                   <Button variant="link" className="text-primary font-black text-xs uppercase tracking-widest p-0 h-auto">
+                     Ver todos <ChevronRight className="ml-1 h-3 w-3" />
+                   </Button>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Bottom Grid: Categories & Steps */}
+          <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Categories Panel */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-8"
+            >
+              <div className={cn(GLASS_CARD, "p-8")}>
+                <h2 className={SECTION_TITLE}>Categorias</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {CATEGORIES.map(({ key, label, Icon }) => (
+                    <button 
+                      key={key} 
+                      onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })}
+                      className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-left transition-all hover:bg-white/[0.05] hover:border-primary/30"
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <span className="text-sm font-bold text-white/70 group-hover:text-white transition-colors">{label}</span>
+                    </button>
+                  ))}
+                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-4 rounded-2xl border border-dashed border-white/10 p-4 text-left hover:border-white/30 transition-all">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white/40"><Plus className="h-5 w-5" /></div>
+                    <span className="text-sm font-bold text-white/40">Todas</span>
+                  </button>
+                </div>
+              </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="order-2 grid grid-cols-1 gap-4 lg:col-span-5">
-              {metrics.map((m: any) => (
-                <motion.button key={m.kind} whileHover={{ scale: 1.02 }} className="group relative flex items-center gap-4 rounded-3xl border border-border/50 bg-card/40 p-5 text-left backdrop-blur-md">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary"><m.Icon className="h-7 w-7" /></div>
-                  <div className="flex flex-1 flex-col"><span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{m.label}</span><span className="text-3xl font-extrabold">{m.value}</span></div>
-                </motion.button>
-              ))}
+
+            {/* Steps / Quick Actions */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-4"
+            >
+              <div className={cn(GLASS_CARD, "p-8")}>
+                <h2 className={SECTION_TITLE}>Ações rápidas</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: "Histórico", Icon: ListChecks },
+                    { label: "Colaborar", Icon: MousePointer2 },
+                    { label: "Acessar App", Icon: LayoutGrid, primary: true },
+                    { label: "Planos", Icon: Zap }
+                  ].map((item) => (
+                    <button 
+                      key={item.label}
+                      onClick={() => navigate({ to: item.primary ? "/app" : "/buscar" })}
+                      className={cn(
+                        "flex flex-col gap-3 rounded-2xl p-5 transition-all text-left",
+                        item.primary ? "bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105" : "bg-white/[0.03] border border-white/5 hover:bg-white/[0.06]"
+                      )}
+                    >
+                      <item.Icon className={cn("h-6 w-6", item.primary ? "text-white" : "text-primary")} />
+                      <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           </div>
-        </main>
-        <div className="flex-1" />
-        <section className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-            <div className="grid shrink-0 gap-3 lg:grid-cols-12">
-                <nav className="min-w-0 rounded-3xl border border-border/50 p-4 lg:col-span-12 shadow-2xl bg-card/40 backdrop-blur-sm">
-                    <p className={EYEBROW}>Categorias</p>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-                        {CATEGORIES.map(({ key, label, Icon }) => (
-                          <button key={key} type="button" onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })} className={TILE}>
-                            <span className={TILE_ICONWRAP}><Icon className={TILE_ICON} /></span>
-                            <span className={TILE_LABEL}>{label}</span>
-                          </button>
-                        ))}
-                    </div>
-                </nav>
+
+          {/* Simple Steps Section */}
+          <section className="mt-24 text-center">
+            <h2 className="text-3xl font-black mb-2">Economize em 3 passos simples</h2>
+            <p className="text-white/40 font-medium mb-12">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {[
+                { icon: Search, title: "Busque o Produto", desc: "Digite o nome do que você precisa. Nosso sistema varre todos os mercados em segundos." },
+                { icon: TrendingDown, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
+                { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
+              ].map((step, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-4 px-4">
+                  <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+                    <step.icon className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-lg font-black">{step.title}</h3>
+                  <p className="text-sm text-white/30 leading-relaxed max-w-[280px]">{step.desc}</p>
+                </div>
+              ))}
             </div>
-        </section>
-        <footer className="shrink-0 border-t px-4 py-6 mt-4 bg-card/60 backdrop-blur-md">
-          <div className="mx-auto w-full max-w-7xl text-center">
-             <p className="text-sm font-semibold">© {new Date().getFullYear()} PreçoCerto · Feijó/AC</p>
+          </section>
+
+          {/* Daily Opportunities */}
+          <section className="mt-32">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-black tracking-tight">Oportunidades do dia</h2>
+              <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 font-bold text-xs">
+                Ver todas as ofertas <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { name: "Arroz agulha T1 5kg", market: "Mercado Central", price: "R$ 24,90", oldPrice: "R$ 31,50", discount: "-21%" },
+                { name: "Leite Integral 1L", market: "Supermercado Popular", price: "R$ 4,75", oldPrice: "R$ 6,50", discount: "-27%" },
+                { name: "Feijão Carioca 1kg", market: "Açougue do Zé", price: "R$ 7,90", oldPrice: "R$ 10,20", discount: "-22%" },
+                { name: "Óleo de Soja 900ml", market: "Varejão de Fv", price: "R$ 4,99", oldPrice: "R$ 7,50", discount: "-33%" }
+              ].map((item, idx) => (
+                <div key={idx} className={cn(GLASS_CARD, "p-6 group hover:-translate-y-2")}>
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40">
+                      <Package className="h-5 w-5" />
+                    </div>
+                    <span className="bg-emerald-500 text-[10px] font-black px-2 py-1 rounded-full">{item.discount}</span>
+                  </div>
+                  <h4 className="font-bold text-white/90 mb-1 truncate">{item.name}</h4>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">{item.market}</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black">{item.price}</span>
+                    <span className="text-xs text-white/20 line-through">{item.oldPrice}</span>
+                  </div>
+                  <Button className="w-full mt-6 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-xs font-bold py-5">
+                    Ver detalhes
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </section>
+        </main>
+
+        <footer className="mt-32 border-t border-white/5 bg-[#020617] px-4 py-12">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
+              <div className="flex flex-col items-center md:items-start gap-2">
+                 <p className="text-xs font-black uppercase tracking-[0.2em] text-white/30">© {new Date().getFullYear()} PreçoCerto · Feijó/AC</p>
+                 <p className="text-[10px] font-medium text-white/15 uppercase tracking-widest">A inteligência que faltava</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-8">
+                {["Mercados", "Bairros", "Planos", "Fale Conosco", "Privacidade"].map(link => (
+                  <button key={link} className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">
+                    {link}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </footer>
       </div>
+
       <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
       <GuestGateDialog open={gateOpen} onOpenChange={setGateOpen} action="search" redirect="/buscar" />
     </div>
-  );
-}
-
-function PillarLink({ to, Icon, label, emphasis }: { to: string; Icon: any; label: string; emphasis?: boolean; }) {
-  return (
-    <Link to={to} className={cn(TILE, emphasis && "bg-primary border-primary hover:bg-primary/90")}>
-      <span className={cn(TILE_ICONWRAP, emphasis && "bg-white/20 text-white")}><Icon className={TILE_ICON} /></span>
-      <span className={cn(TILE_LABEL, emphasis && "text-white")}>{label}</span>
-    </Link>
   );
 }
