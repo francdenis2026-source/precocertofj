@@ -748,10 +748,10 @@ function HomePage() {
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-2xl border p-2.5 sm:p-3 lg:col-span-8 shadow-sm"
+              className="min-w-0 rounded-2xl border p-4 sm:p-5 lg:col-span-8 shadow-xl"
               style={{
-                background: "rgba(255, 255, 255, 0.72)",
-                borderColor: "rgba(15, 27, 61, 0.12)",
+                background: "rgba(255, 255, 255, 0.9)",
+                borderColor: "rgba(15, 27, 61, 0.1)",
               }}
             >
               <p
@@ -831,10 +831,10 @@ function HomePage() {
             {/* Ações — moldura própria, separada das categorias */}
             <nav
               aria-label="Ações"
-              className="min-w-0 rounded-2xl border p-2.5 sm:p-3 lg:col-span-4 shadow-sm"
+              className="min-w-0 rounded-2xl border p-4 sm:p-5 lg:col-span-4 shadow-xl"
               style={{
-                background: "rgba(255, 255, 255, 0.85)",
-                borderColor: "rgba(15, 27, 61, 0.15)",
+                background: "rgba(255, 255, 255, 0.95)",
+                borderColor: "rgba(15, 27, 61, 0.12)",
               }}
             >
               <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
