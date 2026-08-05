@@ -1148,8 +1148,6 @@ function HomePage() {
             </div>
           </div>
         </footer>
-      </div>
-      <div className="flex flex-col">
         <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
         <MetricSpotlightDialog
           open={spotlight !== null}
