@@ -44,7 +44,23 @@
   .sophisticated-scroll {
     transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
   }
+
+  .animate-reveal {
+    animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
+
 
 /*
  * PreçoCerto — Ocean Modern
