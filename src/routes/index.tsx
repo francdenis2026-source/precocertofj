@@ -6,8 +6,6 @@ import { motion } from "framer-motion";
 import {
   Search,
   ArrowRight,
-  TrendingDown,
-  ShieldCheck,
   Package,
   LayoutGrid,
   Zap,

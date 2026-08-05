@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import Autoplay from "embla-carousel-autoplay";
-import { Sparkles, Clock3, ArrowRight, TrendingDown } from "lucide-react";
+import { Sparkles, Clock3, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
@@ -191,7 +191,7 @@ export function RecentProductsCarousel() {
                     </span>
                     {savings >= 5 && (
                       <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-[10px] font-black text-emerald-400 flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                        <TrendingDown className="h-2.5 w-2.5" />
+                        <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>
                         ↓ {savings}%
                       </span>
                     )}
