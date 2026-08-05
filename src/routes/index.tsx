@@ -995,11 +995,11 @@ function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Search className="w-8 h-8" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                  <Search className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Busque o Produto</h3>
-                <p className="text-muted-foreground">Digite o nome do que você precisa. Nosso sistema varre todos os mercados de Feijó em segundos.</p>
+                <h3 className="text-lg md:text-xl font-bold mb-2">Busque o Produto</h3>
+                <p className="text-sm text-muted-foreground">Digite o nome do que você precisa. Nosso sistema varre todos os mercados de Feijó em segundos.</p>
               </div>
               <div className="flex flex-col items-center text-center group">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
