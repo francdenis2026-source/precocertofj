@@ -69,8 +69,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
-const SECTION_TITLE = "text-[11px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-6";
-const GLASS_CARD = "rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20";
+const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4";
+const GLASS_CARD = "rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -129,28 +129,28 @@ function HomePage() {
         <img 
           src={homeHeroImg} 
           alt="" 
-          className="h-full w-full object-cover object-center scale-100 opacity-30 blur-[0.3px] saturate-[1.2] brightness-[0.8]" 
+          className="h-full w-full object-cover object-center scale-100 opacity-20 blur-[0.2px] saturate-[1.1] brightness-[0.7]" 
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/40 via-[#020617]/80 to-[#020617]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.25)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.08)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/60 via-[#020617]/90 to-[#020617]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.15)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.04)_0%,transparent_60%)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
         
-        <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 items-start">
+        <main className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12 items-start">
             
             {/* Left Column: Hero Content */}
-            <div className="lg:col-span-7 flex flex-col gap-8">
+            <div className="lg:col-span-7 flex flex-col gap-4">
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-4"
               >
                 <div className="flex items-center gap-3">
                   <span className="relative flex h-2 w-2">
@@ -160,13 +160,13 @@ function HomePage() {
                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/90">Ao vivo em Feijó/AC</span>
                 </div>
                 
-                <h1 className="text-6xl font-black tracking-tighter sm:text-8xl lg:text-[102px] leading-[0.85] text-white">
+                <h1 className="text-5xl font-black tracking-tighter sm:text-7xl lg:text-[84px] leading-[0.9] text-white">
                   Inteligência <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-indigo-400">Preditiva</span> <br />
-                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_40px_rgba(99,102,241,0.4)]">de Preços</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-indigo-400">Preditiva</span> <br />
+                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">de Preços</span>
                 </h1>
                 
-                <p className="max-w-md text-lg font-medium text-white/50 leading-relaxed">
+                <p className="max-w-md text-base font-medium text-white/40 leading-relaxed">
                   A ferramenta definitiva para quem domina a economia. Analise mercados, identifique oportunidades e economize com precisão cirúrgica.
                 </p>
 
@@ -213,40 +213,40 @@ function HomePage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className={cn(GLASS_CARD, "p-8 flex flex-col gap-8")}
+                className={cn(GLASS_CARD, "p-6 flex flex-col gap-6")}
               >
                 {metrics.map((m, idx) => (
                   <motion.div 
                     key={m.kind} 
-                    whileHover={{ x: 8 }}
-                    className="flex items-center gap-6 group cursor-default"
+                    whileHover={{ x: 6 }}
+                    className="flex items-center gap-4 group cursor-default"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all duration-500">
-                      <m.Icon className="h-8 w-8" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-500">
+                      <m.Icon className="h-6 w-6" />
                     </div>
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[9px] font-black text-indigo-400 border border-indigo-500/20">+2 novos</span>}
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
+                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-emerald-500/20">+2 novos</span>}
                       </div>
-                      <span className="text-4xl font-black tabular-nums tracking-tighter">{m.value}</span>
-                      <p className="text-[11px] font-medium text-white/20 tracking-wide">{m.description}</p>
+                      <span className="text-3xl font-black tabular-nums tracking-tighter">{m.value}</span>
+                      <p className="text-[10px] font-medium text-white/20 tracking-wide">{m.description}</p>
                     </div>
                   </motion.div>
                 ))}
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                   <div className="flex -space-x-3">
+                   <div className="flex -space-x-2">
                       {[1,2,3,4,5,6].map(i => (
-                        <div key={i} className="h-8 w-8 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
+                        <div key={i} className="h-6 w-6 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="" />
                         </div>
                       ))}
-                      <div className="h-8 w-8 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[10px] font-bold">+10</div>
+                      <div className="h-6 w-6 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[8px] font-bold">+10</div>
                    </div>
-                   <Button variant="link" className="text-primary font-black text-xs uppercase tracking-widest p-0 h-auto">
-                     Ver todos <ChevronRight className="ml-1 h-3 w-3" />
+                   <Button variant="link" className="text-primary font-black text-[10px] uppercase tracking-widest p-0 h-auto">
+                     Ver todos <ChevronRight className="ml-1 h-2 w-2" />
                    </Button>
                 </div>
               </motion.div>
@@ -254,12 +254,12 @@ function HomePage() {
           </div>
 
           {/* Showcase Section */}
-          <Suspense fallback={<div className="mt-16 h-40 w-full animate-pulse rounded-3xl bg-white/5" />}>
+          <Suspense fallback={<div className="mt-12 h-40 w-full animate-pulse rounded-3xl bg-white/5" />}>
             <RecentProductsCarousel />
           </Suspense>
 
           {/* Bottom Grid: Categories & Steps */}
-          <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
             {/* Categories Panel */}
             <motion.div 
@@ -268,24 +268,24 @@ function HomePage() {
               viewport={{ once: true }}
               className="lg:col-span-8"
             >
-              <div className={cn(GLASS_CARD, "p-8")}>
+              <div className={cn(GLASS_CARD, "p-6")}>
                 <h2 className={SECTION_TITLE}>Categorias</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {CATEGORIES.map(({ key, label, Icon }) => (
                     <button 
                       key={key} 
                       onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })}
-                      className="group flex items-center gap-4 rounded-[20px] border border-white/5 bg-white/[0.02] p-5 text-left transition-all hover:bg-white/[0.08] hover:border-indigo-500/30 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
+                      className="group flex items-center gap-3 rounded-[18px] border border-white/5 bg-white/[0.02] p-4 text-left transition-all hover:bg-white/[0.08] hover:border-indigo-500/30 hover:shadow-[0_16px_32px_-8px_rgba(0,0,0,0.3)]"
                     >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-                        <Icon className="h-6 w-6" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.4)]">
+                        <Icon className="h-5 w-5" />
                       </div>
-                      <span className="text-[13px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">{label}</span>
+                      <span className="text-[12px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">{label}</span>
                     </button>
                   ))}
-                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-4 rounded-[20px] border border-dashed border-white/10 p-5 text-left hover:border-white/30 transition-all group">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-white/5 text-white/20 group-hover:text-white transition-colors"><Plus className="h-6 w-6" /></div>
-                    <span className="text-[13px] font-black uppercase tracking-widest text-white/20 group-hover:text-white">Todas</span>
+                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-3 rounded-[18px] border border-dashed border-white/10 p-4 text-left hover:border-white/30 transition-all group">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-white/5 text-white/20 group-hover:text-white transition-colors"><Plus className="h-5 w-5" /></div>
+                    <span className="text-[12px] font-black uppercase tracking-widest text-white/20 group-hover:text-white">Todas</span>
                   </button>
                 </div>
               </div>
@@ -298,7 +298,7 @@ function HomePage() {
               viewport={{ once: true }}
               className="lg:col-span-4"
             >
-              <div className={cn(GLASS_CARD, "p-8")}>
+              <div className={cn(GLASS_CARD, "p-6")}>
                 <h2 className={SECTION_TITLE}>Ações rápidas</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {[
@@ -311,8 +311,8 @@ function HomePage() {
                       key={item.label}
                       onClick={() => navigate({ to: item.primary ? "/app" : "/buscar" })}
                       className={cn(
-                        "flex flex-col gap-3 rounded-[24px] p-6 transition-all text-left group-step",
-                        item.primary ? "bg-indigo-600 text-white shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] hover:scale-105 active:scale-[0.98]" : "bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.98]"
+                        "flex flex-col gap-2 rounded-[20px] p-5 transition-all text-left group-step",
+                        item.primary ? "bg-indigo-600 text-white shadow-[0_16px_32px_-8px_rgba(79,70,229,0.4)] hover:scale-105 active:scale-[0.98]" : "bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.98]"
                       )}
                     >
                       <item.Icon className={cn("h-6 w-6", item.primary ? "text-white" : "text-primary")} />
@@ -325,7 +325,7 @@ function HomePage() {
           </div>
 
           {/* Simple Steps Section */}
-          <section className="mt-24 text-center">
+          <section className="mt-16 text-center">
             <h2 className="text-4xl font-black mb-4 tracking-tighter">Economize em 3 passos</h2>
             <p className="text-white/30 font-medium mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
             

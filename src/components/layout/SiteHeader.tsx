@@ -105,7 +105,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
       <div
         className={dsx(
           ds.container,
-          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-1.5 sm:gap-4 sm:py-2 md:flex md:justify-between md:py-2.5",
+          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-1 sm:gap-4 sm:py-1.5 md:flex md:justify-between md:py-2",
         )}
       >
         {/* Brand */}
@@ -119,7 +119,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               width={64}
               height={64}
               className={dsx(
-                "relative h-14 w-14 shrink-0 object-contain transition-transform duration-500 group-hover:scale-110 sm:h-14 sm:w-14 md:h-16 md:w-16",
+                "relative h-12 w-12 shrink-0 object-contain transition-transform duration-500 group-hover:scale-110 sm:h-12 sm:w-12 md:h-14 md:w-14",
                 isOverlay
                   ? "drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                   : "drop-shadow-[0_10px_30px_rgba(99,102,241,0.2)]",
@@ -130,7 +130,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           <div className="flex min-w-0 flex-col leading-none">
             <span
               className={dsx(
-                "truncate text-2xl font-black leading-tight tracking-[-0.05em] antialiased sm:text-3xl",
+                "truncate text-xl font-black leading-tight tracking-[-0.05em] antialiased sm:text-2xl",
                 brandTextClass,
               )}
             >
