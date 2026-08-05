@@ -14,6 +14,8 @@ import {
   Grid3x3,
   LayoutGrid,
   MapPin,
+  ShoppingCart,
+  Store,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
