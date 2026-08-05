@@ -1023,8 +1023,8 @@ function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
               <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Oportunidades do dia</h2>
-                <p className="text-muted-foreground">Produtos com a maior variação de preço entre os mercados hoje.</p>
+                <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-1">Oportunidades do dia</h2>
+                <p className="text-sm text-muted-foreground">Melhores variações de preço hoje.</p>
               </div>
               <Button variant="outline" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
                 Ver todos os preços <ArrowRight className="ml-2 w-4 h-4" />
