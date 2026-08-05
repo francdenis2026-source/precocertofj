@@ -157,17 +157,23 @@ function HomePage() {
 
                 {/* Search Bar */}
                 <div ref={searchAnchorRef} className="relative w-full max-w-xl group">
-                  <form onSubmit={submitSearch} className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 focus-within:border-primary/50 focus-within:ring-8 focus-within:ring-primary/10 group-hover:bg-white/[0.08]">
+                  <form 
+                    onSubmit={submitSearch} 
+                    onKeyDown={(e) => {
+                      if (suggestRef.current?.handleKeyDown(e as any)) return;
+                    }}
+                    className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 focus-within:border-primary/50 focus-within:ring-8 focus-within:ring-primary/10 group-hover:bg-white/[0.08]"
+                  >
                     <div className="flex h-12 w-12 items-center justify-center text-primary"><Search className="h-6 w-6" /></div>
                     <input 
                       type="text" 
                       value={q} 
                       onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} 
                       onFocus={() => setSuggestOpen(true)}
-                      placeholder="Buscar produto ou mercado..." 
+                      placeholder="O que você quer economizar hoje?" 
                       className="h-full flex-1 bg-transparent px-2 text-lg font-bold placeholder:text-white/20 focus:outline-none" 
                     />
-                    <Button type="submit" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary hover:bg-primary/90 font-black shadow-xl">
+                    <Button type="submit" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary hover:bg-primary/90 font-black shadow-xl transition-transform hover:scale-[1.02] active:scale-[0.98]">
                       Buscar <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </form>
