@@ -249,10 +249,10 @@
      `bg-[var(--pc-navy)]` use o mesmo azul das utilitárias .bg-brand-navy. */
   --pc-navy: #0f1b3d;
   --pc-home-navy-2: #324c73;
-  --pc-home-gold: #b58a3c;
-  --pc-home-gold-soft: #8a6218;
+  --pc-home-gold: var(--primary);
+  --pc-home-gold-soft: var(--primary);
   /* Gold legível como texto/ícone sobre superfícies claras (AA ≥ 4.5) */
-  --pc-gold-ink: #6b4a12;
+  --pc-gold-ink: var(--primary);
   --pc-home-line: #dfe3ec;
   /* Tint dourado uniforme para hover de chips, links de sidebar e alvos leves.
      Light: ~10% do gold sobre fundo claro (contraste elegante sem sujar).
