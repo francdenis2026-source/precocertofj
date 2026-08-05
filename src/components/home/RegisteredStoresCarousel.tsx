@@ -30,8 +30,8 @@ export function RegisteredStoresCarousel() {
   return (
     <div className="relative w-full overflow-hidden">
       {/* Fade Edges */}
-      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-slate-800 to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-slate-800 to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[var(--bg-surface)] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[var(--bg-surface)] to-transparent pointer-events-none" />
       
       <motion.div 
         className="flex gap-6 py-2"
@@ -50,8 +50,8 @@ export function RegisteredStoresCarousel() {
             className="group flex flex-col items-center gap-2 shrink-0"
           >
             <div className={cn(
-              "h-16 w-16 flex items-center justify-center rounded-2xl border border-slate-700 bg-slate-900/50 p-2 transition-all duration-300",
-              "group-hover:border-indigo-500/50 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+              "h-16 w-16 flex items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-base)] p-2 transition-all duration-300",
+              "group-hover:border-[var(--brand-primary)]/50 group-hover:scale-110"
             )}>
               <StoreLogoThumb 
                 src={store.logoUrl} 
@@ -62,7 +62,7 @@ export function RegisteredStoresCarousel() {
                 vector
               />
             </div>
-            <span className="text-[9px] font-black uppercase tracking-widest text-white/20 group-hover:text-indigo-400 transition-colors truncate max-w-[80px]">
+            <span className="text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] transition-colors truncate max-w-[80px]">
               {store.name}
             </span>
           </Link>
