@@ -1038,7 +1038,7 @@ function HomePage() {
                 { name: "Feijão Carioca 1kg", savings: "R$ 2,15", price: "R$ 7,90", store: "Açougue & Cia" },
                 { name: "Óleo de Soja 900ml", savings: "R$ 0,95", price: "R$ 6,30", store: "Varejão do Povo" },
               ].map((p, i) => (
-                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-4 md:p-5 hover:border-primary/50 transition-all hover:shadow-xl min-h-[220px]">
+                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-3 md:p-4 hover:border-primary/50 transition-all hover:shadow-xl min-h-[180px] md:min-h-[200px]">
                   <div className="flex justify-between items-start mb-4">
                     <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
                       <Package className="w-6 h-6 text-muted-foreground" />
