@@ -1057,7 +1057,8 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md mb-0 pb-[calc(1.5rem+76px+env(safe-area-inset-bottom,0px))] md:pb-6"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md md:pb-6"
+          style={{ paddingBottom: 'calc(1.5rem + 76px + env(safe-area-inset-bottom, 0px))' }}
         >
           <div className="mx-auto w-full max-w-7xl">
             {/* Mobile: Accordion links */}
