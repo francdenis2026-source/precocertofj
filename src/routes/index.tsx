@@ -541,11 +541,7 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame overflow-hidden rounded-3xl border p-1 shadow-2xl transition-all"
-                style={{
-                  background: "rgba(255, 255, 255, 0.92)",
-                  borderColor: "rgba(15, 27, 61, 0.08)",
-                }}
+                className="rounded-3xl border border-border/50 p-6 backdrop-blur-xl shadow-2xl bg-card/60"
               >
                 <div
                   className="grid grid-cols-1 gap-1 sm:grid-cols-3 lg:grid-cols-1"
@@ -555,18 +551,18 @@ function HomePage() {
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-[1.25rem] border border-transparent bg-transparent p-5 transition-all hover:bg-white cursor-pointer active:scale-[0.98]"
+                      className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card p-5 transition-all hover:bg-card hover:border-primary/40 cursor-pointer shadow-sm active:scale-[0.98]"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/50">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                             {m.label}
                           </span>
                           <div className="flex items-baseline gap-1">
-                            <span className="pc-num text-2xl font-bold text-brand-navy sm:text-3xl tracking-tight">
+                            <span className="pc-num text-2xl font-extrabold text-foreground sm:text-3xl tracking-tighter">
                               {m.value}
                             </span>
                              <span className="text-[11.5px] font-bold text-brand bg-brand/10 px-2 py-0.5 rounded-lg border border-brand/20">
@@ -578,7 +574,7 @@ function HomePage() {
                           <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
                         </div>
                       </div>
-                      <p className="mt-2 text-[13px] leading-relaxed font-medium text-brand-navy/70">
+                      <p className="mt-3 text-[13px] leading-relaxed font-medium text-muted-foreground">
                         {m.sublabel}
                       </p>
                       
@@ -591,12 +587,7 @@ function HomePage() {
                 {livePanel.failed && (
                   <p
                     role="status"
-                    className="mt-2 rounded-lg border px-2 py-1.5 text-[11.5px] leading-snug"
-                    style={{
-                      color: "var(--pc-home-onhero-fg-80)",
-                      borderColor: "var(--pc-home-onhero-border-soft)",
-                      background: "var(--pc-home-onhero-glass-soft)",
-                    }}
+                    className="mt-3 rounded-xl border border-destructive/20 px-3 py-2 text-[11.5px] leading-snug bg-destructive/5 text-destructive/80"
                   >
                     {livePanel.errorMessage}
                   </p>
@@ -608,14 +599,13 @@ function HomePage() {
                     em cápsula inferior (revela em hover para não competir
                     com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
-                  className="mx-1 mb-1 mt-1 rounded-2xl bg-brand-navy/[0.03] border border-brand-navy/[0.05] p-4 hidden min-[360px]:block"
+                  className="mx-1 mb-1 mt-1 rounded-2xl bg-muted/30 border border-border/40 p-4 hidden min-[360px]:block"
                 >
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
+                      <MapPin className="h-3 w-3 text-primary/60" aria-hidden />
                       <span
                         className={EYEBROW}
-                        style={{ color: "var(--pc-home-onhero-fg-60)" }}
                       >
                         Onde comparamos
                       </span>
@@ -623,9 +613,9 @@ function HomePage() {
                         <span
                           className="rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums"
                           style={{
-                            color: "var(--pc-home-onhero-fg-80)",
-                            background: "var(--pc-home-onhero-glass-soft)",
-                            border: "1px solid var(--pc-home-onhero-border-soft)",
+                            color: "var(--foreground)",
+                            background: "var(--muted)",
+                            border: "1px solid var(--border)",
                           }}
                           aria-label={`${partners.length} mercados parceiros`}
                         >
@@ -638,8 +628,7 @@ function HomePage() {
                       aria-label="Ver todos os mercados parceiros"
                       className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2"
                       style={{
-                        color: "var(--pc-home-onhero-gold)",
-                        ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
+                        color: "var(--primary)",
                       }}
                     >
                       Ver todos →
