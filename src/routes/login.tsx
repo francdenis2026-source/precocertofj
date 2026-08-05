@@ -560,12 +560,10 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg text-[13.5px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none"
+              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[15px] font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none bg-[var(--brand-primary)]"
               style={{
-                background: `linear-gradient(135deg, ${PC_EMERALD_DEEP}, ${PC_EMERALD})`,
-                boxShadow: `0 12px 24px -10px ${PC_EMERALD}66`,
+                boxShadow: `0 12px 24px -10px var(--brand-glow)`,
                 fontFamily: PC_DISPLAY,
-                opacity: undefined,
               }}
             >
               {loading ? (
@@ -582,7 +580,7 @@ function LoginPage() {
             <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px] text-muted-foreground">
               <Link
                 to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold text-gold-ink transition hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand-primary)] transition hover:underline"
               >
                 <Ticket className="h-3.5 w-3.5" />
                 Tenho um código promocional
@@ -1085,20 +1083,20 @@ function PinField({
               borderColor: hasError
                 ? "#dc2626"
                 : d.trim()
-                  ? PC_GOLD
+                  ? "var(--brand-primary)"
                   : "var(--border)",
               fontFamily: PC_DISPLAY,
             }}
             onFocus={(e) => {
-              e.currentTarget.style.borderColor = PC_GOLD;
-              e.currentTarget.style.boxShadow = `0 0 0 3px ${PC_GOLD}33`;
+              e.currentTarget.style.borderColor = "var(--brand-primary)";
+              e.currentTarget.style.boxShadow = `0 0 0 3px var(--brand-glow)`;
             }}
             onBlur={(e) => {
               e.currentTarget.style.boxShadow = "none";
               e.currentTarget.style.borderColor = hasError
                 ? "#dc2626"
                 : d.trim()
-                  ? PC_GOLD
+                  ? "var(--brand-primary)"
                   : "var(--border)";
             }}
           />
