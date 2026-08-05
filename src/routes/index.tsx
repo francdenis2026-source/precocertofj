@@ -1143,21 +1143,21 @@ function HomePage() {
             </div>
           </div>
         </footer>
-        <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
-        <MetricSpotlightDialog
-          open={spotlight !== null}
-          onOpenChange={(v) => {
-            if (!v) setSpotlight(null);
-          }}
-          kind={spotlight}
-        />
-        <GuestGateDialog
-          open={gateOpen}
-          onOpenChange={setGateOpen}
-          action="search"
-          redirect="/buscar"
-        />
       </div>
+      <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
+      <MetricSpotlightDialog
+        open={spotlight !== null}
+        onOpenChange={(v) => {
+          if (!v) setSpotlight(null);
+        }}
+        kind={spotlight}
+      />
+      <GuestGateDialog
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        action="search"
+        redirect="/buscar"
+      />
     </div>
   );
 }
