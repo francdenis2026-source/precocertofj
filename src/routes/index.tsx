@@ -400,7 +400,7 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-6 md:gap-12 px-4 py-8 md:py-16 sm:px-6 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-4 md:gap-8 px-4 py-4 md:py-10 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
@@ -714,7 +714,7 @@ function HomePage() {
 
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="my-8 border-border/10" aria-hidden />
+          <hr className="my-4 border-border/10" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
               Dois blocos com molduras próprias para não misturar conceitos:
@@ -726,7 +726,7 @@ function HomePage() {
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-8 shadow-2xl bg-card/40 backdrop-blur-sm"
+              className="min-w-0 rounded-3xl border border-border/50 p-4 lg:col-span-8 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
               <p
                 className={`${EYEBROW} mb-1.5 px-0.5`}
@@ -789,7 +789,7 @@ function HomePage() {
             {/* Ações — moldura própria, separada das categorias */}
             <nav
               aria-label="Ações"
-              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-4 shadow-2xl bg-card/40 backdrop-blur-sm"
+              className="min-w-0 rounded-3xl border border-border/50 p-4 lg:col-span-4 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
               <p className={`${EYEBROW} mb-1.5 px-0.5`}>
                 Ações
@@ -1063,10 +1063,10 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-12 bg-white/50 backdrop-blur-sm"
+          className="shrink-0 border-t px-4 py-4 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
-            <p className="text-[12.5px] leading-snug sm:text-[13px] text-muted-foreground">
+            <p className="text-[12.5px] leading-snug sm:text-[13px] text-foreground font-medium">
               © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
               <span className="font-semibold text-primary">
                 &lt;dev&gt; Franc D&apos;nis
@@ -1084,7 +1084,7 @@ function HomePage() {
                   key={l.to}
                   type="button"
                   onClick={() => navigate({ to: l.to })}
-                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px] text-muted-foreground/80 hover:text-primary transition-colors"
+                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-bold uppercase tracking-[0.12em] outline-none sm:text-[13px] text-foreground hover:text-primary transition-colors"
                   // style removed to use tailwind classes for consistency
                 >
                   {l.label}
