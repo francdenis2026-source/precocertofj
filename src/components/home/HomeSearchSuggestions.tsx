@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   suggestProducts,
@@ -238,20 +239,24 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
     if (!visible || typeof document === "undefined") return null;
 
     const panel = (
-      <div
-        className="fixed z-[80] flex flex-col overflow-hidden rounded-xl border shadow-2xl transition-all duration-300 ease-out"
-        style={{
-          left: rect?.left ?? 0,
-          top: rect?.top ?? 0,
-          width: rect?.width ?? 0,
-          maxHeight: rect?.maxH ?? 320,
-          visibility: rect ? "visible" : "hidden",
-          background: "var(--card)",
-          borderColor: "var(--primary)",
-          color: "var(--foreground)",
-        }}
-
-      >
+      <AnimatePresence>
+        {visible && rect && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border-2 shadow-2xl backdrop-blur-xl"
+            style={{
+              left: rect.left,
+              top: rect.top,
+              width: rect.width,
+              maxHeight: rect.maxH,
+              background: "var(--card)",
+              borderColor: "var(--primary)",
+              color: "var(--foreground)",
+            }}
+          >
 
         {loading && items.length === 0 ? (
           <div className="flex items-center gap-2 px-3 py-2.5 text-[12.5px] text-slate-500">
@@ -433,7 +438,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
           </button>
         </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     );
 
     return createPortal(panel, document.body);

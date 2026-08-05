@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -177,18 +178,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           {showNav && (
             <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   type="button"
                   aria-label="Abrir menu de navegação"
                   className={dsx(
-                    "inline-flex h-11 w-11 items-center justify-center rounded-lg border outline-none transition-colors focus-visible:ring-2 lg:hidden",
+                    "inline-flex h-12 w-12 items-center justify-center rounded-xl border-2 outline-none transition-all focus-visible:ring-2 lg:hidden",
                     isOverlay
-                      ? "border-on-media-border bg-on-media-surface text-on-media focus-visible:ring-brand/60"
-                      : "border-border bg-card text-foreground focus-visible:ring-brand/60",
+                      ? "border-white/20 bg-white/10 text-white backdrop-blur-md focus-visible:ring-white/50"
+                      : "border-border bg-card text-foreground focus-visible:ring-primary/50",
                   )}
                 >
-                  <Menu className="h-5 w-5" aria-hidden />
-                </button>
+                  <Menu className="h-6 w-6" aria-hidden />
+                </motion.button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[86vw] max-w-xs p-0">
                 <SheetHeader className="px-4 pt-4 pb-2 text-left">
