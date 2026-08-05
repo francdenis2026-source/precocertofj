@@ -275,17 +275,17 @@ function HomePage() {
                     <button 
                       key={key} 
                       onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })}
-                      className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-left transition-all hover:bg-white/[0.05] hover:border-primary/30"
+                      className="group flex items-center gap-4 rounded-[20px] border border-white/5 bg-white/[0.02] p-5 text-left transition-all hover:bg-white/[0.08] hover:border-indigo-500/30 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                        <Icon className="h-5 w-5" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+                        <Icon className="h-6 w-6" />
                       </div>
-                      <span className="text-sm font-bold text-white/70 group-hover:text-white transition-colors">{label}</span>
+                      <span className="text-[13px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">{label}</span>
                     </button>
                   ))}
-                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-4 rounded-2xl border border-dashed border-white/10 p-4 text-left hover:border-white/30 transition-all">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-white/40"><Plus className="h-5 w-5" /></div>
-                    <span className="text-sm font-bold text-white/40">Todas</span>
+                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-4 rounded-[20px] border border-dashed border-white/10 p-5 text-left hover:border-white/30 transition-all group">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-white/5 text-white/20 group-hover:text-white transition-colors"><Plus className="h-6 w-6" /></div>
+                    <span className="text-[13px] font-black uppercase tracking-widest text-white/20 group-hover:text-white">Todas</span>
                   </button>
                 </div>
               </div>
