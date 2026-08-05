@@ -317,7 +317,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     className={
                       "grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg border " +
                       (active === i
-                        ? "border-white/30 bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
+                        ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/15 shadow-[0_0_10px_rgba(108,92,231,0.2)]"
                         : s.imageUrl
                           ? "border-slate-700 bg-slate-800"
                           : "border-primary/30 bg-slate-800")
