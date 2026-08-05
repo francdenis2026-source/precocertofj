@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, useLoaderData } from "@tanstack/react-router";
-import { lazy, Suspense, useRef, useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { lazy, Suspense, useRef, useState, useMemo, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
 import {
@@ -41,6 +41,7 @@ import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/categ
 import { categoryIcon } from "@/lib/category-icons";
 
 const ExplorePanel = lazy(() => import("@/components/home/ExplorePanel").then(m => ({ default: m.ExplorePanel })));
+const RecentProductsCarousel = lazy(() => import("@/components/home/RecentProductsCarousel").then(m => ({ default: m.RecentProductsCarousel })));
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -73,6 +74,7 @@ const GLASS_CARD = "rounded-3xl border border-white/5 bg-white/[0.03] backdrop-b
 
 function HomePage() {
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
@@ -83,14 +85,21 @@ function HomePage() {
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
 
   const trendingFn = useServerFn(listTrendingSearches);
-  const popularQ = useQuery({ queryKey: ["home-trending-searches"], queryFn: () => trendingFn({ data: { limit: 24 } } as any), staleTime: 15_000 });
+  const popularQ = useQuery({ 
+    queryKey: ["home-trending-searches"], 
+    queryFn: () => trendingFn({ data: { limit: 24 } } as any), 
+    staleTime: 5 * 60_000,
+    gcTime: 30 * 60_000,
+  });
   useSearchTrendsRealtime(["home-trending-searches"]);
 
   const trendRows = useMemo(() => (popularQ.data ?? []).map((p: any) => ({ query: String(p?.query ?? "").trim() })).filter((p: { query: string }) => p.query.length >= 2), [popularQ.data]);
   const popularAll = useMemo(() => trendRows.length >= 3 ? trendRows.map((p: any) => p.query) : ["arroz", "feijão", "leite", "óleo", "café", "açúcar"], [trendRows]);
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
 
-  const { stats, economy } = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
+  const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
+  const stats = loaderData?.stats;
+  const economy = loaderData?.economy;
   const livePanel = buildLivePanel({ stats, economy, statsLoading: false, economyLoading: false, statsError: stats == null, economyError: economy == null });
   const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({ 
     ...m, 
@@ -121,6 +130,8 @@ function HomePage() {
           src={homeHeroImg} 
           alt="" 
           className="h-full w-full object-cover object-center scale-105 opacity-30 blur-[1px] saturate-[1.2]" 
+          loading="eager"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-[#020617]/95 to-[#020617]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(79,70,229,0.15)_0%,transparent_50%)]" />
@@ -234,6 +245,11 @@ function HomePage() {
             </div>
           </div>
 
+          {/* Showcase Section */}
+          <Suspense fallback={<div className="mt-16 h-40 w-full animate-pulse rounded-3xl bg-white/5" />}>
+            <RecentProductsCarousel />
+          </Suspense>
+
           {/* Bottom Grid: Categories & Steps */}
           <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
@@ -322,42 +338,12 @@ function HomePage() {
             </div>
           </section>
 
-          {/* Daily Opportunities */}
-          <section className="mt-32">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-black tracking-tight">Oportunidades do dia</h2>
-              <Button variant="outline" className="rounded-full border-white/10 bg-white/5 hover:bg-white/10 font-bold text-xs">
-                Ver todas as ofertas <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { name: "Arroz agulha T1 5kg", market: "Mercado Central", price: "R$ 24,90", oldPrice: "R$ 31,50", discount: "-21%" },
-                { name: "Leite Integral 1L", market: "Supermercado Popular", price: "R$ 4,75", oldPrice: "R$ 6,50", discount: "-27%" },
-                { name: "Feijão Carioca 1kg", market: "Açougue do Zé", price: "R$ 7,90", oldPrice: "R$ 10,20", discount: "-22%" },
-                { name: "Óleo de Soja 900ml", market: "Varejão de Fv", price: "R$ 4,99", oldPrice: "R$ 7,50", discount: "-33%" }
-              ].map((item, idx) => (
-                <div key={idx} className={cn(GLASS_CARD, "p-6 group hover:-translate-y-2")}>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40">
-                      <Package className="h-5 w-5" />
-                    </div>
-                    <span className="bg-emerald-500 text-[10px] font-black px-2 py-1 rounded-full">{item.discount}</span>
-                  </div>
-                  <h4 className="font-bold text-white/90 mb-1 truncate">{item.name}</h4>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">{item.market}</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-black">{item.price}</span>
-                    <span className="text-xs text-white/20 line-through">{item.oldPrice}</span>
-                  </div>
-                  <Button className="w-full mt-6 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-xs font-bold py-5">
-                    Ver detalhes
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* Heavy Editorial Panel */}
+          <Suspense fallback={<div className="mt-32 h-[500px] w-full animate-pulse rounded-3xl bg-white/5" />}>
+            <section className="mt-32">
+              <ExplorePanel />
+            </section>
+          </Suspense>
         </main>
 
         <footer className="mt-32 border-t border-white/5 bg-[#020617] px-4 py-12">
