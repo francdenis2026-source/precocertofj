@@ -342,7 +342,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-[90dvh] w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
       style={{
         background: "var(--background)",
         color: "var(--foreground)",
@@ -391,9 +391,8 @@ function HomePage() {
 
 
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
-          `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
-          para fora da janela. */}
-      <div className="relative z-10 flex min-h-0 flex-col">
+          Usa h-full ou flex-1 para preencher a viewport se o conteúdo for pequeno. */}
+      <div className="relative z-10 flex min-h-[100dvh] flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
@@ -988,73 +987,73 @@ function HomePage() {
         </main>
 
 
-        <section className="py-10 md:py-16 bg-card/30">
+        <section className="py-8 md:py-10 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10 md:mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
+            <div className="text-center mb-6 md:mb-8">
+              <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">Economize em 3 passos simples</h2>
+              <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Search className="w-8 h-8" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                  <Search className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Busque o Produto</h3>
-                <p className="text-muted-foreground">Digite o nome do que você precisa. Nosso sistema varre todos os mercados de Feijó em segundos.</p>
+                <h3 className="text-lg md:text-xl font-bold mb-2">Busque o Produto</h3>
+                <p className="text-sm text-muted-foreground">Digite o nome do que você precisa. Nosso sistema varre todos os mercados de Feijó em segundos.</p>
               </div>
               <div className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <LineChart className="w-8 h-8" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                  <LineChart className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Compare e Escolha</h3>
-                <p className="text-muted-foreground">Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas.</p>
+                <h3 className="text-lg md:text-xl font-bold mb-2">Compare e Escolha</h3>
+                <p className="text-sm text-muted-foreground">Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas.</p>
               </div>
               <div className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <ShoppingCart className="w-8 h-8" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                  <ShoppingCart className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Monte sua Lista</h3>
-                <p className="text-muted-foreground">Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida.</p>
+                <h3 className="text-lg md:text-xl font-bold mb-2">Monte sua Lista</h3>
+                <p className="text-sm text-muted-foreground">Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="py-10 md:py-16 border-t border-border/50">
+        <section className="py-6 md:py-8 border-t border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
               <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Oportunidades do dia</h2>
-                <p className="text-muted-foreground">Produtos com a maior variação de preço entre os mercados hoje.</p>
+                <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-1">Oportunidades do dia</h2>
+                <p className="text-sm text-muted-foreground">Melhores variações de preço hoje.</p>
               </div>
-              <Button variant="outline" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
+              <Button variant="outline" size="sm" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
                 Ver todos os preços <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[
                 { name: "Arroz agulha T1 5kg", savings: "R$ 8,40", price: "R$ 24,90", store: "Mercado Central" },
                 { name: "Leite Integral 1L", savings: "R$ 1,20", price: "R$ 4,75", store: "Super Econômico" },
                 { name: "Feijão Carioca 1kg", savings: "R$ 2,15", price: "R$ 7,90", store: "Açougue & Cia" },
                 { name: "Óleo de Soja 900ml", savings: "R$ 0,95", price: "R$ 6,30", store: "Varejão do Povo" },
               ].map((p, i) => (
-                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-4 md:p-5 hover:border-primary/50 transition-all hover:shadow-xl min-h-[220px]">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
-                      <Package className="w-6 h-6 text-muted-foreground" />
+                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-3 md:p-4 hover:border-primary/50 transition-all hover:shadow-xl min-h-[180px] md:min-h-[200px]">
+                  <div className="flex justify-between items-start mb-2 md:mb-3">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-muted flex items-center justify-center">
+                      <Package className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                     </div>
                     <span className="bg-green-500/10 text-green-600 dark:text-green-400 text-[11px] font-bold px-2 py-1 rounded-lg border border-green-500/20">
                       -{p.savings}
                     </span>
                   </div>
                   <h4 className="font-bold text-base md:text-lg mb-0.5 md:mb-1 truncate">{p.name}</h4>
-                  <p className="text-[12px] md:text-[13px] text-muted-foreground mb-3 md:mb-4">Melhor preço: <span className="text-foreground font-semibold">{p.price}</span></p>
-                  <div className="flex items-center gap-2 text-[12px] text-muted-foreground pb-4 border-b border-border/50 mb-4">
+                  <p className="text-[11px] md:text-[12px] text-muted-foreground mb-2 md:mb-3">Melhor: <span className="text-foreground font-semibold">{p.price}</span></p>
+                  <div className="flex items-center gap-2 text-[10px] md:text-[11px] text-muted-foreground pb-2 md:pb-3 border-b border-border/50 mb-2 md:mb-3 truncate">
                     <Store className="w-3.5 h-3.5" />
                     {p.store}
                   </div>
-                  <Button variant="ghost" className="w-full justify-between h-9 text-primary hover:bg-primary/5 font-bold text-[13px] rounded-lg">
+                  <Button variant="ghost" className="w-full justify-between h-8 text-primary hover:bg-primary/5 font-bold text-[12px] rounded-lg p-0 px-2">
                     Ver detalhes <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
@@ -1150,7 +1149,6 @@ function HomePage() {
           </div>
         </footer>
       </div>
-
       <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
       <MetricSpotlightDialog
         open={spotlight !== null}
