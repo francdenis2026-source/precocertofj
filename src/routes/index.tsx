@@ -175,13 +175,13 @@ function HomePage() {
                 className="flex flex-wrap items-center gap-6"
               >
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.05, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Button
                     size="lg"
                     onClick={() => navigate({ to: "/app" })}
-                    className="h-16 rounded-2xl bg-primary px-10 text-xl font-black text-primary-foreground shadow-[0_20px_40px_-10px_rgba(var(--pc-primary-rgb),0.5)] transition-all hover:shadow-[0_25px_50px_-10px_rgba(var(--pc-primary-rgb),0.6)]"
+                    className="h-16 rounded-2xl bg-primary px-10 text-xl font-black text-primary-foreground shadow-[0_20px_50px_-12px_rgba(var(--pc-primary-rgb),0.5)] transition-all hover:bg-primary/90 hover:shadow-[0_30px_60px_-12px_rgba(var(--pc-primary-rgb),0.6)]"
                   >
                     Acessar Aplicativo
                     <LayoutGrid className="ml-3 h-6 w-6" />
