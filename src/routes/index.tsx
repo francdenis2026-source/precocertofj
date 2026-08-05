@@ -342,12 +342,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
-      style={{
-        background: "var(--background)",
-        color: "var(--foreground)",
-        fontFamily: "var(--font-sans)",
-      }}
+      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth contain-layout bg-background text-foreground font-sans"
     >
       {/* ---------- Camadas de fundo editoriais ---------- */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
