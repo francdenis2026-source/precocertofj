@@ -69,8 +69,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
-const SECTION_TITLE = "text-xs font-black uppercase tracking-[0.2em] text-primary/70 mb-4";
-const GLASS_CARD = "rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-xl shadow-2xl transition-all duration-500";
+const SECTION_TITLE = "text-[11px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-6";
+const GLASS_CARD = "rounded-[32px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -123,18 +123,19 @@ function HomePage() {
   };
 
   return (
-    <div className="pc-home relative flex min-h-screen flex-col bg-[#020617] text-white selection:bg-primary/30">
+    <div className="pc-home relative flex min-h-screen flex-col bg-[#020617] text-white selection:bg-indigo-500/30 overflow-x-hidden">
       {/* Background Layer */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <img 
           src={homeHeroImg} 
           alt="" 
-          className="h-full w-full object-cover object-center scale-105 opacity-30 blur-[1px] saturate-[1.2]" 
+          className="h-full w-full object-cover object-center scale-105 opacity-25 blur-[0.5px] saturate-[1.1]" 
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-[#020617]/95 to-[#020617]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(79,70,229,0.15)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/70 via-[#020617]/90 to-[#020617]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.2)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.05)_0%,transparent_50%)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -152,18 +153,21 @@ function HomePage() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500/90">Ao vivo · Feijó/AC</span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/90">Ao vivo em Feijó/AC</span>
                 </div>
                 
-                <h1 className="text-5xl font-black tracking-tight sm:text-7xl lg:text-[80px] leading-[0.95]">
+                <h1 className="text-6xl font-black tracking-tighter sm:text-8xl lg:text-[96px] leading-[0.9] text-white">
                   Inteligência <br />
-                  real para <br />
-                  <span className="italic font-extrabold text-white/90">economizar</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/60">real para</span> <br />
+                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">economizar</span>
                 </h1>
                 
-                <p className="max-w-lg text-lg font-medium text-white/50 leading-relaxed">
-                  A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista.
+                <p className="max-w-md text-lg font-medium text-white/40 leading-relaxed">
+                  A plataforma definitiva de monitoramento de preços. Compare mercados locais e domine sua economia diária.
                 </p>
 
                 {/* Search Bar */}
@@ -173,19 +177,19 @@ function HomePage() {
                     onKeyDown={(e) => {
                       if (suggestRef.current?.handleKeyDown(e as any)) return;
                     }}
-                    className="relative flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 focus-within:border-primary/50 focus-within:ring-8 focus-within:ring-primary/10 group-hover:bg-white/[0.08]"
+                    className="relative flex items-center overflow-hidden rounded-[24px] border border-white/10 bg-white/5 p-1.5 shadow-3xl backdrop-blur-3xl transition-all duration-700 focus-within:border-indigo-500/50 focus-within:ring-[12px] focus-within:ring-indigo-500/5 group-hover:bg-white/[0.08] group-hover:border-white/20"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center text-primary"><Search className="h-6 w-6" /></div>
+                    <div className="flex h-14 w-14 items-center justify-center text-indigo-400"><Search className="h-7 w-7" /></div>
                     <input 
                       type="text" 
                       value={q} 
                       onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} 
                       onFocus={() => setSuggestOpen(true)}
-                      placeholder="O que você quer economizar hoje?" 
-                      className="h-full flex-1 bg-transparent px-2 text-lg font-bold placeholder:text-white/20 focus:outline-none" 
+                      placeholder="Qual item você busca hoje?" 
+                      className="h-full flex-1 bg-transparent px-2 text-xl font-bold placeholder:text-white/10 focus:outline-none" 
                     />
-                    <Button type="submit" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary hover:bg-primary/90 font-black shadow-xl transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                      Buscar <ArrowRight className="ml-2 h-5 w-5" />
+                    <Button type="submit" className="hidden sm:flex h-14 rounded-[18px] px-10 bg-indigo-600 hover:bg-indigo-500 text-white font-black shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all hover:scale-[1.03] active:scale-[0.97]">
+                      Buscar <ArrowRight className="ml-2 h-6 w-6" />
                     </Button>
                   </form>
                   <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
@@ -212,20 +216,24 @@ function HomePage() {
                 className={cn(GLASS_CARD, "p-8 flex flex-col gap-8")}
               >
                 {metrics.map((m, idx) => (
-                  <div key={m.kind} className="flex items-center gap-6 group">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                      <m.Icon className="h-7 w-7" />
+                  <motion.div 
+                    key={m.kind} 
+                    whileHover={{ x: 8 }}
+                    className="flex items-center gap-6 group cursor-default"
+                  >
+                    <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all duration-500">
+                      <m.Icon className="h-8 w-8" />
                     </div>
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[9px] font-bold text-amber-500">↑ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[9px] font-bold text-primary">+2 novos</span>}
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
+                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[9px] font-black text-indigo-400 border border-indigo-500/20">+2 novos</span>}
                       </div>
-                      <span className="text-3xl font-black tabular-nums">{m.value}</span>
-                      <p className="text-xs font-medium text-white/30">{m.description}</p>
+                      <span className="text-4xl font-black tabular-nums tracking-tighter">{m.value}</span>
+                      <p className="text-[11px] font-medium text-white/20 tracking-wide">{m.description}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
