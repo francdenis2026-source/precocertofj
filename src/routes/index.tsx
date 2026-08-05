@@ -1144,7 +1144,6 @@ function HomePage() {
           </div>
         </footer>
       </div>
-      <div aria-hidden className="h-[64px] md:hidden" />
       <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
       <MetricSpotlightDialog
         open={spotlight !== null}
