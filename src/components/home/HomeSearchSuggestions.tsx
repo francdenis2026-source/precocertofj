@@ -257,13 +257,13 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border border-white/10 shadow-2xl backdrop-blur-2xl"
+            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border border-slate-700 shadow-2xl"
             style={{
               left: rect.left,
               top: rect.top,
               width: rect.width,
               maxHeight: rect.maxH,
-              background: "rgba(15, 23, 42, 0.95)",
+              background: "#1e293b",
               color: "#ffffff",
             }}
           >
@@ -280,7 +280,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => handlePick(q)}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-primary/10"
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-slate-700"
           >
             <Search className="h-4 w-4 text-primary" />
             Nenhum produto com esse nome — ver todos os resultados para “<strong>{q}</strong>”
@@ -309,7 +309,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
                     (active === i
                       ? "border-l-primary bg-primary text-primary-foreground"
-                      : "border-l-transparent hover:bg-primary/10")
+                      : "border-l-transparent hover:bg-slate-700")
 
                   }
                 >
@@ -319,8 +319,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       (active === i
                         ? "border-white/30 bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
                         : s.imageUrl
-                          ? "border-white/5 bg-white/5"
-                          : "border-primary/30 bg-primary/10")
+                          ? "border-slate-700 bg-slate-800"
+                          : "border-primary/30 bg-slate-800")
                     }
                   >
                     {s.imageUrl ? (
@@ -420,7 +420,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
 
         <div
           className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
-          style={{ borderColor: "var(--border)", background: "var(--muted)" }}
+          style={{ borderColor: "#334155", background: "#0f172a" }}
         >
 
           <span className="truncate text-muted-foreground">
