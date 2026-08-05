@@ -468,17 +468,16 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="max-w-[15ch] text-[clamp(2.4rem,8vw,4.8rem)] leading-[0.9] font-editorial tracking-[-0.04em] sm:text-[clamp(3.2rem,9vw,5.8rem)]"
-                style={{ color: "var(--pc-home-onhero-fg)" }}
+                className="max-w-[14ch] text-[clamp(2.8rem,9vw,5.5rem)] font-extrabold leading-[1] tracking-[-0.05em] sm:text-[clamp(3.5rem,10vw,6.5rem)]"
+                style={{ color: "var(--foreground)" }}
               >
-                Inteligência real para <span className="pc-hero-mark italic font-normal text-[var(--pc-home-onhero-gold)]">economizar mais</span>
+                Inteligência real para <span className="text-primary italic">economizar</span>
               </h1>
 
               <p
-                className="max-w-[46ch] text-[clamp(1rem,2.2vw,1.25rem)] font-medium leading-[1.5] tracking-[-0.01em] opacity-85 sm:text-[clamp(1.15rem,2.5vw,1.5rem)]"
-                style={{ color: "var(--pc-home-onhero-fg)" }}
+                className="max-w-[48ch] text-[clamp(1rem,2vw,1.2rem)] font-medium leading-relaxed tracking-tight text-muted-foreground sm:text-[clamp(1.1rem,2.2vw,1.4rem)]"
               >
-                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare, escolha o melhor mercado e economize de verdade em cada item da sua lista.
+                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista.
               </p>
 
               {/* ---------- Busca centralizada ---------- */}
@@ -501,14 +500,14 @@ function HomePage() {
                       setSuggestOpen(true);
                     }}
                     onFocus={() => setSuggestOpen(true)}
-                    placeholder="O que você precisa comprar hoje?"
-                    className="h-14 w-full rounded-2xl border-2 border-white/20 bg-white/5 pl-14 pr-32 text-[17px] font-semibold text-white placeholder:text-white/40 backdrop-blur-2xl transition-all hover:bg-white/10 focus:border-brand/40 focus:bg-white/15 focus:outline-none focus:ring-8 focus:ring-brand/5 sm:h-16 sm:pl-16 sm:text-[19px]"
+                    placeholder="Buscar produto ou mercado…"
+                    className="h-14 w-full rounded-2xl border border-border bg-white/50 dark:bg-slate-900/50 pl-14 pr-32 text-[17px] font-semibold text-foreground placeholder:text-muted-foreground/60 backdrop-blur-2xl transition-all hover:bg-white dark:hover:bg-slate-900 focus:border-primary/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-8 focus:ring-primary/5 sm:h-16 sm:pl-16 sm:text-[19px]"
                   />
                   <div className="absolute right-2 top-2 h-10 sm:right-2.5 sm:top-2.5 sm:h-11">
                     <Button
                       type="submit"
                       disabled={!q.trim()}
-                      className="h-full rounded-xl bg-brand px-5 text-[15px] font-bold text-brand-foreground shadow-lg transition-all hover:bg-brand-strong hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
+                      className="h-full rounded-xl bg-primary px-6 text-[15px] font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
                     >
                       Buscar
                     </Button>
@@ -529,12 +528,12 @@ function HomePage() {
 
               {/* Buscas em alta no Hero */}
               <div className="flex flex-wrap items-center gap-2 pt-2 sm:gap-3">
-                <span className="text-[12px] font-bold uppercase tracking-wider opacity-60">Popular:</span>
+                <span className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground/60">Destaques:</span>
                 {heroPopular.map((term) => (
                   <button
                     key={term}
                     onClick={() => goToPopular(term)}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[13.5px] font-medium text-white/90 backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/15 hover:text-white active:scale-95"
+                    className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] font-semibold text-foreground/80 shadow-sm transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary active:scale-95"
                   >
                     {term}
                   </button>

@@ -80,14 +80,13 @@
 }
 
 @theme inline {
-  --font-numeric: "Oswald Digits";
-  /* Oswald completa — display secundária: títulos, stats, CTAs, badges. */
-  --font-condensed: "Oswald", "Oswald Digits", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-condensed);
-  --font-editorial: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-numeric), "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-numeric), "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
+  --font-numeric: "Inter", "Work Sans", sans-serif;
+  --font-condensed: "Inter", sans-serif;
+  --font-display: "DM Sans", "Inter", sans-serif;
+  --font-editorial: "DM Sans", "Inter", sans-serif;
+  --font-sans: "Inter", "Work Sans", sans-serif;
+  --font-serif: "DM Sans", "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
 
 
