@@ -387,7 +387,7 @@ function HomePage() {
 
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
           Usa flex-1 para preencher a viewport se o conteúdo for pequeno. */}
-      <div className="relative z-10 flex min-h-screen flex-col pb-[env(safe-area-inset-bottom,0px)] md:pb-0">
+      <div className="relative z-10 flex min-h-screen flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
