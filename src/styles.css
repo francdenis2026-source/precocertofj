@@ -82,10 +82,10 @@
 @theme inline {
   --font-numeric: "Inter", "Work Sans", sans-serif;
   --font-condensed: "Inter", sans-serif;
-  --font-display: "DM Sans", "Inter", sans-serif;
-  --font-editorial: "DM Sans", "Inter", sans-serif;
+  --font-display: "Inter", sans-serif;
+  --font-editorial: "Inter", sans-serif;
   --font-sans: "Inter", "Work Sans", sans-serif;
-  --font-serif: "DM Sans", "Inter", sans-serif;
+  --font-serif: "Inter", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
 
@@ -280,7 +280,7 @@
   --pc-home-onhero-border-hover: rgb(15 27 61 / 0.50);
   --pc-home-onhero-fg-70: #2a3757;
   --pc-home-onhero-fg-60: #38456a;
-  --pc-home-onhero-gold: #6a4708;
+  --pc-home-onhero-gold: var(--primary);
   --pc-home-hero-bg: #fbfaf6;
   --pc-home-hero-img-opacity: 0.12;
 
@@ -294,8 +294,8 @@
 
 
   /* Semantic — nome de estabelecimento (unificado em todo o site) */
-  --market-accent: #8a6218;
-  --market-accent-hover: #6b4a10;
+  --market-accent: var(--primary);
+  --market-accent-hover: var(--primary);
 
   /* ============= Semantic TEXT tokens (WCAG-safe) — LIGHT =============
      Baseline ink #08122a sobre superfícies claras (#ffffff / #f5f6fa / #eef1f7).
@@ -316,9 +316,9 @@
 
   /* Acentos com contraste garantido em superfícies claras */
   --pc-price:           #08122a;   /* preço/valor sobre card branco → 19.8:1 (navy strong) */
-  --pc-eyebrow-gold:    #6b4a10;   /* eyebrow gold sobre card branco → 7.5:1 */
-  --pc-eyebrow-on-navy: #f2d689;   /* eyebrow gold sobre navy sólido → 9.4:1 */
-  --pc-live:            #047857;   /* indicador ao-vivo sobre card claro → 5.8:1 */
+  --pc-eyebrow-gold:    var(--primary);
+  --pc-eyebrow-on-navy: var(--primary-foreground);
+  --pc-live:            oklch(0.60 0.20 150);
 
   /* ----- Tokens tipográficos para preços (typeclear) ----- */
   --pc-price-fg:         var(--pc-price);              /* base — segue tema */
@@ -416,9 +416,9 @@
   --pc-home-card: oklch(0.20 0.04 258);
   --pc-home-navy: #071126;
   --pc-home-navy-2: #172a4b;
-  --pc-home-gold: #f2c66b;         /* brighter gold p/ garantir contraste em fundos claros de popovers no dark */
-  --pc-home-gold-soft: #ffe9ab;
-  --pc-gold-ink: #f2c66b;
+  --pc-home-gold: var(--primary);
+  --pc-home-gold-soft: var(--primary);
+  --pc-gold-ink: var(--primary);
   --pc-home-line: oklch(0.31 0.045 258);
   --pc-hover-tint: color-mix(in oklab, var(--pc-home-gold) 16%, transparent);
 
@@ -442,7 +442,7 @@
   --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
   --pc-home-onhero-fg-70: #cbd6e8;
   --pc-home-onhero-fg-60: #b7c5dd;
-  --pc-home-onhero-gold: #F0CE86;
+  --pc-home-onhero-gold: var(--primary);
   --pc-home-hero-bg: #071126;
   --pc-home-hero-img-opacity: 0.44;
 
@@ -456,8 +456,8 @@
 
 
   /* Semantic — nome de estabelecimento (dark) */
-  --market-accent: #ffe3a0;
-  --market-accent-hover: #fff2cc;
+  --market-accent: var(--primary);
+  --market-accent-hover: var(--primary);
 
   /* ============= Semantic TEXT tokens (WCAG-safe) — DARK =============
      Baseline ink near-white sobre navy card (#0f1b3d / oklch 0.20).
@@ -477,9 +477,9 @@
 
   /* Acentos (dark) */
   --pc-price:           #f5f6fa;   /* sobre card navy → 15.6:1 (branco quente) */
-  --pc-eyebrow-gold:    #ffe3a0;   /* sobre card navy → 11:1 */
-  --pc-eyebrow-on-navy: #f2d689;   /* mesmo em ambos os temas */
-  --pc-live:            #34d399;   /* sobre card navy → 7:1 */
+  --pc-eyebrow-gold:    var(--primary);
+  --pc-eyebrow-on-navy: var(--primary-foreground);
+  --pc-live:            oklch(0.70 0.18 150);
 
 
 
