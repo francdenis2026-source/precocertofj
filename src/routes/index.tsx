@@ -324,7 +324,7 @@ function HomePage() {
           <section className="mt-20">
             <div className="flex items-center justify-between mb-6">
               <h2 className={SECTION_TITLE}>
-                <ShieldCheck className="h-3 w-3" />
+                <svg viewBox="0 0 24 24" className="h-3 w-3 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 Mercados Cadastrados
               </h2>
               <Link to="/estabelecimentos" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
