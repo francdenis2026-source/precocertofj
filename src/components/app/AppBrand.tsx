@@ -67,7 +67,7 @@ export function AppBrand({
             ) : (
               <>
                 Preço
-                <span className="text-gold-ink underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
+                <span className="text-[var(--brand-primary)] underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
                   Certo
                 </span>
               </>
