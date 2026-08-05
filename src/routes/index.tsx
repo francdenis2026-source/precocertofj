@@ -125,10 +125,10 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
    segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
    (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
-const TILE = "group flex h-14 w-full min-w-0 items-center gap-3 rounded-xl border pl-3 pr-4 text-left pc-tile pc-elite-frame transition-all hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2";
-const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-lg h-9 w-9";
-const TILE_ICON = "h-5 w-5";
-const TILE_LABEL = "min-w-0 flex-1 truncate text-[14.5px] font-bold leading-none tracking-tight";
+const TILE = "group flex h-[4.5rem] w-full min-w-0 items-center gap-3.5 rounded-2xl border pl-4 pr-5 text-left pc-tile pc-elite-frame transition-all hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2";
+const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-11 w-11";
+const TILE_ICON = "h-6 w-6";
+const TILE_LABEL = "min-w-0 flex-1 truncate text-[16px] font-bold leading-none tracking-tight";
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
    buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
@@ -551,21 +551,21 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-4 backdrop-blur-xl sm:p-6 shadow-2xl"
+                className="pc-elite-frame overflow-hidden rounded-3xl border p-1 shadow-2xl transition-all"
                 style={{
-                  background: "rgba(255, 255, 255, 0.85)",
-                  borderColor: "rgba(15, 27, 61, 0.15)",
+                  background: "rgba(255, 255, 255, 0.92)",
+                  borderColor: "rgba(15, 27, 61, 0.08)",
                 }}
               >
                 <div
-                  className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-1 lg:gap-5"
+                  className="grid grid-cols-1 gap-1 sm:grid-cols-3 lg:grid-cols-1"
                   role="region"
                   aria-label="Painel de economia em tempo real"
                 >
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-black/5 bg-white p-5 transition-all hover:border-brand/50 hover:bg-white cursor-pointer shadow-sm hover:shadow-xl active:scale-[0.98]"
+                      className="pc-elite-frame group relative overflow-hidden rounded-[1.25rem] border border-transparent bg-transparent p-5 transition-all hover:bg-white cursor-pointer active:scale-[0.98]"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
@@ -618,8 +618,7 @@ function HomePage() {
                     em cápsula inferior (revela em hover para não competir
                     com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
-                  className="mt-2.5 hidden border-t pt-2 min-[360px]:block"
-                  style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
+                  className="mx-1 mb-1 mt-1 rounded-2xl bg-brand-navy/[0.03] border border-brand-navy/[0.05] p-4 hidden min-[360px]:block"
                 >
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <div className="flex items-center gap-1.5">
@@ -744,14 +743,14 @@ function HomePage() {
               as AÇÕES do produto (Histórico, Colaborar, Plus, Explorar). Cada
               bloco tem rótulo e contorno próprios; as células são horizontais
               (ícone à esquerda do rótulo) e mais baixas, ganhando densidade. */}
-          <div className="grid shrink-0 gap-2 sm:gap-2.5 lg:grid-cols-12">
+          <div className="grid shrink-0 gap-3 lg:grid-cols-12">
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-2xl border p-4 sm:p-5 lg:col-span-8 shadow-xl"
+              className="min-w-0 rounded-3xl border p-6 lg:col-span-8 shadow-2xl"
               style={{
-                background: "rgba(255, 255, 255, 0.9)",
-                borderColor: "rgba(15, 27, 61, 0.1)",
+                background: "rgba(255, 255, 255, 0.95)",
+                borderColor: "rgba(15, 27, 61, 0.08)",
               }}
             >
               <p
@@ -760,7 +759,7 @@ function HomePage() {
               >
                 Categorias
               </p>
-              <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-3">
                 {CATEGORIES.map(({ key, label, full, coverage, Icon }) => (
                   <button
                     key={key}
