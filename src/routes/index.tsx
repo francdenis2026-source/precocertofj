@@ -341,7 +341,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth"
+      className="pc-home relative flex min-h-[90dvh] w-full flex-col overflow-x-hidden scroll-smooth"
       style={{
         background: "var(--background)",
         color: "var(--foreground)",
@@ -400,15 +400,15 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-[clamp(2rem,6vh,4rem)] px-4 py-16 sm:px-6 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-6 md:gap-12 px-4 py-8 md:py-16 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
               em vez de acumular um vazio antes das categorias. */}
-          <div className="grid min-h-0 shrink-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
+          <div className="grid min-h-0 shrink-0 items-center gap-4 md:gap-8 lg:grid-cols-12 lg:gap-10">
 
             {/* ---------- Coluna editorial ---------- */}
-            <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
+            <div className="order-1 flex min-w-0 flex-col gap-2 md:gap-4 lg:col-span-7 lg:pr-4">
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
@@ -988,13 +988,13 @@ function HomePage() {
         </main>
 
 
-        <section className="py-16 bg-card/30">
+        <section className="py-10 md:py-16 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
               <div className="flex flex-col items-center text-center group">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Search className="w-8 h-8" />
@@ -1020,9 +1020,9 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="py-16 border-t border-border/50">
+        <section className="py-10 md:py-16 border-t border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Oportunidades do dia</h2>
                 <p className="text-muted-foreground">Produtos com a maior variação de preço entre os mercados hoje.</p>
@@ -1063,7 +1063,7 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-6 bg-white/50 backdrop-blur-sm"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-12 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
             <p className="text-[12.5px] leading-snug sm:text-[13px] text-muted-foreground">
