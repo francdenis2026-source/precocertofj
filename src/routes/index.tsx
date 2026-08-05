@@ -340,38 +340,32 @@ function HomePage() {
                 </svg>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-                <div className="flex-1 space-y-4">
-                  <h3 className="text-3xl font-black text-white tracking-tighter">Transparência e Confiança</h3>
-                  <p className="text-white/40 leading-relaxed max-w-xl text-[15px] font-medium">
-                    Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir que você tenha acesso a informações precisas e atualizadas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
-                  </p>
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Button 
-                      onClick={() => navigate({ to: "/estabelecimentos" })}
-                      className="bg-indigo-600 text-white font-black hover:bg-indigo-500 transition-all rounded-xl px-6"
-                    >
-                      Ver Mercados
-                    </Button>
-                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-                      <ShieldCheck className="h-5 w-5" />
-                      <span>Dados Auditados</span>
+              <div className="flex flex-col gap-10 relative z-10">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                  <div className="flex-1 space-y-4 text-center md:text-left">
+                    <h3 className="text-3xl font-black tracking-tighter text-white">Transparência e Confiança</h3>
+                    <p className="max-w-xl text-[15px] font-medium text-white/40 leading-relaxed">
+                      Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir acesso a informações precisas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-6 shrink-0">
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl font-black text-white">{stats?.establishments ?? "0"}</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/30">Parceiros</span>
+                    </div>
+                    <div className="h-8 w-px bg-white/10" />
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+                        <ShieldCheck className="h-6 w-6" />
+                      </div>
+                      <span className="mt-1 text-[8px] font-black uppercase tracking-widest text-emerald-400">Auditado</span>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-                   {[
-                     { name: "Supermercados", count: stats?.markets || 12 },
-                     { name: "Farmácias", count: 8 },
-                     { name: "Açougues", count: 6 },
-                     { name: "Padarias", count: 5 }
-                   ].map(cat => (
-                     <div key={cat.name} className="bg-slate-700/30 border border-slate-700 p-4 rounded-xl text-center min-w-[120px]">
-                        <div className="text-2xl font-black text-white">{cat.count}</div>
-                        <div className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{cat.name}</div>
-                     </div>
-                   ))}
-                </div>
+
+                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-white/5 rounded-xl" />}>
+                  <RegisteredStoresCarousel />
+                </Suspense>
               </div>
             </div>
           </section>
