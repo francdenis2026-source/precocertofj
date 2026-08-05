@@ -94,8 +94,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // Botão "Entrar" alinhado à paleta gold/navy do header em ambas as variantes.
   // Tokens-only (navy/gold). Hover visível: escurece o gold e sobe elevação; active afunda.
   const loginClass = isOverlay
-    ? "bg-brand text-brand-foreground ring-1 ring-primary/20 shadow-[0_4px_14px_rgb(0_0_0/0.25)] transition-[background-color,box-shadow,transform] hover:bg-brand-strong hover:shadow-[0_8px_22px_rgb(0_0_0/0.32)] active:scale-[0.98] active:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "bg-brand text-brand-foreground ring-1 ring-primary/15 shadow-elev-2 transition-[background-color,box-shadow,transform] hover:bg-brand-strong hover:shadow-elev-3 active:scale-[0.98] active:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    ? "bg-primary text-primary-foreground shadow-[0_15px_30px_-5px_rgba(var(--pc-primary-rgb),0.4)] transition-all duration-300 hover:scale-[1.05] hover:bg-primary/90 hover:shadow-[0_20px_35px_-5px_rgba(var(--pc-primary-rgb),0.5)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    : "bg-primary text-primary-foreground shadow-[0_10px_20px_-5px_rgba(var(--pc-primary-rgb),0.2)] transition-all duration-300 hover:scale-[1.05] hover:bg-primary/90 hover:shadow-[0_15px_25px_-5px_rgba(var(--pc-primary-rgb),0.3)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 
 

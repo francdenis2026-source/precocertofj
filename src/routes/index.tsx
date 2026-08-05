@@ -161,16 +161,50 @@ function HomePage() {
                 <p className="max-w-xl text-lg text-muted-foreground">Economize comparando preços em Feijó em tempo real.</p>
               </div>
               <motion.div ref={searchAnchorRef} className="relative group w-full max-w-2xl">
-                <form onSubmit={submitSearch} className="relative flex items-center overflow-hidden rounded-2xl border-2 border-primary/20 bg-card/80 p-1.5 shadow-2xl backdrop-blur-xl">
-                  <div className="flex h-12 w-12 items-center justify-center text-primary"><Search className="h-6 w-6" /></div>
-                  <input type="text" value={q} onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} onFocus={() => setSuggestOpen(true)} placeholder="O que você quer economizar hoje?" className="h-full flex-1 bg-transparent px-2 text-lg focus:outline-none" />
-                  <Button type="submit" size="lg" className="hidden sm:flex h-12 rounded-xl px-8">Buscar <ArrowRight className="ml-2 h-5 w-5" /></Button>
+                <form onSubmit={submitSearch} className="relative flex items-center overflow-hidden rounded-2xl border border-primary/20 bg-card/60 p-1.5 shadow-2xl backdrop-blur-xl transition-all duration-300 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 group-hover:bg-card/80">
+                  <div className="flex h-12 w-12 items-center justify-center text-primary/70"><Search className="h-6 w-6" /></div>
+                  <input type="text" value={q} onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} onFocus={() => setSuggestOpen(true)} placeholder="O que você quer economizar hoje?" className="h-full flex-1 bg-transparent px-2 text-lg font-bold placeholder:text-muted-foreground/40 focus:outline-none" />
+                  <Button type="submit" size="lg" className="hidden sm:flex h-12 rounded-xl px-8 bg-primary font-bold shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]">Buscar <ArrowRight className="ml-2 h-5 w-5" /></Button>
                 </form>
                 <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
               </motion.div>
-              <div className="flex flex-wrap items-center gap-4">
-                <Button size="lg" onClick={() => navigate({ to: "/app" })} className="h-14 rounded-2xl px-8 text-lg font-bold">Acessar Aplicativo <LayoutGrid className="ml-2 h-5 w-5" /></Button>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="flex flex-wrap items-center gap-6"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    size="lg"
+                    onClick={() => navigate({ to: "/app" })}
+                    className="h-16 rounded-2xl bg-primary px-10 text-xl font-black text-primary-foreground shadow-[0_20px_50px_-12px_rgba(var(--pc-primary-rgb),0.5)] transition-all hover:bg-primary/90 hover:shadow-[0_30px_60px_-12px_rgba(var(--pc-primary-rgb),0.6)]"
+                  >
+                    Acessar Aplicativo
+                    <LayoutGrid className="ml-3 h-6 w-6" />
+                  </Button>
+                </motion.div>
+
+                <div className="flex flex-col gap-1.5 px-2">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/70">
+                    Sugestões em alta
+                  </span>
+                  <div className="flex flex-wrap gap-4">
+                    {heroPopular.map((term) => (
+                      <button
+                        key={term}
+                        onClick={() => goToPopular(term)}
+                        className="text-sm font-bold text-foreground/80 transition-all hover:text-primary hover:translate-x-1"
+                      >
+                        #{term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="order-2 grid grid-cols-1 gap-4 lg:col-span-5">
               {metrics.map((m: any) => (
