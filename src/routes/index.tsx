@@ -371,7 +371,7 @@ function HomePage() {
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-4 px-4">
-                  <div className="h-20 w-20 rounded-[24px] bg-white/5 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500">
+                  <div className="h-20 w-20 rounded-[24px] bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
                     <step.icon className="h-10 w-10" />
                   </div>
                   <h3 className="text-xl font-black mb-2 tracking-tight">{step.title}</h3>
@@ -382,7 +382,7 @@ function HomePage() {
           </section>
 
           {/* Heavy Editorial Panel */}
-          <Suspense fallback={<div className="mt-32 h-[500px] w-full animate-pulse rounded-3xl bg-white/5" />}>
+          <Suspense fallback={<div className="mt-32 h-[500px] w-full animate-pulse rounded-3xl bg-slate-800" />}>
             <section className="mt-32">
               <ExplorePanel />
             </section>
