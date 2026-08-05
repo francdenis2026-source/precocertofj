@@ -100,11 +100,18 @@ function HomePage() {
   const stats = loaderData?.stats;
   const economy = loaderData?.economy;
   const livePanel = buildLivePanel({ stats, economy, statsLoading: false, economyLoading: false, statsError: stats == null, economyError: economy == null });
-  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({ 
-    ...m, 
-    Icon: { markets: ShieldCheck, products: Package, savings: TrendingDown }[m.kind],
-    description: { markets: "Mercados locais auditados", products: "Itens monitorados hoje", savings: "Diferença média de preço" }[m.kind]
-  }));
+  const metrics = livePanel.metrics.map((m: LivePanelMetric) => {
+    const icons: Record<string, any> = {
+      markets: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>,
+      products: Package,
+      savings: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>
+    };
+    return { 
+      ...m, 
+      Icon: icons[m.kind],
+      description: { markets: "Mercados locais auditados", products: "Itens monitorados hoje", savings: "Diferença média de preço" }[m.kind]
+    };
+  });
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -376,7 +383,7 @@ function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
                 { icon: Search, title: "Busque o Produto", desc: "Digite o nome do que você precisa. Nosso sistema varre todos os mercados em segundos." },
-                { icon: TrendingDown, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
+                { icon: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-4 px-4">
