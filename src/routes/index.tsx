@@ -1053,7 +1053,7 @@ function HomePage() {
                     <Store className="w-3.5 h-3.5" />
                     {p.store}
                   </div>
-                  <Button variant="ghost" className="w-full justify-between h-9 text-primary hover:bg-primary/5 font-bold text-[13px] rounded-lg">
+                  <Button variant="ghost" className="w-full justify-between h-8 text-primary hover:bg-primary/5 font-bold text-[12px] rounded-lg p-0 px-2">
                     Ver detalhes <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
