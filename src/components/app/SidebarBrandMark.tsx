@@ -22,8 +22,8 @@ export function SidebarBrandMark({
     <svg viewBox="0 0 40 40" role="img" aria-hidden className={className} focusable="false">
       <defs>
         <linearGradient id={g} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="var(--pcsb-mark-a)" />
-          <stop offset="100%" stopColor="var(--pcsb-mark-b)" />
+          <stop offset="0%" stopColor="var(--brand-primary)" />
+          <stop offset="100%" stopColor="var(--brand-primary)" />
         </linearGradient>
       </defs>
 
@@ -37,17 +37,17 @@ export function SidebarBrandMark({
         // Console: escudo interno em navy sobre o dourado
         <path
           d="M18.6 13.8l5.6 2.2v4.1c0 3.1-2.1 5.6-5.6 6.9-3.5-1.3-5.6-3.8-5.6-6.9V16z"
-          fill="var(--pcsb-mark-ink)"
+          fill="var(--bg-base)"
         />
       ) : (
         <>
           {/* Furo da etiqueta */}
-          <circle cx="14.4" cy="14.4" r="2.9" fill="var(--pcsb-mark-hole)" />
+          <circle cx="14.4" cy="14.4" r="2.9" fill="var(--bg-base)" />
           {/* Selo de conferido */}
           <path
             d="M17.4 24.9l3.6 3.6 8.2-8.9"
             fill="none"
-            stroke="var(--pcsb-mark-ink)"
+            stroke="var(--bg-base)"
             strokeWidth="4.2"
             strokeLinecap="round"
             strokeLinejoin="round"

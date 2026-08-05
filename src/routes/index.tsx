@@ -12,7 +12,9 @@ import {
   MousePointer2,
   ListChecks,
   ChevronRight,
-  Plus
+  Plus,
+  ShieldCheck,
+  TrendingDown
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -68,8 +70,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
-const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4 flex items-center gap-2";
-const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10 overflow-hidden";
+const SECTION_TITLE = "text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-4 flex items-center gap-2";
+const GLASS_CARD = "rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-xl transition-all duration-300 hover:border-[var(--brand-primary)]/40 hover:translate-y-[-2px] overflow-hidden";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -129,14 +131,11 @@ function HomePage() {
   };
 
   return (
-    <div className="pc-home relative flex min-h-screen flex-col bg-[#0f172a] text-white selection:bg-indigo-500/30 overflow-x-hidden">
-      {/* Background Layer - More solid, less transparent */}
+    <div className="pc-home relative flex min-h-screen flex-col bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 overflow-x-hidden">
+      {/* Background Layer - Radial Gradient Glow */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[#0f172a]" />
-        <div className="absolute inset-0 opacity-20" 
-             style={{ backgroundImage: `url(${homeHeroImg})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'grayscale(0.5) brightness(0.5)' }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/80 via-[#0f172a]/95 to-[#0f172a]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.1)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,var(--brand-glow)_0%,transparent_60%)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -161,10 +160,9 @@ function HomePage() {
                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/90">Ao vivo em Feijó/AC</span>
                 </div>
                 
-                <h1 className="text-5xl font-black tracking-tighter sm:text-7xl lg:text-[84px] leading-[0.9] text-white">
-                  Inteligência <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-indigo-400">Preditiva</span> <br />
-                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">de Preços</span>
+                <h1 className="font-['Space_Grotesk'] text-[56px] font-bold tracking-[-0.02em] leading-[1.05] text-white">
+                  Inteligência real para <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[var(--brand-primary)]">economizar</span>
                 </h1>
                 
                 <p className="max-w-md text-[15px] font-medium text-white/40 leading-relaxed">
@@ -178,27 +176,27 @@ function HomePage() {
                     onKeyDown={(e) => {
                       if (suggestRef.current?.handleKeyDown(e as any)) return;
                     }}
-                    className="relative flex items-center overflow-hidden rounded-[24px] border border-slate-700 bg-slate-900/80 p-1.5 shadow-2xl transition-all duration-300 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/20 group-hover:bg-slate-900 group-hover:border-slate-600"
+                    className="relative flex items-center min-h-[56px] overflow-hidden rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-[3px] focus-within:ring-[var(--brand-primary)]/25 group-hover:bg-[var(--bg-surface-elevated)]"
                   >
-                    <div className="flex h-14 w-14 items-center justify-center text-indigo-400"><Search className="h-7 w-7" /></div>
+                    <div className="flex h-12 w-12 items-center justify-center text-[var(--text-tertiary)]"><Search className="h-5 w-5" /></div>
                     <input 
                       type="text" 
                       value={q} 
                       onChange={(e) => { setQ(e.target.value); setSuggestOpen(true); }} 
                       onFocus={() => setSuggestOpen(true)}
-                      placeholder="Qual item você busca hoje?" 
-                      className="h-full flex-1 bg-transparent px-2 text-xl font-bold placeholder:text-white/10 focus:outline-none" 
+                      placeholder="Buscar arroz, leite, detergente..." 
+                      className="h-full flex-1 bg-transparent px-2 text-base font-medium placeholder:text-[var(--text-tertiary)] focus:outline-none" 
                     />
-                    <Button type="submit" className="hidden sm:flex h-14 rounded-[18px] px-10 bg-indigo-600 hover:bg-indigo-500 text-white font-black shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all hover:scale-[1.03] active:scale-[0.97]">
-                      Buscar <ArrowRight className="ml-2 h-6 w-6" />
+                    <Button type="submit" className="h-11 rounded-full px-8 bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white font-semibold transition-all">
+                      Buscar
                     </Button>
                   </form>
                   <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
                   
-                  <div className="mt-4 flex flex-wrap gap-4 items-center">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white/30">Mais buscados:</span>
+                  <div className="mt-4 flex flex-wrap gap-2 items-center">
+                    <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Sugestões:</span>
                     {heroPopular.map((term) => (
-                      <button key={term} onClick={() => goToPopular(term)} className="text-xs font-bold text-white/60 hover:text-primary transition-colors">
+                      <button key={term} onClick={() => goToPopular(term)} className="rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] px-3 py-1 text-[12px] font-medium text-[var(--text-secondary)] hover:border-[var(--brand-primary)]/40 hover:text-[var(--text-primary)] transition-all">
                         {term}
                       </button>
                     ))}
@@ -214,28 +212,33 @@ function HomePage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className={cn(GLASS_CARD, "p-6 flex flex-col gap-6")}
+                className={cn(GLASS_CARD, "p-1 backdrop-blur-[20px] bg-[var(--bg-surface)]/60 border-[var(--border-subtle)]")}
               >
-                {metrics.map((m, idx) => (
-                  <motion.div 
-                    key={m.kind} 
-                    whileHover={{ x: 6 }}
-                    className="flex items-center gap-4 group cursor-default"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-slate-700/50 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-500">
-                      <m.Icon className="h-6 w-6" />
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">↓ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">+2 novos</span>}
+                <div className="flex flex-col">
+                  {metrics.map((m, idx) => (
+                    <div 
+                      key={m.kind} 
+                      className={cn(
+                        "flex items-center gap-4 p-5 transition-all duration-300",
+                        idx !== metrics.length - 1 && "border-b border-[var(--border-subtle)]"
+                      )}
+                    >
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)]">
+                        <m.Icon className="h-5 w-5" />
                       </div>
-                      <span className="text-3xl font-black tabular-nums tracking-tighter">{m.value}</span>
-                      <p className="text-[10px] font-medium text-white/20 tracking-wide">{m.description}</p>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)]">{m.label}</span>
+                          <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                          </span>
+                        </div>
+                        <span className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">{m.value}</span>
+                      </div>
                     </div>
-                  </motion.div>
-                ))}
+                  ))}
+                </div>
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                    <div className="flex -space-x-2">
@@ -276,17 +279,17 @@ function HomePage() {
                     <button 
                       key={key} 
                       onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })}
-                      className="group flex items-center gap-3 rounded-[18px] border border-slate-700 bg-slate-800/50 p-4 text-left transition-all hover:bg-slate-800 hover:border-indigo-500/30 hover:shadow-lg"
+                      className="group flex items-center gap-3 rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 text-left transition-all hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:translate-y-[-2px]"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-slate-700/50 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.4)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-all">
                         <Icon className="h-5 w-5" />
                       </div>
-                      <span className="text-[12px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">{label}</span>
+                      <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">{label}</span>
                     </button>
                   ))}
-                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-3 rounded-[18px] border border-dashed border-white/10 p-4 text-left hover:border-white/30 transition-all group">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-slate-700/50 text-white/20 group-hover:text-white transition-colors"><Plus className="h-5 w-5" /></div>
-                    <span className="text-[12px] font-black uppercase tracking-widest text-white/20 group-hover:text-white">Todas</span>
+                  <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-3 rounded-[12px] border border-dashed border-[var(--border-subtle)] p-4 text-left hover:border-[var(--text-tertiary)] transition-all group">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors"><Plus className="h-5 w-5" /></div>
+                    <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors">Todas</span>
                   </button>
                 </div>
               </div>
@@ -329,46 +332,39 @@ function HomePage() {
           <section className="mt-20">
             <div className="flex items-center justify-between mb-6">
               <h2 className={SECTION_TITLE}>
-                <svg viewBox="0 0 24 24" className="h-3 w-3 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <ShieldCheck className="h-3 w-3" />
                 Mercados Cadastrados
               </h2>
-              <Link to="/estabelecimentos" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
+              <Link to="/estabelecimentos" className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--brand-primary)] hover:text-[var(--brand-primary)]/80 transition-colors">
                 Ver todos os parceiros →
               </Link>
             </div>
             
-            <div className={cn(GLASS_CARD, "p-8 relative group")}>
-              {/* Decorative SVG Pattern */}
-              <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 opacity-5 pointer-events-none">
-                <svg viewBox="0 0 100 100" className="h-full w-full text-white fill-current">
-                  <path d="M0 0 L100 100 M100 0 L0 100" stroke="currentColor" strokeWidth="0.5" />
-                </svg>
-              </div>
-
+            <div className={cn(GLASS_CARD, "p-8 relative group bg-[var(--bg-surface)] border-[var(--border-subtle)]")}>
               <div className="flex flex-col gap-10 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                   <div className="flex-1 space-y-4 text-center md:text-left">
-                    <h3 className="text-3xl font-black tracking-tighter text-white">Transparência e Confiança</h3>
-                    <p className="max-w-xl text-[15px] font-medium text-white/40 leading-relaxed">
+                    <h3 className="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Transparência e Confiança</h3>
+                    <p className="max-w-xl text-[15px] font-normal text-[var(--text-secondary)] leading-relaxed">
                       Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir acesso a informações precisas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
                     </p>
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
                     <div className="flex flex-col items-center">
-                      <span className="text-2xl font-black text-white">{stats?.establishments ?? "0"}</span>
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/30">Parceiros</span>
+                      <span className="text-2xl font-bold text-[var(--text-primary)]">{stats?.establishments ?? "0"}</span>
+                      <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Parceiros</span>
                     </div>
-                    <div className="h-8 w-px bg-white/10" />
+                    <div className="h-8 w-px bg-[var(--border-subtle)]" />
                     <div className="flex flex-col items-center">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
-                        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                        <ShieldCheck className="h-6 w-6" />
                       </div>
-                      <span className="mt-1 text-[8px] font-black uppercase tracking-widest text-emerald-400">Auditado</span>
+                      <span className="mt-1 text-[12px] font-medium uppercase tracking-[0.06em] text-emerald-400">Auditado</span>
                     </div>
                   </div>
                 </div>
 
-                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-white/5 rounded-xl" />}>
+                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-[var(--bg-surface-elevated)] rounded-xl" />}>
                   <RegisteredStoresCarousel />
                 </Suspense>
               </div>
@@ -376,22 +372,26 @@ function HomePage() {
           </section>
 
           {/* Simple Steps Section */}
-          <section className="mt-24 text-center">
-            <h2 className="text-4xl font-black mb-4 tracking-tighter">Economize em 3 passos</h2>
-            <p className="text-white/30 font-medium mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
+          <section className="mt-24 text-center relative overflow-hidden py-10">
+            <h2 className="font-['Space_Grotesk'] text-[32px] font-bold mb-4 tracking-tight">Economize em 3 passos</h2>
+            <p className="text-[var(--text-secondary)] font-normal mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12">
+              {/* Connecting Dotted Line for Desktop */}
+              <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-px border-t border-dashed border-[var(--border-subtle)] -z-10" />
+              
               {[
                 { icon: Search, title: "Busque o Produto", desc: "Digite o nome do que você precisa. Nosso sistema varre todos os mercados em segundos." },
-                { icon: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
+                { icon: TrendingDown, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-4 px-4">
-                  <div className="h-20 w-20 rounded-[24px] bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                <div key={idx} className="relative flex flex-col items-center gap-4 px-4 group">
+                  <span className="absolute -top-6 text-6xl font-bold text-[var(--text-tertiary)] opacity-5 -z-10 select-none">0{idx + 1}</span>
+                  <div className="h-20 w-20 rounded-[12px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] mb-6 group-hover:bg-[var(--brand-primary)] group-hover:text-white group-hover:border-[var(--brand-primary)] transition-all duration-300">
                     <step.icon className="h-10 w-10" />
                   </div>
-                  <h3 className="text-xl font-black mb-2 tracking-tight">{step.title}</h3>
-                  <p className="text-[13px] text-white/20 leading-relaxed max-w-[280px] font-medium">{step.desc}</p>
+                  <h3 className="text-[18px] font-bold mb-2 tracking-tight text-[var(--text-primary)]">{step.title}</h3>
+                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed max-w-[280px] font-normal">{step.desc}</p>
                 </div>
               ))}
             </div>

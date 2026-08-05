@@ -289,7 +289,7 @@ export function AppSidebar() {
                 >
                   <span aria-hidden className="pcsb-rail" />
                    <span aria-hidden className="pcsb-ico">
-                     <n.icon className="h-5 w-5" strokeWidth={active ? 2.15 : 1.9} />
+                     <n.icon className="h-5 w-5" strokeWidth={active ? 2.2 : 1.8} />
                    </span>
                   <span className="pcsb-label">{n.label}</span>
                   {n.shortcut && (

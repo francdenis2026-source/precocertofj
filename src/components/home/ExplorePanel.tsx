@@ -89,8 +89,8 @@ function Zone({
 }) {
   return (
     <div
-      className={`relative min-h-0 overflow-hidden rounded-xl border bg-slate-800 px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
-      style={{ borderColor: "#334155" }}
+      className={`relative min-h-0 overflow-hidden rounded-[12px] border bg-[var(--bg-surface)] px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
+      style={{ borderColor: "var(--border-subtle)" }}
     >
       <span
         aria-hidden
@@ -116,7 +116,7 @@ function SectionHead({
   accent?: string;
 }) {
   return (
-    <header className={HEAD} style={{ borderColor: "#334155" }}>
+    <header className={HEAD} style={{ borderColor: "var(--border-subtle)" }}>
       <div className={HEAD_LEFT}>
         <Kicker accent={accent}>{kicker}</Kicker>
         <h3
@@ -174,7 +174,7 @@ const PriceRow = memo(function PriceRow({
             ? `${p.name} — melhor oferta agora, ${brl(p.price)}${hasDrop ? `, queda de ${p.dropPct}% em relação a ${brl(p.previousPrice!)}` : ""}`
             : undefined
         }
-        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-slate-700 hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${flash ? "pc-live-flash" : ""}`}
+        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--bg-surface-elevated)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
@@ -448,9 +448,9 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   });
 
 
-  const liveAccent = "var(--pc-explore-live-accent)";
-  const benefitAccent = "var(--pc-explore-benefit-accent)";
-  const proofAccent = "var(--pc-explore-proof-accent)";
+  const liveAccent = "var(--brand-primary)";
+  const benefitAccent = "var(--text-tertiary)";
+  const proofAccent = "var(--brand-primary)";
 
   return (
     <div className="grid h-full min-h-0 w-full grid-rows-[minmax(0,1fr)] gap-3 lg:grid-cols-12 lg:gap-5">

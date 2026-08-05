@@ -257,14 +257,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border border-slate-700 shadow-2xl"
+            className="fixed z-[80] flex flex-col overflow-hidden rounded-[12px] border border-[var(--border-subtle)] shadow-2xl"
             style={{
               left: rect.left,
               top: rect.top,
               width: rect.width,
               maxHeight: rect.maxH,
-              background: "#1e293b",
-              color: "#ffffff",
+              background: "var(--bg-surface)",
+              color: "var(--text-primary)",
             }}
           >
 
@@ -308,19 +308,18 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   className={
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
                     (active === i
-                      ? "border-l-primary bg-primary text-primary-foreground"
-                      : "border-l-transparent hover:bg-slate-700")
-
+                      ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 text-[var(--text-primary)]"
+                      : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]")
                   }
                 >
                   <span
                     className={
                       "grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg border " +
                       (active === i
-                        ? "border-white/30 bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
+                        ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/15 shadow-[0_0_10px_rgba(108,92,231,0.2)]"
                         : s.imageUrl
-                          ? "border-slate-700 bg-slate-800"
-                          : "border-primary/30 bg-slate-800")
+                          ? "border-[var(--border-subtle)] bg-[var(--bg-base)]"
+                          : "border-[var(--brand-primary)]/30 bg-[var(--bg-base)]")
                     }
                   >
                     {s.imageUrl ? (
@@ -335,7 +334,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         aria-hidden
                         className={
                           "text-[12px] font-black uppercase leading-none tracking-tight " +
-                          (active === i ? "text-white" : "text-primary")
+                          (active === i ? "text-[var(--text-primary)]" : "text-[var(--brand-primary)]")
                         }
                       >
                         {(s.displayName || "?").trim().charAt(0)}
@@ -346,7 +345,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   <span className="min-w-0 flex-1">
                     <span
                       className={
-                        "block truncate text-[13.5px] font-semibold leading-tight " +
+                        "block truncate text-[15px] font-medium leading-tight " +
+                        (active === i ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]") +
                         (blocked ? "select-none blur-sm" : "")
                       }
                     >
@@ -420,7 +420,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
 
         <div
           className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
-          style={{ borderColor: "#334155", background: "#0f172a" }}
+          style={{ borderColor: "var(--border-subtle)", background: "var(--bg-base)" }}
         >
 
           <span className="truncate text-muted-foreground">

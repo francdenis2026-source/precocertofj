@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import Autoplay from "embla-carousel-autoplay";
-import { Sparkles, Clock3, ArrowRight } from "lucide-react";
+import { Sparkles, Clock3, ArrowRight, TrendingDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
@@ -174,30 +174,30 @@ export function RecentProductsCarousel() {
                   to="/produto-publico/$slug"
                   params={{ slug }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-[24px] border border-slate-700 bg-slate-800/50 p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-slate-800 hover:border-indigo-500/40"
+                  className="group/card relative block h-full overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40"
                 >
                   {/* Scanning Effect for "Eyeing the product" feature - subtly updated */}
-                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[24px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
-                    <div className="animate-scan absolute left-0 right-0 h-1 bg-indigo-500 shadow-[0_0_20px_rgba(99,102,241,1)]" />
+                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[12px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                    <div className="animate-scan absolute left-0 right-0 h-1 bg-[var(--brand-primary)] shadow-[0_0_20px_rgba(108,92,231,1)]" />
                   </div>
 
                   {/* Corner Glow */}
-                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-500/10 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--brand-primary)]/10 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
 
                   <header className="relative z-10 flex items-center justify-between mb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-700/50 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white/40 backdrop-blur-sm">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
                       <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
                       {timeAgo(p.createdAt)}
                     </span>
                     {savings >= 5 && (
-                      <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-[10px] font-black text-emerald-400 flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                        <svg viewBox="0 0 24 24" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>
+                      <span className="rounded-full bg-[var(--success)]/10 border border-[var(--success)]/20 px-2.5 py-1 text-[10px] font-bold text-[var(--success)] flex items-center gap-1 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                        <TrendingDown className="h-2.5 w-2.5" />
                         ↓ {savings}%
                       </span>
                     )}
                   </header>
 
-                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-2xl bg-slate-900/40 p-4 transition-transform duration-700 group-hover/card:scale-105">
+                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-lg bg-[var(--bg-base)] p-4 transition-transform duration-700 group-hover/card:scale-105">
                     <ProductImage
                       src={cmp?.image_url ?? p.imageUrl}
                       alt={p.displayName}
@@ -210,11 +210,11 @@ export function RecentProductsCarousel() {
                   <div className="relative z-10 mt-5 space-y-3">
                     <div>
                       {p.brand && (
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400/60 mb-1">
+                        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--brand-primary)]/60 mb-1">
                           {p.brand}
                         </p>
                       )}
-                      <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white group-hover/card:text-indigo-300 transition-colors">
+                      <h3 className="line-clamp-2 text-[18px] font-semibold leading-tight tracking-tight text-[var(--text-primary)] group-hover/card:text-[var(--brand-primary)] transition-colors">
                         {p.displayName}
                       </h3>
                     </div>
@@ -224,29 +224,29 @@ export function RecentProductsCarousel() {
                         {price != null ? (
                           <>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-2xl font-black tracking-tighter text-white">
+                              <span className="text-2xl font-bold tracking-tight text-[var(--text-primary)] tabular-nums">
                                 {formatBRL(price)}
                               </span>
                               {avg != null && avg > price && (
-                                <span className="text-xs font-bold text-white/20 line-through">
+                                <span className="text-xs font-normal text-[var(--text-tertiary)] line-through">
                                   {formatBRL(avg)}
                                 </span>
                               )}
                             </div>
                             {store && (
-                              <p className="text-[10px] font-bold text-white/30 truncate max-w-[120px]">
-                                no <span className="text-white/50">{store}</span>
+                              <p className="text-[12px] font-medium text-[var(--text-tertiary)] truncate max-w-[120px]">
+                                no <span className="text-[var(--text-secondary)]">{store}</span>
                               </p>
                             )}
                           </>
                         ) : (
-                          <span className="text-xs font-bold text-white/20 italic">
+                          <span className="text-xs font-medium text-[var(--text-tertiary)] italic">
                             Monitorando...
                           </span>
                         )}
                       </div>
                       
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700/50 text-indigo-400 transition-all duration-300 group-hover/card:bg-indigo-500 group-hover/card:text-white group-hover/card:shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] transition-all duration-300 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white">
                         <ArrowRight className="h-5 w-5" />
                       </div>
                     </div>
