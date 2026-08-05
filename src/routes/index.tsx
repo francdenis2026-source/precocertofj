@@ -129,13 +129,13 @@ function HomePage() {
         <img 
           src={homeHeroImg} 
           alt="" 
-          className="h-full w-full object-cover object-center scale-105 opacity-25 blur-[0.5px] saturate-[1.1]" 
+          className="h-full w-full object-cover object-center scale-100 opacity-30 blur-[0.3px] saturate-[1.2] brightness-[0.8]" 
           loading="eager"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/70 via-[#020617]/90 to-[#020617]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.2)_0%,transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.05)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/40 via-[#020617]/80 to-[#020617]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.25)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.08)_0%,transparent_60%)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -160,14 +160,14 @@ function HomePage() {
                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/90">Ao vivo em Feijó/AC</span>
                 </div>
                 
-                <h1 className="text-6xl font-black tracking-tighter sm:text-8xl lg:text-[96px] leading-[0.9] text-white">
+                <h1 className="text-6xl font-black tracking-tighter sm:text-8xl lg:text-[102px] leading-[0.85] text-white">
                   Inteligência <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/60">real para</span> <br />
-                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">economizar</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-indigo-400">Preditiva</span> <br />
+                  <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_40px_rgba(99,102,241,0.4)]">de Preços</span>
                 </h1>
                 
-                <p className="max-w-md text-lg font-medium text-white/40 leading-relaxed">
-                  A plataforma definitiva de monitoramento de preços. Compare mercados locais e domine sua economia diária.
+                <p className="max-w-md text-lg font-medium text-white/50 leading-relaxed">
+                  A ferramenta definitiva para quem domina a economia. Analise mercados, identifique oportunidades e economize com precisão cirúrgica.
                 </p>
 
                 {/* Search Bar */}
