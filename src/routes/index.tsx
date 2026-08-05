@@ -342,7 +342,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
+      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
       style={{
         background: "var(--background)",
         color: "var(--foreground)",
@@ -391,8 +391,8 @@ function HomePage() {
 
 
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
-          Usa h-full ou flex-1 para preencher a viewport se o conteúdo for pequeno. */}
-      <div className="relative z-10 flex min-h-[100dvh] flex-col">
+          Usa flex-1 para preencher a viewport se o conteúdo for pequeno. */}
+      <div className="relative z-10 flex min-h-screen flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
@@ -1148,21 +1148,21 @@ function HomePage() {
             </div>
           </div>
         </footer>
+        <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
+        <MetricSpotlightDialog
+          open={spotlight !== null}
+          onOpenChange={(v) => {
+            if (!v) setSpotlight(null);
+          }}
+          kind={spotlight}
+        />
+        <GuestGateDialog
+          open={gateOpen}
+          onOpenChange={setGateOpen}
+          action="search"
+          redirect="/buscar"
+        />
       </div>
-      <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
-      <MetricSpotlightDialog
-        open={spotlight !== null}
-        onOpenChange={(v) => {
-          if (!v) setSpotlight(null);
-        }}
-        kind={spotlight}
-      />
-      <GuestGateDialog
-        open={gateOpen}
-        onOpenChange={setGateOpen}
-        action="search"
-        redirect="/buscar"
-      />
     </div>
   );
 }
