@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate, useLoaderData } from "@tanstack/rea
 import { lazy, Suspense, useEffect, useMemo, useRef, useState, memo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   ArrowRight,
@@ -390,53 +391,181 @@ function HomePage() {
       <div className="relative z-10 flex min-h-screen flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
-        {/* ================= PALCO ÚNICO ================= */}
+        {/* ================= HERO SECTION ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-4 md:gap-8 px-4 py-4 md:py-10 sm:px-6 lg:px-8"
+          className="relative mx-auto flex min-h-[85vh] w-full max-w-7xl flex-col justify-center px-4 py-8 sm:px-6 lg:px-8"
         >
-          {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
-              como um bloco só, distribuindo a folga igualmente acima e abaixo
-              em vez de acumular um vazio antes das categorias. */}
-          <div className="grid min-h-0 shrink-0 items-center gap-4 md:gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+            {/* ---------- Hero Content ---------- */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="order-1 flex flex-col gap-6 lg:col-span-7 lg:pr-8"
+            >
+              <div className="flex flex-col gap-3">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="inline-flex max-w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary backdrop-blur-sm"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+                  </span>
+                  <span>Ao vivo · Feijó/AC</span>
+                </motion.div>
+                
+                <h1
+                  id="hero-title"
+                  className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+                >
+                  O melhor preço <br />
+                  <span className="relative inline-block text-primary">
+                    antes
+                    <svg
+                      viewBox="0 0 100 12"
+                      className="absolute -bottom-2 left-0 h-2 w-full fill-primary/30"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <path d="M0,5 Q50,12 100,5 T200,5" strokeWidth="4" />
+                    </svg>
+                  </span>{" "}
+                  de comprar
+                </h1>
+                
+                <p className="max-w-xl text-lg font-medium leading-relaxed text-muted-foreground md:text-xl">
+                  Economize tempo e dinheiro comparando preços em todos os mercados de Feijó em tempo real.
+                </p>
+              </div>
 
-            {/* ---------- Coluna editorial ---------- */}
-            <div className="order-1 flex min-w-0 flex-col gap-2 md:gap-4 lg:col-span-7 lg:pr-4 animate-reveal">
-              <div
-                className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
-                style={{
-                  background: `var(--primary)`,
-                  borderColor: `var(--primary)`,
-                  color: "var(--primary-foreground)",
-                }}
-                role="status"
-                aria-live="polite"
+              {/* Search Bar no Hero */}
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                ref={searchAnchorRef}
+                className="relative group w-full max-w-2xl"
               >
-                <span className="relative flex h-1.5 w-1.5" aria-hidden>
-                  <span
-                    className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                    style={{ background: "white" }}
+                <form
+                  onSubmit={submitSearch}
+                  className="relative flex items-center overflow-hidden rounded-2xl border-2 border-primary/20 bg-card/80 p-1.5 shadow-2xl backdrop-blur-xl transition-all duration-300 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 group-hover:border-primary/40"
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center text-primary">
+                    <Search className="h-6 w-6" />
+                  </div>
+                  <input
+                    type="text"
+                    value={q}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setSuggestOpen(true);
+                    }}
+                    onFocus={() => setSuggestOpen(true)}
+                    placeholder="O que você quer economizar hoje? (ex: Arroz, Leite...)"
+                    className="h-full flex-1 bg-transparent px-2 text-lg font-semibold placeholder:text-muted-foreground/60 focus:outline-none"
                   />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "white" }} />
-                </span>
-                <span>Ao vivo · Feijó/AC</span>
-                <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
-                <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
-                  <ShieldCheck className="h-3 w-3" aria-hidden />
-                  <strong className="pc-num font-semibold">{stats?.markets ?? "—"}</strong>
-                  <span className="text-[11px] opacity-80">mercados</span>
-                </span>
-                <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
-                <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
-                  <Package className="h-3 w-3" aria-hidden />
-                  <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
-                  <span className="text-[11px] opacity-80">produtos</span>
-                </span>
-                {Number(economy?.avgSavingsPct ?? 0) > 0 ? (
-                  <>
-                    <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
-                    <span
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="hidden h-12 rounded-xl px-8 text-base font-bold shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] sm:flex"
+                  >
+                    Buscar
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </form>
+
+                <HomeSearchSuggestions
+                  ref={suggestRef}
+                  query={q}
+                  isLoggedOut={isLoggedOut}
+                  onBlocked={() => setGateOpen(true)}
+                  open={suggestOpen}
+                  onClose={() => setSuggestOpen(false)}
+                  anchorRef={searchAnchorRef}
+                />
+              </motion.div>
+
+              {/* CTAs de Acesso Rápido */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="flex flex-wrap items-center gap-4"
+              >
+                <Button
+                  size="xl"
+                  onClick={() => navigate({ to: "/app" })}
+                  className="h-14 rounded-2xl bg-primary px-8 text-lg font-bold text-primary-foreground shadow-[0_20px_40px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.05] hover:shadow-[0_25px_50px_rgba(var(--primary-rgb),0.4)] active:scale-[0.98]"
+                >
+                  Acessar Aplicativo
+                  <LayoutGrid className="ml-2 h-5 w-5" />
+                </Button>
+                
+                <div className="flex flex-col gap-0.5 px-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
+                    Sugestões
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {heroPopular.map((term) => (
+                      <button
+                        key={term}
+                        onClick={() => goToPopular(term)}
+                        className="text-sm font-bold text-foreground/80 transition-colors hover:text-primary"
+                      >
+                        #{term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* ---------- Metric Cards (Colunas) ---------- */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="order-2 grid grid-cols-1 gap-4 lg:col-span-5"
+            >
+              {metrics.map((m, idx) => (
+                <motion.button
+                  key={m.kind}
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSpotlight(m.kind)}
+                  className="group relative flex items-center gap-4 rounded-3xl border border-border/50 bg-card/40 p-5 text-left backdrop-blur-md transition-all hover:border-primary/30 hover:bg-card/60 hover:shadow-xl"
+                >
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <m.Icon className="h-7 w-7" />
+                  </div>
+                  <div className="flex flex-1 flex-col">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">
+                        {m.label}
+                      </span>
+                      <span className="pc-num text-xs font-bold text-primary">
+                        {m.trend}
+                      </span>
+                    </div>
+                    <span className="pc-num text-3xl font-extrabold tracking-tight">
+                      {m.value}
+                    </span>
+                    <p className="line-clamp-1 text-xs font-medium text-muted-foreground">
+                      {m.sublabel}
+                    </p>
+                  </div>
+                </motion.button>
+              ))}
+            </motion.div>
+          </div>
+        </main>
+
+        <div className="flex-1" /> {/* Spacer */}
                       className="inline-flex items-center gap-1 normal-case tracking-normal"
                       style={{ color: "var(--pc-home-onhero-fg)" }}
                       title="Diferença média entre o menor e o maior preço do mesmo produto, considerando itens com diferença relevante entre mercados."
