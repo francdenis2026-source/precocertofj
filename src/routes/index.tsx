@@ -350,20 +350,19 @@ function HomePage() {
       }}
     >
       {/* ---------- Camadas de fundo editoriais ---------- */}
-      <img
-        src={homeHeroImg}
-        alt=""
-        aria-hidden
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-        style={{
-          opacity: "var(--pc-home-hero-img-opacity)" as unknown as number,
-          filter: "blur(3px) saturate(0.97)",
-          transform: "scale(1.04)", // compensa a borda suavizada pelo blur
-        }}
-      />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+        <img
+          src={homeHeroImg}
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="h-full w-full object-cover object-center scale-[1.04] blur-[3px] saturate-[0.97]"
+          style={{
+            opacity: "var(--pc-home-hero-img-opacity)" as unknown as number,
+          }}
+        />
+      </div>
       {/* Véu editorial: usa o gradiente do design system — sutil, mantém a foto viva */}
       <div
         aria-hidden
