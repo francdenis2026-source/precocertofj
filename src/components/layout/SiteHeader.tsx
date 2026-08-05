@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-sans";
 
 type Variant = "overlay" | "solid";
 

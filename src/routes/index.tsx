@@ -118,7 +118,7 @@ const P = {
   line: "var(--pc-home-line)",
   heading: "var(--pc-home-heading)",
 };
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-sans";
 
 /* Ladrilhos da faixa inferior — layout horizontal (ícone à esquerda do rótulo).
    A caixa ficou mais baixa e densa: com ícone e texto na mesma linha, a altura
@@ -416,9 +416,9 @@ function HomePage() {
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
-                  background: `color-mix(in oklab, ${P.navy} 45%, transparent)`,
-                  borderColor: `color-mix(in oklab, ${P.gold} 38%, transparent)`,
-                  color: "var(--pc-home-onhero-gold)",
+                  background: `var(--primary)`,
+                  borderColor: `var(--primary)`,
+                  color: "var(--primary-foreground)",
                 }}
                 role="status"
                 aria-live="polite"
@@ -426,9 +426,9 @@ function HomePage() {
                 <span className="relative flex h-1.5 w-1.5" aria-hidden>
                   <span
                     className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                    style={{ background: P.gold }}
+                    style={{ background: "white" }}
                   />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "white" }} />
                 </span>
                 <span>Ao vivo · Feijó/AC</span>
                 <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
@@ -729,7 +729,7 @@ function HomePage() {
 
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="pc-rule my-4 opacity-10" aria-hidden />
+          <hr className="my-8 border-border/10" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
               Dois blocos com molduras próprias para não misturar conceitos:
@@ -780,7 +780,7 @@ function HomePage() {
                       }}
                       aria-hidden
                     >
-                      <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                      <Icon className={TILE_ICON} style={{ color: "var(--primary)" }} strokeWidth={2.2} aria-hidden />
                     </span>
                     <span
                       className={TILE_LABEL}
@@ -798,8 +798,8 @@ function HomePage() {
                   data-reading-card
                   className={`${TILE} border-dashed`}
                   style={{
-                    background: `color-mix(in oklab, ${P.gold} 20%, transparent)`,
-                    borderColor: `color-mix(in oklab, ${P.gold} 62%, transparent)`,
+                    background: `var(--muted)`,
+                    borderColor: `var(--border)`,
                     // @ts-expect-error css var
                     "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                   }}
@@ -807,14 +807,14 @@ function HomePage() {
                   <span
                     className={TILE_ICONWRAP}
                     style={{
-                      background: `color-mix(in oklab, ${P.gold} 26%, transparent)`,
-                      border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
+                      background: `var(--primary)`,
+                      border: `1px solid var(--primary)`,
                     }}
                     aria-hidden
                   >
-                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
+                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--primary)" }} strokeWidth={2.4} aria-hidden />
                   </span>
-                  <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+                  <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--primary)" }}>
                     Todas
                   </span>
                 </button>
