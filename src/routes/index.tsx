@@ -345,9 +345,9 @@ function HomePage() {
   });
   const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
   const METRIC_DETAILS: Record<LivePanelKind, { trend: string; sublabel: string }> = {
-    markets: { trend: "+2 essa semana", sublabel: "Redes e minimercados com preços auditados em Feijó." },
-    products: { trend: "Atualizado agora", sublabel: "Itens de cesta básica, higiene e limpeza monitorados diariamente." },
-    savings: { trend: "↑ 2.4%", sublabel: "Diferença média entre o maior e o menor preço encontrado hoje." },
+    markets: { trend: "+2 novos", sublabel: "Mercados locais com preços auditados em Feijó." },
+    products: { trend: "Hoje", sublabel: "Cesta básica e limpeza monitorados diariamente." },
+    savings: { trend: "↑ 2.4% var.", sublabel: "Diferença média entre o maior e o menor preço hoje." },
   };
 
   const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
@@ -562,21 +562,21 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-xl sm:p-4"
+                className="pc-elite-frame rounded-2xl border p-2 backdrop-blur-xl sm:p-2.5"
                 style={{
-                  background: "rgba(255, 255, 255, 0.65)",
-                  borderColor: "rgba(15, 27, 61, 0.15)",
+                  background: "rgba(255, 255, 255, 0.72)",
+                  borderColor: "rgba(15, 27, 61, 0.12)",
                 }}
               >
                 <div
-                  className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4"
+                  className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-1 lg:gap-3"
                   role="region"
                   aria-label="Painel de economia em tempo real"
                 >
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-black/5 bg-white/40 p-5 backdrop-blur-md transition-all hover:border-brand/30 hover:bg-white/60 cursor-pointer shadow-sm hover:shadow-md"
+                      className="pc-elite-frame group relative overflow-hidden rounded-xl border border-black/5 bg-white/45 p-4 backdrop-blur-md transition-all hover:border-brand/40 hover:bg-white/75 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.99]"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
@@ -586,20 +586,20 @@ function HomePage() {
                           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/50">
                             {m.label}
                           </span>
-                          <div className="flex items-baseline gap-1.5">
-                             <span className="pc-num text-3xl font-bold text-brand-navy sm:text-4xl tracking-tight">
+                          <div className="flex items-baseline gap-1">
+                            <span className="pc-num text-2xl font-bold text-brand-navy sm:text-3xl tracking-tight">
                               {m.value}
                             </span>
-                            <span className="text-[13px] font-medium text-brand">
+                             <span className="text-[11px] font-bold text-brand/90 bg-brand/5 px-1.5 py-0.5 rounded-md">
                               {m.trend}
                             </span>
                           </div>
                         </div>
-                        <div className="rounded-xl bg-brand-navy/5 p-2 text-brand-navy/60 transition-colors group-hover:bg-brand/15 group-hover:text-brand">
-                          <m.Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
+                        <div className="rounded-lg bg-brand-navy/5 p-2 text-brand-navy/50 transition-colors group-hover:bg-brand/10 group-hover:text-brand">
+                          <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
                         </div>
                       </div>
-                      <p className="mt-2 text-[12.5px] leading-relaxed font-medium text-brand-navy/70">
+                      <p className="mt-1 text-[11.5px] leading-tight font-medium text-brand-navy/60">
                         {m.sublabel}
                       </p>
                       
@@ -698,12 +698,12 @@ function HomePage() {
                                   : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
 
-                                className="group relative flex flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_12px_-4px_rgba(3,10,28,0.25)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-[0_8px_16px_-6px_rgba(3,10,28,0.35)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
-                                  borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
+                                  borderColor: "rgba(15, 27, 61, 0.12)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
-                                  height: "clamp(42px, 4.6vh, 52px)",
-                                  width: "clamp(42px, 4.6vh, 52px)",
+                                  height: "clamp(44px, 4.8vh, 54px)",
+                                  width: "clamp(44px, 4.8vh, 54px)",
                                 }}
                               >
                                 <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
@@ -759,10 +759,10 @@ function HomePage() {
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-8"
+              className="min-w-0 rounded-2xl border p-2.5 sm:p-3 lg:col-span-8 shadow-sm"
               style={{
-                background: "color-mix(in oklab, var(--pc-home-onhero-glass) 45%, transparent)",
-                borderColor: "var(--pc-home-onhero-border-soft)",
+                background: "rgba(255, 255, 255, 0.72)",
+                borderColor: "rgba(15, 27, 61, 0.12)",
               }}
             >
               <p
@@ -782,8 +782,8 @@ function HomePage() {
                     data-reading-card
                     className={TILE}
                     style={{
-                      background: "var(--pc-home-onhero-glass)",
-                      borderColor: "var(--pc-home-onhero-border)",
+                      background: "white",
+                      borderColor: "rgba(15, 27, 61, 0.12)",
                       // @ts-expect-error css var
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
@@ -842,10 +842,10 @@ function HomePage() {
             {/* Ações — moldura própria, separada das categorias */}
             <nav
               aria-label="Ações"
-              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-4"
+              className="min-w-0 rounded-2xl border p-2.5 sm:p-3 lg:col-span-4 shadow-sm"
               style={{
-                background: `color-mix(in oklab, ${P.gold} 7%, var(--pc-home-onhero-glass))`,
-                borderColor: `color-mix(in oklab, ${P.gold} 32%, transparent)`,
+                background: "rgba(255, 255, 255, 0.85)",
+                borderColor: "rgba(15, 27, 61, 0.15)",
               }}
             >
               <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
@@ -864,8 +864,8 @@ function HomePage() {
                       onPointerEnter={preloadExplorePanel}
                       onFocus={preloadExplorePanel}
                       style={{
-                        background: "var(--pc-home-onhero-glass)",
-                        borderColor: "var(--pc-home-onhero-border)",
+                        background: "white",
+                        borderColor: "rgba(15, 27, 61, 0.12)",
                         // @ts-expect-error css var
                         "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                       }}
