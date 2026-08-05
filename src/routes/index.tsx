@@ -994,7 +994,7 @@ function HomePage() {
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
               <div className="flex flex-col items-center text-center group">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Search className="w-8 h-8" />
