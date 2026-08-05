@@ -80,22 +80,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
       // flutua por cima do hero e a marca colide com o título/badge.
       "relative z-30 w-full shrink-0"
-    : "sticky top-0 z-40 border-b border-slate-700 bg-[#0f172a]/95 text-foreground shadow-xl backdrop-blur-md";
-  const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
-  const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";
-  const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
+    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/95 text-[var(--text-primary)] shadow-xl backdrop-blur-md";
+  const brandTextClass = "text-[var(--text-primary)]";
+  const brandAccentClass = "text-[var(--brand-primary)]";
+  const subTextClass = "text-[var(--text-tertiary)]";
   // Nav: hover/active sempre em gold (brand) — legível em light e dark, sem tons cyan.
-  const navClass = isOverlay
-    ? "relative text-on-media-muted transition-colors hover:text-brand-soft focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&.active]:text-brand-soft after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-brand-soft after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100"
-    : "relative text-foreground/80 transition-colors hover:text-[var(--pc-gold-ink)] focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-[var(--pc-gold-ink)] after:pointer-events-none after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--pc-gold-ink)] after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
-  const accountClass = isOverlay
-    ? "border-on-media-border bg-on-media-surface text-on-media transition-colors hover:border-brand-soft hover:bg-brand-soft/15 hover:text-brand-soft focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "border-border bg-card text-foreground transition-colors hover:border-brand hover:bg-brand/10 hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-  // Botão "Entrar" alinhado à paleta gold/navy do header em ambas as variantes.
-  // Tokens-only (navy/gold). Hover visível: escurece o gold e sobe elevação; active afunda.
-  const loginClass = isOverlay
-    ? "bg-primary text-primary-foreground shadow-[0_15px_30px_-5px_rgba(var(--pc-primary-rgb),0.4)] transition-all duration-300 hover:scale-[1.05] hover:bg-primary/90 hover:shadow-[0_20px_35px_-5px_rgba(var(--pc-primary-rgb),0.5)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "bg-primary text-primary-foreground shadow-[0_10px_20px_-5px_rgba(var(--pc-primary-rgb),0.2)] transition-all duration-300 hover:scale-[1.05] hover:bg-primary/90 hover:shadow-[0_15px_25px_-5px_rgba(var(--pc-primary-rgb),0.3)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  const navClass = "relative text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] [&.active]:text-[var(--brand-primary)] after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--brand-primary)] after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
+  const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]";
+  const loginClass = "bg-[var(--brand-primary)] text-white shadow-[0_15px_30px_-5px_var(--brand-glow)] transition-all duration-300 hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98]";
 
 
 
@@ -111,7 +103,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         {/* Brand */}
         <Link to="/" className="group flex min-w-0 items-center gap-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-[var(--brand-primary)] blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
             <img
               src="/logo-mark.png"
               alt=""
@@ -119,10 +111,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               width={64}
               height={64}
               className={dsx(
-                "relative h-12 w-12 shrink-0 object-contain transition-transform duration-500 group-hover:scale-110 sm:h-12 sm:w-12 md:h-14 md:w-14",
-                isOverlay
-                  ? "drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-                  : "drop-shadow-[0_10px_30px_rgba(99,102,241,0.2)]",
+                "relative h-12 w-12 shrink-0 object-contain transition-transform duration-500 group-hover:scale-110 sm:h-12 sm:w-12 md:h-14 md:w-14 drop-shadow-[0_10px_30px_rgba(108,92,231,0.2)]"
               )}
             />
           </div>
@@ -134,12 +123,12 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 brandTextClass,
               )}
             >
-              Preço<span className="text-indigo-400">Certo</span>
-              <svg viewBox="0 0 24 24" className="ml-1.5 h-3 w-3 text-indigo-400 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg>
+              Preço<span className="text-[var(--brand-primary)]">Certo</span>
+              <svg viewBox="0 0 24 24" className="ml-1.5 h-3 w-3 text-[var(--brand-primary)] inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg>
             </span>
             <span
               className={dsx(
-                "text-[10px] font-black uppercase tracking-[0.3em] mt-1 antialiased opacity-40",
+                "text-[12px] font-medium uppercase tracking-[0.06em] mt-1 antialiased opacity-40",
                 subTextClass,
               )}
             >
@@ -161,9 +150,9 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 to={l.to}
                 onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
                 onFocus={() => prefetchRouteData(queryClient, String(l.to))}
-                className={dsx(
-                "pc-nav-link rounded-xl px-4 py-2 text-[13px] font-black uppercase tracking-[0.15em] leading-none antialiased outline-none transition-all hover:text-white hover:bg-white/5",
-                isOverlay ? "text-white/60" : "text-white/80",
+                className={cn(
+                  "pc-nav-link rounded-lg px-4 py-2 text-[15px] font-normal leading-none antialiased outline-none transition-all hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
+                  navClass
                 )}
                 activeProps={{ "aria-current": "page" } as any}
               >
@@ -326,8 +315,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           ) : (
             <Link
               to="/login"
-              className={dsx(
-                "inline-flex items-center rounded-xl bg-indigo-600 px-6 py-3 text-[15px] font-black uppercase tracking-widest text-white shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all hover:scale-[1.05] hover:bg-indigo-500 active:scale-[0.98] outline-none",
+              className={cn(
+                "inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-semibold text-white shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
               )}
             >
               Entrar

@@ -42,19 +42,19 @@ body {
 
 /* Utilities */
 @utility glass-card {
-  @apply rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20;
+  @apply rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-300 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40;
 }
 
 @utility section-title {
-  @apply text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4;
+  @apply text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-4;
 }
 
 @utility indigo-glow {
-  @apply shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)];
+  @apply shadow-[0_0_40px_-10px_var(--brand-glow)];
 }
 
 @utility scan-line {
-  @apply absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-[2px];
+  @apply absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--brand-primary)] to-transparent blur-[2px];
 }
 
 .pc-nav-link {
