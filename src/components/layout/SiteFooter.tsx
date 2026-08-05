@@ -12,10 +12,10 @@ const focusRing =
   "outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const linkClass = dsx(
-  "inline-flex min-h-9 items-center rounded-md px-2 py-1 font-medium text-foreground",
-  "underline-offset-4 transition-colors hover:bg-brand/10 hover:underline",
-  "hover:text-[var(--pc-gold-ink)] dark:hover:text-brand",
-  focusRing,
+  "inline-flex min-h-9 items-center rounded-md px-2 py-1 font-black uppercase tracking-widest text-[11px] text-white/40",
+  "transition-all hover:text-indigo-400 hover:bg-white/5",
+  "hover:text-indigo-400",
+  "outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
 );
 
 /**
@@ -36,7 +36,7 @@ export function SiteFooter() {
   return (
     <footer
       aria-labelledby="site-footer-title"
-      className="mt-0.5 border-t border-border bg-muted/50 text-foreground"
+      className="mt-0.5 border-t border-white/5 bg-[#020617] text-white/40"
     >
       <h2 id="site-footer-title" className="sr-only">
         Rodapé — PreçoCerto, comparador de preços de Feijó (AC)
@@ -61,8 +61,8 @@ export function SiteFooter() {
               height={28}
               className="h-7 w-7 shrink-0 object-contain"
             />
-            <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
-              Preço<span className="italic text-brand">Certo</span>
+            <span className="truncate text-lg font-black tracking-tighter text-white">
+              Preço<span className="text-indigo-400">Certo</span>
             </span>
           </p>
         ) : (
@@ -82,8 +82,8 @@ export function SiteFooter() {
               height={28}
               className="h-7 w-7 shrink-0 object-contain"
             />
-            <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
-              Preço<span className="italic text-brand">Certo</span>
+            <span className="truncate text-lg font-black tracking-tighter text-white">
+              Preço<span className="text-indigo-400">Certo</span>
             </span>
             <span className="sr-only">— ir para a página inicial</span>
           </button>
@@ -119,8 +119,8 @@ export function SiteFooter() {
           <span aria-hidden />
         )}
 
-        <p className="justify-self-end whitespace-nowrap font-mono text-[12.5px] text-muted-foreground">
-          &lt;dev&gt; <span className="text-foreground">Franc D&apos;nis</span>
+        <p className="justify-self-end whitespace-nowrap font-black uppercase tracking-widest text-[10px] text-white/20">
+          &lt;dev&gt; <span className="text-indigo-400/60">Franc D&apos;nis</span>
         </p>
       </div>
     </footer>
