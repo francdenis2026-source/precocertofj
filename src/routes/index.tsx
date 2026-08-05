@@ -376,7 +376,7 @@ function HomePage() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 bottom-[-160px] h-[420px] w-[420px] rounded-full"
+        className="pointer-events-none absolute -left-40 top-[60%] h-[420px] w-[420px] rounded-full"
         style={{
           background: `radial-gradient(circle, color-mix(in oklab, ${P.navy} 55%, transparent) 0%, transparent 70%)`,
           filter: "blur(130px)",
