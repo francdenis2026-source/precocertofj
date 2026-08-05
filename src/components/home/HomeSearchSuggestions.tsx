@@ -94,14 +94,24 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
       const ctrl = new AbortController();
       abortRef.current = ctrl;
       const timer = setTimeout(async () => {
-        setLoading(true);
-        setErr(null);
         try {
           const suggestions = await fetchSuggestions(qc, runSuggest as never, q, ctrl.signal);
           if (ctrl.signal.aborted) return;
           const base = (suggestions ?? []).slice(0, MAX_ITEMS);
-          // Mostra os nomes imediatamente; o preço chega logo depois.
+          
+          // Se já temos no cache enriquecido, não precisa mostrar loading ou "nomes puros"
+          const enrichedKey = ["search", "enriched-suggestions", q];
+          const cachedEnriched = qc.getQueryData(enrichedKey);
+          
+          if (cachedEnriched) {
+            setItems(cachedEnriched as any);
+            return;
+          }
+
           setItems(base.map((s) => ({ ...s, minPrice: null, market: null })));
+          setLoading(true);
+          setErr(null);
+
           const enriched = await Promise.all(
             base.map(async (s) => {
               try {
@@ -125,6 +135,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           );
           if (ctrl.signal.aborted) return;
           setItems(enriched);
+          qc.setQueryData(enrichedKey, enriched, { updatedAt: Date.now() });
         } catch (e: any) {
           if (ctrl.signal.aborted) return;
           setErr(e?.message ?? "Falha ao buscar sugestões");
@@ -132,7 +143,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         } finally {
           if (!ctrl.signal.aborted) setLoading(false);
         }
-      }, 140);
+      }, 180);
       return () => {
         clearTimeout(timer);
         ctrl.abort();
