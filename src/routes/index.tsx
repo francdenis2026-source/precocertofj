@@ -361,11 +361,11 @@ function HomePage() {
       /* O travamento em uma janela só vale a partir de `lg`: no mobile o
          conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
          sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased tall-lg:h-[100dvh] tall-lg:max-h-[100dvh] tall-lg:min-h-0 tall-lg:overflow-hidden"
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased tall-lg:h-[100dvh] tall-lg:max-h-[100dvh] tall-lg:min-h-0 tall-lg:overflow-hidden selection:bg-brand selection:text-brand-foreground"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
-        fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
+        fontFamily: "var(--font-sans)",
       }}
     >
       {/* ---------- Camadas de fundo editoriais ---------- */}
@@ -484,17 +484,17 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="max-w-[18ch] text-[clamp(2.2rem,7vw,4.2rem)] leading-[0.92] font-editorial tracking-[-0.035em] sm:text-[clamp(3rem,8vw,5.2rem)]"
+                className="max-w-[15ch] text-[clamp(2.4rem,8vw,4.8rem)] leading-[0.9] font-editorial tracking-[-0.04em] sm:text-[clamp(3.2rem,9vw,5.8rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Economize de verdade em <span className="pc-hero-mark italic font-normal text-[var(--pc-home-onhero-gold)]">cada compra</span>
+                Inteligência real para <span className="pc-hero-mark italic font-normal text-[var(--pc-home-onhero-gold)]">economizar mais</span>
               </h1>
 
               <p
-                className="max-w-[42ch] text-[clamp(0.95rem,2vw,1.2rem)] font-medium leading-[1.45] tracking-[-0.015em] opacity-90 sm:text-[clamp(1.1rem,2.4vw,1.4rem)]"
+                className="max-w-[46ch] text-[clamp(1rem,2.2vw,1.25rem)] font-medium leading-[1.5] tracking-[-0.01em] opacity-85 sm:text-[clamp(1.15rem,2.5vw,1.5rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Compare os preços dos supermercados de Feijó em tempo real. Cesta básica, quedas do dia e economia real — direto no seu celular.
+                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare, escolha o melhor mercado e economize de verdade em cada item da sua lista.
               </p>
 
               {/* ---------- Busca centralizada ---------- */}
@@ -518,7 +518,7 @@ function HomePage() {
                     }}
                     onFocus={() => setSuggestOpen(true)}
                     placeholder="O que você precisa comprar hoje?"
-                    className="h-14 w-full rounded-2xl border-2 border-white/20 bg-white/10 pl-14 pr-32 text-[17px] font-semibold text-white placeholder:text-white/50 backdrop-blur-xl transition-all hover:bg-white/15 focus:border-brand/60 focus:bg-white/20 focus:outline-none focus:ring-4 focus:ring-brand/10 sm:h-16 sm:pl-16 sm:text-[19px]"
+                    className="h-14 w-full rounded-2xl border-2 border-white/20 bg-white/5 pl-14 pr-32 text-[17px] font-semibold text-white placeholder:text-white/40 backdrop-blur-2xl transition-all hover:bg-white/10 focus:border-brand/40 focus:bg-white/15 focus:outline-none focus:ring-8 focus:ring-brand/5 sm:h-16 sm:pl-16 sm:text-[19px]"
                   />
                   <div className="absolute right-2 top-2 h-10 sm:right-2.5 sm:top-2.5 sm:h-11">
                     <Button
@@ -562,10 +562,10 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-2.5 backdrop-blur-md sm:p-3"
+                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-xl sm:p-4"
                 style={{
-                  background: "var(--pc-home-onhero-glass)",
-                  borderColor: "var(--pc-home-onhero-border)",
+                  background: "rgba(255, 255, 255, 0.65)",
+                  borderColor: "rgba(15, 27, 61, 0.15)",
                 }}
               >
                 <div
@@ -576,18 +576,18 @@ function HomePage() {
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 cursor-pointer"
+                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-black/5 bg-white/40 p-5 backdrop-blur-md transition-all hover:border-brand/30 hover:bg-white/60 cursor-pointer shadow-sm hover:shadow-md"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-1">
-                          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/50">
                             {m.label}
                           </span>
                           <div className="flex items-baseline gap-1.5">
-                            <span className="pc-num text-2xl font-bold text-white sm:text-3xl">
+                             <span className="pc-num text-3xl font-bold text-brand-navy sm:text-4xl tracking-tight">
                               {m.value}
                             </span>
                             <span className="text-[13px] font-medium text-brand">
@@ -595,11 +595,11 @@ function HomePage() {
                             </span>
                           </div>
                         </div>
-                        <div className="rounded-xl bg-white/5 p-2 text-white/80 transition-colors group-hover:bg-brand/20 group-hover:text-brand">
-                          <m.Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                        <div className="rounded-xl bg-brand-navy/5 p-2 text-brand-navy/60 transition-colors group-hover:bg-brand/15 group-hover:text-brand">
+                          <m.Icon className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
                         </div>
                       </div>
-                      <p className="mt-2 text-[13px] leading-snug text-white/60">
+                      <p className="mt-2 text-[12.5px] leading-relaxed font-medium text-brand-navy/70">
                         {m.sublabel}
                       </p>
                       
