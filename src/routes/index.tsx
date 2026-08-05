@@ -400,15 +400,15 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-[clamp(2rem,6vh,4rem)] px-4 py-16 sm:px-6 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-6 md:gap-12 px-4 py-8 md:py-16 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
               em vez de acumular um vazio antes das categorias. */}
-          <div className="grid min-h-0 shrink-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
+          <div className="grid min-h-0 shrink-0 items-center gap-4 md:gap-8 lg:grid-cols-12 lg:gap-10">
 
             {/* ---------- Coluna editorial ---------- */}
-            <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
+            <div className="order-1 flex min-w-0 flex-col gap-2 md:gap-4 lg:col-span-7 lg:pr-4">
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
