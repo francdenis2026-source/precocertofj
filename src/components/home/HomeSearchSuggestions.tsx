@@ -308,9 +308,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   className={
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
                     (active === i
-                      ? "border-l-primary bg-primary text-primary-foreground"
-                      : "border-l-transparent hover:bg-slate-700")
-
+                      ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 text-[var(--text-primary)]"
+                      : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]")
                   }
                 >
                   <span
