@@ -755,12 +755,6 @@ function HomePage() {
                     title={coverage ? `${catLabel(key, full)} — ${coverage}` : catLabel(key, full)}
                     data-reading-card
                     className={TILE}
-                    style={{
-                      background: "white",
-                      borderColor: "rgba(15, 27, 61, 0.12)",
-                      // @ts-expect-error css var
-                      "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                    }}
                   >
                     {/* Chip atrás do ícone: separa o dourado do fundo fotográfico
                         e garante contraste legível sobre o glass. */}
@@ -788,25 +782,15 @@ function HomePage() {
                   aria-haspopup="dialog"
                   aria-label="Ver todas as categorias"
                   data-reading-card
-                  className={`${TILE} border-dashed`}
-                  style={{
-                    background: `var(--muted)`,
-                    borderColor: `var(--border)`,
-                    // @ts-expect-error css var
-                    "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                  }}
+                  className={`${TILE} border-dashed bg-primary/5 border-primary/20 hover:bg-primary/10`}
                 >
                   <span
                     className={TILE_ICONWRAP}
-                    style={{
-                      background: `var(--primary)`,
-                      border: `1px solid var(--primary)`,
-                    }}
                     aria-hidden
                   >
-                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--primary)" }} strokeWidth={2.4} aria-hidden />
+                    <Grid3x3 className={TILE_ICON} strokeWidth={2.4} aria-hidden />
                   </span>
-                  <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--primary)" }}>
+                  <span className={`${TILE_LABEL} font-bold`}>
                     Todas
                   </span>
                 </button>
@@ -1160,41 +1144,19 @@ function PillarLink({
     <Link
       to={to}
       data-reading-card
-      className={TILE}
-      style={{
-        background: emphasis ? "var(--pc-home-gold)" : "var(--pc-home-onhero-glass)",
-        borderColor: emphasis
-          ? "var(--pc-home-gold)"
-          : "var(--pc-home-onhero-border)",
-        boxShadow: emphasis
-          ? "0 6px 18px -10px color-mix(in oklab, var(--pc-home-gold) 70%, transparent)"
-          : undefined,
-        // @ts-expect-error css var
-        "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
-      }}
+      className={cn(TILE, emphasis && "bg-primary border-primary hover:bg-primary/90")}
     >
       <span
-        className={TILE_ICONWRAP}
-        style={{
-          background: emphasis
-            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
-            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-          border: emphasis
-            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
-            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
-        }}
-        aria-hidden
+        className={cn(TILE_ICONWRAP, emphasis && "bg-white/20 text-white")}
       >
         <Icon
           className={TILE_ICON}
-          style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
           strokeWidth={2.2}
           aria-hidden
         />
       </span>
       <span
-        className={`${TILE_LABEL}${emphasis ? " font-bold" : ""}`}
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
+        className={cn(TILE_LABEL, emphasis && "text-white")}
       >
         {label}
       </span>
