@@ -352,7 +352,7 @@ function HomePage() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="h-full w-full object-cover object-center scale-[1.04] blur-[3px] saturate-[0.97]"
+          className="h-full w-full object-cover object-center scale-[1.04] blur-[2px] saturate-[1.1]"
           style={{
             opacity: "var(--pc-home-hero-img-opacity)" as unknown as number,
           }}
