@@ -125,13 +125,10 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
    segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
    (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
-const TILE =
-  "group flex h-[clamp(44px,5.4vh,58px)] short-h:h-[clamp(36px,5vh,44px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
-const TILE_ICONWRAP =
-  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)] short-h:h-[22px] short-h:w-[22px]";
-const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)] short-h:h-[14px] short-h:w-[14px]";
-const TILE_LABEL =
-  "min-w-0 flex-1 truncate text-[clamp(11.5px,1.5vh,14px)] font-semibold leading-none tracking-[-0.005em]";
+const TILE = "group flex h-14 w-full min-w-0 items-center gap-3 rounded-xl border pl-3 pr-4 text-left pc-tile pc-elite-frame transition-all hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2";
+const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-lg h-9 w-9";
+const TILE_ICON = "h-5 w-5";
+const TILE_LABEL = "min-w-0 flex-1 truncate text-[14.5px] font-bold leading-none tracking-tight";
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
    buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
@@ -361,7 +358,7 @@ function HomePage() {
       /* O travamento em uma janela só vale a partir de `lg`: no mobile o
          conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
          sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased tall-lg:h-[100dvh] tall-lg:max-h-[100dvh] tall-lg:min-h-0 tall-lg:overflow-hidden selection:bg-brand selection:text-brand-foreground"
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
@@ -413,14 +410,14 @@ function HomePage() {
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
           `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
           para fora da janela. */}
-      <div className="relative z-10 flex min-h-0 flex-col tall-lg:h-full">
+      <div className="relative z-10 flex min-h-0 flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8 tall-lg:overflow-hidden"
+          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(1.5rem,4vh,3rem)] px-3 py-10 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
@@ -562,21 +559,21 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-2 backdrop-blur-xl sm:p-2.5"
+                className="pc-elite-frame rounded-2xl border p-4 backdrop-blur-xl sm:p-6 shadow-2xl"
                 style={{
-                  background: "rgba(255, 255, 255, 0.72)",
-                  borderColor: "rgba(15, 27, 61, 0.12)",
+                  background: "rgba(255, 255, 255, 0.85)",
+                  borderColor: "rgba(15, 27, 61, 0.15)",
                 }}
               >
                 <div
-                  className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-1 lg:gap-3"
+                  className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-1 lg:gap-5"
                   role="region"
                   aria-label="Painel de economia em tempo real"
                 >
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-xl border border-black/5 bg-white/45 p-4 backdrop-blur-md transition-all hover:border-brand/40 hover:bg-white/75 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.99]"
+                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-black/5 bg-white p-5 transition-all hover:border-brand/50 hover:bg-white cursor-pointer shadow-sm hover:shadow-xl active:scale-[0.98]"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
@@ -599,7 +596,7 @@ function HomePage() {
                           <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
                         </div>
                       </div>
-                      <p className="mt-1 text-[11.5px] leading-tight font-medium text-brand-navy/60">
+                      <p className="mt-2 text-[13px] leading-relaxed font-medium text-brand-navy/70">
                         {m.sublabel}
                       </p>
                       
@@ -747,7 +744,7 @@ function HomePage() {
 
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
+          <hr className="pc-rule my-4 opacity-10" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
               Dois blocos com molduras próprias para não misturar conceitos:
@@ -936,7 +933,7 @@ function HomePage() {
               Destaque sutil em dourado para diferenciá-la do painel ao vivo. */}
           <section
             aria-label="Buscas em alta nos últimos 7 dias"
-            className="hidden shrink-0 items-center gap-3 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
+            className="hidden shrink-0 items-center gap-4 overflow-hidden rounded-2xl border px-6 py-4 backdrop-blur-xl lg:flex shadow-lg"
             style={{
               background: `color-mix(in oklab, ${P.gold} 18%, var(--pc-home-onhero-glass))`,
               borderColor: `color-mix(in oklab, ${P.gold} 65%, transparent)`,
