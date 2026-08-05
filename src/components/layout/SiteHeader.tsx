@@ -135,6 +135,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               )}
             >
               Preço<span className="text-indigo-400">Certo</span>
+              <svg viewBox="0 0 24 24" className="ml-1.5 h-3 w-3 text-indigo-400 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg>
             </span>
             <span
               className={dsx(
@@ -161,7 +162,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
                 onFocus={() => prefetchRouteData(queryClient, String(l.to))}
                 className={dsx(
-                "pc-nav-link rounded-xl px-4 py-2 text-[15px] font-black uppercase tracking-widest leading-none antialiased outline-none transition-all hover:text-white hover:bg-white/5",
+                "pc-nav-link rounded-xl px-4 py-2 text-[13px] font-black uppercase tracking-[0.15em] leading-none antialiased outline-none transition-all hover:text-white hover:bg-white/5",
                 isOverlay ? "text-white/60" : "text-white/80",
                 )}
                 activeProps={{ "aria-current": "page" } as any}

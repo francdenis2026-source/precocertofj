@@ -42,6 +42,7 @@ import { categoryIcon } from "@/lib/category-icons";
 
 const ExplorePanel = lazy(() => import("@/components/home/ExplorePanel").then(m => ({ default: m.ExplorePanel })));
 const RecentProductsCarousel = lazy(() => import("@/components/home/RecentProductsCarousel").then(m => ({ default: m.RecentProductsCarousel })));
+const RegisteredStoresCarousel = lazy(() => import("@/components/home/RegisteredStoresCarousel").then(m => ({ default: m.RegisteredStoresCarousel })));
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -69,8 +70,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
-const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4";
-const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10";
+const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4 flex items-center gap-2";
+const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10 overflow-hidden";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -321,9 +322,25 @@ function HomePage() {
 
           {/* Registered Stores Section */}
           <section className="mt-20">
-            <h2 className={SECTION_TITLE}>Mercados Cadastrados</h2>
-            <div className={cn(GLASS_CARD, "p-8")}>
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={SECTION_TITLE}>
+                <ShieldCheck className="h-3 w-3" />
+                Mercados Cadastrados
+              </h2>
+              <Link to="/estabelecimentos" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
+                Ver todos os parceiros →
+              </Link>
+            </div>
+            
+            <div className={cn(GLASS_CARD, "p-8 relative group")}>
+              {/* Decorative SVG Pattern */}
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 opacity-5 pointer-events-none">
+                <svg viewBox="0 0 100 100" className="h-full w-full text-white fill-current">
+                  <path d="M0 0 L100 100 M100 0 L0 100" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </div>
+
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
                 <div className="flex-1 space-y-4">
                   <h3 className="text-3xl font-black text-white tracking-tighter">Transparência e Confiança</h3>
                   <p className="text-white/40 leading-relaxed max-w-xl text-[15px] font-medium">
