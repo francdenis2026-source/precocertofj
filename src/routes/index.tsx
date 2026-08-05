@@ -244,18 +244,10 @@ function HomePage() {
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
   /* Em janelas baixas mostramos apenas uma linha de chips: a home precisa
      caber inteira na viewport, sem rolagem nem corte. */
-  const [shortViewport, setShortViewport] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-height: 760px)");
-    const apply = () => setShortViewport(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, shortViewport ? 4 : 8);
-  }, [popularAll, shortViewport]);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, 10);
+  }, [popularAll]);
 
 
 
