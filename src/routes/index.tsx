@@ -191,9 +191,9 @@ function HomePage() {
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    document.body.classList.add("no-page-bg", "pc-home-locked");
+    document.body.classList.add("no-page-bg", "pc-home-locked", "overflow-hidden");
     return () => {
-      document.body.classList.remove("no-page-bg", "pc-home-locked");
+      document.body.classList.remove("no-page-bg", "pc-home-locked", "overflow-hidden");
     };
   }, []);
 
@@ -579,7 +579,7 @@ function HomePage() {
                             <span className="pc-num text-2xl font-bold text-brand-navy sm:text-3xl tracking-tight">
                               {m.value}
                             </span>
-                             <span className="text-[11px] font-bold text-brand/90 bg-brand/5 px-1.5 py-0.5 rounded-md">
+                             <span className="text-[11.5px] font-bold text-brand bg-brand/10 px-2 py-0.5 rounded-lg border border-brand/20">
                               {m.trend}
                             </span>
                           </div>
