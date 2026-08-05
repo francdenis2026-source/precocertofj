@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import Autoplay from "embla-carousel-autoplay";
-import { Sparkles, Clock3 } from "lucide-react";
+import { Sparkles, Clock3, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
