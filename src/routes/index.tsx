@@ -570,7 +570,7 @@ function HomePage() {
                             </span>
                           </div>
                         </div>
-                        <div className="rounded-lg bg-brand-navy/5 p-2 text-brand-navy/50 transition-colors group-hover:bg-brand/10 group-hover:text-brand">
+                        <div className="rounded-xl bg-primary/5 p-2 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                           <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
                         </div>
                       </div>
@@ -579,7 +579,7 @@ function HomePage() {
                       </p>
                       
                       {/* Efeito de brilho no hover */}
-                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-brand/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                     </div>
                   ))}
                 </div>
