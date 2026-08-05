@@ -179,7 +179,7 @@ function HomePage() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Button
-                    size="xl"
+                    size="lg"
                     onClick={() => navigate({ to: "/app" })}
                     className="h-16 rounded-2xl bg-primary px-10 text-xl font-black text-primary-foreground shadow-[0_20px_40px_-10px_rgba(var(--pc-primary-rgb),0.5)] transition-all hover:shadow-[0_25px_50px_-10px_rgba(var(--pc-primary-rgb),0.6)]"
                   >
