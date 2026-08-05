@@ -191,10 +191,8 @@ function HomePage() {
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    document.body.classList.add("no-page-bg", "pc-home-locked", "overflow-hidden");
-    return () => {
-      document.body.classList.remove("no-page-bg", "pc-home-locked", "overflow-hidden");
-    };
+    // No body classes needed anymore, layout is standard and expansive.
+    return () => {};
   }, []);
 
   const { stats, economy } = useLoaderData({ from: "/" }) as {
@@ -347,13 +345,10 @@ function HomePage() {
 
   return (
     <div
-      /* O travamento em uma janela só vale a partir de `lg`: no mobile o
-         conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
-         sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased"
+      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth"
       style={{
-        background: "var(--pc-home-hero-bg)",
-        color: "var(--pc-home-onhero-fg)",
+        background: "var(--background)",
+        color: "var(--foreground)",
         fontFamily: "var(--font-sans)",
       }}
     >
@@ -409,7 +404,7 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(1.5rem,4vh,3rem)] px-3 py-10 sm:px-6 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-[clamp(2rem,6vh,4rem)] px-4 py-16 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo

@@ -173,19 +173,19 @@
   --mobile-nav-height: calc(4.75rem + env(safe-area-inset-bottom, 0px));
 
   /* LIGHT — paleta sincronizada com o background navy+dourado */
-  --background: oklch(0.986 0.008 250);
-  --foreground: oklch(0.17 0.05 258);
+  --background: oklch(0.985 0.005 240); /* Clean Slate Off-white */
+  --foreground: oklch(0.20 0.04 250);   /* Slate 900-ish */
   --surface: oklch(1 0 0);
-  --ink: oklch(0.15 0.052 258);
+  --ink: oklch(0.15 0.05 250);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.17 0.05 258);
+  --card-foreground: oklch(0.20 0.04 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.17 0.05 258);
+  --popover-foreground: oklch(0.20 0.04 250);
 
   /* Primary alinhado ao navy do background (hue 258) — azul-marinho premium */
-  --primary: oklch(0.50 0.19 258);
-  --primary-foreground: oklch(0.99 0.002 250);
+  --primary: oklch(0.55 0.20 255); /* Electric Indigo */
+  --primary-foreground: oklch(0.99 0.01 250);
 
   --secondary: oklch(0.955 0.016 250);
   --secondary-foreground: oklch(0.22 0.05 258);
@@ -200,8 +200,8 @@
   /* tinta legível derivada do accent (AA em texto pequeno) */
   --accent-ink: #6b4a12;
   /* Brand dourado harmonizado com o bokeh do fundo */
-  --brand: oklch(0.70 0.135 80);
-  --brand-foreground: oklch(0.16 0.05 258);
+  --brand: oklch(0.75 0.18 65); /* Vibrant Amber/Orange */
+  --brand-foreground: oklch(0.15 0.05 250);
   /* LIGHT: sobre mídia clara o dourado precisa ser "ink" (AA ≥ 4.5), não pastel. */
   --brand-soft: oklch(0.45 0.095 78);
 
@@ -283,7 +283,7 @@
   --pc-home-onhero-fg-60: #38456a;
   --pc-home-onhero-gold: #6a4708;
   --pc-home-hero-bg: #fbfaf6;
-  --pc-home-hero-img-opacity: 0.22;
+  --pc-home-hero-img-opacity: 0.12;
 
   /* Zonas cromáticas do painel "Explorar" (guia rápido) — LIGHT */
   --pc-explore-live-accent: #1d4ed8;
@@ -331,7 +331,7 @@
      caem em DM Sans, que segue como fonte comercial de apoio. Como a Oswald é
      condensada, o tracking negativo foi zerado — apertar uma condensada reduz
      a legibilidade em vez de aumentá-la. */
-  --pc-price-font:       var(--font-numeric), 'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pc-price-font: "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --pc-price-tracking:   0.005em;
   --pc-price-feature-settings: "tnum" 1, "lnum" 1;
 
@@ -348,19 +348,19 @@
 /* ============= DARK — Deep Ocean ============= */
 .dark {
   /* DARK — mesma família navy, contrastes reforçados para ícones/links/botões */
-  --background: oklch(0.145 0.038 258);
-  --foreground: oklch(0.975 0.006 250);
-  --surface: oklch(0.205 0.042 258);
-  --ink: oklch(0.975 0.006 250);
+  --background: oklch(0.12 0.02 250); /* Deep Slate Black */
+  --foreground: oklch(0.98 0.01 240);
+  --surface: oklch(0.18 0.03 250);
+  --ink: oklch(0.98 0.01 240);
 
-  --card: oklch(0.205 0.042 258);
-  --card-foreground: oklch(0.975 0.006 250);
-  --popover: oklch(0.205 0.042 258);
-  --popover-foreground: oklch(0.975 0.006 250);
+  --card: oklch(0.18 0.03 250);
+  --card-foreground: oklch(0.98 0.01 240);
+  --popover: oklch(0.18 0.03 250);
+  --popover-foreground: oklch(0.98 0.01 240);
 
   /* Primary navy institucional — mantém a identidade PreçoCerto no dark mode */
-  --primary: oklch(0.48 0.13 258);
-  --primary-foreground: oklch(0.985 0.005 250);
+  --primary: oklch(0.65 0.22 255); /* Brighter Indigo for Dark */
+  --primary-foreground: oklch(0.10 0.02 250);
 
   --secondary: oklch(0.255 0.048 258);
   --secondary-foreground: oklch(0.975 0.006 250);
@@ -374,8 +374,8 @@
   --accent-strong: oklch(0.38 0.055 258);
   --accent-ink: #e8be72;
   /* Brand dourado casando com o bokeh do background */
-  --brand: oklch(0.80 0.135 82);
-  --brand-foreground: oklch(0.13 0.04 258);
+  --brand: oklch(0.85 0.16 70); /* Soft Amber for Dark */
+  --brand-foreground: oklch(0.10 0.02 250);
   --brand-soft: oklch(0.90 0.09 82);
   --brand-strong: oklch(0.68 0.15 80);
   --on-media: oklch(0.99 0.002 250);
