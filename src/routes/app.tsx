@@ -134,15 +134,15 @@ function AppHomeContent() {
         <header
           ref={panelBarRef}
           data-testid="panel-band"
-          className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md"
+          className="overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm backdrop-blur-md"
         >
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/60 bg-primary/95 px-3 py-1 text-primary-foreground md:px-4 md:py-1.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-[var(--brand-primary)] px-3 py-1 text-white md:px-4 md:py-1.5">
             <span
               aria-hidden
-              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
+              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/20 blur-3xl"
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
-              <p className={cn(tc.eyebrow, "hidden shrink-0 text-brand sm:block")}>Meu painel</p>
+              <p className={cn(tc.eyebrow, "hidden shrink-0 text-white/60 sm:block")}>Meu painel</p>
               <h1 className="truncate whitespace-nowrap text-[14px] font-semibold leading-tight tracking-[-0.01em] text-primary-foreground md:text-[15.5px]">
                 Olá, {firstName}
               </h1>
@@ -158,14 +158,14 @@ function AppHomeContent() {
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/30 bg-white/10 px-3 text-[12.5px] font-medium text-white transition hover:bg-white/20"
               >
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-white px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-white/90"
               >
                 Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
@@ -194,7 +194,7 @@ function AppHomeContent() {
               )}
             </>
           ) : (
-            <div className="grid grid-cols-1 divide-y divide-border/60 min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0">
+            <div className="grid grid-cols-1 divide-y divide-[var(--border-subtle)] min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0">
               <Metric
                 icon={ShoppingCart}
                 label="Suas listas"
@@ -316,10 +316,10 @@ function AppHomeContent() {
 type MetricTone = "primary" | "brand" | "savings" | "warning";
 
 const METRIC_TONES: Record<MetricTone, { chip: string; rail: string }> = {
-  primary: { chip: "bg-primary/12 text-primary", rail: "bg-primary" },
-  brand: { chip: "bg-brand/20 text-brand-soft", rail: "bg-brand" },
-  savings: { chip: "bg-savings/15 text-savings", rail: "bg-savings" },
-  warning: { chip: "bg-warning/20 text-accent-ink", rail: "bg-warning" },
+  primary: { chip: "bg-[var(--brand-primary)]/12 text-[var(--brand-primary)]", rail: "bg-[var(--brand-primary)]" },
+  brand: { chip: "bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]", rail: "bg-[var(--brand-primary)]" },
+  savings: { chip: "bg-[var(--success)]/15 text-[var(--success)]", rail: "bg-[var(--success)]" },
+  warning: { chip: "bg-[var(--warning)]/20 text-[var(--warning)]", rail: "bg-[var(--warning)]" },
 };
 
 /**
@@ -355,10 +355,10 @@ function Metric({
         >
           {label}
         </p>
-        <p className="pc-price min-w-0 truncate text-[19px] font-bold leading-tight text-foreground sm:text-[21px]">
+        <p className="pc-price min-w-0 truncate text-[19px] font-semibold leading-tight text-[var(--text-primary)] sm:text-[21px]">
           {value}
         </p>
-        <p className="line-clamp-1 text-[11.5px] leading-tight text-foreground/55" title={hint}>
+        <p className="line-clamp-1 text-[12px] leading-tight text-[var(--text-tertiary)]" title={hint}>
           {hint}
         </p>
       </div>
