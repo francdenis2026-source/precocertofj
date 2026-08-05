@@ -1066,9 +1066,9 @@ function HomePage() {
           className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-6 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
-            <p className="text-[12.5px] leading-snug sm:text-[13px]" style={{ color: "var(--pc-home-onhero-fg-70)" }}>
+            <p className="text-[12.5px] leading-snug sm:text-[13px] text-muted-foreground">
               © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
-              <span className="font-semibold" style={{ color: "var(--pc-home-onhero-gold)" }}>
+              <span className="font-semibold text-primary">
                 &lt;dev&gt; Franc D&apos;nis
               </span>
             </p>
@@ -1084,8 +1084,8 @@ function HomePage() {
                   key={l.to}
                   type="button"
                   onClick={() => navigate({ to: l.to })}
-                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px]"
-                  style={{ color: "var(--pc-home-onhero-fg-85)" }}
+                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px] text-muted-foreground/80 hover:text-primary transition-colors"
+                  // style removed to use tailwind classes for consistency
                 >
                   {l.label}
                 </button>
