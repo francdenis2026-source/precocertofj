@@ -162,7 +162,7 @@ function HomePage() {
                   <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">de Preços</span>
                 </h1>
                 
-                <p className="max-w-md text-base font-medium text-white/40 leading-relaxed">
+                <p className="max-w-md text-[15px] font-medium text-white/40 leading-relaxed">
                   A ferramenta definitiva para quem domina a economia. Analise mercados, identifique oportunidades e economize com precisão cirúrgica.
                 </p>
 
@@ -223,8 +223,8 @@ function HomePage() {
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-emerald-500/20">+2 novos</span>}
+                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">↓ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">+2 novos</span>}
                       </div>
                       <span className="text-3xl font-black tabular-nums tracking-tighter">{m.value}</span>
                       <p className="text-[10px] font-medium text-white/20 tracking-wide">{m.description}</p>
