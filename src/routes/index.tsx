@@ -458,16 +458,19 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="max-w-[14ch] text-[clamp(2.8rem,9vw,5.5rem)] font-extrabold leading-[1] tracking-[-0.05em] sm:text-[clamp(3.5rem,10vw,6.5rem)]"
+                className="max-w-[15ch] text-[clamp(2.8rem,9vw,5.5rem)] font-extrabold leading-[0.92] tracking-[-0.05em] sm:text-[clamp(3.5rem,10vw,6.5rem)]"
                 style={{ color: "var(--foreground)" }}
               >
-                Inteligência real para <span className="text-primary italic">economizar</span>
+                O melhor preço <span className="relative inline-block">
+                  <span className="relative z-10 text-primary">antes</span>
+                  <span className="absolute -bottom-1 left-0 h-[20%] w-full bg-primary/15 -rotate-1" aria-hidden />
+                </span> de comprar
               </h1>
 
               <p
-                className="max-w-[48ch] text-[clamp(1rem,2vw,1.2rem)] font-medium leading-relaxed tracking-tight text-muted-foreground sm:text-[clamp(1.1rem,2.2vw,1.4rem)]"
+                className="max-w-[52ch] text-[clamp(1rem,2vw,1.2rem)] font-medium leading-relaxed tracking-tight text-muted-foreground/90 sm:text-[clamp(1.1rem,2.2vw,1.4rem)]"
               >
-                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista.
+                A plataforma definitiva para monitorar preços em tempo real nos mercados de Feijó. Compare ofertas, economize tempo e garanta o valor mais baixo em cada compra.
               </p>
 
               {/* ---------- Busca centralizada ---------- */}
