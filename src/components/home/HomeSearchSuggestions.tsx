@@ -319,8 +319,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       (active === i
                         ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/15 shadow-[0_0_10px_rgba(108,92,231,0.2)]"
                         : s.imageUrl
-                          ? "border-slate-700 bg-slate-800"
-                          : "border-primary/30 bg-slate-800")
+                          ? "border-[var(--border-subtle)] bg-[var(--bg-base)]"
+                          : "border-[var(--brand-primary)]/30 bg-[var(--bg-base)]")
                     }
                   >
                     {s.imageUrl ? (
@@ -335,7 +335,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         aria-hidden
                         className={
                           "text-[12px] font-black uppercase leading-none tracking-tight " +
-                          (active === i ? "text-white" : "text-primary")
+                          (active === i ? "text-[var(--text-primary)]" : "text-[var(--brand-primary)]")
                         }
                       >
                         {(s.displayName || "?").trim().charAt(0)}
@@ -346,7 +346,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   <span className="min-w-0 flex-1">
                     <span
                       className={
-                        "block truncate text-[13.5px] font-semibold leading-tight " +
+                        "block truncate text-[15px] font-medium leading-tight " +
+                        (active === i ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]") +
                         (blocked ? "select-none blur-sm" : "")
                       }
                     >
