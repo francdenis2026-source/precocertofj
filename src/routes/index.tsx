@@ -376,7 +376,7 @@ function HomePage() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 bottom-0 h-[420px] w-[420px] rounded-full"
+        className="pointer-events-none absolute -left-40 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full"
         style={{
           background: `radial-gradient(circle, color-mix(in oklab, ${P.navy} 55%, transparent) 0%, transparent 70%)`,
           filter: "blur(130px)",
@@ -1057,7 +1057,7 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md pb-[calc(1.5rem+76px+env(safe-area-inset-bottom,0px))] md:pb-6"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md pb-[calc(1.5rem+76px+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-hidden"
         >
           <div className="mx-auto w-full max-w-7xl">
             {/* Mobile: Accordion links */}
