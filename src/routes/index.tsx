@@ -1063,10 +1063,10 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-4 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-white/50 backdrop-blur-sm"
+          className="shrink-0 border-t px-4 py-4 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
-            <p className="text-[12.5px] leading-snug sm:text-[13px] text-foreground font-medium">
+            <p className="text-[12.5px] leading-snug sm:text-[13px] text-foreground font-semibold">
               © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
               <span className="font-semibold text-primary">
                 &lt;dev&gt; Franc D&apos;nis
@@ -1084,7 +1084,7 @@ function HomePage() {
                   key={l.to}
                   type="button"
                   onClick={() => navigate({ to: l.to })}
-                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-bold uppercase tracking-[0.12em] outline-none sm:text-[13px] text-foreground hover:text-primary transition-colors"
+                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-extrabold uppercase tracking-[0.14em] outline-none sm:text-[13px] text-foreground hover:text-primary transition-colors"
                   // style removed to use tailwind classes for consistency
                 >
                   {l.label}
