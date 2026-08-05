@@ -80,7 +80,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
       // flutua por cima do hero e a marca colide com o título/badge.
       "relative z-30 w-full shrink-0"
-    : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-md dark:bg-background/88";
+    : "sticky top-0 z-40 border-b border-white/5 bg-[#020617]/80 text-foreground shadow-2xl backdrop-blur-2xl";
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
   const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";
   const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
@@ -109,40 +109,41 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         )}
       >
         {/* Brand */}
-        <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-2.5">
-          <img
-            src="/logo-mark.png"
-            alt=""
-            aria-hidden="true"
-            width={56}
-            height={56}
-            className={dsx(
-              "h-12 w-12 shrink-0 object-contain sm:h-12 sm:w-12 md:h-[52px] md:w-[52px] lg:h-14 lg:w-14",
-              isOverlay
-                ? "drop-shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
-                : "drop-shadow-[0_2px_6px_rgb(11_22_44/0.22)]",
-            )}
-          />
+        <Link to="/" className="group flex min-w-0 items-center gap-4">
+          <div className="relative">
+            <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+            <img
+              src="/logo-mark.png"
+              alt=""
+              aria-hidden="true"
+              width={64}
+              height={64}
+              className={dsx(
+                "relative h-14 w-14 shrink-0 object-contain transition-transform duration-500 group-hover:scale-110 sm:h-14 sm:w-14 md:h-16 md:w-16",
+                isOverlay
+                  ? "drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                  : "drop-shadow-[0_10px_30px_rgba(99,102,241,0.2)]",
+              )}
+            />
+          </div>
 
           <div className="flex min-w-0 flex-col leading-none">
             <span
               className={dsx(
-                "truncate text-[22px] font-bold leading-tight tracking-[-0.04em] antialiased sm:text-[24px] md:text-[26px]",
+                "truncate text-2xl font-black leading-tight tracking-[-0.05em] antialiased sm:text-3xl",
                 brandTextClass,
               )}
             >
-              Preço<span className={cn("text-primary ml-px", brandAccentClass)}>Certo</span>
+              Preço<span className="text-indigo-400">Certo</span>
             </span>
             <span
               className={dsx(
-                "text-eyebrow-muted mt-0.5 antialiased",
+                "text-[10px] font-black uppercase tracking-[0.3em] mt-1 antialiased opacity-40",
                 subTextClass,
-                isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
               )}
             >
               Feijó <span className="mx-0.5 opacity-60">·</span> Acre
             </span>
-
           </div>
         </Link>
 
@@ -160,8 +161,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
                 onFocus={() => prefetchRouteData(queryClient, String(l.to))}
                 className={dsx(
-                  "pc-nav-link rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none xl:px-3.5 xl:text-[16.5px]",
-                  isOverlay ? "text-on-media-muted" : "text-foreground/80",
+                "pc-nav-link rounded-xl px-4 py-2 text-[15px] font-black uppercase tracking-widest leading-none antialiased outline-none transition-all hover:text-white hover:bg-white/5",
+                isOverlay ? "text-white/60" : "text-white/80",
                 )}
                 activeProps={{ "aria-current": "page" } as any}
               >
@@ -325,8 +326,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <Link
               to="/login"
               className={dsx(
-                "inline-flex items-center rounded-full px-5 py-2.5 text-[15px] font-bold leading-none tracking-[-0.005em] outline-none sm:rounded-lg sm:px-4 sm:py-2 sm:text-[14.5px] md:px-5 md:py-2.5 md:text-[15.5px]",
-                loginClass,
+                "inline-flex items-center rounded-xl bg-indigo-600 px-6 py-3 text-[15px] font-black uppercase tracking-widest text-white shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all hover:scale-[1.05] hover:bg-indigo-500 active:scale-[0.98] outline-none",
               )}
             >
               Entrar
