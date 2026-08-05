@@ -146,7 +146,7 @@ function HomePage() {
   return (
     <div className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth contain-layout bg-background text-foreground font-sans">
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-        <img src={homeHeroImg} alt="" loading="eager" fetchPriority="high" className="h-full w-full object-cover object-center scale-[1.04] blur-[2px] saturate-[1.1]" style={{ opacity: 0.55 }} />
+        <img src={homeHeroImg} alt="" loading="eager" fetchPriority="high" className="h-full w-full object-cover object-center scale-[1.04] blur-[1px] saturate-[1.1]" style={{ opacity: 0.55 }} />
       </div>
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(circle at 20% 30%, rgba(3, 7, 18, 0.6) 0%, rgba(3, 7, 18, 0.85) 100%)" }} />
       
