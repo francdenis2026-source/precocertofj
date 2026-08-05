@@ -213,40 +213,40 @@ function HomePage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className={cn(GLASS_CARD, "p-8 flex flex-col gap-8")}
+                className={cn(GLASS_CARD, "p-6 flex flex-col gap-6")}
               >
                 {metrics.map((m, idx) => (
                   <motion.div 
                     key={m.kind} 
-                    whileHover={{ x: 8 }}
-                    className="flex items-center gap-6 group cursor-default"
+                    whileHover={{ x: 6 }}
+                    className="flex items-center gap-4 group cursor-default"
                   >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all duration-500">
-                      <m.Icon className="h-8 w-8" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-500">
+                      <m.Icon className="h-6 w-6" />
                     </div>
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[9px] font-black text-indigo-400 border border-indigo-500/20">+2 novos</span>}
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
+                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-emerald-500/20">+2 novos</span>}
                       </div>
-                      <span className="text-4xl font-black tabular-nums tracking-tighter">{m.value}</span>
-                      <p className="text-[11px] font-medium text-white/20 tracking-wide">{m.description}</p>
+                      <span className="text-3xl font-black tabular-nums tracking-tighter">{m.value}</span>
+                      <p className="text-[10px] font-medium text-white/20 tracking-wide">{m.description}</p>
                     </div>
                   </motion.div>
                 ))}
 
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                   <div className="flex -space-x-3">
+                   <div className="flex -space-x-2">
                       {[1,2,3,4,5,6].map(i => (
-                        <div key={i} className="h-8 w-8 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
+                        <div key={i} className="h-6 w-6 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="" />
                         </div>
                       ))}
-                      <div className="h-8 w-8 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[10px] font-bold">+10</div>
+                      <div className="h-6 w-6 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[8px] font-bold">+10</div>
                    </div>
-                   <Button variant="link" className="text-primary font-black text-xs uppercase tracking-widest p-0 h-auto">
-                     Ver todos <ChevronRight className="ml-1 h-3 w-3" />
+                   <Button variant="link" className="text-primary font-black text-[10px] uppercase tracking-widest p-0 h-auto">
+                     Ver todos <ChevronRight className="ml-1 h-2 w-2" />
                    </Button>
                 </div>
               </motion.div>
@@ -254,12 +254,12 @@ function HomePage() {
           </div>
 
           {/* Showcase Section */}
-          <Suspense fallback={<div className="mt-16 h-40 w-full animate-pulse rounded-3xl bg-white/5" />}>
+          <Suspense fallback={<div className="mt-12 h-40 w-full animate-pulse rounded-3xl bg-white/5" />}>
             <RecentProductsCarousel />
           </Suspense>
 
           {/* Bottom Grid: Categories & Steps */}
-          <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
             {/* Categories Panel */}
             <motion.div 
