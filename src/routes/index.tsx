@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, useLoaderData } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, memo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -46,6 +46,7 @@ import {
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 import { normalizeSearchText } from "@/lib/text-normalize";
@@ -341,7 +342,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-[90dvh] w-full flex-col overflow-x-hidden scroll-smooth"
+      className="pc-home relative flex min-h-[90dvh] w-full flex-col overflow-x-hidden scroll-smooth contain-layout"
       style={{
         background: "var(--background)",
         color: "var(--foreground)",
@@ -1032,14 +1033,14 @@ function HomePage() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {[
                 { name: "Arroz agulha T1 5kg", savings: "R$ 8,40", price: "R$ 24,90", store: "Mercado Central" },
                 { name: "Leite Integral 1L", savings: "R$ 1,20", price: "R$ 4,75", store: "Super Econômico" },
                 { name: "Feijão Carioca 1kg", savings: "R$ 2,15", price: "R$ 7,90", store: "Açougue & Cia" },
                 { name: "Óleo de Soja 900ml", savings: "R$ 0,95", price: "R$ 6,30", store: "Varejão do Povo" },
               ].map((p, i) => (
-                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-5 hover:border-primary/50 transition-all hover:shadow-xl">
+                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-4 md:p-5 hover:border-primary/50 transition-all hover:shadow-xl min-h-[220px]">
                   <div className="flex justify-between items-start mb-4">
                     <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
                       <Package className="w-6 h-6 text-muted-foreground" />
@@ -1048,8 +1049,8 @@ function HomePage() {
                       -{p.savings}
                     </span>
                   </div>
-                  <h4 className="font-bold text-lg mb-1 truncate">{p.name}</h4>
-                  <p className="text-[13px] text-muted-foreground mb-4">Melhor preço: <span className="text-foreground font-semibold">{p.price}</span></p>
+                  <h4 className="font-bold text-base md:text-lg mb-0.5 md:mb-1 truncate">{p.name}</h4>
+                  <p className="text-[12px] md:text-[13px] text-muted-foreground mb-3 md:mb-4">Melhor preço: <span className="text-foreground font-semibold">{p.price}</span></p>
                   <div className="flex items-center gap-2 text-[12px] text-muted-foreground pb-4 border-b border-border/50 mb-4">
                     <Store className="w-3.5 h-3.5" />
                     {p.store}
@@ -1063,37 +1064,90 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-4 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-8 bg-card/60 backdrop-blur-md"
         >
-          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
-            <p className="text-[12.5px] leading-snug sm:text-[13px] text-foreground font-semibold">
-              © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
-              <span className="font-semibold text-primary">
-                &lt;dev&gt; Franc D&apos;nis
-              </span>
-            </p>
-            <nav aria-label="Links institucionais" className="flex flex-wrap items-center gap-x-1 gap-y-1">
-              {[
-                { to: "/estabelecimentos", label: "Mercados" },
-                { to: "/mapa", label: "Bairros" },
-                { to: "/planos", label: "Planos" },
-                { to: "/fale-conosco", label: "Fale conosco" },
-                { to: "/privacidade", label: "Privacidade" },
-              ].map((l) => (
-                <button
-                  key={l.to}
-                  type="button"
-                  onClick={() => navigate({ to: l.to })}
-                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-extrabold uppercase tracking-[0.14em] outline-none sm:text-[13px] text-foreground hover:text-primary transition-colors"
-                  // style removed to use tailwind classes for consistency
-                >
-                  {l.label}
-                </button>
+          <div className="mx-auto w-full max-w-7xl">
+            {/* Mobile: Accordion links */}
+            <div className="block md:hidden mb-6">
+              <Accordion type="single" collapsible className="w-full space-y-2">
+                <AccordionItem value="institucional" className="border-border/40">
+                  <AccordionTrigger className="py-3 text-[14px] font-bold text-foreground hover:no-underline">
+                    Institucional
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2 pb-4">
+                    <nav className="flex flex-col gap-3">
+                      {[
+                        { to: "/estabelecimentos", label: "Mercados" },
+                        { to: "/mapa", label: "Bairros" },
+                        { to: "/planos", label: "Planos" },
+                      ].map((l) => (
+                        <button
+                          key={l.to}
+                          type="button"
+                          onClick={() => navigate({ to: l.to })}
+                          className="text-left text-[13.5px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1"
+                        >
+                          {l.label}
+                        </button>
+                      ))}
+                    </nav>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="suporte" className="border-border/40">
+                  <AccordionTrigger className="py-3 text-[14px] font-bold text-foreground hover:no-underline">
+                    Suporte & Legal
+                  </AccordionTrigger>
+                  <AccordionContent className="pt-2 pb-4">
+                    <nav className="flex flex-col gap-3">
+                      {[
+                        { to: "/fale-conosco", label: "Fale conosco" },
+                        { to: "/privacidade", label: "Privacidade" },
+                      ].map((l) => (
+                        <button
+                          key={l.to}
+                          type="button"
+                          onClick={() => navigate({ to: l.to })}
+                          className="text-left text-[13.5px] font-semibold text-foreground/80 hover:text-primary transition-colors py-1"
+                        >
+                          {l.label}
+                        </button>
+                      ))}
+                    </nav>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
 
-              ))}
-
-            </nav>
-
+            <div className="flex flex-col md:flex-row items-center justify-between gap-x-4 gap-y-4">
+              <div className="flex flex-col items-center md:items-start gap-1">
+                <p className="text-[12.5px] leading-snug sm:text-[13px] text-foreground font-semibold">
+                  © {new Date().getFullYear()} PreçoCerto · Feijó/AC
+                </p>
+                <span className="text-[11px] font-bold text-primary uppercase tracking-widest opacity-80">
+                  &lt;dev&gt; Franc D&apos;nis
+                </span>
+              </div>
+              
+              {/* Desktop: Horizontal links */}
+              <nav aria-label="Links institucionais" className="hidden md:flex items-center gap-x-2">
+                {[
+                  { to: "/estabelecimentos", label: "Mercados" },
+                  { to: "/mapa", label: "Bairros" },
+                  { to: "/planos", label: "Planos" },
+                  { to: "/fale-conosco", label: "Fale conosco" },
+                  { to: "/privacidade", label: "Privacidade" },
+                ].map((l) => (
+                  <button
+                    key={l.to}
+                    type="button"
+                    onClick={() => navigate({ to: l.to })}
+                    className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-extrabold uppercase tracking-[0.14em] outline-none text-foreground hover:text-primary transition-colors"
+                  >
+                    {l.label}
+                  </button>
+                ))}
+              </nav>
+            </div>
           </div>
         </footer>
       </div>
