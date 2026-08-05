@@ -70,7 +70,7 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
 });
 
 const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4";
-const GLASS_CARD = "rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20";
+const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10";
 
 function HomePage() {
   const navigate = useNavigate();
