@@ -344,34 +344,6 @@ function HomePage() {
               <ExplorePanel />
             </section>
           </Suspense>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { name: "Arroz agulha T1 5kg", market: "Mercado Central", price: "R$ 24,90", oldPrice: "R$ 31,50", discount: "-21%" },
-                { name: "Leite Integral 1L", market: "Supermercado Popular", price: "R$ 4,75", oldPrice: "R$ 6,50", discount: "-27%" },
-                { name: "Feijão Carioca 1kg", market: "Açougue do Zé", price: "R$ 7,90", oldPrice: "R$ 10,20", discount: "-22%" },
-                { name: "Óleo de Soja 900ml", market: "Varejão de Fv", price: "R$ 4,99", oldPrice: "R$ 7,50", discount: "-33%" }
-              ].map((item, idx) => (
-                <div key={idx} className={cn(GLASS_CARD, "p-6 group hover:-translate-y-2")}>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40">
-                      <Package className="h-5 w-5" />
-                    </div>
-                    <span className="bg-emerald-500 text-[10px] font-black px-2 py-1 rounded-full">{item.discount}</span>
-                  </div>
-                  <h4 className="font-bold text-white/90 mb-1 truncate">{item.name}</h4>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">{item.market}</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-black">{item.price}</span>
-                    <span className="text-xs text-white/20 line-through">{item.oldPrice}</span>
-                  </div>
-                  <Button className="w-full mt-6 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-xs font-bold py-5">
-                    Ver detalhes
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </section>
         </main>
 
         <footer className="mt-32 border-t border-white/5 bg-[#020617] px-4 py-12">
