@@ -1,79 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --pc-primary-rgb: 79 70 229;
+  --pc-primary-rgb: 99 102 241; /* Indigo-500 */
+  --pc-gold-ink: #fbbf24;      /* Amber-400 */
 }
 
-/* Custom properties for the PreçoCerto home system */
-:root {
-  /* Hero text contrast */
-  --pc-home-onhero-fg: #ffffff;
-  --pc-home-onhero-fg-90: rgba(255, 255, 255, 0.9);
-  --pc-home-onhero-fg-70: rgba(255, 255, 255, 0.7);
-  
-  /* Hero glass surface */
-  --pc-home-onhero-glass: rgba(11, 22, 44, 0.45);
-  --pc-home-onhero-glass-soft: rgba(11, 22, 44, 0.28);
-  --pc-home-onhero-border: rgba(255, 255, 255, 0.18);
-  --pc-home-onhero-border-soft: rgba(255, 255, 255, 0.08);
-  
-  /* Brand accents for hero context */
-  --pc-home-onhero-gold: #fbbf24;
-  
-  /* Hero background setup */
-  --pc-home-hero-bg: #020617;
-  --pc-home-hero-img-opacity: 0.3;
-  
-  /* Sidebar Indicator */
-  --pcsb-rail: #6366f1;
-}
-
-.dark {
-  --pc-home-hero-bg: #020617;
-}
-
-/* Base resets & scroll behavior */
+/* Base resets */
 html {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
 }
 html::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
 }
 
 body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #020617;
+  color: white;
 }
 
-/* Custom utility for staggered reveals */
-@utility animate-reveal {
-  animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  opacity: 0;
-  transform: translateY(20px);
+/* Utilities */
+@utility glass-card {
+  @apply rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-2xl shadow-2xl;
 }
 
-@keyframes reveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Specific styling for home elements */
-.pc-home {
-  background-color: var(--pc-home-hero-bg);
-}
-
-.pc-num {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
-.pc-trend-chip {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+@utility section-title {
+  @apply text-[11px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-6;
 }
 
 .pc-nav-link {
