@@ -988,9 +988,9 @@ function HomePage() {
         </main>
 
 
-        <section className="py-12 md:py-16 bg-card/30">
+        <section className="py-10 md:py-16 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-center mb-10 md:mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
             </div>
@@ -1020,9 +1020,9 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="py-12 md:py-16 border-t border-border/50">
+        <section className="py-10 md:py-16 border-t border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Oportunidades do dia</h2>
                 <p className="text-muted-foreground">Produtos com a maior variação de preço entre os mercados hoje.</p>
@@ -1063,7 +1063,7 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-6 md:mt-12 bg-white/50 backdrop-blur-sm"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-4 md:mt-12 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
             <p className="text-[12.5px] leading-snug sm:text-[13px] text-muted-foreground">
