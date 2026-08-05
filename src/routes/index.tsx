@@ -88,8 +88,8 @@ function HomePage() {
   const popularQ = useQuery({ 
     queryKey: ["home-trending-searches"], 
     queryFn: () => trendingFn({ data: { limit: 24 } } as any), 
-    staleTime: 60_000,
-    gcTime: 5 * 60_000,
+    staleTime: 5 * 60_000,
+    gcTime: 30 * 60_000,
   });
   useSearchTrendsRealtime(["home-trending-searches"]);
 
