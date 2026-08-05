@@ -174,7 +174,7 @@ export function RecentProductsCarousel() {
                   to="/produto-publico/$slug"
                   params={{ slug }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-5 shadow-2xl backdrop-blur-3xl transition-all duration-500 hover:-translate-y-2 hover:bg-white/[0.07] hover:border-indigo-500/40 hover:shadow-indigo-500/10"
+                  className="group/card relative block h-full overflow-hidden rounded-[24px] border border-slate-700 bg-slate-800/50 p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-slate-800 hover:border-indigo-500/40"
                 >
                   {/* Scanning Effect for "Eyeing the product" feature */}
                   <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[32px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">

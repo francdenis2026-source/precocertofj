@@ -80,7 +80,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
       // flutua por cima do hero e a marca colide com o título/badge.
       "relative z-30 w-full shrink-0"
-    : "sticky top-0 z-40 border-b border-white/5 bg-[#020617]/80 text-foreground shadow-2xl backdrop-blur-2xl";
+    : "sticky top-0 z-40 border-b border-slate-700 bg-[#0f172a]/95 text-foreground shadow-xl backdrop-blur-md";
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
   const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";
   const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
