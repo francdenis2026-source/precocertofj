@@ -341,7 +341,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth"
+      className="pc-home relative flex min-h-[90dvh] w-full flex-col overflow-x-hidden scroll-smooth"
       style={{
         background: "var(--background)",
         color: "var(--foreground)",
