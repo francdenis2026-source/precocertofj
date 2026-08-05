@@ -5,6 +5,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import {
   suggestProducts,
   type ProductSuggestion,
@@ -372,9 +374,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         }
                       >
                         <TrendingDown
-                          className="h-3.5 w-3.5"
                           className={cn("h-3.5 w-3.5", active === i ? "text-primary-foreground" : "text-savings")}
                         />
+
 
                         {BRL(s.minPrice)}
                       </span>
