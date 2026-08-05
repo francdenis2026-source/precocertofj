@@ -8,6 +8,8 @@
   --emerald-accent: #10b981;
   --card-bg: #1e293b;          /* Slate-800 - Solid card background */
   --border-subtle: #334155;    /* Slate-700 */
+  --pc-store-badge-bg: #1e293b;
+  --pc-store-badge-border: #334155;
 }
 
 /* Base resets */

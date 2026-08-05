@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useLoaderData, Link } from "@tanstack/react-router";
 import { lazy, Suspense, useRef, useState, useMemo, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -6,8 +6,6 @@ import { motion } from "framer-motion";
 import {
   Search,
   ArrowRight,
-  TrendingDown,
-  ShieldCheck,
   Package,
   LayoutGrid,
   Zap,
@@ -42,6 +40,7 @@ import { categoryIcon } from "@/lib/category-icons";
 
 const ExplorePanel = lazy(() => import("@/components/home/ExplorePanel").then(m => ({ default: m.ExplorePanel })));
 const RecentProductsCarousel = lazy(() => import("@/components/home/RecentProductsCarousel").then(m => ({ default: m.RecentProductsCarousel })));
+const RegisteredStoresCarousel = lazy(() => import("@/components/home/RegisteredStoresCarousel").then(m => ({ default: m.RegisteredStoresCarousel })));
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -69,8 +68,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   return { key: def.slug, label: def.short, Icon: categoryIcon(def.slug) };
 });
 
-const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4";
-const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10";
+const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4 flex items-center gap-2";
+const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10 overflow-hidden";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -101,11 +100,18 @@ function HomePage() {
   const stats = loaderData?.stats;
   const economy = loaderData?.economy;
   const livePanel = buildLivePanel({ stats, economy, statsLoading: false, economyLoading: false, statsError: stats == null, economyError: economy == null });
-  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({ 
-    ...m, 
-    Icon: { markets: ShieldCheck, products: Package, savings: TrendingDown }[m.kind],
-    description: { markets: "Mercados locais auditados", products: "Itens monitorados hoje", savings: "Diferença média de preço" }[m.kind]
-  }));
+  const metrics = livePanel.metrics.map((m: LivePanelMetric) => {
+    const icons: Record<string, any> = {
+      markets: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>,
+      products: Package,
+      savings: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>
+    };
+    return { 
+      ...m, 
+      Icon: icons[m.kind],
+      description: { markets: "Mercados locais auditados", products: "Itens monitorados hoje", savings: "Diferença média de preço" }[m.kind]
+    };
+  });
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -161,7 +167,7 @@ function HomePage() {
                   <span className="italic font-extrabold text-indigo-400 drop-shadow-[0_0_30px_rgba(99,102,241,0.3)]">de Preços</span>
                 </h1>
                 
-                <p className="max-w-md text-base font-medium text-white/40 leading-relaxed">
+                <p className="max-w-md text-[15px] font-medium text-white/40 leading-relaxed">
                   A ferramenta definitiva para quem domina a economia. Analise mercados, identifique oportunidades e economize com precisão cirúrgica.
                 </p>
 
@@ -222,8 +228,8 @@ function HomePage() {
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] text-white/30">{m.label}</span>
-                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20">↓ 2.4%</span>}
-                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-emerald-500/20">+2 novos</span>}
+                        {idx === 2 && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[8px] font-black text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">↓ 2.4%</span>}
+                        {idx === 0 && <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[8px] font-black text-indigo-400 border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">+2 novos</span>}
                       </div>
                       <span className="text-3xl font-black tabular-nums tracking-tighter">{m.value}</span>
                       <p className="text-[10px] font-medium text-white/20 tracking-wide">{m.description}</p>
@@ -321,40 +327,50 @@ function HomePage() {
 
           {/* Registered Stores Section */}
           <section className="mt-20">
-            <h2 className={SECTION_TITLE}>Mercados Cadastrados</h2>
-            <div className={cn(GLASS_CARD, "p-8")}>
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex-1 space-y-4">
-                  <h3 className="text-3xl font-black text-white tracking-tighter">Transparência e Confiança</h3>
-                  <p className="text-white/40 leading-relaxed max-w-xl text-[15px] font-medium">
-                    Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir que você tenha acesso a informações precisas e atualizadas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
-                  </p>
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Button 
-                      onClick={() => navigate({ to: "/estabelecimentos" })}
-                      className="bg-indigo-600 text-white font-black hover:bg-indigo-500 transition-all rounded-xl px-6"
-                    >
-                      Ver Mercados
-                    </Button>
-                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-                      <ShieldCheck className="h-5 w-5" />
-                      <span>Dados Auditados</span>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={SECTION_TITLE}>
+                <svg viewBox="0 0 24 24" className="h-3 w-3 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Mercados Cadastrados
+              </h2>
+              <Link to="/estabelecimentos" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
+                Ver todos os parceiros →
+              </Link>
+            </div>
+            
+            <div className={cn(GLASS_CARD, "p-8 relative group")}>
+              {/* Decorative SVG Pattern */}
+              <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 opacity-5 pointer-events-none">
+                <svg viewBox="0 0 100 100" className="h-full w-full text-white fill-current">
+                  <path d="M0 0 L100 100 M100 0 L0 100" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </div>
+
+              <div className="flex flex-col gap-10 relative z-10">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                  <div className="flex-1 space-y-4 text-center md:text-left">
+                    <h3 className="text-3xl font-black tracking-tighter text-white">Transparência e Confiança</h3>
+                    <p className="max-w-xl text-[15px] font-medium text-white/40 leading-relaxed">
+                      Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir acesso a informações precisas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-6 shrink-0">
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl font-black text-white">{stats?.establishments ?? "0"}</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/30">Parceiros</span>
+                    </div>
+                    <div className="h-8 w-px bg-white/10" />
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+                        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                      </div>
+                      <span className="mt-1 text-[8px] font-black uppercase tracking-widest text-emerald-400">Auditado</span>
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-                   {[
-                     { name: "Supermercados", count: stats?.markets || 12 },
-                     { name: "Farmácias", count: 8 },
-                     { name: "Açougues", count: 6 },
-                     { name: "Padarias", count: 5 }
-                   ].map(cat => (
-                     <div key={cat.name} className="bg-slate-700/30 border border-slate-700 p-4 rounded-xl text-center min-w-[120px]">
-                        <div className="text-2xl font-black text-white">{cat.count}</div>
-                        <div className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{cat.name}</div>
-                     </div>
-                   ))}
-                </div>
+
+                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-white/5 rounded-xl" />}>
+                  <RegisteredStoresCarousel />
+                </Suspense>
               </div>
             </div>
           </section>
@@ -367,7 +383,7 @@ function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
                 { icon: Search, title: "Busque o Produto", desc: "Digite o nome do que você precisa. Nosso sistema varre todos os mercados em segundos." },
-                { icon: TrendingDown, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
+                { icon: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-4 px-4">
