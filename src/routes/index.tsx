@@ -1026,7 +1026,7 @@ function HomePage() {
                 <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-1">Oportunidades do dia</h2>
                 <p className="text-sm text-muted-foreground">Melhores variações de preço hoje.</p>
               </div>
-              <Button variant="outline" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
+              <Button variant="outline" size="sm" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
                 Ver todos os preços <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </div>
