@@ -21,18 +21,15 @@
   --pc-home-onhero-gold: #fbbf24;
   
   /* Hero background setup */
-  --pc-home-hero-bg: #030712;
-  --pc-home-hero-img-opacity: 0.55;
-  --pc-home-hero-overlay: radial-gradient(circle at 20% 30%, rgba(3, 7, 18, 0.6) 0%, rgba(3, 7, 18, 0.85) 100%);
+  --pc-home-hero-bg: #020617;
+  --pc-home-hero-img-opacity: 0.3;
   
   /* Sidebar Indicator */
   --pcsb-rail: #6366f1;
 }
 
 .dark {
-  --pc-home-hero-img-opacity: 0.45;
-  --pc-home-hero-overlay: radial-gradient(circle at 20% 30%, rgba(2, 6, 23, 0.75) 0%, #020617 100%);
-  --pc-home-onhero-glass: rgba(2, 6, 23, 0.65);
+  --pc-home-hero-bg: #020617;
 }
 
 /* Base resets & scroll behavior */
