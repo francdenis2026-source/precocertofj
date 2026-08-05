@@ -190,7 +190,7 @@
   --secondary: oklch(0.955 0.016 250);
   --secondary-foreground: oklch(0.22 0.05 258);
 
-  --muted: oklch(0.948 0.014 250);
+  --muted: oklch(0.96 0.01 250);
   --muted-foreground: oklch(0.40 0.04 258);
 
   /* Accent = hover/soft interactions — creme dourado que combina com navy/gold */
@@ -365,7 +365,7 @@
   --secondary: oklch(0.255 0.048 258);
   --secondary-foreground: oklch(0.975 0.006 250);
 
-  --muted: oklch(0.255 0.048 258);
+  --muted: oklch(0.22 0.04 258);
   --muted-foreground: oklch(0.78 0.022 250);
 
   /* Accent no dark = navy elevado com leve calor dourado (evita azul brilhante) */
