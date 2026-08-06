@@ -250,15 +250,16 @@ function HomePage() {
           <PromoBanner />
         </section>
 
+        {/* Optimized Baskets - Smart Intelligence System */}
+        <section className="max-w-7xl mx-auto px-4 mb-24">
+          <OptimizedBasketSection />
+        </section>
+
         {/* Live Market Insights (formerly Recent Products) */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
           <RecentProductsCarousel />
         </section>
 
-        {/* Optimized Baskets - Smart Intelligence System */}
-        <section className="max-w-7xl mx-auto px-4 mb-24">
-          <OptimizedBasketSection />
-        </section>
 
 
 
