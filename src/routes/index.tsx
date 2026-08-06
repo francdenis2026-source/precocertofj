@@ -264,13 +264,23 @@ function HomePage() {
               <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
-            <h1 className="font-display text-[32px] sm:text-[48px] font-black tracking-tight leading-[1.1] mb-4 max-w-3xl text-[var(--text-primary)]">
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="font-display text-[32px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-4 max-w-4xl text-[var(--text-primary)]"
+            >
               Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
-            </h1>
+            </motion.h1>
             
-            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed font-body">
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-base sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed font-body"
+            >
               Compare preços em tempo real com a inteligência do PreçoCerto. A melhor tecnologia para o seu bolso.
-            </p>
+            </motion.p>
 
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
