@@ -265,11 +265,11 @@ function HomePage() {
             </motion.div>
             
             <h1 className="font-display text-[32px] sm:text-[48px] font-black tracking-tight leading-[1.1] mb-4 max-w-3xl text-[var(--text-primary)]">
-              Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
+              Clareza e Conexão para sua <span className="text-[var(--brand-secondary)]">Economia Real</span>
             </h1>
             
-            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed">
-              Descubra os melhores preços em Feijó com uma interface moderna e intuitiva. 
+            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed font-body">
+              Compare preços em tempo real com a inteligência do PreçoCerto. A melhor tecnologia para o seu bolso.
             </p>
 
             <div className={cn(
