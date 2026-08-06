@@ -138,7 +138,7 @@ function SearchPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-bold text-sm truncate group-hover:text-[#2563EB] transition-colors">{m.name}</h3>
-                        {m.maxSavings > 0 && <Badge variant="savingsSoft" size="xs" className="bg-[#16A34A]/10 text-[#16A34A] border-none">-{m.maxSavings}%</Badge>}
+                        {m.maxSavings > 0 && <Badge variant="savingsSoft" size="sm" className="bg-[#16A34A]/10 text-[#16A34A] border-none">-{m.maxSavings}%</Badge>}
                       </div>
                       <p className="text-[11px] text-[#6B7280] font-medium mt-0.5">{m.neighborhood || "Centro"}</p>
                       <div className="flex items-center gap-3 mt-2">
@@ -180,7 +180,7 @@ function SearchPage() {
                      <div className="space-y-1">
                        <h1 className="text-3xl font-bold tracking-tight">{activeMarket.name}</h1>
                        <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#6B7280]">
-                         <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {activeMarket.address || "Endereço não informado"}</span>
+                         <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {activeMarket.city || "Endereço não informado"}</span>
                          <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> 08:00 às 19:00</span>
                          <span className="flex items-center gap-1.5 text-[#16A34A] font-bold">Aberto agora</span>
                        </div>
@@ -282,7 +282,7 @@ function ProductCard({ group, marketId }: { group: ProductGroup; marketId: strin
       <div className="aspect-square bg-[#F9FAFB] p-6 flex items-center justify-center relative">
         <ProductImage name={group.productName} alt={group.productName} size="lg" className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
         <div className="absolute top-3 right-3">
-           <Badge variant="savings" size="xs" className="bg-[#16A34A] text-white border-none shadow-md shadow-[#16A34A]/20">-{Math.round(((group.max - group.min)/group.max)*100)}%</Badge>
+           <Badge variant="savings" size="sm" className="bg-[#16A34A] text-white border-none shadow-md shadow-[#16A34A]/20">-{Math.round(((group.max - group.min)/group.max)*100)}%</Badge>
         </div>
       </div>
       <div className="p-5 space-y-4">
@@ -295,7 +295,7 @@ function ProductCard({ group, marketId }: { group: ProductGroup; marketId: strin
            <div className="space-y-0.5">
              <div className="flex items-center gap-2">
                <span className="text-[10px] text-[#6B7280] line-through">R$ {group.max.toFixed(2)}</span>
-               <Badge variant="savingsSoft" size="xs" className="bg-[#16A34A]/10 text-[#16A34A] font-bold py-0 h-4">Economize</Badge>
+               <Badge variant="savingsSoft" size="sm" className="bg-[#16A34A]/10 text-[#16A34A] font-bold py-0 h-4">Economize</Badge>
              </div>
              <Price value={priceObj.price} size="lg" className="text-[#111827] font-bold" />
            </div>
