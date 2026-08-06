@@ -17,6 +17,15 @@ import {
   ArrowRight,
   TrendingDown
 } from "lucide-react";
+import { 
+  GroceryIcon, 
+  BakeryIcon, 
+  MeatIcon, 
+  FruitIcon, 
+  DrinkIcon, 
+  CleaningIcon, 
+  HygieneIcon 
+} from "@/components/icons/CategoryIcons";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Button } from "@/components/ui/button";
@@ -49,13 +58,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=60&w=400" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=60&w=400" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=60&w=400" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=60&w=400" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&q=60&w=400" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=60&w=400" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, image: "https://images.unsplash.com/photo-1559594861-16383c899062?auto=format&fit=crop&q=60&w=400" },
+  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#6C5CE7" },
+  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#FD79A8" },
+  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#E17055" },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#00B894" },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#0984E3" },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#00CEC9" },
+  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#FDCB6E" },
 ];
 
 function HomePage() {
@@ -146,16 +155,16 @@ function HomePage() {
                    document.addEventListener('mousemove', onMouseMove);
                    document.addEventListener('mouseup', onMouseUp);
                  }}>
-              {CATEGORIES.map(({ slug, label, Icon, image }) => (
+              {CATEGORIES.map(({ slug, label, Icon, SVG, color }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
                   className="group relative flex flex-col items-center justify-end min-w-[160px] h-[200px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
                 >
-                  <div className="absolute inset-0 z-0">
-                    <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-60" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/40 to-transparent" />
+                  <div className="absolute inset-0 z-0 flex items-center justify-center p-8 opacity-20 group-hover:opacity-30 transition-opacity">
+                    <SVG className="w-full h-full" style={{ color }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
                   </div>
                   <div className="relative z-10 w-full p-5 flex flex-col items-center">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md text-white group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 mb-3 shadow-lg">
