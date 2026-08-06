@@ -227,7 +227,7 @@ function StoreCatalog({ storeId }: { storeId: string }) {
                   </div>
                 </div>
                 <div className="text-right">
-                  <Price amount={product.price} className="text-base font-black" />
+                  <Price value={product.price} className="text-base font-black" />
                   {product.unitLabel && (
                     <div className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase mt-0.5">
                       {product.unitLabel}
