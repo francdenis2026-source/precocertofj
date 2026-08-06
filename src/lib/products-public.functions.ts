@@ -158,6 +158,9 @@ export const getRecentProducts = createServerFn({ method: "GET" })
     return { limit };
   })
   .handler(async ({ data: { limit } }): Promise<RecentProduct[]> => {
+    // ...
+    // fix the loop or reference
+
     try {
       setResponseHeader(
         "cache-control",

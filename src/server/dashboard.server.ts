@@ -1,8 +1,8 @@
 // src/lib/dashboard.server.ts
-import { getMyProfileStats } from "./profile-stats.functions";
-import { listMyScans } from "./scans-history.functions";
-import { listFavoriteItems } from "./favorites.functions";
-import { listPriceAlerts } from "./notifications.functions";
+import { getMyProfileStats } from "@/lib/profile-stats.functions";
+import { listMyScans } from "@/lib/scans-history.functions";
+import { listFavoriteItems } from "@/lib/favorites.functions";
+import { listPriceAlerts } from "@/lib/notifications.functions";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function fetchDashboardData(supabase: SupabaseClient, userId: string) {
