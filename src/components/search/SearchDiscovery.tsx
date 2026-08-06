@@ -192,7 +192,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ RECENTES — tinta ÍNDIGO (histórico) ============ */}
       <section
         aria-label="Últimas buscas"
-        className="relative flex min-h-0 flex-col overflow-hidden rounded-xl border border-indigo-500/25 bg-indigo-500/[0.05] p-2 dark:border-indigo-400/25 dark:bg-indigo-400/[0.06]"
+        className="relative flex min-h-0 flex-col overflow-hidden rounded-xl border-[var(--brand-primary)]/25 bg-[var(--brand-primary)]/[0.05] p-2 dark:border-[var(--brand-primary)]/25 dark:bg-[var(--brand-primary)]/[0.06]"
 
       >
         <div className="flex items-center justify-between gap-2">

@@ -824,7 +824,7 @@ export function PriceSearchBar({
                           clearSearchHistory();
                           setHistory([]);
                         }}
-                        className="text-[10px] font-bold uppercase tracking-wider text-red-500/80 hover:text-red-500 transition-colors"
+                        className="text-[10px] font-bold uppercase tracking-wider text-[var(--brand-primary)]/80 hover:text-[var(--brand-primary)] transition-colors"
                       >
                         Limpar
                       </button>
