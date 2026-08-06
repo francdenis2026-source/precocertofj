@@ -608,4 +608,3 @@ function FocusTrap({ children, active }: { children: React.ReactNode; active: bo
 
   return <div ref={rootRef} className="contents">{children}</div>;
 }
-);
