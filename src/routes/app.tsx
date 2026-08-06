@@ -138,7 +138,11 @@ function DashboardPage() {
               <ul className="divide-y divide-border">
                 {data?.trackedItems.map((item) => (
                   <li key={item.id} className="py-3 first:pt-0 last:pb-0">
-                    <Link to="/produto/$id" params={{ id: item.catalogId }} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                    <Link 
+                      to="/loja/$id/produto/$slug" 
+                      params={{ id: item.lastEstablishmentId || "catalogo", slug: item.catalogSlug }} 
+                      className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                    >
                       <ProductImage src={item.imageUrl} alt={item.displayName} width={40} height={40} className="rounded-md border bg-muted/30" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-semibold">{item.displayName}</p>
@@ -183,21 +187,27 @@ function DashboardPage() {
                       !alert.readAt ? "border-primary/20 bg-primary/5" : "bg-card"
                     )}
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      {alert.kind === "item_target_hit" ? <Tag className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium leading-tight">{alert.displayName}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {alert.marketName ? `No ${alert.marketName}: ` : ""}
-                        <span className="font-bold text-foreground">
-                          R$ {alert.newPrice?.toFixed(2).replace(".", ",")}
-                        </span>
-                        {alert.diffPct && (
-                          <span className="ml-1 text-neon font-bold">(-{alert.diffPct.toFixed(0)}%)</span>
-                        )}
-                      </p>
-                    </div>
+                    <Link 
+                      to="/loja/$id/produto/$slug" 
+                      params={{ id: alert.establishmentId || "catalogo", slug: alert.productSlug }}
+                      className="flex w-full gap-3"
+                    >
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        {alert.kind === "item_target_hit" ? <Tag className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium leading-tight">{alert.displayName}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {alert.marketName ? `No ${alert.marketName}: ` : ""}
+                          <span className="font-bold text-foreground">
+                            R$ {alert.newPrice?.toFixed(2).replace(".", ",")}
+                          </span>
+                          {alert.diffPct && (
+                            <span className="ml-1 text-neon font-bold">(-{alert.diffPct.toFixed(0)}%)</span>
+                          )}
+                        </p>
+                      </div>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -226,8 +236,8 @@ function DashboardPage() {
                 {data?.recentScans.map((scan) => (
                   <Link 
                     key={scan.id} 
-                    to="/historico/$id" 
-                    params={{ id: scan.id }}
+                    to="/loja/$id/produto/$slug" 
+                    params={{ id: scan.establishmentId || "catalogo", slug: scan.productSlug }}
                     className="group flex flex-col items-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/40 hover:bg-muted/10 transition-all"
                   >
                     <ProductImage src={scan.imageUrl} alt={scan.productName || ""} width={60} height={60} className="mb-3 rounded-lg" />
