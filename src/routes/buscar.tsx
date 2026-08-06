@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
