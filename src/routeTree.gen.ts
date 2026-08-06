@@ -359,6 +359,11 @@ const LojaIdRoute = LojaIdRouteImport.update({
   path: '/loja/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LojaIdRoute = LojaIdRouteImport.update({
+  id: '/loja/$id',
+  path: '/loja/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ListaProntaRoute = ListaProntaRouteImport.update({
   id: '/lista_/pronta',
   path: '/lista/pronta',
@@ -1430,6 +1435,7 @@ export interface RootRouteChildren {
   EstabelecimentoSlugRoute: typeof EstabelecimentoSlugRouteWithChildren
   ListaNovaRoute: typeof ListaNovaRoute
   ListaProntaRoute: typeof ListaProntaRoute
+  LojaIdRoute: typeof LojaIdRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
   OndeComprarProdutoRoute: typeof OndeComprarProdutoRoute
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
@@ -1775,6 +1781,13 @@ declare module '@tanstack/react-router' {
       path: '/onde-comprar/$produto'
       fullPath: '/onde-comprar/$produto'
       preLoaderRoute: typeof OndeComprarProdutoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loja/$id': {
+      id: '/loja/$id'
+      path: '/loja/$id'
+      fullPath: '/loja/$id'
+      preLoaderRoute: typeof LojaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loja/$id': {
@@ -2364,6 +2377,7 @@ const rootRouteChildren: RootRouteChildren = {
   EstabelecimentoSlugRoute: EstabelecimentoSlugRouteWithChildren,
   ListaNovaRoute: ListaNovaRoute,
   ListaProntaRoute: ListaProntaRoute,
+  LojaIdRoute: LojaIdRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
   OndeComprarProdutoRoute: OndeComprarProdutoRoute,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
