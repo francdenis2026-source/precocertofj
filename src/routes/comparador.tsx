@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
+import { Plus, Check, Save, Download, FileDown, BellRing, Store as StoreIcon, Trophy, ArrowRight, Lock, X, Search, SlidersHorizontal, Info, ChevronDown } from "lucide-react";
 import { Nav } from "@/components/brand/Nav";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
@@ -1700,7 +1701,7 @@ function ProductCardBase({
           </>
         ) : (
           <>
-            <X className="h-3 w-3 rotate-45" strokeWidth={2.6} /> Comparar
+            <Plus className="h-3 w-3" strokeWidth={2.6} /> Comparar
           </>
         )}
       </button>
