@@ -1,4 +1,6 @@
 import { createFileRoute, useNavigate, Link, retainSearchParams } from "@tanstack/react-router";
+import { Scale } from "lucide-react";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -202,7 +204,11 @@ function formatSize(size_value: number | null, size_unit: string): string | null
 }
 
 function MelhoresPrecosPage() {
+  const [selected, setSelected] = useState<string[]>([]);
+  const MAX_SEL = 5;
+
   const search = Route.useSearch() as any;
+
   const navigate = useNavigate({ from: "/melhores-precos" }) as any;
   const activeCategory = search.cat || null;
   const activeType = search.type || null;
@@ -434,6 +440,12 @@ function MelhoresPrecosPage() {
     [rows, currentPage],
   );
 
+  const selectedRows = useMemo(
+    () => allRows.filter((r) => selected.includes(r.product_key)),
+    [allRows, selected],
+  );
+
+
   const totalSavings = rows.reduce(
     (acc, r) => acc + (Number(r.avg_price) - Number(r.min_price)),
     0,
@@ -452,7 +464,7 @@ function MelhoresPrecosPage() {
   return (
     <PageShell fit hideFooter>
       <Nav />
-      <PageShellContent fit className="!pb-0">
+      <PageShellContent fit className="relative !pb-0">
       <main className="mx-auto w-full max-w-7xl flex-1 min-h-0 overflow-y-auto px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-1 md:px-6 md:pb-6">
 
         {/* ---------- Cabeçalho editorial compacto ---------- */}
@@ -487,8 +499,7 @@ function MelhoresPrecosPage() {
                 <PrecoCertoMark variant="inline" as="em">mais barato</PrecoCertoMark>
               </h1>
               <p className={dsx(tc.sectionNote, "mt-0.5 line-clamp-2 max-w-2xl")}>
-                Comparamos itens de mesmo tamanho e unidade (ml, g, un). A economia é medida
-                contra a média dos mercados que vendem o item.
+                Comparamos itens de mesmo tamanho e unidade. Selecione até {MAX_SEL} itens para comparar o custo total entre estabelecimentos.
               </p>
             </div>
 
@@ -802,7 +813,20 @@ function MelhoresPrecosPage() {
 
             {!isLoading && !error && rows.length > 0 && (
               <>
-                <MelhoresList rows={pagedRows} startIndex={(currentPage - 1) * PAGE_SIZE} />
+                <MelhoresList
+                  rows={pagedRows}
+                  startIndex={(currentPage - 1) * PAGE_SIZE}
+                  selected={selected}
+                  onToggle={(id) =>
+                    setSelected((prev) =>
+                      prev.includes(id)
+                        ? prev.filter((p) => p !== id)
+                        : prev.length < MAX_SEL
+                        ? [...prev, id]
+                        : prev,
+                    )
+                  }
+                />
                 {totalPages > 1 && (
                   <Pagination
                     page={currentPage}
@@ -817,14 +841,147 @@ function MelhoresPrecosPage() {
         </section>
       </main>
 
-      {/* Página isolada — sem footer (padrão IsolatedPage). */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-16 z-40 flex justify-center px-4 md:bottom-8">
+        <div
+          className={cn(
+            "pointer-events-auto flex w-full max-w-xl flex-col gap-3 rounded-2xl border border-border bg-card/95 p-3 shadow-xl backdrop-blur transition-all duration-300",
+            selected.length > 0 ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0",
+          )}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <Scale className="h-5 w-5 shrink-0 text-primary" strokeWidth={2.2} />
+              <div className="min-w-0">
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  {selected.length}/{MAX_SEL} selecionado{selected.length > 1 ? "s" : ""}
+                </p>
+                <p className="line-clamp-1 text-[12.5px] font-medium text-foreground">
+                  {selectedRows.map((r) => r.display_name).join(" · ")}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setSelected([])}
+                className="rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-semibold text-muted-foreground transition hover:text-foreground"
+              >
+                Limpar
+              </button>
+            </div>
+          </div>
+
+          {selected.length >= 2 && (
+            <div className="overflow-hidden rounded-xl border border-border bg-background/50">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-left text-[12px]">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/30">
+                      <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Mercado
+                      </th>
+                      <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Total
+                      </th>
+                      <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        Diferença
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/50">
+                    {(() => {
+                      const productCount = selectedRows.length;
+                      const productMins = selectedRows.map((r) => Number(r.min_price));
+                      const allMarketNames = new Set<string>();
+                      selectedRows.forEach((r) =>
+                        (r.stores || []).forEach((s) => allMarketNames.add(s.store_name)),
+                      );
+
+                      const results = Array.from(allMarketNames)
+                        .map((market) => {
+                          let total = 0;
+                          let itemsCount = 0;
+                          selectedRows.forEach((r) => {
+                            const match = (r.stores || []).find((s) => s.store_name === market);
+                            if (match) {
+                              total += Number(match.price);
+                              itemsCount++;
+                            }
+                          });
+                          return { market, total, itemsCount };
+                        })
+                        .filter((r) => r.itemsCount === productCount);
+
+                      if (results.length === 0) {
+                        return (
+                          <tr>
+                            <td
+                              colSpan={3}
+                              className="px-3 py-4 text-center italic text-muted-foreground"
+                            >
+                              Nenhum mercado possui todos os itens simultaneamente.
+                            </td>
+                          </tr>
+                        );
+                      }
+
+                      const bestTotal = Math.min(...results.map((r) => r.total));
+                      const sumMins = productMins.reduce((a, b) => a + b, 0);
+
+                      return results
+                        .sort((a, b) => a.total - b.total)
+                        .map((res) => {
+                          const isBest = res.total === bestTotal;
+                          const diff = res.total - sumMins;
+                          return (
+                            <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
+                              <td className="max-w-[120px] truncate px-2 py-1.5 font-medium">
+                                {res.market}
+                              </td>
+                              <td className="px-2 py-1.5 text-right font-mono">
+                                <Price
+                                  value={res.total}
+                                  size="sm"
+                                  tone={isBest ? "best" : "default"}
+                                />
+                              </td>
+                              <td className="px-2 py-1.5 text-right">
+                                {isBest ? (
+                                  <span className="font-bold text-savings">MELHOR</span>
+                                ) : (
+                                  <span className="text-muted-foreground">
+                                    +{formatBRL(diff)}
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        });
+                    })()}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       </PageShellContent>
     </PageShell>
   );
 }
 
 
-function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex?: number }) {
+function MelhoresList({
+  rows,
+  startIndex = 0,
+  selected,
+  onToggle,
+}: {
+  rows: Comparison[];
+  startIndex?: number;
+  selected: string[];
+  onToggle: (id: string) => void;
+}) {
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
   return (
     <>
@@ -845,6 +1002,8 @@ function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex
                   row={row}
                   rank={globalIdx + 1}
                   imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
+                  isSelected={selected.includes(row.product_key)}
+                  onToggle={() => onToggle(row.product_key)}
                 />
               </TeaserCard>
             </li>
@@ -1038,7 +1197,19 @@ function formatFreshness(iso: string | null | undefined): { label: string; days:
   return { label, days, stale };
 }
 
-function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: number; imageOverride?: string }) {
+function ComparisonCard({
+  row,
+  rank,
+  imageOverride,
+  isSelected,
+  onToggle,
+}: {
+  row: Comparison;
+  rank: number;
+  imageOverride?: string;
+  isSelected?: boolean;
+  onToggle?: () => void;
+}) {
   const size = formatSize(row.size_value, row.size_unit);
   const stores = Array.isArray(row.stores) ? row.stores : [];
   const catLabel = CATEGORY_LABELS[row.category] ?? row.category;
@@ -1057,7 +1228,20 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
   const cardFreshness = formatFreshness(latestIso);
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className={cn("relative flex h-full flex-col", isSelected && "ring-2 ring-primary ring-offset-2 rounded-xl")}>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={cn(
+          "absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all shadow-sm",
+          isSelected
+            ? "border-primary bg-primary text-primary-foreground"
+            : "border-muted-foreground/30 bg-background/80 text-transparent hover:border-primary/50",
+        )}
+        aria-label={isSelected ? "Remover da comparação" : "Adicionar à comparação"}
+      >
+        <Scale className="h-3.5 w-3.5" strokeWidth={3} />
+      </button>
     <Link
       to="/produto-publico/$slug"
       params={{ slug: detailSlug }}

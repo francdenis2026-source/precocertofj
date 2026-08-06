@@ -1042,27 +1042,115 @@ function ComparadorPage() {
 
       {selected.length > 0 && (
         <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-          <div className="pointer-events-auto flex w-full max-w-xl items-center gap-3 rounded-2xl border border-border bg-card/95 p-3 shadow-xl backdrop-blur">
-            <div className="flex min-w-0 flex-1 items-center gap-2">
-              <Scale className="h-5 w-5 shrink-0 text-primary" strokeWidth={2.2} />
-              <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                  {selected.length}/{MAX_SEL} selecionado{selected.length > 1 ? "s" : ""}
-                </p>
-                <p className="line-clamp-1 text-[12.5px] font-medium text-foreground">
-                  {selectedRows.map((r) => r.display_name).join(" · ")}
-                </p>
+          <div className="pointer-events-auto flex w-full max-w-xl flex-col gap-3 rounded-2xl border border-border bg-card/95 p-3 shadow-xl backdrop-blur">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <Scale className="h-5 w-5 shrink-0 text-primary" strokeWidth={2.2} />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    {selected.length}/{MAX_SEL} selecionado{selected.length > 1 ? "s" : ""}
+                  </p>
+                  <p className="line-clamp-1 text-[12.5px] font-medium text-foreground">
+                    {selectedRows.map((r) => r.display_name).join(" · ")}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelected([])}
+                  className="rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-semibold text-muted-foreground transition hover:text-foreground"
+                >
+                  Limpar
+                </button>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setSelected([])}
-              className="hidden shrink-0 rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-semibold text-muted-foreground transition hover:text-foreground sm:inline-flex"
-            >
-              Limpar
-            </button>
 
+            {selected.length >= 2 && (
+              <div className="overflow-hidden rounded-xl border border-border bg-background/50">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left text-[12px]">
+                    <thead>
+                      <tr className="border-b border-border bg-muted/30">
+                        <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Mercado
+                        </th>
+                        <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Total
+                        </th>
+                        <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                          Diferença
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/50">
+                      {(() => {
+                        const productCount = selectedRows.length;
 
+                        // Encontrar o menor preço de cada produto para calcular economia
+                        const productMins = selectedRows.map(r => Number(r.min_price));
+
+                        // Coletar mercados que têm TODOS os produtos selecionados
+                        const allMarketNames = new Set<string>();
+                        selectedRows.forEach(r => (r.stores || []).forEach(s => allMarketNames.add(s.store_name)));
+
+                        const results = Array.from(allMarketNames).map(market => {
+                          let total = 0;
+                          let itemsCount = 0;
+                          
+                          selectedRows.forEach(r => {
+                            const match = (r.stores || []).find(s => s.store_name === market);
+                            if (match) {
+                              total += Number(match.price);
+                              itemsCount++;
+                            }
+                          });
+
+                          return { market, total, itemsCount };
+                        }).filter(r => r.itemsCount === productCount);
+
+                        if (results.length === 0) {
+                          return (
+                            <tr>
+                              <td colSpan={3} className="px-3 py-4 text-center italic text-muted-foreground">
+                                Nenhum mercado possui todos os itens simultaneamente.
+                              </td>
+                            </tr>
+                          );
+                        }
+
+                        const bestTotal = Math.min(...results.map(r => r.total));
+                        const sumMins = productMins.reduce((a, b) => a + b, 0);
+
+                        return results
+                          .sort((a, b) => a.total - b.total)
+                          .map(res => {
+                            const isBest = res.total === bestTotal;
+                            const diff = res.total - sumMins;
+                            return (
+                              <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
+                                <td className="px-2 py-1.5 font-medium truncate max-w-[120px]">
+                                  {res.market}
+                                </td>
+                                <td className="px-2 py-1.5 text-right font-mono">
+                                  <Price value={res.total} size="sm" tone={isBest ? "best" : "default"} />
+                                </td>
+                                <td className="px-2 py-1.5 text-right">
+                                  {isBest ? (
+                                    <span className="font-bold text-savings">MELHOR</span>
+                                  ) : (
+                                    <span className="text-muted-foreground">+{formatBRL(diff)}</span>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          });
+                      })()}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
