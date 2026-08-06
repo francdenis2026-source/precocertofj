@@ -123,28 +123,13 @@ export function ProductQuickView({
         }))
       : [];
 
-  // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
-  // estabelecimento o destaque repetiria a linha, então é omitido.
-  const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
   const cheapestLogo =
     cheapest && storeKey(cheapest.marketName) === storeKey(product?.cheapestStore)
       ? (product?.cheapestLogo ?? null)
       : null;
 
-  /**
-   * "Melhor custo-benefício" no modal.
-   *
-   * Aqui todas as ofertas são do MESMO produto (mesma embalagem), então o
-   * vencedor por unidade coincide com o menor preço. O selo continua útil
-   * porque traduz a etiqueta em R$/kg ou R$/L — mas precisa dos mesmos
-   * guardas anti-ruído do `BestValueBadge`:
-   *  - `requireDifferentSizes: false` (comparação intra-produto);
-   *  - `pickBestValue` devolve null sem tamanho detectável, com bases
-   *    misturadas (kg vs L) ou com menos de 2 ofertas;
-   *  - `computeUnitPrice` (interno) não extrapola g/ml abaixo de 1kg/1L.
-   */
   const bestValue = pickBestValue(
-    allMarkets.map((m) => ({
+    sortedMarkets.map((m: any) => ({
       key: m.marketName,
       price: m.priceMin,
       name: product?.name ?? data?.displayName ?? "",
