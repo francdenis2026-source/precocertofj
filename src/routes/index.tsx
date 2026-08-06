@@ -306,7 +306,7 @@ function HomePage() {
                       params={{ slug: slug as any }}
                       data-category-item
                       data-label={label}
-                      className="group/card relative flex flex-col items-center justify-end h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
+                      className="group/card relative flex flex-col items-center justify-end h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg-base)]"
                     >
                       {/* Category Ambient Glow */}
                       <div className="absolute inset-0 z-0">

@@ -34,14 +34,19 @@ describe("Price Sorting Logic (Enriched Suggestions)", () => {
     const sorted = [...items].sort((a, b) => {
       if (a.minPrice === null) return 1;
       if (b.minPrice === null) return -1;
-      return a.minPrice - b.minPrice;
+      if (a.minPrice !== b.minPrice) return a.minPrice - b.minPrice;
+      // Secondary sort to ensure consistency on ties
+      return (a.market || "").localeCompare(b.market || "");
     });
 
     expect(sorted[0].minPrice).toBe(5.2);
+    expect(sorted[0].market).toBe("B");
     expect(sorted[1].minPrice).toBe(5.2);
+    expect(sorted[1].market).toBe("D");
     expect(sorted[2].minPrice).toBe(8.9);
     expect(sorted[3].minPrice).toBe(10.5);
     expect(sorted[4].minPrice).toBe(null);
   });
 });
+
 
