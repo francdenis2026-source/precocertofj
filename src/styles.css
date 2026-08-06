@@ -14,25 +14,35 @@
  * --------------------------------
  */
 :root {
-  /* Cores da Logomarca - Evolução Gold & Navy */
-  --pc-brand-gold: #D4AF37;   /* Dourado Metálico */
-  --pc-brand-navy: #0B1E3A;   /* Azul Marinho Contamigos */
-  --pc-brand-white: #FFFFFF;  /* Branco Puro */
+  /* Cores Core - Evolução Gold & Navy (Midnight Executive) */
+  --pc-brand-gold: #D4AF37;   /* Dourado Metálico Base */
+  --pc-brand-gold-glow: #FFD700; /* Ouro Brilhante */
+  --pc-brand-navy: #0B1E3A;   /* Azul Marinho Varejão */
+  --pc-brand-navy-deep: #050E1B;
   
-  /* Primary Palette - Light Mode */
-  --pc-bg-base: #F1F4F9;       /* Slate-ish light blue, mais suave */
+  /* Primary Palette - Light Mode Premium */
+  --pc-bg-base: #F8FAFC;       /* Slate-ish light blue, extremamente limpo */
   --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #E2E8F0;
+  --pc-bg-surface-elevated: #F1F5F9;
   
   --pc-brand-primary: var(--pc-brand-gold);
   --pc-brand-secondary: var(--pc-brand-navy);
-  --pc-brand-accent: #6366F1;  /* Indigo vibrante para microinterações */
+  --pc-brand-accent: #6366F1;
   
-  --pc-brand-glow: rgba(212, 175, 55, 0.12);
-  --pc-border-subtle: rgba(11, 30, 58, 0.08);
+  --pc-brand-glow: rgba(212, 175, 55, 0.15);
+  --pc-border-subtle: rgba(11, 30, 58, 0.06);
   --pc-text-primary: #0F172A;   /* Slate 900 */
   --pc-text-secondary: #475569; /* Slate 600 */
   --pc-text-tertiary: #94A3B8;  /* Slate 400 */
+  
+  /* Layout Tokens */
+  --pc-radius-lg: 24px;
+  --pc-radius-md: 16px;
+  --pc-radius-sm: 8px;
+  
+  --pc-shadow-sm: 0 1px 3px rgba(11, 30, 58, 0.04);
+  --pc-shadow-md: 0 12px 32px -4px rgba(11, 30, 58, 0.08);
+  --pc-shadow-lg: 0 32px 64px -16px rgba(11, 30, 58, 0.14);
   
   /* Semantic Tokens */
   --bg-base: var(--pc-bg-base);
@@ -47,29 +57,25 @@
   --text-secondary: var(--pc-text-secondary);
   --text-tertiary: var(--pc-text-tertiary);
 
-  /* Radius & Transitions */
-  --pc-radius: 12px;
-  --pc-shadow-sm: 0 1px 3px rgba(11, 30, 58, 0.05);
-  --pc-shadow-md: 0 8px 24px -4px rgba(11, 30, 58, 0.08);
-  --pc-shadow-lg: 0 20px 48px -12px rgba(11, 30, 58, 0.12);
-  
+  --dur-fast: 180ms;
   --dur-base: 250ms;
+  --dur-slow: 350ms;
   --ease-out-smooth: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 :root[data-theme='dark'] {
-  /* Deep Navy — melhor contraste com o dourado do que o preto puro */
-  --pc-bg-base: #0A182C;
-  --pc-bg-surface: #10233F;
-  --pc-bg-surface-elevated: #17304F;
+  /* Ultra Deep Navy Layering */
+  --pc-bg-base: #050E1B;
+  --pc-bg-surface: #0B1E3A;
+  --pc-bg-surface-elevated: #112A4F;
   --pc-brand-primary: #E8C25A;
   --pc-brand-secondary: #F8FAFC;
-  --pc-brand-accent: #7C8CF8;
-  --pc-brand-glow: rgba(232, 194, 90, 0.18);
-  --pc-border-subtle: rgba(232, 194, 90, 0.14);
-  --pc-text-primary: #F3F6FB;
-  --pc-text-secondary: #A9BAD2;
-  --pc-text-tertiary: #7086A3;
+  --pc-brand-accent: #818CF8;
+  --pc-brand-glow: rgba(232, 194, 90, 0.2);
+  --pc-border-subtle: rgba(232, 194, 90, 0.1);
+  --pc-text-primary: #F8FAFC;
+  --pc-text-secondary: #94A3B8;
+  --pc-text-tertiary: #64748B;
 }
 
 @theme {

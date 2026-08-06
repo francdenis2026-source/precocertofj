@@ -20,42 +20,23 @@ import {
   Filter,
   ArrowDownWideNarrow,
   Clock,
-    MapPin,
-    Sparkles
+  MapPin,
+  Sparkles
 } from "lucide-react";
-import { 
-  GroceryIcon, 
-  BakeryIcon, 
-  MeatIcon, 
-  FruitIcon, 
-  DrinkIcon, 
-  CleaningIcon, 
-  HygieneIcon 
-} from "@/components/icons/CategoryIcons";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat, getRecentProducts } from "@/lib/products-public.functions";
-import { listTrendingSearches } from "@/lib/search-trends.functions";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
-import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { PromoBanner } from "@/components/promo/PromoBanner";
-import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -78,62 +59,31 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#D4AF37" }, // Dourado
-  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#0B1E3A" },    // Marinho
-  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#1E293B" },    // Slate
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#D4AF37" },  // Dourado
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#0B1E3A" },       // Marinho
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#1E293B" },   // Slate
-  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#D4AF37" },     // Dourado
+  { slug: "supermercados", label: "Mercados", Icon: Store, color: "#D4AF37" },
+  { slug: "padarias", label: "Padarias", Icon: Coffee, color: "#0B1E3A" },
+  { slug: "acougues", label: "Açougues", Icon: Utensils, color: "#1E293B" },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, color: "#D4AF37" },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, color: "#0B1E3A" },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, color: "#1E293B" },
+  { slug: "higiene", label: "Higiene", Icon: Smile, color: "#D4AF37" },
 ];
+
+function formatDate(iso: string): string {
+  if (!iso) return "—";
+  const date = new Date(iso);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
 
 function HomePage() {
   const navigate = useNavigate();
-  const { user, loading: sessionLoading } = useSession();
+  const { user } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  // const [q, setQ] = useState(""); // Removed q from state as we now use SmartSearchBar exclusively for searching
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [showLogoPreview, setShowLogoPreview] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const availableLogos = [
-    { name: "Central Super Color (Dark)", path: "/logos/central-super-color-dark.svg" },
-    { name: "Central Super Color", path: "/logos/central-super-color.svg" },
-    { name: "Central Super Mono", path: "/logos/central-super-mono.svg" },
-    { name: "Claudia v5", path: "/logos/claudia-v5.png" },
-    { name: "Comercial Claudia", path: "/logos/comercial-claudia.png" },
-    { name: "Doce Dia Color", path: "/logos/doce-dia-color.svg" },
-    { name: "Doce Dia Mono", path: "/logos/doce-dia-mono.svg" },
-    { name: "Facem Color", path: "/logos/facem-color.svg" },
-    { name: "Facem Mono", path: "/logos/facem-mono.svg" },
-    { name: "Feijoense Color", path: "/logos/feijoense-color.svg" },
-    { name: "Feijoense Mono", path: "/logos/feijoense-mono.svg" },
-    { name: "Pague Pouco", path: "/logos/pague-pouco-v6.webp" },
-    { name: "Parceirão Color", path: "/logos/parceirao-color.svg" },
-    { name: "Parceirão Mono", path: "/logos/parceirao-mono.svg" },
-    { name: "Rebouças Color", path: "/logos/reboucas-color.svg" },
-    { name: "Rebouças Mono", path: "/logos/reboucas-mono.svg" },
-    { name: "Recanto Color", path: "/logos/recanto-color.svg" },
-    { name: "Recanto Mono", path: "/logos/recanto-mono.svg" },
-    { name: "Ultra Color", path: "/logos/ultra-color.svg" },
-    { name: "Ultra Mono", path: "/logos/ultra-mono.svg" },
-    { name: "Vanderley Color", path: "/logos/vanderley-color.svg" },
-    { name: "Vanderley Mono", path: "/logos/vanderley-mono.svg" },
-    { name: "Logo Lockup", path: "/logo-lockup.png" },
-    { name: "Logo Mark", path: "/logo-mark.svg" }
-  ];
-
 
   useEffect(() => {
     if (sort === "near" && !userLocation) {
@@ -170,9 +120,6 @@ function HomePage() {
     if (!rawRecentProducts) return [];
     let list = [...rawRecentProducts];
     
-    // We removed 'q' filtering from here because the main search happens via SmartSearchBar which navigates to /buscar
-    // The products shown here are 'live' recent prices, not necessarily search results.
-
     if (sort === "price") {
       list.sort((a, b) => a.price - b.price);
     } else if (sort === "near" && userLocation) {
@@ -192,450 +139,332 @@ function HomePage() {
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 overflow-x-hidden">
       <SiteHeader variant="overlay" showThemeToggle />
       
-      {/* Backdrop for focused search */}
-      {/* Backdrop for focused search - Removed fixed backdrop to prevent focus issues */}
-      
-      {/* Realistic Supermarket Background Hero */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-[var(--bg-base)]" />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.78) contrast(1.12) saturate(1.05) blur(2px)"
-          }}
+      {/* Premium Hero Section */}
+      <div className="relative min-h-[92vh] flex flex-col pt-20 pb-16 overflow-hidden">
+        {/* Background Layer with Parallax-like effect (Dynamic Blur) */}
+        <div className="absolute inset-0 z-0">
+          <motion.div
+            initial={{ scale: 1.1, opacity: 0 }}
+            animate={{ scale: 1.05, opacity: 1 }}
+            transition={{ duration: 2, ease: "easeOut" }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
+              filter: isSearchFocused ? "brightness(0.3) blur(2px)" : "brightness(0.55) blur(2px)"
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center max-w-7xl mx-auto px-4 w-full text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-8"
+          >
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl mb-8">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
+              </span>
+              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90">
+                Atualizado em tempo real <span className="text-[var(--brand-primary)] mx-1">·</span> Feijó, AC
+              </span>
+            </div>
+
+            <h1 className="text-4xl sm:text-7xl font-black tracking-tight text-white leading-[0.9] sm:leading-[0.85] mb-8">
+              A inteligência que seu <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFD700] drop-shadow-sm">
+                dinheiro merece
+              </span>
+            </h1>
+
+            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-12 font-medium">
+              Não aceite pagar mais caro. Nossa plataforma monitora todos os mercados da nossa Feijó para você economizar em cada item do carrinho.
+            </p>
+
+            {/* Centralized Search - The heart of the experience */}
+            <div className="w-full max-w-3xl mx-auto mb-16 relative">
+              <SmartSearchBar onFocusChange={setIsSearchFocused} />
+              <AnimatePresence>
+                {!isSearchFocused && (
+                   <motion.div 
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     exit={{ opacity: 0 }}
+                     className="absolute -bottom-8 left-0 right-0 flex justify-center gap-6 text-[11px] font-bold text-white/40 uppercase tracking-widest"
+                   >
+                     <span>Produtos Populares: Feijão, Arroz, Leite, Óleo</span>
+                   </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+
+          {/* Real-time Stats Section */}
+          <section className="w-full max-w-5xl mx-auto pt-8 border-t border-white/10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <StatItem label="Produtos" value={loaderData.stats?.productsCount || 2450} suffix="+" />
+              <StatItem label="Mercados" value={loaderData.stats?.storesCount || 12} />
+              <StatItem label="Notas Recebidas" value={142} suffix="k" />
+              <StatItem label="Economia Gerada" value={loaderData.economy?.totalSaved || 85} prefix="R$" suffix="k" />
+            </div>
+          </section>
+        </div>
+
+        {/* Floating Price Elements (Visual purely) */}
+        <FloatingPrice 
+          className="top-[20%] left-[5%] hidden lg:block" 
+          name="Arroz 5kg" 
+          price={24.90} 
+          delay={0}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/30 via-[var(--bg-base)]/50 to-[var(--bg-base)]" />
-        <div className="absolute inset-0 bg-[var(--bg-base)]/25" />
+        <FloatingPrice 
+          className="bottom-[30%] right-[8%] hidden lg:block" 
+          name="Leite 1L" 
+          price={4.85} 
+          delay={1.5}
+        />
       </div>
 
-      <div className="relative z-10 flex flex-col">
-        <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-          <script dangerouslySetInnerHTML={{ __html: `
-            window.addEventListener('open-quick-view', (e) => {
-              window.dispatchEvent(new CustomEvent('internal-open-quick-view', { detail: e.detail }));
-            });
-          `}} />
-          
-          {/* Hero Section - Compact & Professional */}
-          <motion.section 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center text-center mb-12 pt-2 sm:pt-4"
-          >
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-surface)]/80 border border-[var(--border-subtle)] mb-6 shadow-sm backdrop-blur-md hover:scale-105 transition-all duration-300 cursor-default"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Seu dinheiro vale mais <span className="text-[var(--brand-primary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[1] sm:leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)] px-2 sm:px-0"
-            >
-              Economize <span className="sm:inline hidden">de verdade</span> em cada compra na <span className="text-[var(--brand-primary)]">nossa Feijó</span>
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-base sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed font-body"
-            >
-              Com o PreçoCerto, você encontra o menor preço em segundos. Tecnologia simples e moderna para valorizar o seu bolso e a nossa gente.
-            </motion.p>
+      <main className="relative z-10 bg-[var(--bg-base)]">
+        {/* Category Dashboard */}
+        <section className="max-w-7xl mx-auto px-4 -mt-10 mb-20 relative z-20">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            {CATEGORIES.map((cat, i) => (
+              <CategoryCard key={cat.slug} {...cat} index={i} />
+            ))}
+          </div>
+        </section>
 
-            <div className="w-full mb-12">
-              <SmartSearchBar onFocusChange={setIsSearchFocused} />
+        {/* Promo Showcase */}
+        <section className="max-w-7xl mx-auto px-4 mb-24">
+          <PromoBanner />
+        </section>
+
+        {/* Live Market Insights (formerly Recent Products) */}
+        <section className="max-w-7xl mx-auto px-4 mb-24">
+          <RecentProductsCarousel />
+        </section>
+
+        {/* Dashboard Table Section */}
+        <section className="max-w-7xl mx-auto px-4 mb-24">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div className="min-w-0">
+              <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)] mb-1">
+                Monitoramento ao vivo
+              </h2>
+              <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)]">
+                Preços que estão rolando agora
+              </h3>
             </div>
-
-            <div className="flex flex-wrap justify-center gap-3 mb-2">
-              <Button 
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate({ to: "/registrar" })}
-                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+            
+            <div className="flex items-center gap-2 bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)]">
+              <button 
+                onClick={() => setSort("recent")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
+                  sort === "recent" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                )}
               >
-                <PlusCircle className="h-3.5 w-3.5" />
-                Registrar
-              </Button>
-              <Button 
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate({ to: "/app" })}
-                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+                <Clock className="h-3.5 w-3.5" />
+                Novos
+              </button>
+              <button 
+                onClick={() => setSort("price")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
+                  sort === "price" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                )}
               >
-                <ArrowRight className="h-3.5 w-3.5" />
-                Painel
-              </Button>
+                <TrendingDown className="h-3.5 w-3.5" />
+                Baratos
+              </button>
+              <button 
+                onClick={() => setSort("near")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
+                  sort === "near" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                )}
+              >
+                <MapPin className="h-3.5 w-3.5" />
+                Perto
+              </button>
             </div>
-          </motion.section>
-
-
-          {/* How It Works Section - More Compact */}
-          <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
-          <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <motion.div 
-              whileHover={{ y: -6 }}
-              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300"
-            >
-              <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] shadow-inner">
-                <Search className="h-6 w-6" strokeWidth={2.5} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-black uppercase tracking-wider text-[var(--brand-secondary)] mb-1">Procure</h3>
-                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">Encontre o que você precisa em todos os mercados de Feijó num só lugar.</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ y: -4, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
-            >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
-                <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Compare</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Veja onde o seu dinheiro rende mais e escolha o melhor preço para o seu bolso.</p>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ y: -4, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="col-span-2 md:col-span-1 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
-            >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
-                <PlusCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Ajude</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Viu um preço novo? Compartilhe com a gente e ajude todo mundo a economizar.</p>
-              </div>
-            </motion.div>
-          </section>
-          </Suspense>
-
-          {/* Promo Section */}
-          <section className="mb-16">
-            <PromoBanner />
-          </section>
-
-          {/* Grid Category Navigation */}
-          <section className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">O que você busca hoje?</h2>
-              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver tudo</Link>
-            </div>
-            
-            <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">{Array.from({length: 7}).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-[32px]" />)}</div>}>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
-              {CATEGORIES.map(({ slug, label, Icon, color }) => (
-                <Link 
-                  key={slug} 
-                  to="/categoria/$slug" 
-                  params={{ slug: slug as any }}
-                  className="group relative flex flex-col items-center justify-center gap-4 p-6 rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 hover:border-[var(--brand-primary)] hover:-translate-y-1 shadow-sm hover:shadow-xl overflow-hidden"
-                >
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.03] transition-opacity pointer-events-none" style={{ backgroundColor: color }} />
-                  <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--bg-base)] border border-[var(--border-subtle)] group-hover:border-[var(--brand-primary)]/30 transition-all">
-                    <Icon className="h-8 w-8 text-[var(--brand-primary)]" />
-                  </div>
-                  <span className="text-sm font-black text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors">
-                    {label}
-                  </span>
-                </Link>
-              ))}
-            </div>
-            </Suspense>
-          </section>
-
-          {/* CTA Banner - Premium Refactoring with Tracking & Accessibility */}
-          <section className="mb-16">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              onViewportEnter={() => {
-                // Event tracking for impression
-                console.log("[Analytics] Banner Impression: VIU UM PREÇO NOVO?");
-              }}
-              className="relative group overflow-hidden rounded-[32px] sm:rounded-[48px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] p-8 sm:p-12 lg:p-16 shadow-2xl transition-all duration-500 hover:shadow-[var(--pc-shadow-lg)] hover:border-[var(--brand-primary)]/20"
-            >
-              {/* background image without yellow tint, high contrast, lazy loading optimization */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40 saturate-[0.8] brightness-[0.9] group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
-                style={{ 
-                  backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')",
-                  backgroundColor: 'var(--bg-surface-elevated)'
-                }}
-                role="img"
-                aria-label="Supermarket interior"
-              />
-              
-              {/* Premium Gradients for Text Contrast (WCAG Compliance) */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-surface-elevated)] via-[var(--bg-surface-elevated)]/95 to-transparent sm:via-[var(--bg-surface-elevated)]/90 pointer-events-none" />
-              
-              <div className="relative z-10 max-w-xl">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[var(--brand-primary)] text-[#0B1E3A] text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] mb-6 sm:mb-8 shadow-lg shadow-[var(--brand-primary)]/20"
-                >
-                  <Sparkles className="h-3 w-3" /> Colaboração Local
-                </motion.div>
-                
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl font-black text-[var(--text-primary)] mb-4 sm:mb-6 leading-[1.05] tracking-tight">
-                  Viu um preço <span className="relative inline-block">
-                    <span className="relative z-10 text-[var(--brand-primary)]">novo por aí</span>
-                    <svg className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2 sm:h-3 text-[var(--brand-primary)]/30" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
-                      <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
-                    </svg>
-                  </span>?
-                </h2>
-                
-                <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-8 sm:mb-10 leading-relaxed font-body max-w-md">
-                  Ajude o pessoal de Feijó a economizar também. Viu uma oferta? Conta pra gente e vamos fazer o dinheiro de todo mundo render mais!
-                </p>
-                
-                <Button 
-                  onClick={() => {
-                    console.log("[Analytics] Banner Click: Registrar Agora");
-                    navigate({ to: "/registrar" });
-                  }}
-                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[var(--brand-primary)] text-[#0B1E3A] font-black uppercase tracking-widest text-[10px] sm:text-xs lg:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-3">
-                    Contar pra gente
-                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                  <div className="absolute inset-0 bg-black/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                </Button>
-              </div>
-              
-            </motion.div>
-          </section>
-
-
-          {/* New Sections for Recent and Trending Products */}
-          <div className="mb-12">
-            <Suspense fallback={<Skeleton className="h-[200px] w-full rounded-3xl" />}>
-              <RecentProductsCarousel />
-            </Suspense>
           </div>
 
-          {/* Live Prices Table */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-            <div className="lg:col-span-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="section-title font-display font-bold text-[var(--text-primary)] mb-0">Preços que estão rolando agora</h2>
-                
-                <div className="flex items-center gap-2">
-                  <div className="flex bg-[var(--bg-surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
-                    <button 
-                      onClick={() => setSort("recent")}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "recent" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                      )}
+          <div className="rounded-[32px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
+                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Produto</th>
+                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Mercado</th>
+                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Preço</th>
+                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Atualização</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border-subtle)]">
+                  {filteredProducts.map((p, i) => (
+                    <motion.tr
+                      key={`${p.name}-${p.when}`}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      onClick={() => setSelectedProduct({ 
+                        name: p.name, 
+                        minPrice: p.price, 
+                        cheapestStore: p.marketName,
+                        updatedAt: p.when
+                      })}
+                      className="group cursor-pointer hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
                     >
-                      <Clock className="h-3 w-3" />
-                      Mais novos
-                    </button>
-                    <button 
-                      onClick={() => setSort("price")}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "price" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                      )}
-                    >
-                      <TrendingDown className="h-3 w-3" />
-                      Baratos
-                    </button>
-                    <button 
-                      onClick={() => setSort("near")}
-                      className={cn(
-                        "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "near" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                      )}
-                    >
-                      <MapPin className="h-3 w-3" />
-                      Mais pertinho
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-[var(--border-subtle)] bg-white/[0.02]">
-                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Produto</th>
-                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Mercado</th>
-                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Preço</th>
-                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Variação</th>
-                        <th className="px-6 py-5" aria-hidden="true"><span className="sr-only">Ações</span></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[var(--border-subtle)]">
-                      {filteredProducts.map((product) => (
-                        <tr 
-                          key={product.slug} 
-                          className="group hover:bg-white/[0.03] transition-colors cursor-pointer"
-                          onClick={() => setSelectedProduct(product)}
-                        >
-                          <td className="px-6 py-5">
-                            <div className="flex items-center gap-4">
-                              <div className="h-12 w-12 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
-                                <ShoppingCart className="h-5 w-5 text-[var(--text-tertiary)]" />
-                              </div>
-                              <div>
-                                <div className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">{product.name}</div>
-                                <div className="text-[10px] text-[var(--text-tertiary)] flex items-center gap-1 mt-0.5">
-                                  <Clock className="h-3 w-3" />
-                                  {new Date(product.when).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            <div className="flex items-center gap-2">
-                              <div className="h-6 w-6 rounded-md bg-[var(--brand-primary)]/10 flex items-center justify-center">
-                                <Store className="h-3 w-3 text-[var(--brand-primary)]" />
-                              </div>
-                              <span className="text-xs font-semibold text-[var(--text-secondary)]">{product.marketName}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            <div className="text-sm font-black text-[var(--brand-primary)]">
-                              <Price value={product.price} />
-                            </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            {product.dropPct !== null && (
-                              <div className={cn(
-                                "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider",
-                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
-                              )}>
-                                {product.dropPct > 0 ? <TrendingDown className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5 rotate-180" />}
-                                {Math.abs(product.dropPct)}%
-                              </div>
-                            )}
-                          </td>
-                          <td className="px-6 py-5 text-right">
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" aria-label={`Ver detalhes de ${product.name}`}>
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                
-                <div className="p-6 bg-white/[0.01] border-t border-[var(--border-subtle)] text-center">
-                  <Button variant="link" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:no-underline group">
-                    Ver todos os preços 
-                    <ArrowRight className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Platform Stats Column */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="p-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-8">
-                    <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center border border-[var(--brand-primary)]/20">
-                      <TrendingDown className="h-5 w-5 text-[var(--brand-primary)]" />
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Economia Estimada</span>
-                  </div>
-                  
-                  <div className="mb-2">
-                    <div className="text-4xl font-black tracking-tight mb-1 text-[var(--brand-primary)]">
-                      <Price value={loaderData.economy?.total || 0} />
-                    </div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">Poupados pelos usuários</div>
-                  </div>
-                  
-                  <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
-                    <div className="flex items-center justify-between">
-                      <div className="flex -space-x-3">
-                        {[1, 2, 3, 4].map(i => (
-                          <div key={i} className="h-8 w-8 rounded-full border-2 border-[var(--bg-surface)] bg-[var(--bg-base)] flex items-center justify-center">
-                            <Store className="h-4 w-4 text-[var(--brand-primary)] opacity-40" />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="text-[9px] font-black uppercase tracking-wider bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] px-3 py-1.5 rounded-full border border-[var(--brand-primary)]/20">
-                        +1.2k usuários ativos
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Trending Searches */}
-              <div className="p-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Buscas em Alta</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['Arroz 5kg', 'Óleo Soy', 'Leite Integral', 'Açúcar', 'Café', 'Sabão em pó'].map(term => (
-                    <button 
-                      key={term}
-                      onClick={() => navigate({ to: "/buscar", search: { q: term } as any })}
-                      className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5 text-xs font-semibold text-[var(--text-secondary)] hover:bg-[var(--brand-primary)]/10 hover:border-[var(--brand-primary)]/30 hover:text-[var(--brand-primary)] transition-all"
-                    >
-                      {term}
-                    </button>
+                      <td className="px-6 py-5">
+                         <div className="flex items-center gap-3">
+                           <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-hidden flex items-center justify-center">
+                             <span className="text-xs font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
+                           </div>
+                           <div>
+                             <p className="text-[14px] font-bold text-[var(--text-primary)] leading-tight group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</p>
+                             <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mt-0.5">Catálogo</p>
+                           </div>
+                         </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-2">
+                          <Store className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+                          <span className="text-[13px] font-bold text-[var(--text-secondary)]">{p.marketName ?? "—"}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 text-right">
+                        <Price value={p.price} size="lg" className="font-black" />
+                        {i === 0 && <span className="block text-[9px] font-black text-emerald-500 uppercase tracking-tighter">Melhor Oferta</span>}
+                      </td>
+                      <td className="px-6 py-5 text-right">
+                        <div className="flex items-center justify-end gap-1.5 text-[11px] font-bold text-[var(--text-tertiary)]">
+                          <Clock className="h-3 w-3" />
+                          {formatDate(p.when)}
+                        </div>
+                      </td>
+                    </motion.tr>
                   ))}
-                </div>
-              </div>
+                </tbody>
+              </table>
             </div>
-          </section>
+            <div className="p-6 bg-[var(--bg-surface-elevated)]/30 border-t border-[var(--border-subtle)] text-center">
+              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline flex items-center justify-center gap-2">
+                Ver catálogo completo <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
+        </section>
 
-          {/* Registered Stores Carousel */}
-          <Suspense fallback={<Skeleton className="h-[150px] w-full rounded-3xl mb-12" />}>
-            <RegisteredStoresCarousel />
-          </Suspense>
-        </main>
-      </div>
+        {/* Partners Carousel */}
+        <section className="max-w-7xl mx-auto px-4 pb-24 text-center">
+           <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--text-tertiary)] mb-8">
+             Nossa rede de colaboração
+           </h2>
+           <RegisteredStoresCarousel />
+        </section>
+      </main>
 
-      <ProductQuickView 
-        product={selectedProduct} 
-        onClose={() => setSelectedProduct(null)} 
-      />
-
-      <AnimatePresence>
-        {showLogoPreview && (
-          <LogoPreviewList 
-            logos={availableLogos} 
-            onClose={() => setShowLogoPreview(false)} 
-          />
-        )}
-      </AnimatePresence>
-
+      {selectedProduct && (
+        <ProductQuickView 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      )}
     </div>
+  );
+}
+
+function StatItem({ label, value, prefix = "", suffix = "" }: { label: string; value: number; prefix?: string; suffix?: string }) {
+  const [display, setDisplay] = useState(0);
+  
+  useEffect(() => {
+    let start = 0;
+    const end = value;
+    const duration = 2000;
+    const increment = end / (duration / 16);
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setDisplay(end);
+        clearInterval(timer);
+      } else {
+        setDisplay(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return (
+    <div className="flex flex-col items-center">
+      <span className="text-3xl sm:text-4xl font-black text-white mb-1">
+        {prefix}{display.toLocaleString()}{suffix}
+      </span>
+      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function FloatingPrice({ className, name, price, delay }: { className: string; name: string; price: number; delay: number }) {
+  return (
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: [0, -15, 0], opacity: 1 }}
+      transition={{ 
+        y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay },
+        opacity: { duration: 0.8, delay: 0.5 }
+      }}
+      className={cn("absolute z-10 px-4 py-3 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col gap-0.5 min-w-[120px]", className)}
+    >
+      <span className="text-[9px] font-black uppercase tracking-wider text-white/50">{name}</span>
+      <span className="text-xl font-black text-[var(--brand-primary)]">R$ {price.toFixed(2)}</span>
+      <div className="mt-1 h-1 w-full bg-white/10 rounded-full overflow-hidden">
+        <div className="h-full bg-emerald-500 w-[70%]" />
+      </div>
+    </motion.div>
+  );
+}
+
+function CategoryCard({ slug, label, Icon, index }: { slug: string; label: string; Icon: any; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 + (index * 0.05), duration: 0.5 }}
+    >
+      <Link 
+        to="/categoria/$slug" 
+        params={{ slug: slug as any }}
+        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[var(--pc-radius-lg)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300 hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
+      >
+        {/* Glow Hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        
+        <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-[var(--pc-brand-navy)] transition-all duration-300 shadow-inner">
+          <Icon className="h-7 w-7" />
+        </div>
+        
+        <div className="relative z-10 text-center">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">
+            {label}
+          </h3>
+          <p className="text-[9px] font-black uppercase tracking-wider text-[var(--text-tertiary)] mt-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            Ver Ofertas
+          </p>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
