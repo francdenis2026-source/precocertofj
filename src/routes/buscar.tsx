@@ -12,28 +12,6 @@ import { SearchMarketsSection } from "@/components/search/SearchMarketsSection";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { SearchDiscovery } from "@/components/search/SearchDiscovery";
 import { motion, AnimatePresence } from "framer-motion";
-import { ErrorBoundary } from "react-error-boundary";
-import { AlertCircle, RefreshCcw } from "lucide-react";
-
-function SearchErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
-  return (
-    <div className="flex flex-col items-center justify-center p-12 text-center bg-card border border-destructive/20 rounded-3xl m-4">
-      <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-      <h2 className="text-xl font-bold mb-2">Ops! Algo deu errado na busca</h2>
-      <p className="text-muted-foreground mb-6 max-w-md">{error.message}</p>
-      <button 
-        onClick={resetErrorBoundary}
-        className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2 rounded-full font-bold hover:brightness-110 transition-all"
-      >
-        <RefreshCcw className="h-4 w-4" /> Tentar novamente
-      </button>
-    </div>
-  );
-}
-import { SearchMarketsSection } from "@/components/search/SearchMarketsSection";
-import { IsolatedPage } from "@/components/layout/IsolatedPage";
-import { SearchDiscovery } from "@/components/search/SearchDiscovery";
-import { motion, AnimatePresence } from "framer-motion";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
