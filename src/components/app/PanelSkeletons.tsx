@@ -49,7 +49,7 @@ export function PanelBlockSkeleton({
       aria-live="polite"
       aria-busy="true"
       className={cn(
-        "flex h-full min-h-0 flex-1 flex-col gap-2.5 rounded-xl border border-border bg-card/80 p-3.5 backdrop-blur-md",
+        "flex h-full min-h-0 flex-1 flex-col gap-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 p-3.5 backdrop-blur-md shadow-xl",
         className,
       )}
     >
