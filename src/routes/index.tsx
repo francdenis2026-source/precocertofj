@@ -524,7 +524,6 @@ function HomePage() {
 
       <ProductQuickView 
         product={selectedProduct} 
-        open={!!selectedProduct} 
         onClose={() => setSelectedProduct(null)} 
       />
     </div>
