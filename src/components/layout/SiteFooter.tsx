@@ -13,9 +13,9 @@ const focusRing =
 
 const linkClass = dsx(
   "inline-flex min-h-9 items-center rounded-md px-2 py-1 font-black uppercase tracking-widest text-[11px] text-white/40",
-  "transition-all hover:text-indigo-400 hover:bg-white/5",
-  "hover:text-indigo-400",
-  "outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+  "transition-all hover:text-[var(--brand-primary)] hover:bg-white/5",
+  "hover:text-[var(--brand-primary)]",
+  "outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
 );
 
 /**
@@ -62,7 +62,7 @@ export function SiteFooter() {
               className="h-7 w-7 shrink-0 object-contain"
             />
             <span className="truncate text-lg font-black tracking-tighter text-white">
-              Preço<span className="text-indigo-400">Certo</span>
+              Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
           </p>
         ) : (
@@ -83,7 +83,7 @@ export function SiteFooter() {
               className="h-7 w-7 shrink-0 object-contain"
             />
             <span className="truncate text-lg font-black tracking-tighter text-white">
-              Preço<span className="text-indigo-400">Certo</span>
+              Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
             <span className="sr-only">— ir para a página inicial</span>
           </button>
@@ -120,7 +120,7 @@ export function SiteFooter() {
         )}
 
         <p className="justify-self-end whitespace-nowrap font-black uppercase tracking-widest text-[10px] text-white/20">
-          &lt;dev&gt; <span className="text-indigo-400/60">Franc D&apos;nis</span>
+          &lt;dev&gt; <span className="text-[var(--brand-primary)]/60">Franc D&apos;nis</span>
         </p>
       </div>
     </footer>

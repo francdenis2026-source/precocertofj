@@ -136,7 +136,7 @@ function ProductDetailDashboard() {
                     <Clock className="h-4 w-4 text-primary" />
                     <span>Visto {fmtRelative(product.lastDate)}</span>
                     {trend !== 0 && (
-                      <span className={`flex items-center gap-0.5 px-2 py-0.5 rounded-full text-xs ${trend < 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                      <span className={`flex items-center gap-0.5 px-2 py-0.5 rounded-full text-xs ${trend < 0 ? 'bg-green-100 text-green-700' : 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]'}`}>
                         {trend < 0 ? <TrendingDown className="h-3 w-3" /> : <TrendingUp className="h-3 w-3" />}
                         {Math.abs((trend / (product.price - trend)) * 100).toFixed(1)}%
                       </span>
@@ -336,7 +336,7 @@ function AIInsightsSection({
           <span className={cn(
             "text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full",
             data.trend === "Queda" ? "bg-green-100 text-green-700" : 
-            data.trend === "Alta" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"
+            data.trend === "Alta" ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" : "bg-[var(--brand-secondary)]/10 text-[var(--brand-secondary)]"
           )}>
             Tendência: {data.trend}
           </span>

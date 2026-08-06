@@ -76,13 +76,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#6366F1" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#EC4899" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#EF4444" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#10B981" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#3B82F6" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#06B6D4" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#F59E0B" },
+  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#D4AF37" }, // Dourado
+  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#0B1E3A" },    // Marinho
+  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#1E293B" },    // Slate
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#D4AF37" },  // Dourado
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#0B1E3A" },       // Marinho
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#1E293B" },   // Slate
+  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#D4AF37" },     // Dourado
 ];
 
 function HomePage() {
@@ -356,7 +356,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-red-50 flex items-center justify-center text-[var(--brand-primary)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
                 <Search className="h-6 w-6" />
               </div>
               <div>
@@ -369,7 +369,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-blue-50 flex items-center justify-center text-[var(--brand-secondary)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
                 <TrendingDown className="h-6 w-6" />
               </div>
               <div>
@@ -382,7 +382,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-orange-50 flex items-center justify-center text-[var(--brand-accent)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
                 <PlusCircle className="h-6 w-6" />
               </div>
               <div>
@@ -539,7 +539,7 @@ function HomePage() {
                             {product.dropPct !== null && (
                               <div className={cn(
                                 "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider",
-                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                               )}>
                                 {product.dropPct > 0 ? <TrendingDown className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5 rotate-180" />}
                                 {Math.abs(product.dropPct)}%
