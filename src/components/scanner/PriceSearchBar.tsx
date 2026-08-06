@@ -19,7 +19,7 @@ import {
   type SearchHistoryEntry,
 } from "@/lib/search-history";
 
-import { ChevronDown, ChevronUp, Clock, Crown, MapPin, Search, ShoppingBag, Sparkles, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Clock, Crown, MapPin, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
 
@@ -83,6 +83,16 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 type SortMode = "relevance" | "cheapest" | "highest" | "unit" | "recent" | "kind" | "spread" | "savings";
+
+const CATEGORIES = [
+  { slug: "supermercados", label: "Mercados" },
+  { slug: "padarias", label: "Padarias" },
+  { slug: "acougues", label: "Açougues" },
+  { slug: "hortifruti", label: "Hortifruti" },
+  { slug: "bebidas", label: "Bebidas" },
+  { slug: "limpeza", label: "Limpeza" },
+  { slug: "higiene", label: "Higiene" },
+];
 
 export function PriceSearchBar({
   initialQuery = "",
@@ -842,12 +852,12 @@ export function PriceSearchBar({
               {(() => {
                 // Mix in category suggestions based on current query if any
                 const catMatches = query.length >= 2 
-                  ? CATEGORIES.filter(c => c.label.toLowerCase().includes(query.toLowerCase())).slice(0, 2)
+                  ? CATEGORIES.filter((c: any) => c.label.toLowerCase().includes(query.toLowerCase())).slice(0, 2)
                   : [];
                 
                 return (
                   <>
-                    {catMatches.map((cat, ci) => (
+                    {catMatches.map((cat: any, ci: number) => (
                       <li key={`cat-${cat.slug}`} role="option">
                         <Link
                           to="/categoria/$slug"
