@@ -722,7 +722,7 @@ function StorePage() {
       {/* Floating cart footer */}
       {cart.totalQty > 0 && (
         <div
-          className="fixed left-0 right-0 z-30 border-t border-border bg-surface/95 shadow-[0_-6px_20px_-8px_rgba(0,0,0,0.12)] backdrop-blur"
+          className="no-print fixed left-0 right-0 z-30 border-t border-border bg-surface/95 shadow-[0_-6px_20px_-8px_rgba(0,0,0,0.12)] backdrop-blur"
           style={{
             bottom: "calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))",
           }}
