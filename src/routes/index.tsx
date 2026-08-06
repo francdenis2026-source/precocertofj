@@ -237,7 +237,7 @@ function HomePage() {
             filter: "brightness(0.9) contrast(1.1) saturate(1.2) blur(2px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
