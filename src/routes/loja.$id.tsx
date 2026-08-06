@@ -821,7 +821,7 @@ function CategoryChip({
     <button
       type="button"
       onClick={onClick}
-          search={{ q: search, from: `/loja/${id}` }}
+      className={cn(
         "shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 text-[11.5px] font-semibold transition",
         active
           ? "border-primary bg-primary text-primary-foreground"
@@ -940,7 +940,7 @@ function FeaturedCard({
       <Link
         to="/loja/$id/produto/$slug"
         params={{ id: storeId, slug: p.slug }}
-        search={{ q: "" }}
+        search={{ q: "", from: `/loja/${id}` }}
 
         className="grid h-[92px] w-full shrink-0 place-items-center overflow-hidden bg-gradient-to-br from-primary/10 via-surface to-accent/10"
       >
@@ -968,6 +968,7 @@ function FeaturedCard({
         <Link
           to="/loja/$id/produto/$slug"
           params={{ id: storeId, slug: p.slug }}
+          search={{ q: "", from: `/loja/${id}` }}
           className="line-clamp-2 min-h-[2.2em] text-[11px] font-semibold leading-tight text-foreground hover:text-primary"
         >
           {p.productName}
