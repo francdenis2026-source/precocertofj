@@ -196,13 +196,13 @@ export function NumberAuditPage() {
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <Link to="/admin/metricas" search={{ tab: "numeros" } as any}>
+                  <Link to="/admin/metricas" search={{ tab: "numeros" }}>
                     Métricas &amp; reconstruir cache
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <Link to="/admin/consistencia" search={{ tab: "numeros" } as any}>
+                  <Link to="/admin/consistencia" search={{ tab: "numeros" }}>
                     Consistência de contagens
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

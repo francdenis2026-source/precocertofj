@@ -249,10 +249,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             onClose();
             return true;
           }
-          if (e.key === "Enter" && cur >= 0 && list[cur]) {
-            e.preventDefault();
-            handlePick(list[cur]);
-            return true;
+          if (e.key === "Enter") {
+            if (cur >= 0 && list[cur]) {
+              e.preventDefault();
+              handlePick(list[cur]);
+              return true;
+            }
+            // Se não houver item ativo, deixa o formulário submeter para a busca global
+            return false;
           }
           return false;
         },

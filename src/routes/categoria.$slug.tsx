@@ -351,6 +351,36 @@ function CategoryPage() {
   const pageStart = (safePage - 1) * perPage;
   const visible = ["list", "near"].includes(view) ? productsWithProximity.slice(pageStart, pageStart + perPage) : productsWithProximity.slice(0, limit);
 
+  const [activeIdx, setActiveIdx] = useState(-1);
+  const listContainerRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    setActiveIdx(-1);
+  }, [search.q, search.loja, search.sub, search.corte]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIdx(prev => (prev + 1 >= visible.length ? 0 : prev + 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIdx(prev => (prev <= 0 ? visible.length - 1 : prev - 1));
+    } else if (e.key === "Enter" && activeIdx >= 0) {
+      const p = visible[activeIdx];
+      if (p) {
+        e.preventDefault();
+        openQuickView(p.name);
+      }
+    }
+  }, [visible, activeIdx, openQuickView]);
+
+  useEffect(() => {
+    if (activeIdx >= 0 && listContainerRef.current) {
+      const el = listContainerRef.current.children[activeIdx] as HTMLElement;
+      el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, [activeIdx]);
+
   useEffect(() => {
     setLimit(24);
   }, [slug, q, storeFilter, perPage, view, search.sub]);
