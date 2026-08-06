@@ -1,0 +1,50 @@
+@media print {
+  .no-print, 
+  nav, 
+  header:not(.pc-print-header), 
+  footer, 
+  .pc-grid > div:not(.pc-print-content),
+  button,
+  input,
+  [role="tablist"] {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+
+  .pc-page {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .pc-print-header {
+    display: block !important;
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+
+  .pc-print-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  .pc-card {
+    border: 1px solid #eee !important;
+    break-inside: avoid;
+    padding: 10px !important;
+  }
+
+  .pc-price {
+    color: black !important;
+  }
+
+  .pc-price__prefix {
+    font-size: 0.8em;
+  }
+}
