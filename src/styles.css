@@ -116,8 +116,9 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
 @utility section-title {
