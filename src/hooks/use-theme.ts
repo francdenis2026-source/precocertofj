@@ -84,7 +84,10 @@ function notifyThemeChange(theme: Theme) {
  *   sua própria escolha depois disso.
  */
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "dark";
+    return readStored(null);
+  });
   const [mounted, setMounted] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const userIdRef = useRef<string | null>(null);
