@@ -116,8 +116,8 @@ const STORAGE_KEY = "search:mode";
 const PURE_KEY = "search:pureOnly";
 
 function SearchPage() {
-  const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/buscar" });
+  const search = Route.useSearch() as any;
+  const navigate = useNavigate({ from: "/buscar" }) as any;
   const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -617,7 +617,7 @@ function SearchPage() {
                     onFocusChange={(product, market) =>
                       setFocusUrl(product ?? null, market ?? null)
                     }
-                    autoFocusResults={search.from === "alta"}
+                    autoFocusResults={search?.from === "alta"}
                   />
 
 

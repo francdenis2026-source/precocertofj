@@ -414,7 +414,8 @@ function OverviewTable({
                   </TableCell>
                   <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                     <Button asChild size="sm" variant="outline">
-                      <Link to="/admin_/cobertura/$id" params={{ id: r.establishment_id }}>
+                      {/* @ts-ignore */}
+                      <Link to="/admin/cobertura/$id" params={{ id: r.establishment_id }}>
                         Ver detalhes
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </Link>

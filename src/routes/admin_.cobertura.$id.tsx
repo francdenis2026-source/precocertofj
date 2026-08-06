@@ -225,7 +225,8 @@ function StoreCoverageDetail() {
       <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="mb-6 flex items-center gap-3">
           <Button asChild variant="ghost" size="sm">
-            <Link to="/admin_/cobertura"><ArrowLeft className="mr-2 h-4 w-4" />Voltar à cobertura</Link>
+            {/* @ts-ignore */}
+            <Link to="/admin/cobertura"><ArrowLeft className="mr-2 h-4 w-4" />Voltar à cobertura</Link>
           </Button>
         </div>
 

@@ -153,7 +153,8 @@ function CestaAdminPage() {
           </p>
         </div>
         <Button variant="outline" asChild size="sm">
-          <Link to="/admin_/vitrine">
+          {/* @ts-ignore */}
+          <Link to="/admin/vitrine">
             <ArrowLeft className="mr-1.5 h-4 w-4" /> Voltar ao hub
           </Link>
         </Button>

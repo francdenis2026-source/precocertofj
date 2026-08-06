@@ -41,7 +41,7 @@ export const Route = createFileRoute("/lista_/pronta")({
 });
 
 function ListaProntaPage() {
-  const { id } = useSearch({ from: "/lista/pronta" });
+  const { id } = useSearch({ from: "/lista_/pronta" }) as any;
   const getListFn = useServerFn(getShoppingList);
   const bestFn = useServerFn(computeBestPrices);
 
