@@ -317,14 +317,14 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex w-full max-w-[1080px] flex-col overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-2xl shadow-2xl md:h-[760px] md:flex-row"
+        className="relative z-10 flex w-full max-w-[980px] flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 shadow-[0_24px_60px_-24px_rgba(11,30,58,0.45)] backdrop-blur-2xl md:max-h-[680px] md:flex-row"
       >
-        <div className="relative h-[240px] w-full shrink-0 md:h-full md:w-[480px]">
+        <div className="relative hidden w-full shrink-0 md:block md:w-[380px]">
           <AuthHero variant="login" className="h-full w-full" />
         </div>
 
 
-        <div className="flex flex-1 flex-col overflow-y-auto p-6 sm:p-8 md:p-12">
+        <div className="flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9">
 
           {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
@@ -344,16 +344,21 @@ function LoginPage() {
           </div>
 
 
-          <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
+          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[var(--brand-primary)]">
             {mode === "login" ? "Acesso Exclusivo" : "Novo Assinante"}
           </p>
 
           <h1
-            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+            className="mt-1 text-[21px] font-bold leading-[1.15] tracking-tight text-foreground sm:text-[24px]"
             style={{ fontFamily: PC_DISPLAY }}
           >
             {mode === "login" ? "Entrar na sua conta" : "Criar sua conta agora"}
           </h1>
+          <p className="mt-1 text-[12.5px] leading-snug text-muted-foreground">
+            {mode === "login"
+              ? "Use seu CPF e o PIN de 6 dígitos para continuar."
+              : "Leva menos de um minuto. É de graça."}
+          </p>
 
 
           <TabSwitch mode={mode} onChange={setMode} />
@@ -563,7 +568,7 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[15px] font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none bg-[var(--brand-primary)]"
+              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand-primary)] text-[15px] font-bold text-[#0B1E3A] shadow-lg transition hover:brightness-105 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
               style={{
                 boxShadow: `0 12px 24px -10px var(--brand-glow)`,
                 fontFamily: PC_DISPLAY,
