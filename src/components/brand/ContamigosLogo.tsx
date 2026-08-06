@@ -54,23 +54,25 @@ export function ContamigosLogo({
         </svg>
       </div>
 
-      <div className="flex flex-col justify-center leading-none">
-        <span className={cn(
-          "font-display font-black tracking-tighter uppercase italic",
-          size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
-          isDark ? "text-white" : "text-[#0B1E3A]"
-        )}>
-          Varejão
-          <span className="text-[#D4AF37] not-italic ml-1">Contamigos</span>
-        </span>
-        <span className={cn(
-          "font-mono font-bold tracking-[0.2em] uppercase",
-          size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
-          isDark ? "text-white/60" : "text-[#0B1E3A]/60"
-        )}>
-          Preço Baixo de Verdade
-        </span>
-      </div>
+      {!props.title && (
+        <div className="flex flex-col justify-center leading-none">
+          <span className={cn(
+            "font-display font-black tracking-tighter uppercase italic",
+            size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
+            isDark ? "text-white" : "text-[#0B1E3A]"
+          )}>
+            Varejão
+            <span className="text-[#D4AF37] not-italic ml-1">Contamigos</span>
+          </span>
+          <span className={cn(
+            "font-mono font-bold tracking-[0.2em] uppercase",
+            size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
+            isDark ? "text-white/60" : "text-[#0B1E3A]/60"
+          )}>
+            Preço Baixo de Verdade
+          </span>
+        </div>
+      )}
     </div>
   );
 }
