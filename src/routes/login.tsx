@@ -142,7 +142,7 @@ function LoginPage() {
     if (target.startsWith("/app")) return "Painel do cliente";
     if (target.startsWith("/buscar")) return "Buscar preços";
     if (target.startsWith("/mercados") || target.startsWith("/estabelecimentos"))
-      return "Mercados de Feijó";
+      return "Comércios da nossa Feijó";
     if (target.startsWith("/colaborador")) return "Área do colaborador";
     if (target === "/" || target === "") return "Página inicial";
     return "Área restrita";
@@ -277,7 +277,7 @@ function LoginPage() {
         clearAttempts(digits);
         notify.success(`Login aprovado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: `CPF ${maskCpf(digits)} verificado. Carregando suas listas, favoritos e alertas de preço.`,
+          description: `Tudo pronto! Estamos carregando os preços para você.`,
         });
       }
       await router.invalidate();
@@ -310,7 +310,7 @@ function LoginPage() {
         to="/"
         className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-3 py-1.5 text-[13px] font-medium text-[var(--text-secondary)] backdrop-blur transition hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] sm:right-8 sm:top-8"
       >
-        ← Voltar ao site
+        ← Voltar para o início
       </Link>
 
       <motion.div
@@ -352,7 +352,7 @@ function LoginPage() {
             className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
             style={{ fontFamily: PC_DISPLAY }}
           >
-            {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
+            {mode === "login" ? "Entrar na sua conta" : "Criar sua conta agora"}
           </h1>
 
 
