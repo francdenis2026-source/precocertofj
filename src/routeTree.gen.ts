@@ -44,7 +44,6 @@ import { Route as ColaborarRouteImport } from './routes/colaborar'
 import { Route as CestaBasicaRouteImport } from './routes/cesta-basica'
 import { Route as CestaRouteImport } from './routes/cesta'
 import { Route as CadastroRouteImport } from './routes/cadastro'
-import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as AssinarRouteImport } from './routes/assinar'
@@ -56,6 +55,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
+import { Route as PrecosLegacyRouteImport } from './routes/precos.legacy'
 import { Route as OndeComprarProdutoRouteImport } from './routes/onde-comprar_.$produto'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
 import { Route as ListaProntaRouteImport } from './routes/lista_.pronta'
@@ -299,11 +299,6 @@ const CadastroRoute = CadastroRouteImport.update({
   path: '/cadastro',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuscarRoute = BuscarRouteImport.update({
-  id: '/buscar',
-  path: '/buscar',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -358,6 +353,11 @@ const ProdutoPublicoSlugRoute = ProdutoPublicoSlugRouteImport.update({
   id: '/produto-publico/$slug',
   path: '/produto-publico/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosLegacyRoute = PrecosLegacyRouteImport.update({
+  id: '/legacy',
+  path: '/legacy',
+  getParentRoute: () => PrecosRoute,
 } as any)
 const OndeComprarProdutoRoute = OndeComprarProdutoRouteImport.update({
   id: '/onde-comprar_/$produto',
@@ -710,7 +710,6 @@ export interface FileRoutesByFullPath {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
   '/cesta-basica': typeof CestaBasicaRoute
@@ -738,7 +737,7 @@ export interface FileRoutesByFullPath {
   '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
-  '/precos': typeof PrecosRoute
+  '/precos': typeof PrecosRouteWithChildren
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/registrar': typeof RegistrarRoute
@@ -798,6 +797,7 @@ export interface FileRoutesByFullPath {
   '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/onde-comprar/$produto': typeof OndeComprarProdutoRoute
+  '/precos/legacy': typeof PrecosLegacyRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -826,7 +826,6 @@ export interface FileRoutesByTo {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
   '/cesta-basica': typeof CestaBasicaRoute
@@ -854,7 +853,7 @@ export interface FileRoutesByTo {
   '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
-  '/precos': typeof PrecosRoute
+  '/precos': typeof PrecosRouteWithChildren
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/registrar': typeof RegistrarRoute
@@ -914,6 +913,7 @@ export interface FileRoutesByTo {
   '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/onde-comprar/$produto': typeof OndeComprarProdutoRoute
+  '/precos/legacy': typeof PrecosLegacyRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -943,7 +943,6 @@ export interface FileRoutesById {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
   '/cesta-basica': typeof CestaBasicaRoute
@@ -971,7 +970,7 @@ export interface FileRoutesById {
   '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
-  '/precos': typeof PrecosRoute
+  '/precos': typeof PrecosRouteWithChildren
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/registrar': typeof RegistrarRoute
@@ -1031,6 +1030,7 @@ export interface FileRoutesById {
   '/lista_/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/onde-comprar_/$produto': typeof OndeComprarProdutoRoute
+  '/precos/legacy': typeof PrecosLegacyRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -1061,7 +1061,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/buscar'
     | '/cadastro'
     | '/cesta'
     | '/cesta-basica'
@@ -1149,6 +1148,7 @@ export interface FileRouteTypes {
     | '/lista/pronta'
     | '/loja/$id'
     | '/onde-comprar/$produto'
+    | '/precos/legacy'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1177,7 +1177,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/buscar'
     | '/cadastro'
     | '/cesta'
     | '/cesta-basica'
@@ -1265,6 +1264,7 @@ export interface FileRouteTypes {
     | '/lista/pronta'
     | '/loja/$id'
     | '/onde-comprar/$produto'
+    | '/precos/legacy'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1293,7 +1293,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/buscar'
     | '/cadastro'
     | '/cesta'
     | '/cesta-basica'
@@ -1381,6 +1380,7 @@ export interface FileRouteTypes {
     | '/lista_/pronta'
     | '/loja/$id'
     | '/onde-comprar_/$produto'
+    | '/precos/legacy'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1410,7 +1410,6 @@ export interface RootRouteChildren {
   AssinarRoute: typeof AssinarRoute
   AssinaturaRoute: typeof AssinaturaRoute
   AuthRoute: typeof AuthRoute
-  BuscarRoute: typeof BuscarRoute
   CadastroRoute: typeof CadastroRoute
   CestaRoute: typeof CestaRoute
   CestaBasicaRoute: typeof CestaBasicaRoute
@@ -1438,7 +1437,7 @@ export interface RootRouteChildren {
   OndeComprarRoute: typeof OndeComprarRoute
   PerfilRoute: typeof PerfilRoute
   PlanosRoute: typeof PlanosRoute
-  PrecosRoute: typeof PrecosRoute
+  PrecosRoute: typeof PrecosRouteWithChildren
   PrecosPorCategoriaRoute: typeof PrecosPorCategoriaRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   RegistrarRoute: typeof RegistrarRoute
@@ -1755,13 +1754,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CadastroRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buscar': {
-      id: '/buscar'
-      path: '/buscar'
-      fullPath: '/buscar'
-      preLoaderRoute: typeof BuscarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -1838,6 +1830,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/produto-publico/$slug'
       preLoaderRoute: typeof ProdutoPublicoSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/precos/legacy': {
+      id: '/precos/legacy'
+      path: '/legacy'
+      fullPath: '/precos/legacy'
+      preLoaderRoute: typeof PrecosLegacyRouteImport
+      parentRoute: typeof PrecosRoute
     }
     '/onde-comprar_/$produto': {
       id: '/onde-comprar_/$produto'
@@ -2351,6 +2350,17 @@ const HistoricoRouteWithChildren = HistoricoRoute._addFileChildren(
   HistoricoRouteChildren,
 )
 
+interface PrecosRouteChildren {
+  PrecosLegacyRoute: typeof PrecosLegacyRoute
+}
+
+const PrecosRouteChildren: PrecosRouteChildren = {
+  PrecosLegacyRoute: PrecosLegacyRoute,
+}
+
+const PrecosRouteWithChildren =
+  PrecosRoute._addFileChildren(PrecosRouteChildren)
+
 interface AdminCoberturaRouteChildren {
   AdminCoberturaIdRoute: typeof AdminCoberturaIdRoute
 }
@@ -2395,7 +2405,6 @@ const rootRouteChildren: RootRouteChildren = {
   AssinarRoute: AssinarRoute,
   AssinaturaRoute: AssinaturaRoute,
   AuthRoute: AuthRoute,
-  BuscarRoute: BuscarRoute,
   CadastroRoute: CadastroRoute,
   CestaRoute: CestaRoute,
   CestaBasicaRoute: CestaBasicaRoute,
@@ -2423,7 +2432,7 @@ const rootRouteChildren: RootRouteChildren = {
   OndeComprarRoute: OndeComprarRoute,
   PerfilRoute: PerfilRoute,
   PlanosRoute: PlanosRoute,
-  PrecosRoute: PrecosRoute,
+  PrecosRoute: PrecosRouteWithChildren,
   PrecosPorCategoriaRoute: PrecosPorCategoriaRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   RegistrarRoute: RegistrarRoute,

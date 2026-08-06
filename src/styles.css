@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 @import "./styles/print.css";
 
 @custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
@@ -102,8 +103,8 @@
   --text-secondary: var(--text-secondary);
   --text-tertiary: var(--text-tertiary);
 
-  --font-display: "Outfit", "Space Grotesk", sans-serif !important;
-  --font-body: "DM Sans", "Inter", sans-serif !important;
+  --font-display: "Inter", "Outfit", "Space Grotesk", sans-serif !important;
+  --font-body: "Inter", "DM Sans", sans-serif !important;
 }
 
 html {

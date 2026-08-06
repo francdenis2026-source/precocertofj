@@ -44,7 +44,7 @@ type Props = {
 };
 
 const NAV_LINKS = [
-  { to: "/buscar", label: "Buscar" },
+  { to: "/precos", label: "Comparar Preços" },
   { to: "/melhores-precos", label: "Rankings" },
   { to: "/estabelecimentos", label: "Mercados" },
   { to: "/colaborar", label: "Colaborar" },
