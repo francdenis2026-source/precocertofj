@@ -162,15 +162,15 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group relative flex flex-col items-center justify-end min-w-[160px] h-[200px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
                 >
-                  <div className="absolute inset-0 z-0 flex items-center justify-center p-8 opacity-20 group-hover:opacity-30 transition-opacity">
-                    <SVG className="w-full h-full" style={{ color }} />
+                  <div className="absolute inset-0 z-0 flex items-center justify-center p-12 opacity-15 group-hover:opacity-25 transition-all duration-500 group-hover:scale-90">
+                    <SVG className="w-16 h-16 sm:w-20 sm:h-20" style={{ color }} />
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
                   </div>
                   <div className="relative z-10 w-full p-5 flex flex-col items-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md text-white group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 mb-3 shadow-lg">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 backdrop-blur-md text-white/80 group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 mb-3 shadow-lg border border-white/10">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-colors">{label}</span>
+                    <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/90 transition-colors group-hover:text-white">{label}</span>
                   </div>
                 </Link>
               ))}
