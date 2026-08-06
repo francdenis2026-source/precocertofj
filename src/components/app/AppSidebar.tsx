@@ -101,9 +101,9 @@ const appGroups: readonly NavGroup[] = [
     label: "Comprar melhor",
     tone: "brand",
     items: [
-      { to: "/app", label: "Painel", icon: Home, exact: true, shortcut: "1", hint: "Resumo da sua economia" },
+      { to: "/app", label: "Dashboard", icon: Home, exact: true, shortcut: "1", hint: "Resumo da sua economia e alertas" },
       { to: "/app/produtos", label: "Produtos", icon: ShoppingCart, shortcut: "2", hint: "Buscar e comparar preços" },
-      { to: "/app/estabelecimentos", label: "Mercados", icon: Store, shortcut: "3", hint: "Lojas cadastradas" },
+      { to: "/app/estabelecimentos", label: "Mercados", icon: Store, shortcut: "3", hint: "Status da rede em Feijó" },
       { to: "/melhores-precos", label: "Melhores preços", icon: Trophy, shortcut: "4", hint: "Ranking do menor preço" },
       { to: "/comparador", label: "Comparador", icon: BarChart3, shortcut: "5", hint: "Comparação lado a lado" },
       { to: "/mapa", label: "Bairros", icon: Boxes, shortcut: "6", hint: "Cobertura por bairro" },
