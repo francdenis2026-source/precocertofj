@@ -383,71 +383,6 @@ function ComparadorPage() {
     }
   };
 
-  const handleSaveCart = async () => {
-    if (!session) {
-      toast.error("Entre para salvar seu carrinho");
-      return;
-    }
-    setIsSaving(true);
-    try {
-      await saveCartFn({
-        data: {
-          name: `Comparativo ${new Date().toLocaleDateString("pt-BR")}`,
-          items: selectedRows.map(r => ({ catalogId: r.product_key, quantity: 1 }))
-        }
-      });
-      toast.success("Carrinho salvo com sucesso!");
-    } catch (err) {
-      toast.error("Erro ao salvar carrinho");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleExport = (format: "csv" | "pdf") => {
-    if (selectedRows.length === 0) {
-      toast.error("Selecione produtos para exportar");
-      return;
-    }
-
-    if (format === "pdf") {
-      const topStore = rankingsForExport[0];
-      if (!topStore) return;
-      
-      exportStoreQuotePdf({
-        storeName: topStore.storeName,
-        cart: selectedRows.map(r => {
-          const price = topStore.prices[r.product_key] || 0;
-          return {
-            slug: r.product_key,
-            productName: r.display_name,
-            price: price,
-            quantity: 1
-          };
-        }),
-        comparison: rankingsForExport.map(rank => ({
-          storeId: rank.storeId,
-          storeName: rank.storeName,
-          total: rank.total,
-          matchedCount: rank.matchCount,
-          totalCount: selectedRows.length,
-          isReference: rank.storeName === topStore.storeName
-        }))
-      });
-    } else {
-      toast.promise(
-        exportComparisonData({
-          data: {
-            format: "csv",
-            items: selectedRows.map(r => ({
-              name: r.display_name,
-              prices: Object.fromEntries(
-                rankingsForExport.map(rank => [rank.storeName, rank.prices[r.product_key] || 0])
-              )
-            })),
-            stores: rankingsForExport.map(r => r.storeName)
-          }
-        }).then(res => {
   const selectedRows = useMemo(
     () => selected.map((k) => rows.find((r) => r.product_key === k)).filter(Boolean) as Comparison[],
     [selected, rows],
@@ -779,6 +714,10 @@ function ComparadorPage() {
       setSelected([...selected, key]);
     }
   };
+  const selectedRows = useMemo(
+    () => selected.map((k) => rows.find((r) => r.product_key === k)).filter(Boolean) as Comparison[],
+    [selected, rows],
+  );
   const rankingsForExport = useMemo(() => {
     if (selectedRows.length === 0) return [];
     const marketMap = new Map<string, { storeId: string; storeName: string; total: number; matchCount: number; prices: Record<string, number> }>();
@@ -799,6 +738,88 @@ function ComparadorPage() {
     return Array.from(marketMap.values())
       .sort((a, b) => b.matchCount - a.matchCount || a.total - b.total);
   }, [selectedRows]);
+
+  const handleSaveCart = async () => {
+    if (!session) {
+      toast.error("Entre para salvar seu carrinho");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await saveCartFn({
+        data: {
+          name: `Comparativo ${new Date().toLocaleDateString("pt-BR")}`,
+          items: selectedRows.map(r => ({ catalogId: r.product_key, quantity: 1 }))
+        }
+      });
+      toast.success("Carrinho salvo com sucesso!");
+    } catch (err) {
+      toast.error("Erro ao salvar carrinho");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleExport = (format: "csv" | "pdf") => {
+    if (selectedRows.length === 0) {
+      toast.error("Selecione produtos para exportar");
+      return;
+    }
+
+    if (format === "pdf") {
+      const topStore = rankingsForExport[0];
+      if (!topStore) return;
+      
+      exportStoreQuotePdf({
+        storeName: topStore.storeName,
+        cart: selectedRows.map(r => {
+          const price = topStore.prices[r.product_key] || 0;
+          return {
+            slug: r.product_key,
+            productName: r.display_name,
+            price: price,
+            quantity: 1
+          };
+        }),
+        comparison: rankingsForExport.map(rank => ({
+          storeId: rank.storeId,
+          storeName: rank.storeName,
+          total: rank.total,
+          matchedCount: rank.matchCount,
+          totalCount: selectedRows.length,
+          isReference: rank.storeName === topStore.storeName
+        }))
+      });
+    } else {
+      toast.promise(
+        exportComparisonData({
+          data: {
+            format: "csv",
+            items: selectedRows.map(r => ({
+              name: r.display_name,
+              prices: Object.fromEntries(
+                rankingsForExport.map(rank => [rank.storeName, rank.prices[r.product_key] || 0])
+              )
+            })),
+            stores: rankingsForExport.map(r => r.storeName)
+          }
+        }).then(res => {
+          if (res.content) {
+            const blob = new Blob([res.content], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = res.filename || "comparativo.csv";
+            a.click();
+          }
+        }),
+        {
+          loading: "Gerando CSV...",
+          success: "CSV baixado!",
+          error: "Erro ao exportar"
+        }
+      );
+    }
 
   const handleShare = async () => {
     if (typeof window === "undefined") return;
