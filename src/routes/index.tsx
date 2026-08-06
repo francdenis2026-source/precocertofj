@@ -290,12 +290,20 @@ function HomePage() {
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
+                  data-category-item
+                  data-label={label}
                   onClick={(e) => {
                     if (e.currentTarget.parentElement?.classList.contains('grabbing')) {
                       e.preventDefault();
                     }
                   }}
-                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] snap-start"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate({ to: "/categoria/$slug", params: { slug: slug as any } });
+                    }
+                  }}
+                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start"
                 >
                   {/* Category Ambient Glow */}
                   <div className="absolute inset-0 z-0">
@@ -330,7 +338,7 @@ function HomePage() {
               
               <Link 
                 to="/buscar" 
-                className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] snap-start"
+                className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
                   <PlusCircle className="h-6 w-6" />
