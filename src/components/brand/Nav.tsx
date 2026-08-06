@@ -47,7 +47,7 @@ export function Nav() {
             aria-label="Localização atual"
           >
             <IconTile icon={MapPin} size="xs" tone="accent" />
-            Feijó · AC
+            Feijó · <span className="text-gold-ink">AC</span>
           </span>
         </div>
 

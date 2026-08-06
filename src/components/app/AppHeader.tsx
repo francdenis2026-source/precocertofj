@@ -213,7 +213,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           ) : (
             <MapPin data-tone-icon className="h-3 w-3" strokeWidth={2.4} />
           )}
-          {isAdminScope ? "Console" : "Feijó · AC"}
+          {isAdminScope ? "Console" : <>Feijó · <span className="text-[var(--brand-primary)]">AC</span></>}
         </span>
 
         {!isAdminScope && <HeaderStats compact={tight} />}

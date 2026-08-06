@@ -133,7 +133,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 subTextClass,
               )}
             >
-              Feijó <span className="mx-0.5 opacity-60">·</span> Acre
+              Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)] opacity-100">Acre</span>
             </span>
           </div>
         </Link>

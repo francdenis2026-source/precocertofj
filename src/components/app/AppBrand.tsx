@@ -75,7 +75,7 @@ export function AppBrand({
           </span>
           {subtitle && (
             <span className="mt-1 truncate text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/70">
-              {subtitle}
+              {subtitle} <span className="text-[var(--brand-primary)]">{subtitle === "Feijó" ? "· AC" : ""}</span>
             </span>
           )}
         </span>
