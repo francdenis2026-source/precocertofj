@@ -78,14 +78,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // if (pathname !== "/") return null;
 
   const shellClass = isOverlay
-    ? "sticky top-0 z-40 w-full shrink-0 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 backdrop-blur-md"
-    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 text-[var(--text-primary)] shadow-sm backdrop-blur-md transition-colors duration-300";
+    ? "sticky top-0 z-40 w-full shrink-0 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 backdrop-blur-[12px] shadow-sm"
+    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 text-[var(--text-primary)] shadow-sm backdrop-blur-[12px] transition-colors duration-300";
   const brandTextClass = "text-[var(--text-primary)]";
   const brandAccentClass = "text-[var(--brand-primary)]";
   const subTextClass = "text-[var(--text-tertiary)]";
   const navClass = "relative text-[var(--text-secondary)] transition-colors hover:text-[var(--brand-primary)] [&.active]:text-[var(--brand-primary)]";
-  const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]";
-  const loginClass = "bg-[var(--brand-primary)] text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]";
+  const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] shadow-sm";
+  const loginClass = "bg-[var(--brand-primary)] text-black font-black shadow-[var(--pc-shadow-md)] transition-all hover:scale-[1.02] active:scale-[0.98]";
 
 
 

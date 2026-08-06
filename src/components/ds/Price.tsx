@@ -13,9 +13,9 @@
  *   </span>
  *
  * Regras de tipografia (definidas em src/styles.css):
- *  - valor: Oswald (condensada) + tabular-nums, peso por tamanho;
- *  - prefixo/sufixo: sans do sistema, menores e com peso reduzido;
- *  - cores: sempre tokens semânticos (--pc-price-fg e derivados).
+ *  - valor: tabular-nums, peso por tamanho;
+ *  - prefixo/sufixo: menores e com peso reduzido;
+ *  - cores: sempre tokens semânticos.
  */
 
 import { memo, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from "react";

@@ -317,7 +317,7 @@ function HomePage() {
                 <Button 
                   type="submit" 
                   className={cn(
-                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
+                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-[0.15em] text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
                     isScrolled && "h-[36px] sm:h-[42px] px-6 text-[10px]"
                   )}
                 >
