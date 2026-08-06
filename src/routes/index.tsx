@@ -234,10 +234,10 @@ function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.8) contrast(1.1) saturate(1.1) blur(4px)"
+            filter: "brightness(0.9) contrast(1.1) saturate(1.2) blur(2px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -452,7 +452,7 @@ function HomePage() {
             >
               {/* background image without yellow tint, high contrast, lazy loading optimization */}
               <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
+                className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
                 style={{ 
                   backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')",
                   backgroundColor: 'var(--bg-surface-elevated)'
