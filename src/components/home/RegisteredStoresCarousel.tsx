@@ -58,8 +58,8 @@ export function RegisteredStoresCarousel() {
                 src={store.logoUrl} 
                 name={store.name} 
                 className="h-full w-full border-none p-0 bg-transparent"
-                imgClassName="object-contain"
-                initialsClassName="text-white/40 text-[10px]"
+                imgClassName="object-contain filter brightness-100"
+                initialsClassName="text-slate-900 font-bold text-[12px]"
                 vector
               />
             </div>
