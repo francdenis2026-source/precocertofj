@@ -75,13 +75,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#FFD700" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#FD79A8" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#E17055" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#00B894" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#0984E3" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#00CEC9" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#FDCB6E" },
+  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#6366F1" },
+  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#EC4899" },
+  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#EF4444" },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#10B981" },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#3B82F6" },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#06B6D4" },
+  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#F59E0B" },
 ];
 
 function HomePage() {
