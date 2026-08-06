@@ -218,7 +218,7 @@ function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[1px]"
             onClick={() => setIsSearchFocused(false)}
           />
         )}
@@ -274,7 +274,7 @@ function HomePage() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[1] sm:leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)] px-2 sm:px-0"
             >
-              Economize de verdade em cada compra na <span className="text-[var(--brand-primary)]">nossa Feijó</span>
+              Economize <span className="sm:inline hidden">de verdade</span> em cada compra na <span className="text-[var(--brand-primary)]">nossa Feijó</span>
             </motion.h1>
             
             <motion.p 
