@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
+import { useRef, useState, useEffect } from "react";
 
 export function RegisteredStoresCarousel() {
   const fetchStores = useServerFn(listPublicStores);
