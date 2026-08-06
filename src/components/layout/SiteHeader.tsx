@@ -78,10 +78,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // if (pathname !== "/") return null;
 
   const shellClass = isOverlay
-    ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
-      // flutua por cima do hero e a marca colide com o título/badge.
-      "relative z-30 w-full shrink-0"
-    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)] text-[var(--text-primary)] shadow-xl backdrop-blur-md transition-colors duration-300";
+    ? "sticky top-0 z-40 w-full shrink-0 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 backdrop-blur-md"
+    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 text-[var(--text-primary)] shadow-sm backdrop-blur-md transition-colors duration-300";
   const brandTextClass = "text-[var(--text-primary)]";
   const brandAccentClass = "text-[var(--brand-primary)]";
   const subTextClass = "text-[var(--text-tertiary)]";
