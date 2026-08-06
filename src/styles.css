@@ -15,33 +15,30 @@
  * A high-end professional palette for utility and reliability.
  */
 :root {
-  /* Colors - Dark Mode (Default) */
-  --pc-deep-navy: #0A0F1A;
-  --pc-navy-surface: #121826;
-  --pc-navy-surface-elevated: #1A2234;
-  --pc-gold-primary: #FFD700;
-  --pc-gold-dark: #C5A000;
-  --pc-gold-glow: rgba(255, 215, 0, 0.15);
+  /* Colors - Light Mode (Default) */
+  --pc-bg-base: #FFFFFF;
+  --pc-bg-surface: #F8F9FA;
+  --pc-bg-surface-elevated: #F1F3F5;
+  --pc-brand-primary: #6366F1; /* Indigo vibrant */
+  --pc-brand-glow: rgba(99, 102, 241, 0.1);
+  --pc-border-subtle: rgba(0, 0, 0, 0.08);
+  --pc-text-primary: #1A1A1A;
+  --pc-text-secondary: #4B5563;
+  --pc-text-tertiary: #9CA3AF;
   
   /* Semantic Tokens for Components */
-  --pc-price-fg: var(--text-primary);
-  --pc-price-best: var(--brand-primary);
-  --pc-price-savings: var(--success);
-  
-  /* Border & Shadow System */
-  --pc-border-gold: rgba(255, 215, 0, 0.12);
-  --pc-shadow-gold: 0 12px 24px -8px var(--brand-glow);
+  --bg-base: var(--pc-bg-base);
+  --bg-surface: var(--pc-bg-surface);
+  --bg-surface-elevated: var(--pc-bg-surface-elevated);
+  --border-subtle: var(--pc-border-subtle);
+  --brand-primary: var(--pc-brand-primary);
+  --brand-glow: var(--pc-brand-glow);
+  --text-primary: var(--pc-text-primary);
+  --text-secondary: var(--pc-text-secondary);
+  --text-tertiary: var(--pc-text-tertiary);
 
-  /* Common Theme variables */
-  --bg-base: var(--pc-deep-navy);
-  --bg-surface: var(--pc-navy-surface);
-  --bg-surface-elevated: var(--pc-navy-surface-elevated);
-  --border-subtle: var(--pc-border-gold);
-  --brand-primary: var(--pc-gold-primary);
-  --brand-glow: var(--pc-gold-glow);
-  --text-primary: #FFFFFF;
-  --text-secondary: #94A3B8;
-  --text-tertiary: #64748B;
+  /* Border & Shadow System */
+  --pc-shadow-gold: 0 12px 24px -8px var(--brand-glow);
 }
 
 @utility animate-gradient-x {
