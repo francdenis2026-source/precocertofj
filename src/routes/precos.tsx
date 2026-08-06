@@ -143,7 +143,7 @@ function PriceLookupPage() {
                     <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-[1fr,auto] gap-6 items-center">
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                           <Badge variant="primarySoft" size="sm" className="font-black text-[9px] uppercase tracking-widest">
+                           <Badge variant="primary" size="sm" className="font-black text-[9px] uppercase tracking-widest bg-primary/10 text-primary border-none">
                              {group.samples} {group.samples === 1 ? 'Oferta' : 'Ofertas'}
                            </Badge>
                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
