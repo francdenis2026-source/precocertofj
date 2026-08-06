@@ -32,7 +32,8 @@ export const Route = createFileRoute("/app")({
 function StatusPage() {
   const { stores } = useLoaderData({ from: "/app" });
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>("f02c23db-3934-41f4-9e61-dc16c6c28115");
+
 
   const filteredStores = useMemo(() => {
     return stores.filter((s: any) => 
@@ -48,7 +49,7 @@ function StatusPage() {
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <header className="mb-12 relative">
           <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-12 bg-[var(--brand-primary)] rounded-full hidden md:block" />
-          <h1 className="text-4xl font-black tracking-tight mb-3 font-[var(--font-display)]">Status da Rede</h1>
+          <h1 className="text-4xl font-black tracking-tight mb-3 font-[var(--font-display)]">Rede de Mercados</h1>
           <p className="text-[var(--text-secondary)] text-lg max-w-2xl font-medium">
             Acompanhe a cobertura de dados, novos cadastros e atualizações de preços em tempo real em Feijó.
           </p>
@@ -82,9 +83,10 @@ function StatusPage() {
                 >
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-bold text-sm">{store.name}</h3>
-                    <Badge variant="secondary" className="text-[10px] font-bold">
-                      {store.productCount} itens
+                    <Badge variant="outline" className="text-[10px] font-black border-[var(--brand-primary)]/30 text-[var(--brand-primary)]">
+                      {store.productCount} ITENS
                     </Badge>
+
                   </div>
                   <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider">
                     <Clock className="h-3 w-3" />
@@ -156,10 +158,11 @@ function StoreCatalog({ storeId }: { storeId: string }) {
           <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold">{data.store.name}</h2>
+                <h2 className="text-3xl font-black tracking-tight font-[var(--font-display)]">{data.store.name}</h2>
                 {data.store.id === 'f02c23db-3934-41f4-9e61-dc16c6c28115' && (
-                  <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/20">Foco Contamigos</Badge>
+                  <Badge className="bg-[var(--brand-primary)] text-black font-black border-none px-3">PREMIUM</Badge>
                 )}
+
               </div>
               <p className="text-sm text-[var(--text-tertiary)] flex items-center gap-2">
                 <Store className="h-4 w-4" />
