@@ -39,7 +39,7 @@ export function HomeBrandLink({
             Preço<span className="italic -ml-[0.05em] text-[var(--pc-gold-ink)]">Certo</span>
           </span>
           <span className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-            Feijó <span className="mx-0.5 opacity-60">·</span> Acre
+            Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)]">Acre</span>
           </span>
         </span>
       )}
