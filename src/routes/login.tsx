@@ -660,6 +660,7 @@ function LoginPage() {
                 Esqueci meu PIN / tenho um código
               </Link>
             </div>
+            </div>
           </form>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
