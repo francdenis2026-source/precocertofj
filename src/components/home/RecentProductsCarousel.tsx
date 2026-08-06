@@ -167,10 +167,10 @@ export function RecentProductsCarousel() {
             const store = cmp?.cheapest_store ? shortenStoreName(cmp.cheapest_store) : null;
 
             return (
-              <CarouselItem
-                key={p.id}
-                className="basis-[85%] pl-4 sm:basis-[45%] md:basis-[30%] lg:basis-[25%]"
-              >
+                <CarouselItem
+                  key={p.id}
+                  className="basis-[75%] pl-4 sm:basis-[45%] md:basis-[33%] lg:basis-[25%] xl:basis-[20%] snap-start"
+                >
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug }}
