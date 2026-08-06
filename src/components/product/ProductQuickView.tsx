@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Price } from "@/components/ds/Price";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { 
@@ -11,8 +11,11 @@ import {
   TrendingDown,
   History,
   Scale,
-  BellPlus
+  BellPlus,
+  ArrowDownWideNarrow,
+  Timer
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   LineChart,
   Line,
@@ -62,12 +65,14 @@ export function ProductQuickView({
   onClose: () => void;
 }) {
   const fetchProduct = useServerFn(getPublicProduct);
-  // Foco inicial no corpo do modal; Radix devolve o foco ao gatilho ao fechar.
+  const [sortOrder, setSortOrder] = useState<"price" | "savings" | "recent">("price");
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (product) openerRef.current = document.activeElement as HTMLElement | null;
   }, [product]);
+
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["public-product-quickview", product?.name ?? ""],
     queryFn: () => fetchProduct({ data: { slug: product!.name } }),
@@ -75,14 +80,28 @@ export function ProductQuickView({
     staleTime: 60_000,
   });
 
-  // Lista canônica: um registro por estabelecimento, ordem estável em empates.
-  const allMarkets = dedupeByStorePrice(data?.markets ?? [], (m) => ({
-    store: m.marketName,
-    price: m.priceMin,
-    samples: m.samples,
-    lastSeen: m.lastSeen,
-  }));
-  const markets = allMarkets.slice(0, 8);
+  const sortedMarkets = useMemo(() => {
+    const raw = dedupeByStorePrice(data?.markets ?? [], (m) => ({
+      store: m.marketName,
+      price: m.priceMin,
+      samples: m.samples,
+      lastSeen: m.lastSeen,
+    }));
+
+    const list = [...raw];
+    if (sortOrder === "price") {
+      list.sort((a, b) => a.priceMin - b.priceMin);
+    } else if (sortOrder === "savings") {
+      const avg = data?.avg ?? 0;
+      list.sort((a, b) => (avg - b.priceMin) - (avg - a.priceMin));
+    } else if (sortOrder === "recent") {
+      list.sort((a, b) => new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime());
+    }
+    return list;
+  }, [data?.markets, data?.avg, sortOrder]);
+
+  const markets = sortedMarkets.slice(0, 8);
+  const cheapest = sortedMarkets.length > 1 ? sortedMarkets[0] : null;
 
   /**
    * Ofertas separadas por embalagem (1L vs 2L vs 5L).
@@ -104,28 +123,13 @@ export function ProductQuickView({
         }))
       : [];
 
-  // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
-  // estabelecimento o destaque repetiria a linha, então é omitido.
-  const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
   const cheapestLogo =
     cheapest && storeKey(cheapest.marketName) === storeKey(product?.cheapestStore)
       ? (product?.cheapestLogo ?? null)
       : null;
 
-  /**
-   * "Melhor custo-benefício" no modal.
-   *
-   * Aqui todas as ofertas são do MESMO produto (mesma embalagem), então o
-   * vencedor por unidade coincide com o menor preço. O selo continua útil
-   * porque traduz a etiqueta em R$/kg ou R$/L — mas precisa dos mesmos
-   * guardas anti-ruído do `BestValueBadge`:
-   *  - `requireDifferentSizes: false` (comparação intra-produto);
-   *  - `pickBestValue` devolve null sem tamanho detectável, com bases
-   *    misturadas (kg vs L) ou com menos de 2 ofertas;
-   *  - `computeUnitPrice` (interno) não extrapola g/ml abaixo de 1kg/1L.
-   */
   const bestValue = pickBestValue(
-    allMarkets.map((m) => ({
+    sortedMarkets.map((m: any) => ({
       key: m.marketName,
       price: m.priceMin,
       name: product?.name ?? data?.displayName ?? "",
@@ -255,18 +259,52 @@ export function ProductQuickView({
 
 
 
-          <div className="mb-4 flex flex-col gap-2">
-            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-              <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
-            </p>
+          <div className="mb-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-muted-foreground">
+                <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
+              </p>
+              
+              <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-lg border border-border/50">
+                <button 
+                  onClick={() => setSortOrder("price")}
+                  className={cn(
+                    "p-1.5 rounded-md transition-all",
+                    sortOrder === "price" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  title="Menor Preço"
+                >
+                  <ArrowDownWideNarrow className="h-3 w-3" />
+                </button>
+                <button 
+                  onClick={() => setSortOrder("savings")}
+                  className={cn(
+                    "p-1.5 rounded-md transition-all",
+                    sortOrder === "savings" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  title="Maior Economia"
+                >
+                  <TrendingDown className="h-3 w-3" />
+                </button>
+                <button 
+                  onClick={() => setSortOrder("recent")}
+                  className={cn(
+                    "p-1.5 rounded-md transition-all",
+                    sortOrder === "recent" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  title="Mais Recentes"
+                >
+                  <Timer className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
             
-            {/* Action buttons */}
             <div className="flex gap-2">
-              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
-                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Acompanhar Preço
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card/60 py-2.5 text-[11px] font-black uppercase tracking-tight text-foreground transition-all hover:border-brand-gold hover:bg-brand-gold/5 active:scale-95">
+                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Monitorar
               </button>
-              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
-                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Adicionar à Lista
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card/60 py-2.5 text-[11px] font-black uppercase tracking-tight text-foreground transition-all hover:border-brand-gold hover:bg-brand-gold/5 active:scale-95">
+                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Comparar
               </button>
             </div>
           </div>

@@ -90,12 +90,21 @@ function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const searchSuggestionsRef = useRef<any>(null);
   const searchAnchorRef = useRef<HTMLFormElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showLogoPreview, setShowLogoPreview] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const availableLogos = [
     { name: "Central Super Color (Dark)", path: "/logos/central-super-color-dark.svg" },
@@ -138,10 +147,9 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
+    // Removido scroll automático ao focar para evitar travamentos e manter posição
     if (isSearchFocused && searchAnchorRef.current) {
-      const yOffset = -100; // Ajuste para deixar a barra de busca em uma posição "profissional"
-      const y = searchAnchorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      // Logic for fixed position could be handled via CSS or state if needed
     }
   }, [isSearchFocused]);
 
@@ -200,6 +208,19 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="overlay" showThemeToggle />
+      
+      {/* Backdrop for focused search */}
+      <AnimatePresence>
+        {isSearchFocused && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsSearchFocused(false)}
+          />
+        )}
+      </AnimatePresence>
       
       {/* Light & Professional Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -282,11 +303,17 @@ function HomePage() {
             </div>
 
 
-            <div className="relative w-full max-w-2xl">
+            <div className={cn(
+              "w-full max-w-2xl transition-all duration-500",
+              isSearchFocused || isScrolled ? "fixed top-4 left-1/2 -translate-x-1/2 z-[100] scale-[0.95]" : "relative"
+            )}>
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
-                className="group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
+                className={cn(
+                  "group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10",
+                  (isSearchFocused || isScrolled) && "h-[54px] sm:h-[60px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                )}
               >
                 <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
                 <input 

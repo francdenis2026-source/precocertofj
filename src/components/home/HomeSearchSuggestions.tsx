@@ -302,7 +302,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[80] flex flex-col overflow-hidden rounded-[12px] border border-[var(--border-subtle)] shadow-2xl"
+            className="fixed z-[110] flex flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
             style={{
               left: rect.left,
               top: rect.top,
