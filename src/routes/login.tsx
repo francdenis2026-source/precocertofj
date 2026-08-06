@@ -617,9 +617,10 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="group relative mt-1 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[var(--brand-primary)] text-[15px] font-bold text-[#0B1E3A] shadow-lg transition-[filter,box-shadow] duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+              className="group relative mt-2 inline-flex h-[54px] w-full items-center justify-center gap-2 overflow-hidden rounded-2xl text-[16px] font-black tracking-tight text-[#0B1E3A] transition-[filter,box-shadow,transform] duration-200 hover:brightness-[1.06] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
               style={{
-                boxShadow: `0 12px 24px -10px var(--brand-glow)`,
+                background: "linear-gradient(180deg, #F5DE95 0%, #E8C25A 45%, #D4AF37 100%)",
+                boxShadow: `0 18px 34px -14px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.45)`,
                 fontFamily: PC_DISPLAY,
               }}
             >
