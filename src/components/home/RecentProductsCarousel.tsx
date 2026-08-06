@@ -164,7 +164,7 @@ export function RecentProductsCarousel() {
             return (
                 <CarouselItem
                   key={p.id}
-                  className="basis-[75%] pl-4 sm:basis-[45%] md:basis-[33%] lg:basis-[25%] xl:basis-[20%] snap-start"
+                  className="basis-[85%] pl-4 sm:basis-[45%] md:basis-[33%] lg:basis-[25%] xl:basis-[20%] snap-start"
                 >
                 <div
                   onClick={() => window.dispatchEvent(new CustomEvent('open-quick-view', { detail: { 
@@ -193,84 +193,78 @@ export function RecentProductsCarousel() {
                     }
                   }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-lg cursor-pointer"
+                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-lg cursor-pointer"
                 >
-                  {/* Subtle Glow */}
                   <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--brand-primary)]/5 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
 
-                  <header className="relative z-10 flex items-center justify-between mb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
+                  <header className="relative z-10 flex items-center justify-between mb-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
                       <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
                       {formatDate(p.createdAt)}
                     </span>
-                    {savings >= 5 && (
-                      <span className="rounded-full bg-[var(--success)]/10 border border-[var(--success)]/20 px-2.5 py-1 text-[10px] font-bold text-[var(--success)] flex items-center gap-1 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    {savings >= 2 && (
+                      <span className="rounded-full bg-[var(--success)]/10 border border-[var(--success)]/20 px-2 py-0.5 text-[9px] font-black text-[var(--success)] flex items-center gap-1">
                         <TrendingDown className="h-2.5 w-2.5" />
                         ↓ {savings}%
                       </span>
                     )}
                   </header>
 
-                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-lg bg-[var(--bg-base)] p-4 transition-transform duration-700 group-hover/card:scale-105">
+                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-xl bg-[var(--bg-base)] p-3 transition-transform duration-700 group-hover/card:scale-105">
                     <ProductImage
                       src={cmp?.image_url ?? p.imageUrl}
                       alt={p.displayName}
                       width={320}
                       height={320}
-                      className="h-full w-full object-contain drop-shadow-2xl"
+                      className="h-full w-full object-contain drop-shadow-md"
                     />
                   </div>
 
-                  <div className="relative z-10 mt-5 space-y-3">
+                  <div className="relative z-10 mt-4 space-y-2">
                     <div>
                       {p.brand && (
-                        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-1">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-0.5">
                           {p.brand}
                         </p>
                       )}
-                      <h3 className="line-clamp-2 text-[18px] font-semibold leading-tight tracking-tight text-[var(--text-primary)] group-hover/card:text-[var(--brand-primary)] transition-colors">
+                      <h3 className="line-clamp-1 text-[15px] font-bold leading-tight tracking-tight text-[var(--text-primary)] group-hover/card:text-[var(--brand-primary)] transition-colors">
                         {p.displayName}
                       </h3>
                     </div>
 
-                    <div className="flex items-end justify-between pt-2">
+                    <div className="flex items-center justify-between pt-1">
                       <div className="flex flex-col">
                         {price != null ? (
                           <>
-                            <div className="flex items-baseline gap-2">
+                            <div className="flex items-baseline gap-1.5">
                               <Price 
                                 value={price} 
-                                size="xl" 
-                                className="font-bold tracking-tight"
+                                size="lg" 
+                                className="font-black tracking-tight"
                               />
-                              {avg != null && avg > price && (
-                                <Price 
-                                  value={avg} 
-                                  tone="strike" 
-                                  size="xs" 
-                                />
-                              )}
                             </div>
                             {store && (
-                              <p className="text-[12px] font-medium text-[var(--text-tertiary)] truncate max-w-[120px]">
-                                no <span className="text-[var(--text-secondary)]">{store}</span>
+                              <p className="text-[10px] font-medium text-[var(--text-tertiary)] truncate max-w-[100px]">
+                                no <span className="text-[var(--text-secondary)] font-bold">{store}</span>
                               </p>
                             )}
                           </>
                         ) : (
-                          <span className="text-xs font-medium text-[var(--text-tertiary)] italic">
+                          <span className="text-[10px] font-bold text-[var(--text-tertiary)] italic">
                             Monitorando...
                           </span>
                         )}
                       </div>
                       
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] transition-all duration-300 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white">
-                        <ArrowRight className="h-5 w-5" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] transition-all duration-300 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white">
+                        <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
                   </div>
                 </div>
               </CarouselItem>
+            );
+          })}
             );
           })}
         </CarouselContent>

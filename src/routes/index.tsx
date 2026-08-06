@@ -296,32 +296,80 @@ function HomePage() {
             </div>
           </motion.section>
 
-          {/* Compact Category Navigation */}
-          <section className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Categorias</h2>
-              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver todas</Link>
+          {/* How It Works Section */}
+          <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-12 w-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4 text-[var(--brand-primary)]">
+                <Search className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">1. Pesquise</h3>
+              <p className="text-sm text-[var(--text-tertiary)] mb-4">Encontre qualquer produto nos mercados da cidade em segundos.</p>
+              <Link to="/buscar" className="text-xs font-black uppercase tracking-widest text-[var(--brand-primary)] hover:underline">Ver catálogo</Link>
             </div>
             
-            <div className="grid grid-cols-4 sm:flex sm:flex-wrap justify-center gap-3 sm:gap-4">
+            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-12 w-12 rounded-2xl bg-pink-50 flex items-center justify-center mb-4 text-pink-500">
+                <TrendingDown className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">2. Compare</h3>
+              <p className="text-sm text-[var(--text-tertiary)] mb-4">Veja onde está mais barato e economize até 40% nas suas compras.</p>
+              <Link to="/app" className="text-xs font-black uppercase tracking-widest text-pink-500 hover:underline">Status ao vivo</Link>
+            </div>
+            
+            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-12 w-12 rounded-2xl bg-green-50 flex items-center justify-center mb-4 text-green-500">
+                <PlusCircle className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold mb-2">3. Colabore</h3>
+              <p className="text-sm text-[var(--text-tertiary)] mb-4">Registre preços novos e ajude a comunidade a economizar.</p>
+              <Link to="/registrar" className="text-xs font-black uppercase tracking-widest text-green-500 hover:underline">Registrar preço</Link>
+            </div>
+          </section>
+
+          {/* Grid Category Navigation */}
+          <section className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-[12px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Navegar por Categorias</h2>
+              <Link to="/buscar" className="text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver tudo</Link>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
-                  className="group flex flex-col items-center gap-2 sm:w-20"
+                  className="group relative flex flex-col items-center justify-center gap-4 p-6 rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 hover:border-[var(--brand-primary)] hover:-translate-y-1 shadow-sm hover:shadow-xl overflow-hidden"
                 >
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm group-hover:shadow-md">
-                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--brand-primary)] transition-colors" />
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity" style={{ backgroundColor: color }} />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.03] transition-opacity pointer-events-none" style={{ backgroundColor: color }} />
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--bg-base)] border border-[var(--border-subtle)] group-hover:border-[var(--brand-primary)]/30 transition-all">
+                    <Icon className="h-8 w-8 text-[var(--brand-primary)]" />
                   </div>
-                  <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full text-center px-1">
+                  <span className="text-sm font-black text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors">
                     {label}
                   </span>
                 </Link>
               ))}
             </div>
           </section>
+
+          {/* CTA Banner */}
+          <section className="mb-16">
+            <div className="relative rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-indigo-700 p-8 sm:p-12 overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 h-full w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-10 mix-blend-overlay pointer-events-none" />
+              <div className="relative z-10 max-w-xl">
+                <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 leading-tight">Viu um preço novo?</h2>
+                <p className="text-lg text-white/80 mb-8 leading-relaxed">Ajude outros moradores de Feijó a economizar registrando o preço que você acabou de encontrar no mercado.</p>
+                <Button 
+                  onClick={() => navigate({ to: "/registrar" })}
+                  className="bg-white text-[var(--brand-primary)] hover:bg-white/90 font-black h-14 px-8 rounded-2xl shadow-xl transition-all active:scale-95 text-lg"
+                >
+                  Registrar Preço Agora
+                </Button>
+              </div>
+            </div>
+          </section>
+
 
           {/* New Sections for Recent and Trending Products */}
           <div className="mb-12">
