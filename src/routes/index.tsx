@@ -452,7 +452,7 @@ function HomePage() {
             >
               {/* background image without yellow tint, high contrast, lazy loading optimization */}
               <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
+                className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
                 style={{ 
                   backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')",
                   backgroundColor: 'var(--bg-surface-elevated)'
