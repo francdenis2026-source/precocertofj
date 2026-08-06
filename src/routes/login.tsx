@@ -411,15 +411,24 @@ function LoginPage() {
                           exit={{ opacity: 0, y: -10 }}
                           className="space-y-6"
                         >
-                          <AuthInput
-                            label="Celular"
-                            icon={Phone}
-                            value={maskPhone(phone)}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="(00) 00000-0000"
-                            inputMode="tel"
-                            success={phone.replace(/\D/g, "").length >= 10}
-                          />
+                            <AuthInput
+                              label="Celular"
+                              icon={Phone}
+                              value={maskPhone(phone)}
+                              onChange={(e) => setPhone(e.target.value)}
+                              placeholder="(00) 00000-0000"
+                              inputMode="tel"
+                              success={phone.replace(/\D/g, "").length >= 10}
+                            />
+                            <AuthInput
+                              label="Data de nascimento"
+                              icon={Calendar}
+                              type="date"
+                              value={birthDate}
+                              onChange={(e) => setBirthDate(e.target.value)}
+                              success={!!birthDate}
+                            />
+                          </div>
                           <div className="grid grid-cols-2 gap-4">
                             <AuthInput
                               label="Cidade"
