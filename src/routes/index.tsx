@@ -253,37 +253,67 @@ function HomePage() {
             
             <div 
               id="category-scroll-container"
-              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none touch-pan-x"
+              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none touch-pan-x overscroll-x-contain"
               onMouseDown={(e) => {
                 const el = e.currentTarget;
                 el.classList.add('grabbing');
+                
+                // Disable smooth scroll during manual drag to avoid "fighting" the mouse
+                el.style.scrollBehavior = 'auto';
+                
                 const startX = e.pageX - el.offsetLeft;
                 const scrollLeft = el.scrollLeft;
                 let isDragging = false;
-                let startTime = Date.now();
+                let lastX = e.pageX;
+                let velocity = 0;
 
                 const onMouseMove = (moveEvent: MouseEvent) => {
-                  moveEvent.preventDefault();
                   const x = moveEvent.pageX - el.offsetLeft;
-                  const walk = (x - startX) * 2;
-                  if (Math.abs(walk) > 5) {
+                  const walk = (x - startX); 
+                  
+                  // Calculate velocity for momentum
+                  velocity = moveEvent.pageX - lastX;
+                  lastX = moveEvent.pageX;
+
+                  if (Math.abs(x - startX) > 5) {
                     isDragging = true;
                     el.classList.add('is-dragging');
                   }
+                  
                   el.scrollLeft = scrollLeft - walk;
                 };
 
-                const onMouseUp = (upEvent: MouseEvent) => {
+                const onMouseUp = () => {
                   el.classList.remove('grabbing');
                   el.classList.remove('is-dragging');
+                  el.style.scrollBehavior = ''; // Restore smooth scroll
+                  
                   document.removeEventListener('mousemove', onMouseMove);
                   document.removeEventListener('mouseup', onMouseUp);
                   
-                  // Simple velocity-based momentum could be added here if needed
-                  
-                  if (isDragging || (Date.now() - startTime > 200)) {
-                    // Prevent click if we dragged or held for too long
+                  if (isDragging) {
+                    // Apply momentum scroll
+                    const momentum = () => {
+                      if (Math.abs(velocity) < 0.5) return;
+                      el.scrollLeft -= velocity;
+                      velocity *= 0.95; // Friction
+                      requestAnimationFrame(momentum);
+                    };
+                    requestAnimationFrame(momentum);
+
+                    // Block clicks on items during/immediately after drag
                     const captureClick = (clickEvent: MouseEvent) => {
+                      clickEvent.stopPropagation();
+                      clickEvent.preventDefault();
+                      el.removeEventListener('click', captureClick, true);
+                    };
+                    el.addEventListener('click', captureClick, true);
+                  }
+                };
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+              }}
                       clickEvent.stopPropagation();
                       clickEvent.preventDefault();
                       el.removeEventListener('click', captureClick, true);
