@@ -109,6 +109,7 @@ import { Route as AdminGestaoRouteImport } from './routes/admin.gestao'
 import { Route as AppLojaIdRouteImport } from './routes/app_.loja.$id'
 import { Route as ApiPublicVersionRouteImport } from './routes/api/public/version'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
+import { Route as ApiPublicDbDumpRouteImport } from './routes/api/public/db-dump'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
@@ -619,6 +620,11 @@ const ApiPublicMpWebhookRoute = ApiPublicMpWebhookRouteImport.update({
   path: '/api/public/mp-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDbDumpRoute = ApiPublicDbDumpRouteImport.update({
+  id: '/api/public/db-dump',
+  path: '/api/public/db-dump',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminCatalogImageRoute = ApiAdminCatalogImageRouteImport.update({
   id: '/api/admin/catalog-image',
   path: '/api/admin/catalog-image',
@@ -771,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/db-dump': typeof ApiPublicDbDumpRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app/loja/$id': typeof AppLojaIdRoute
@@ -882,6 +889,7 @@ export interface FileRoutesByTo {
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/db-dump': typeof ApiPublicDbDumpRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app/loja/$id': typeof AppLojaIdRoute
@@ -994,6 +1002,7 @@ export interface FileRoutesById {
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/db-dump': typeof ApiPublicDbDumpRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app_/loja/$id': typeof AppLojaIdRoute
@@ -1107,6 +1116,7 @@ export interface FileRouteTypes {
     | '/produto/$slug'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/db-dump'
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app/loja/$id'
@@ -1218,6 +1228,7 @@ export interface FileRouteTypes {
     | '/produto/$slug'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/db-dump'
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app/loja/$id'
@@ -1329,6 +1340,7 @@ export interface FileRouteTypes {
     | '/produto/$slug'
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/db-dump'
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app_/loja/$id'
@@ -1436,6 +1448,7 @@ export interface RootRouteChildren {
   ProdutoIdRoute: typeof ProdutoIdRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
+  ApiPublicDbDumpRoute: typeof ApiPublicDbDumpRoute
   ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
   ApiPublicVersionRoute: typeof ApiPublicVersionRoute
   AppLojaIdRoute: typeof AppLojaIdRoute
@@ -2148,6 +2161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/db-dump': {
+      id: '/api/public/db-dump'
+      path: '/api/public/db-dump'
+      fullPath: '/api/public/db-dump'
+      preLoaderRoute: typeof ApiPublicDbDumpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/catalog-image': {
       id: '/api/admin/catalog-image'
       path: '/api/admin/catalog-image'
@@ -2370,6 +2390,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutoIdRoute: ProdutoIdRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
+  ApiPublicDbDumpRoute: ApiPublicDbDumpRoute,
   ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
   ApiPublicVersionRoute: ApiPublicVersionRoute,
   AppLojaIdRoute: AppLojaIdRoute,
