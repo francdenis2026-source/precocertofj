@@ -79,6 +79,12 @@ function HomePage() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"price" | "recent">("recent");
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: any) => setSelectedProduct(e.detail);
+    window.addEventListener('internal-open-quick-view', handler);
+    return () => window.removeEventListener('internal-open-quick-view', handler);
+  }, []);
   
   const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
   
@@ -135,6 +141,11 @@ function HomePage() {
 
       <div className="relative z-10 flex flex-col">
         <main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+          <script dangerouslySetInnerHTML={{ __html: `
+            window.addEventListener('open-quick-view', (e) => {
+              window.dispatchEvent(new CustomEvent('internal-open-quick-view', { detail: e.detail }));
+            });
+          `}} />
           
           {/* Hero Section */}
           <motion.section 
