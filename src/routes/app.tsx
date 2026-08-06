@@ -322,7 +322,7 @@ type MetricTone = "primary" | "brand" | "savings" | "warning";
 
 const METRIC_TONES: Record<MetricTone, { chip: string; rail: string }> = {
   primary: { chip: "bg-[var(--brand-primary)]/12 text-[var(--brand-primary)]", rail: "bg-[var(--brand-primary)]" },
-  brand: { chip: "bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]", rail: "bg-[var(--brand-primary)]" },
+  brand: { chip: "bg-[var(--brand-primary)]/15 text-[var(--brand-primary)]", rail: "bg-[var(--brand-primary)]" },
   savings: { chip: "bg-[var(--success)]/15 text-[var(--success)]", rail: "bg-[var(--success)]" },
   warning: { chip: "bg-[var(--warning)]/20 text-[var(--warning)]", rail: "bg-[var(--warning)]" },
 };

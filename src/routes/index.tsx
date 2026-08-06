@@ -120,11 +120,11 @@ function HomePage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-8 backdrop-blur-md"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
             </motion.div>
@@ -142,7 +142,7 @@ function HomePage() {
                 placeholder="Busque por arroz, feijão, leite..." 
                 className="flex-1 bg-transparent px-5 text-lg font-medium outline-none placeholder:text-[var(--text-tertiary)]" 
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                 Buscar
               </Button>
             </form>
