@@ -42,7 +42,7 @@ function CategoryPage() {
 
   const brands = useMemo(() => {
     const b = new Set<string>();
-    products.forEach(p => {
+    products.forEach((p: any) => {
       // Mock brand extraction if not present
       const brand = p.name.split(" ")[0];
       b.add(brand);
