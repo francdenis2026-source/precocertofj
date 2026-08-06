@@ -193,15 +193,10 @@ export function RecentProductsCarousel() {
                     }
                   }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 cursor-pointer"
+                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-lg cursor-pointer"
                 >
-                  {/* Scanning Effect for "Eyeing the product" feature - subtly updated */}
-                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[12px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
-                    <div className="animate-scan absolute left-0 right-0 h-1 bg-[var(--brand-primary)] shadow-[0_0_20px_rgba(108,92,231,1)]" />
-                  </div>
-
-                  {/* Corner Glow */}
-                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--brand-primary)]/10 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
+                  {/* Subtle Glow */}
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--brand-primary)]/5 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
 
                   <header className="relative z-10 flex items-center justify-between mb-4">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
