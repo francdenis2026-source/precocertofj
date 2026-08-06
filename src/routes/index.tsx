@@ -375,7 +375,7 @@ function HomePage() {
                 </div>
               </div>
 
-              <div className="rounded-[32px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
+              <div className="rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
@@ -454,7 +454,7 @@ function HomePage() {
 
             {/* Platform Stats Column */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="p-8 rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
+              <div className="p-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
                 
                 <div className="relative z-10">
@@ -490,7 +490,7 @@ function HomePage() {
               </div>
 
               {/* Trending Searches */}
-              <div className="p-8 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
+              <div className="p-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Buscas em Alta</h3>
                 <div className="flex flex-wrap gap-2">
                   {['Arroz 5kg', 'Óleo Soy', 'Leite Integral', 'Açúcar', 'Café', 'Sabão em pó'].map(term => (
