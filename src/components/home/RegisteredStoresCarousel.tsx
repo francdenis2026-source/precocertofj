@@ -6,6 +6,7 @@ import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { useRef, useState, useEffect } from "react";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 
 export function RegisteredStoresCarousel() {
   const fetchStores = useServerFn(listPublicStores);
@@ -52,13 +53,17 @@ export function RegisteredStoresCarousel() {
                 "h-16 w-16 flex items-center justify-center rounded-xl border border-white/10 bg-white shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5)] p-2.5 transition-all duration-300",
                 "group-hover:border-[var(--brand-primary)]"
               )}>
-                <StoreLogoThumb 
-                  src={store.logoUrl} 
-                  name={store.name} 
-                  className="h-full w-full border-none p-0 bg-transparent"
-                  imgClassName="object-contain"
-                  initialsClassName="text-slate-900 font-bold text-[12px]"
-                />
+                {store.name.includes("Contamigos") ? (
+                  <ContamigosLogo size="sm" />
+                ) : (
+                  <StoreLogoThumb 
+                    src={store.logoUrl} 
+                    name={store.name} 
+                    className="h-full w-full border-none p-0 bg-transparent"
+                    imgClassName="object-contain"
+                    initialsClassName="text-slate-900 font-bold text-[12px]"
+                  />
+                )}
               </div>
               <span className="text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] transition-colors truncate max-w-[80px]">
                 {store.name.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
@@ -102,13 +107,17 @@ export function RegisteredStoresCarousel() {
                 "h-16 w-16 flex items-center justify-center rounded-xl border border-white/10 bg-white shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5)] p-2.5 transition-all duration-300 backface-visibility-hidden transform-gpu",
                 "group-hover:border-[var(--brand-primary)] group-hover:scale-105 group-hover:-translate-y-1"
               )}>
-                <StoreLogoThumb 
-                  src={store.logoUrl} 
-                  name={store.name} 
-                  className="h-full w-full border-none p-0 bg-transparent"
-                  imgClassName="object-contain"
-                  initialsClassName="text-slate-900 font-bold text-[12px]"
-                />
+                {store.name.includes("Contamigos") ? (
+                  <ContamigosLogo size="sm" />
+                ) : (
+                  <StoreLogoThumb 
+                    src={store.logoUrl} 
+                    name={store.name} 
+                    className="h-full w-full border-none p-0 bg-transparent"
+                    imgClassName="object-contain"
+                    initialsClassName="text-slate-900 font-bold text-[12px]"
+                  />
+                )}
               </div>
               <span className="text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] transition-colors truncate max-w-[80px]">
                 {store.name.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
