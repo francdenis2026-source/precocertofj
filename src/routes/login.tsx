@@ -296,13 +296,24 @@ function LoginPage() {
 
   return (
     <div className="relative flex min-h-svh w-full items-center justify-center bg-[var(--bg-base)] px-4 py-8 sm:px-6">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="absolute -left-40 -top-40 h-[800px] w-[800px] rounded-full opacity-20 blur-[120px]"
-          style={{ background: `radial-gradient(circle, var(--brand-glow), transparent)` }}
+          className="absolute -left-40 -top-52 h-[760px] w-[760px] rounded-full opacity-[0.18] blur-[130px]"
+          style={{ background: `radial-gradient(circle, var(--brand-primary), transparent 70%)` }}
+        />
+        <div
+          className="absolute -bottom-56 -right-40 h-[620px] w-[620px] rounded-full opacity-[0.12] blur-[140px]"
+          style={{ background: `radial-gradient(circle, var(--brand-accent), transparent 70%)` }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.5]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, color-mix(in oklab, var(--border-subtle) 60%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--border-subtle) 60%, transparent) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+            maskImage: "radial-gradient(ellipse at center, black 10%, transparent 72%)",
+            WebkitMaskImage: "radial-gradient(ellipse at center, black 10%, transparent 72%)",
+          }}
         />
       </div>
 
@@ -317,10 +328,15 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex w-full max-w-[980px] flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 shadow-[0_24px_60px_-24px_rgba(11,30,58,0.45)] backdrop-blur-2xl md:max-h-[680px] md:flex-row"
+        className="relative z-10 flex w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:max-h-[700px] md:flex-row"
       >
-        <div className="relative hidden w-full shrink-0 md:block md:w-[380px]">
+        <div className="relative hidden w-full shrink-0 md:block md:w-[392px]">
           <AuthHero variant="login" className="h-full w-full" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 right-0 w-px"
+            style={{ background: `linear-gradient(to bottom, transparent, var(--brand-primary), transparent)`, opacity: 0.35 }}
+          />
         </div>
 
 
@@ -344,21 +360,32 @@ function LoginPage() {
           </div>
 
 
-          <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[var(--brand-primary)]">
-            {mode === "login" ? "Acesso Exclusivo" : "Novo Assinante"}
-          </p>
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--brand-primary)]">
+            <ShieldCheck className="h-3 w-3" />
+            {mode === "login" ? "Acesso seguro" : "Cadastro grátis"}
+          </span>
 
-          <h1
-            className="mt-1 text-[21px] font-bold leading-[1.15] tracking-tight text-foreground sm:text-[24px]"
-            style={{ fontFamily: PC_DISPLAY }}
-          >
-            {mode === "login" ? "Entrar na sua conta" : "Criar sua conta agora"}
-          </h1>
-          <p className="mt-1 text-[12.5px] leading-snug text-muted-foreground">
-            {mode === "login"
-              ? "Use seu CPF e o PIN de 6 dígitos para continuar."
-              : "Leva menos de um minuto. É de graça."}
-          </p>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={mode}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <h1
+                className="mt-2 text-[23px] font-bold leading-[1.12] tracking-tight text-foreground sm:text-[27px]"
+                style={{ fontFamily: PC_DISPLAY }}
+              >
+                {mode === "login" ? "Bem-vindo de volta" : "Criar sua conta agora"}
+              </h1>
+              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
+                {mode === "login"
+                  ? "Use seu CPF e o PIN de 6 dígitos para continuar."
+                  : "Leva menos de um minuto. É de graça."}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
 
           <TabSwitch mode={mode} onChange={setMode} />
@@ -558,8 +585,9 @@ function LoginPage() {
               </p>
             )}
 
-            <button
+            <motion.button
               type="submit"
+              whileTap={{ scale: 0.985 }}
               disabled={
                 loading ||
                 !isValidCpf(cpf) ||
@@ -568,30 +596,45 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand-primary)] text-[15px] font-bold text-[#0B1E3A] shadow-lg transition hover:brightness-105 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+              className="group relative mt-1 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[var(--brand-primary)] text-[15px] font-bold text-[#0B1E3A] shadow-lg transition-[filter,box-shadow] duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
               style={{
                 boxShadow: `0 12px 24px -10px var(--brand-glow)`,
                 fontFamily: PC_DISPLAY,
               }}
             >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-white/25 transition-all duration-700 group-hover:left-[130%]"
+              />
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Validando…
+                </>
               ) : (
                 <>
                   {mode === "login" ? "Acessar plataforma" : "Criar conta grátis"}
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </>
               )}
-            </button>
+            </motion.button>
 
 
-            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px] text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 pt-1.5 text-[11.5px] text-muted-foreground">
+              <button
+                type="button"
+                onClick={() => setMode(mode === "login" ? "signup" : "login")}
+                className="font-semibold text-foreground/80 underline-offset-4 transition hover:text-foreground hover:underline"
+              >
+                {mode === "login" ? "Não tem conta? Criar agora" : "Já tenho conta — entrar"}
+              </button>
+              <span aria-hidden className="hidden h-3 w-px bg-border sm:block" />
               <Link
                 to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand-primary)] transition hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand-primary)] underline-offset-4 transition hover:underline"
               >
                 <Ticket className="h-3.5 w-3.5" />
-                Tenho um código promocional
+                Esqueci meu PIN / tenho um código
               </Link>
             </div>
           </form>
