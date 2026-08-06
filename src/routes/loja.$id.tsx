@@ -441,7 +441,6 @@ function StorePage() {
               </div>
             </div>
           </div>
-        </header>
 
             {store.address && (
               <p className="mt-2 line-clamp-2 text-[11px] text-muted-foreground">
