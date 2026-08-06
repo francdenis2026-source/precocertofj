@@ -6,6 +6,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
+import { QuickStoreCompare } from "@/components/app/QuickStoreCompare";
 
 import { DashboardSearch } from "@/components/app/DashboardSearch";
 import { StoresColumn } from "@/components/app/StoresColumn";
@@ -66,6 +67,7 @@ function AppHomeContent() {
 
   const [selectedStore, setSelectedStore] = useState<PublicStore | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [comparisonOpen, setComparisonOpen] = useState(false);
   // Guarda o gatilho para devolver o foco ao fechar o drawer (WCAG 2.4.3).
   const drawerTriggerRef = useRef<HTMLElement | null>(null);
 
@@ -168,6 +170,13 @@ function AppHomeContent() {
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
+              <button
+                onClick={() => setComparisonOpen(true)}
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-black/30 bg-black/10 px-3 text-[12.5px] font-medium text-black transition hover:bg-black/20"
+              >
+                <TrendingDown className="h-4 w-4" aria-hidden />
+                <span className="hidden md:inline">Comparar Lojas</span>
+              </button>
               <Link
                 to="/lista/nova"
                 className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-black px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-black/90"
@@ -314,6 +323,20 @@ function AppHomeContent() {
         open={drawerOpen}
         onOpenChange={handleDrawerOpenChange}
       />
+
+      {comparisonOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-lg">
+            <QuickStoreCompare
+              storeAId="5c71b8fb-4fe2-4f65-8bd0-80726d92a243"
+              storeAName="Doce Dia"
+              storeBId="eb1e6277-db89-4e94-950e-d14540ce71c6"
+              storeBName="Pague Pouco"
+              onClose={() => setComparisonOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }

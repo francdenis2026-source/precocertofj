@@ -21,7 +21,10 @@ import {
   Trash2,
   X,
   AlertTriangle,
+  Download,
+  History,
 } from "lucide-react";
+import { exportStoreCatalog } from "@/lib/export.functions";
 import { toast } from "sonner";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { SwipeRow } from "@/components/SwipeRow";
@@ -260,8 +263,34 @@ function StorePage() {
   const [page, setPage] = useState(1);
   const [cartOpen, setCartOpen] = useState(false);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [compareTargetStore, setCompareTargetStore] = useState<string | null>(null);
   const [compareResults, setCompareResults] = useState<CartCompareStore[] | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const cart = useStoreCart(id);
+
+  const handleExport = async (format: 'csv' | 'pdf') => {
+    setIsExporting(true);
+    try {
+      const res = await exportStoreCatalog({ data: { storeId: id, format } });
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
+      if (res.content) {
+        const blob = new Blob([res.content], { type: format === 'csv' ? 'text/csv' : 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = res.filename || `precos-${id}.${format}`;
+        a.click();
+        toast.success(`Exportação concluída com sucesso!`);
+      }
+    } catch (err) {
+      toast.error("Erro ao exportar dados.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   useEffect(() => setPage(1), [q, cat, sort]);
 
@@ -337,7 +366,7 @@ function StorePage() {
   return (
     <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+5.5rem)] text-foreground">
       <div className="mx-auto max-w-md px-4 pt-[max(env(safe-area-inset-top),0.75rem)]">
-        <div className="flex items-center justify-between gap-2">
+        <div className="no-print flex items-center justify-between gap-2">
           {Route.useSearch().from === "ranking" ? (
             <Link
               to="/app"
@@ -365,7 +394,7 @@ function StorePage() {
 
 
 
-        <header className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <header className="pc-print-header relative mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           {/* Gradient banner */}
           <div className="relative h-20 bg-gradient-to-br from-primary/25 via-primary/10 to-accent/20">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/30),transparent_60%)]" />
@@ -439,11 +468,31 @@ function StorePage() {
                 </p>
               </div>
             </div>
+
+            <div className="no-print mt-3 flex gap-2">
+              <button
+                type="button"
+                disabled={isExporting}
+                onClick={() => handleExport('csv')}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background/60 py-2.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary disabled:opacity-50"
+              >
+                {isExporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                Exportar CSV
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background/60 py-2.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+              >
+                <FileDown className="h-3.5 w-3.5" />
+                Gerar PDF
+              </button>
+            </div>
           </div>
         </header>
 
         {/* Search */}
-        <div className="mt-4 relative">
+        <div className="no-print mt-4 relative">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={q}
@@ -468,7 +517,7 @@ function StorePage() {
 
         {/* Category chips */}
         {categories.length > 0 && (
-          <div className="mt-3">
+          <div className="no-print mt-3">
             <SwipeRow ariaLabel="Filtrar por categoria">
               <CategoryChip
                 active={cat === "all"}
@@ -488,7 +537,7 @@ function StorePage() {
         )}
 
         {/* Sort + count */}
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="no-print mt-3 flex items-center justify-between gap-2">
           <p className="shrink-0 text-[11.5px] text-muted-foreground">
             <span className="num font-semibold text-foreground">{filtered.length}</span>{" "}
             {filtered.length === 1 ? "produto" : "produtos"}
@@ -554,7 +603,7 @@ function StorePage() {
 
         {/* Featured */}
         {featured.length > 0 && !q && cat === "all" && (
-          <section aria-label="Destaques" className="mt-4">
+          <section aria-label="Destaques" className="no-print mt-4">
             <div className="mb-2 flex items-baseline justify-between">
               <h2 className="font-display text-[13px] font-semibold text-foreground">
                 Melhores desta mercado
@@ -590,7 +639,7 @@ function StorePage() {
                 const groupByCategory = cat === "all" && q.trim() === "";
                 if (!groupByCategory) {
                   return (
-                    <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+                    <ul className="pc-print-content divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
                       {visible.map((p) => (
                         <ProductRow
                           key={p.slug}
@@ -624,7 +673,7 @@ function StorePage() {
                 return (
                   <div className="space-y-5">
                     {ordered.map((group) => (
-                      <div key={group.label}>
+                      <div key={group.label} className="pc-print-content">
                         <div className="sticky top-0 z-10 -mx-4 mb-2 flex items-center justify-between bg-background/95 px-4 py-1.5 backdrop-blur">
                           <h3 className="font-display text-[12px] font-bold uppercase tracking-[0.14em] text-foreground">
                             {group.label}
@@ -673,7 +722,7 @@ function StorePage() {
       {/* Floating cart footer */}
       {cart.totalQty > 0 && (
         <div
-          className="fixed left-0 right-0 z-30 border-t border-border bg-surface/95 shadow-[0_-6px_20px_-8px_rgba(0,0,0,0.12)] backdrop-blur"
+          className="no-print fixed left-0 right-0 z-30 border-t border-border bg-surface/95 shadow-[0_-6px_20px_-8px_rgba(0,0,0,0.12)] backdrop-blur"
           style={{
             bottom: "calc(var(--mobile-nav-height) + env(safe-area-inset-bottom))",
           }}
@@ -810,7 +859,9 @@ function ProductRow({
           </div>
           <Price as="p" value={p.price} size="md" className="mt-0.5" />
         </Link>
-        <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
+        <div className="no-print">
+          <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
+        </div>
       </div>
     </li>
   );
@@ -1097,6 +1148,32 @@ function CartDrawer({
             <Scale className="h-4 w-4" />
             Comparar com outros mercados
           </button>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await exportStoreCatalog({
+                  data: { storeId: Route.useParams().id, format: "csv" },
+                });
+                if (!res?.content) return;
+                const blob = new Blob([res.content], { type: "text/csv;charset=utf-8;" });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", res.filename || "catalogo.csv");
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              } catch (err) {
+                toast.error("Falha ao exportar catálogo");
+              }
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Exportar Catálogo CSV
+          </button>
           <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
@@ -1267,6 +1344,25 @@ function CompareDrawer({
 
   return (
     <Drawer onClose={onClose} title="Comparar cesta entre mercados">
+      <div className="mb-4 flex gap-2">
+        <button
+          onClick={async () => {
+            const res = await exportStoreCatalog({ data: { storeId, format: 'csv' } });
+            if (res.content) {
+              const blob = new Blob([res.content], { type: 'text/csv' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = res.filename || 'export.csv';
+              a.click();
+            }
+          }}
+          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Exportar Catálogo CSV
+        </button>
+      </div>
       {loading && (
         <div className="flex items-center justify-center gap-2 py-10 text-[12.5px] text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Calculando…

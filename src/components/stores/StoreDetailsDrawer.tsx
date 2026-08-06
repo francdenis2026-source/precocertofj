@@ -17,7 +17,9 @@ import {
   TrendingDown,
   Clock,
   Package,
+  Download,
 } from "lucide-react";
+import { exportStoreCatalog } from "@/lib/export.functions";
 import {
   getPublicStoreCatalog,
   getCheapestStoresRanking,
@@ -150,17 +152,36 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
               </SheetDescription>
             </div>
             {store && (
-              <Link
-                to="/loja/$id"
-                params={{ id: store.id }}
-                search={{ q: "", from: "" }}
-                onClick={() => onOpenChange(false)}
-                className="inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground"
-                aria-label="Abrir página da mercado"
-              >
-                Abrir mercado
-                <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
-              </Link>
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    const res = await exportStoreCatalog({ data: { storeId: store.id, format: 'csv' } });
+                    if (res.content) {
+                      const blob = new Blob([res.content], { type: 'text/csv' });
+                      const url = window.URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = res.filename || 'export.csv';
+                      a.click();
+                    }
+                  }}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Exportar CSV
+                </button>
+                <Link
+                  to="/loja/$id"
+                  params={{ id: store.id }}
+                  search={{ q: "", from: "" }}
+                  onClick={() => onOpenChange(false)}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground"
+                  aria-label="Abrir página da mercado"
+                >
+                  Abrir mercado
+                  <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
+                </Link>
+              </div>
             )}
           </div>
         </SheetHeader>
