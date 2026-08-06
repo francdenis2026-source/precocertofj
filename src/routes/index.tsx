@@ -88,7 +88,7 @@ function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchAnchorRef = useMemo(() => ({ current: null as HTMLElement | null }), []);
+  const searchAnchorRef = useRef<HTMLFormElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
