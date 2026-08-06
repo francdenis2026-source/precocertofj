@@ -35,7 +35,7 @@ function StatusPage() {
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
 
   const filteredStores = useMemo(() => {
-    return stores.filter(s => 
+    return stores.filter((s: any) => 
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.city.toLowerCase().includes(searchTerm.toLowerCase())
     );
