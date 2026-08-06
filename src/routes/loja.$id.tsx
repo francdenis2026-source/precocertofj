@@ -41,6 +41,7 @@ import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreSkeleton } from "@/components/loja/StoreSkeleton";
 import { Price } from "@/components/ds/Price";
 import { ShareButton } from "@/components/ds/ShareButton";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 
 const storeCatalogQuery = (id: string) =>
   queryOptions({
