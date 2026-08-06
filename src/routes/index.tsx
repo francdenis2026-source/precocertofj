@@ -285,7 +285,7 @@ function HomePage() {
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
               (isSearchFocused || isScrolled) 
-                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)]/80 backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-sm" 
+                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)] border-b border-[var(--border-subtle)] shadow-md" 
                 : "relative mb-12"
             )}>
               <form 
@@ -293,7 +293,7 @@ function HomePage() {
                 onSubmit={submitSearch} 
                 className={cn(
                   "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[52px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg"
+                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg scale-[0.98]"
                 )}
               >
                 <Search className={cn(
