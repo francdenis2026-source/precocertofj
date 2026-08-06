@@ -673,7 +673,7 @@ function StorePage() {
                 return (
                   <div className="space-y-5">
                     {ordered.map((group) => (
-                      <div key={group.label}>
+                      <div key={group.label} className="pc-print-content">
                         <div className="sticky top-0 z-10 -mx-4 mb-2 flex items-center justify-between bg-background/95 px-4 py-1.5 backdrop-blur">
                           <h3 className="font-display text-[12px] font-bold uppercase tracking-[0.14em] text-foreground">
                             {group.label}
