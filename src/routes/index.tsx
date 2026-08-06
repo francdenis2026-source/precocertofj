@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useLoaderData, Link } from "@tanstack/react-router";
-import { Suspense, useState, useMemo, useEffect } from "react";
+import { Suspense, useState, useMemo, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
