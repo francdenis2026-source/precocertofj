@@ -364,18 +364,17 @@ function HomePage() {
 
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
-          <section className="mb-12 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+          <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             <motion.div 
-              whileHover={{ y: -4, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+              whileHover={{ y: -6, shadow: "var(--pc-shadow-lg)" }}
+              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300"
             >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
-                <Search className="h-5 w-5 sm:h-6 sm:w-6" />
+              <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] shadow-inner">
+                <Search className="h-6 w-6" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Pesquise</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Tempo real.</p>
+                <h3 className="text-sm font-black uppercase tracking-wider text-[var(--brand-secondary)] mb-1">Pesquise</h3>
+                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">Acesse preços atualizados em tempo real nos principais estabelecimentos.</p>
               </div>
             </motion.div>
             

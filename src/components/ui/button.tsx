@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   [
-    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer",
-    "transition-[background-color,color,box-shadow,transform,border-color,filter] duration-200 ease-out",
+    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold cursor-pointer",
+    "transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
     // Foco: anel dourado (navy/gold) consistente em light/dark — WCAG AA
-    "outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--state-focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-base)]",
-    "disabled:pointer-events-none disabled:opacity-[var(--state-disabled-opacity)] disabled:cursor-not-allowed disabled:shadow-none",
-    "hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] active:brightness-[0.96] active:shadow-inner motion-reduce:transform-none",
+    "outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)]",
+    "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none",
+    "hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none",
     "data-[loading=true]:pointer-events-none data-[loading=true]:cursor-progress",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200",
   ].join(" "),
