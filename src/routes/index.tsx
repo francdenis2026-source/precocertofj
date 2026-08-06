@@ -155,7 +155,7 @@ function HomePage() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
               backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-              filter: isSearchFocused ? "brightness(0.4) blur(4px)" : "brightness(0.7) blur(2px)"
+              filter: isSearchFocused ? "brightness(0.3) blur(6px)" : "brightness(0.7) blur(2px)"
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
