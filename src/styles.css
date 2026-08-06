@@ -45,25 +45,16 @@
   animation: gradient-x 3s ease infinite;
 }
 
-:root[data-theme='light'] {
-  --pc-deep-navy: #F8F9FA;
-  --pc-navy-surface: #FFFFFF;
-  --pc-navy-surface-elevated: #F1F3F5;
-  --pc-gold-primary: #B8860B; 
-  --pc-gold-dark: #8B6914;
-  --pc-gold-glow: rgba(184, 134, 11, 0.15);
-  --pc-border-gold: rgba(184, 134, 11, 0.2);
-  
-  /* Semantic overrides for light mode */
-  --bg-base: #F8F9FA;
-  --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F3F5;
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --brand-primary: #B8860B;
-  --brand-glow: rgba(184, 134, 11, 0.1);
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A5568;
-  --text-tertiary: #718096;
+:root[data-theme='dark'] {
+  --pc-bg-base: #0A0F1A;
+  --pc-bg-surface: #121826;
+  --pc-bg-surface-elevated: #1A2234;
+  --pc-brand-primary: #FFD700;
+  --pc-brand-glow: rgba(255, 215, 0, 0.15);
+  --pc-border-subtle: rgba(255, 215, 0, 0.12);
+  --pc-text-primary: #FFFFFF;
+  --pc-text-secondary: #94A3B8;
+  --pc-text-tertiary: #64748B;
 }
 
 @media (prefers-color-scheme: dark) {
