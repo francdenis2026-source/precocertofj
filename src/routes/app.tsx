@@ -310,7 +310,7 @@ function DashboardPage() {
           <p className="text-sm text-muted-foreground mb-6 uppercase tracking-widest font-bold">O que você deseja fazer agora?</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild className="rounded-full h-12 px-8 font-bold">
-              <Link to="/app/produtos">
+              <Link to="/precos">
                 <Search className="mr-2 h-4 w-4" />
                 Achar Menor Preço
               </Link>
