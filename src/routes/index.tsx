@@ -274,7 +274,7 @@ function HomePage() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)]"
             >
-              Economize de verdade em cada compra no <span className="text-[var(--brand-primary)]">nosso Feijó</span>
+              Economize de verdade em cada compra na <span className="text-[var(--brand-primary)]">nossa Feijó</span>
             </motion.h1>
             
             <motion.p 
