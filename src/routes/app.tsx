@@ -1,257 +1,273 @@
-import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listPublicStores, getPublicStoreCatalog } from "@/lib/stores-public.functions";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { Search, Store, Clock, Package, ChevronRight, Filter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { AppShell } from "@/components/brand/AppShell";
+import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { getAppDashboard } from "@/lib/dashboard.functions";
+import { 
+  PageHeader, 
+  SectionCard, 
+  StatGrid, 
+  type Stat 
+} from "@/components/layout";
+import { 
+  History, 
+  Star, 
+  Bell, 
+  TrendingDown, 
+  ChevronRight, 
+  Package,
+  Store,
+  Tag,
+  ArrowRight
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ds/Price";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { LoadingSkeleton, EmptyState } from "@/components/feedback";
 
 export const Route = createFileRoute("/app")({
-  loader: async () => {
-    return {
-      stores: await listPublicStores(),
-    };
-  },
   head: () => ({
     meta: [
-      { title: "Status do Sistema | PreçoCerto" },
-      { name: "description", content: "Status de atualização e catálogo de produtos por estabelecimento." }
+      { title: "Dashboard — PreçoCerto" },
+      { name: "description", content: "Resumo da sua atividade, economia e alertas de preço." },
+      { name: "robots", content: "noindex" },
     ],
   }),
-  component: StatusPage,
+  component: () => (
+    <ProtectedGate>
+      <DashboardPage />
+    </ProtectedGate>
+  ),
 });
 
-function StatusPage() {
-  const { stores } = useLoaderData({ from: "/app" });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStoreId, setSelectedStoreId] = useState<string | null>("f02c23db-3934-41f4-9e61-dc16c6c28115");
-
-
-  const filteredStores = useMemo(() => {
-    return stores.filter((s: any) => 
-      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.city.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [stores, searchTerm]);
-
-  return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
-      <SiteHeader showThemeToggle />
-      
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <header className="mb-12 relative">
-          <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-12 bg-[var(--brand-primary)] rounded-full hidden md:block" />
-          <h1 className="text-4xl font-black tracking-tight mb-3 font-[var(--font-display)]">Rede de Mercados</h1>
-          <p className="text-[var(--text-secondary)] text-lg max-w-2xl font-medium">
-            Acompanhe a cobertura de dados, novos cadastros e atualizações de preços em tempo real em Feijó.
-          </p>
-        </header>
-
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Sidebar: Stores List */}
-          <aside className="lg:col-span-4 space-y-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)]" />
-              <Input 
-                placeholder="Buscar estabelecimento..." 
-                className="pl-10 bg-[var(--bg-surface)] border-[var(--border-subtle)]"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-3">
-              {filteredStores.map((store: any) => (
-                <button
-                  key={store.id}
-                  onClick={() => setSelectedStoreId(store.id)}
-                  className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
-                    selectedStoreId === store.id 
-                      ? "bg-[var(--brand-primary)]/10 border-[var(--brand-primary)] shadow-[0_0_20px_rgba(255,215,0,0.1)] ring-1 ring-[var(--brand-primary)]/20" 
-                      : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]"
-                  }`}
-
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-sm">{store.name}</h3>
-                    <Badge variant="outline" className="text-[10px] font-black border-[var(--brand-primary)]/30 text-[var(--brand-primary)]">
-                      {store.productCount} ITENS
-                    </Badge>
-
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider">
-                    <Clock className="h-3 w-3" />
-                    <span>Feijó, {store.state}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </aside>
-
-          {/* Main Content: Store Details / Catalog */}
-          <section className="lg:col-span-8">
-            {selectedStoreId ? (
-              <StoreCatalog storeId={selectedStoreId} />
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center py-20 bg-[var(--bg-surface)] rounded-3xl border border-dashed border-[var(--border-subtle)] text-center px-6">
-                <Store className="h-12 w-12 text-[var(--text-tertiary)] mb-4 opacity-20" />
-                <h2 className="text-xl font-bold mb-2">Selecione um estabelecimento</h2>
-                <p className="text-[var(--text-tertiary)] max-w-xs mx-auto text-sm">
-                  Escolha um mercado na lista ao lado para ver o catálogo completo de produtos e status de atualização.
-                </p>
-              </div>
-            )}
-          </section>
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function StoreCatalog({ storeId }: { storeId: string }) {
-  const getCatalog = useServerFn(getPublicStoreCatalog);
-  const [productSearch, setProductSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
+function DashboardPage() {
+  const fetchDashboard = useServerFn(getAppDashboard);
   const { data, isLoading } = useQuery({
-    queryKey: ["store-catalog", storeId],
-    queryFn: () => getCatalog({ data: { id: storeId } }),
+    queryKey: ["app-dashboard"],
+    queryFn: () => fetchDashboard(),
   });
 
-  const filteredProducts = useMemo(() => {
-    if (!data) return [];
-    return data.products.filter(p => {
-      const matchesSearch = p.productName.toLowerCase().includes(productSearch.toLowerCase());
-      const matchesCategory = !activeCategory || p.category === activeCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [data, productSearch, activeCategory]);
+  const stats: Stat[] = [
+    { 
+      label: "Economia (90d)", 
+      value: data ? `R$ ${data.stats.totalSavings.toFixed(2).replace(".", ",")}` : "...", 
+      icon: TrendingDown, 
+      tone: "success",
+      hint: data?.stats.potentialSavings && data.stats.potentialSavings > 0 
+        ? `Poderia poupar R$ ${data.stats.potentialSavings.toFixed(2).replace(".", ",")}` 
+        : undefined
+    },
+    { 
+      label: "Favoritos", 
+      value: data?.stats.favoritesCount ?? "...", 
+      icon: Star, 
+      tone: "primary" 
+    },
+    { 
+      label: "Alertas ativos", 
+      value: data?.recentAlerts.filter(a => !a.readAt).length ?? "...", 
+      icon: Bell, 
+      tone: "warning" 
+    },
+    { 
+      label: "Contribuições", 
+      value: data?.stats.contributionsCount ?? "...", 
+      icon: Package 
+    },
+  ];
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-32 w-full rounded-3xl" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 w-full rounded-2xl" />)}
+      <AppShell>
+        <div className="mx-auto max-w-6xl px-4 md:px-6">
+          <PageHeader title="Carregando painel..." />
+          <div className="grid gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map(i => <div key={i} className="h-24 rounded-xl border animate-pulse bg-muted/50" />)}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <LoadingSkeleton rows={4} />
+              <LoadingSkeleton rows={4} />
+            </div>
+          </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
-  if (!data) return null;
-
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-      {/* Store Header Info */}
-      <Card className="bg-[var(--bg-surface)] border-[var(--border-subtle)] overflow-hidden rounded-[32px] shadow-xl">
-        <CardContent className="p-10">
-
-          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-3xl font-black tracking-tight font-[var(--font-display)]">{data.store.name}</h2>
-                {data.store.id === 'f02c23db-3934-41f4-9e61-dc16c6c28115' && (
-                  <Badge className="bg-[var(--brand-primary)] text-black font-black border-none px-3">PREMIUM</Badge>
-                )}
-
-              </div>
-              <p className="text-sm text-[var(--text-tertiary)] flex items-center gap-2">
-                <Store className="h-4 w-4" />
-                {data.store.neighborhood ? `${data.store.neighborhood}, ` : ''}{data.store.city} - {data.store.state}
-              </p>
-            </div>
-            <div className="bg-[var(--bg-base)]/50 p-4 rounded-2xl border border-[var(--border-subtle)] text-right min-w-[200px]">
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Última Atualização</div>
-              <div className="text-sm font-bold">
-                {data.products[0] ? format(new Date(data.products[0].lastDate), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : 'Nenhuma'}
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Catalog Controls */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)]" />
-          <Input 
-            placeholder="Filtrar produtos no catálogo..." 
-            className="pl-10 bg-[var(--bg-surface)] border-[var(--border-subtle)] h-12 rounded-xl"
-            value={productSearch}
-            onChange={(e) => setProductSearch(e.target.value)}
-          />
-        </div>
-        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-          <Button 
-            variant={activeCategory === null ? "default" : "outline"} 
-            size="sm"
-            onClick={() => setActiveCategory(null)}
-            className="rounded-full h-12 px-6 border-[var(--border-subtle)]"
-          >
-            Todos
-          </Button>
-          {data.categories.map(cat => (
-            <Button 
-              key={cat.key}
-              variant={activeCategory === cat.label ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveCategory(cat.label)}
-              className="rounded-full h-12 px-6 border-[var(--border-subtle)] whitespace-nowrap"
-            >
-              {cat.label} ({cat.count})
+    <AppShell>
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pb-20">
+        <PageHeader
+          title="Meu Painel"
+          description="Acompanhe seus produtos, histórico e notificações em um só lugar."
+          actions={
+            <Button asChild size="sm" variant="outline">
+              <Link to="/app/estabelecimentos">
+                <Store className="mr-2 h-4 w-4" />
+                Rede de Mercados
+              </Link>
             </Button>
-          ))}
+          }
+        />
+
+        <StatGrid stats={stats} className="mb-8" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Tracked Products */}
+          <SectionCard 
+            title="Favoritos monitorados" 
+            description="Seus itens favoritos e preços atuais."
+            action={
+              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+                <Link to="/favoritos">Ver todos <ChevronRight className="ml-1 h-3 w-3" /></Link>
+              </Button>
+            }
+          >
+            {data?.trackedItems.length === 0 ? (
+              <EmptyState 
+                icon={Star} 
+                title="Sem favoritos" 
+                message="Favorite produtos para monitorar preços aqui." 
+                action={<Button asChild variant="outline" size="sm"><Link to="/app/produtos">Buscar produtos</Link></Button>}
+              />
+            ) : (
+              <ul className="divide-y divide-border">
+                {data?.trackedItems.map((item) => (
+                  <li key={item.id} className="py-3 first:pt-0 last:pb-0">
+                    <Link to="/produto/$id" params={{ id: item.catalogId }} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                      <ProductImage src={item.imageUrl} alt={item.displayName} width={40} height={40} className="rounded-md border bg-muted/30" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold">{item.displayName}</p>
+                        <p className="text-xs text-muted-foreground">{item.brand || "—"}</p>
+                      </div>
+                      <div className="text-right">
+                        <Price value={item.currentPrice} className="text-sm font-bold" />
+                        {item.targetPrice && (
+                          <p className="text-[10px] text-muted-foreground uppercase font-bold">Meta: R$ {item.targetPrice.toFixed(2).replace(".", ",")}</p>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </SectionCard>
+
+          {/* Recent Alerts */}
+          <SectionCard 
+            title="Alertas recentes" 
+            description="Notificações de queda de preço e metas atingidas."
+            action={
+              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+                <Link to="/alertas">Gerenciar <ChevronRight className="ml-1 h-3 w-3" /></Link>
+              </Button>
+            }
+          >
+            {data?.recentAlerts.length === 0 ? (
+              <EmptyState 
+                icon={Bell} 
+                title="Sem alertas recentes" 
+                message="Você será avisado quando seus favoritos caírem de preço." 
+              />
+            ) : (
+              <ul className="space-y-3">
+                {data?.recentAlerts.map((alert) => (
+                  <li 
+                    key={alert.id} 
+                    className={cn(
+                      "flex gap-3 rounded-lg border p-3 transition-colors",
+                      !alert.readAt ? "border-primary/20 bg-primary/5" : "bg-card"
+                    )}
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      {alert.kind === "item_target_hit" ? <Tag className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium leading-tight">{alert.displayName}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {alert.marketName ? `No ${alert.marketName}: ` : ""}
+                        <span className="font-bold text-foreground">
+                          R$ {alert.newPrice?.toFixed(2).replace(".", ",")}
+                        </span>
+                        {alert.diffPct && (
+                          <span className="ml-1 text-neon font-bold">(-{alert.diffPct.toFixed(0)}%)</span>
+                        )}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </SectionCard>
+
+          {/* Recent History */}
+          <SectionCard 
+            title="Histórico recente" 
+            description="Últimos produtos que você consultou ou escaneou."
+            className="lg:col-span-2"
+            action={
+              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+                <Link to="/historico">Ver histórico completo <ChevronRight className="ml-1 h-3 w-3" /></Link>
+              </Button>
+            }
+          >
+            {data?.recentScans.length === 0 ? (
+              <EmptyState 
+                icon={History} 
+                title="Nenhum registro" 
+                message="Escaneie um produto ou busque no catálogo para ver aqui." 
+              />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                {data?.recentScans.map((scan) => (
+                  <Link 
+                    key={scan.id} 
+                    to="/historico/$id" 
+                    params={{ id: scan.id }}
+                    className="group flex flex-col items-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/40 hover:bg-muted/10 transition-all"
+                  >
+                    <ProductImage src={scan.imageUrl} alt={scan.productName || ""} width={60} height={60} className="mb-3 rounded-lg" />
+                    <div className="text-center w-full">
+                      <p className="truncate text-xs font-bold mb-1">{scan.productName || "Sem nome"}</p>
+                      <Price value={scan.priceCaptured} className="text-sm font-black text-primary" />
+                      <p className="text-[10px] text-muted-foreground mt-1 uppercase font-bold">
+                        {new Date(scan.createdAt).toLocaleDateString("pt-BR")}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </SectionCard>
+        </div>
+
+        {/* Quick Actions / Navigation */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-muted-foreground mb-6 uppercase tracking-widest font-bold">O que você deseja fazer agora?</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button asChild className="rounded-full h-12 px-8 font-bold">
+              <Link to="/app/produtos">
+                <Search className="mr-2 h-4 w-4" />
+                Buscar Preços
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full h-12 px-8 font-bold border-2">
+              <Link to="/lista">
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Lista de Compras
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full h-12 px-8 font-bold border-2">
+              <Link to="/app/estabelecimentos">
+                <Store className="mr-2 h-4 w-4" />
+                Ver Mercados
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map(product => (
-            <div 
-              key={product.slug}
-              className="group p-5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-            >
-
-              <div className="flex justify-between items-start gap-4">
-                <div className="flex-1">
-                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--brand-primary)] mb-1">
-                    {product.category}
-                  </div>
-                  <h4 className="font-bold text-sm mb-1 leading-snug group-hover:text-[var(--brand-primary)] transition-colors">
-                    {product.productName}
-                  </h4>
-                  <div className="text-[10px] text-[var(--text-tertiary)] font-medium">
-                    {format(new Date(product.lastDate), "dd/MM/yyyy")}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <Price value={product.price} className="text-base font-black" />
-                  {product.unitLabel && (
-                    <div className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase mt-0.5">
-                      {product.unitLabel}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="col-span-full py-20 text-center bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]">
-            <Package className="h-8 w-8 text-[var(--text-tertiary)] mx-auto mb-2 opacity-20" />
-            <p className="text-sm text-[var(--text-tertiary)]">Nenhum produto encontrado com estes filtros.</p>
-          </div>
-        )}
-      </div>
-    </div>
+    </AppShell>
   );
 }
