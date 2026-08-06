@@ -137,7 +137,7 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group flex flex-col items-center justify-center min-w-[120px] aspect-square rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] snap-start"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/10 transition-all duration-300 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/10 transition-all duration-300 mb-3">
                     <Icon className="h-6 w-6" />
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] group-hover:text-white transition-colors">{label}</span>
