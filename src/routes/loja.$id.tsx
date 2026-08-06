@@ -21,7 +21,10 @@ import {
   Trash2,
   X,
   AlertTriangle,
+  Download,
+  History,
 } from "lucide-react";
+import { exportStoreCatalog } from "@/lib/export.functions";
 import { toast } from "sonner";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { SwipeRow } from "@/components/SwipeRow";
