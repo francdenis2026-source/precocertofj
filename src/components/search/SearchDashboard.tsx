@@ -43,7 +43,7 @@ export function SearchDashboard() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1 }}
-          className="bg-card/40 backdrop-blur-md border border-border/50 p-6 rounded-[32px] shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 group"
+          className="bg-white dark:bg-card/40 backdrop-blur-md border border-border p-6 rounded-[32px] shadow-sm hover:shadow-xl hover:border-primary transition-all duration-300 group"
         >
           <div className="flex items-center gap-2 mb-1 text-muted-foreground">
             {stat.icon}

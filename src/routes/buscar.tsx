@@ -65,7 +65,7 @@ function SearchPage() {
   };
 
   return (
-    <IsolatedPage fit={false} className="pc-search-scope min-h-screen bg-[#F8F9FA] dark:bg-[#050E1B] selection:bg-primary selection:text-primary-foreground">
+    <IsolatedPage fit={false} className="pc-search-scope min-h-screen bg-[#F1F5F9] dark:bg-[#050E1B] selection:bg-primary selection:text-primary-foreground">
       <div className="flex min-h-svh flex-col">
         {/* Sticky Search Header */}
         <header 
