@@ -89,6 +89,7 @@ function HomePage() {
   const [q, setQ] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchAnchorRef = useRef<HTMLFormElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -103,6 +104,14 @@ function HomePage() {
       );
     }
   }, [sort, userLocation]);
+
+  useEffect(() => {
+    if (isSearchFocused && searchAnchorRef.current) {
+      const yOffset = -100; // Ajuste para deixar a barra de busca em uma posição "profissional"
+      const y = searchAnchorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, [isSearchFocused]);
 
   useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
@@ -350,8 +359,8 @@ function HomePage() {
                   </Link>
                 </CarouselItem>
               </CarouselContent>
-              <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
-              <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
+              <CarouselPrevious className="left-[-20px] h-10 w-10 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white dark:hover:text-black transition-all shadow-xl z-20" />
+              <CarouselNext className="right-[-20px] h-10 w-10 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white dark:hover:text-black transition-all shadow-xl z-20" />
             </Carousel>
           </section>
 
