@@ -949,9 +949,12 @@ function MelhoresPrecosPage() {
                                 {isBest ? (
                                   <span className="font-bold text-savings">MELHOR</span>
                                 ) : (
-                                  <span className="text-muted-foreground">
-                                    +{formatBRL(diff)}
-                                  </span>
+                                  <Price 
+                                    value={diff} 
+                                    size="xs" 
+                                    tone="muted" 
+                                    prefix="+" 
+                                  />
                                 )}
                               </td>
                             </tr>
