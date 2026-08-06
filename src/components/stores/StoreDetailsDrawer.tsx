@@ -153,6 +153,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
               <Link
                 to="/loja/$id"
                 params={{ id: store.id }}
+                search={{ q: "", from: "" }}
                 onClick={() => onOpenChange(false)}
                 className="inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground"
                 aria-label="Abrir página da mercado"
@@ -216,6 +217,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
               <Link
                 to="/loja/$id/produto/$slug"
                 params={{ id: store.id, slug: lowest.slug }}
+                search={{ q: "", from: "" }}
                 onClick={() => onOpenChange(false)}
                 className="mt-2 flex items-center gap-3"
               >
@@ -278,6 +280,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                       <Link
                         to="/loja/$id/produto/$slug"
                         params={{ id: store.id, slug: p.slug }}
+                        search={{ q: "", from: "" }}
                         onClick={() => onOpenChange(false)}
                         className="flex items-center gap-3 px-3 py-3 transition hover:bg-primary/5"
                       >
@@ -343,6 +346,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                       <Link
                         to="/loja/$id/produto/$slug"
                         params={{ id: store.id, slug: p.slug }}
+                        search={{ q: "", from: "" }}
                         onClick={() => onOpenChange(false)}
                         className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-primary/5"
                       >
@@ -365,6 +369,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             <Link
               to="/loja/$id"
               params={{ id: store.id }}
+              search={{ q: "", from: "" }}
               onClick={() => onOpenChange(false)}
               className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3.5 text-[13.5px] font-black text-primary-foreground shadow-[0_10px_24px_-10px_oklch(0.36_0.11_155_/_0.65)] transition hover:bg-accent hover:text-accent-foreground"
             >
