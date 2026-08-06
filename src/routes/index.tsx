@@ -396,15 +396,15 @@ function HomePage() {
                     <tbody className="divide-y divide-[var(--border-subtle)]">
                       {filteredProducts.map((product) => (
                         <tr 
-                          key={product.id} 
+                          key={product.slug} 
                           className="group hover:bg-white/[0.03] transition-colors cursor-pointer"
                           onClick={() => setSelectedProduct(product)}
                         >
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-4">
                               <div className="h-12 w-12 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
-                                {product.image ? (
-                                  <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+                                {product.name ? (
+                                  <img src={product.name} alt={product.name} className="h-full w-full object-cover" />
                                 ) : (
                                   <ShoppingCart className="h-5 w-5 text-[var(--text-tertiary)]" />
                                 )}
@@ -423,7 +423,7 @@ function HomePage() {
                               <div className="h-6 w-6 rounded-md bg-[var(--brand-primary)]/10 flex items-center justify-center">
                                 <Store className="h-3 w-3 text-[var(--brand-primary)]" />
                               </div>
-                              <span className="text-xs font-semibold text-[var(--text-secondary)]">{product.establishment}</span>
+                              <span className="text-xs font-semibold text-[var(--text-secondary)]">{product.marketName}</span>
                             </div>
                           </td>
                           <td className="px-6 py-5">
@@ -432,13 +432,15 @@ function HomePage() {
                             </div>
                           </td>
                           <td className="px-6 py-5">
-                            <div className={cn(
-                              "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider",
-                              product.change < 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
-                            )}>
-                              {product.change < 0 ? <TrendingDown className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5 rotate-180" />}
-                              {Math.abs(product.change)}%
-                            </div>
+                            {product.dropPct !== null && (
+                              <div className={cn(
+                                "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider",
+                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+                              )}>
+                                {product.dropPct > 0 ? <TrendingDown className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5 rotate-180" />}
+                                {Math.abs(product.dropPct)}%
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-5 text-right">
                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
