@@ -280,7 +280,7 @@ function HomePage() {
                     {loaderData.economy?.avgSavingsPct ? `${loaderData.economy.avgSavingsPct}%` : "—"}
                   </div>
                 </div>
-                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-black hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                   Acessar Aplicativo
                 </Button>
               </div>
