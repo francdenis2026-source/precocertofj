@@ -84,7 +84,7 @@ function InsightsPage() {
           description="Análise profunda do seu consumo e sugestões inteligentes para economizar mais."
           actions={
             <Button asChild size="sm" variant="outline">
-              <Link to="/app/alertas">
+              <Link to="/alertas">
                 <Bell className="mr-2 h-4 w-4" />
                 Alertas Ativos
               </Link>
@@ -143,7 +143,7 @@ function InsightsPage() {
                   </p>
                 </div>
                 <Button asChild className="w-full">
-                  <Link to="/app/alertas">Gerenciar Alertas</Link>
+                  <Link to="/alertas">Gerenciar Alertas</Link>
                 </Button>
               </div>
             </SectionCard>
