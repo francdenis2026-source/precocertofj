@@ -537,7 +537,7 @@ function StorePage() {
         )}
 
         {/* Sort + count */}
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="no-print mt-3 flex items-center justify-between gap-2">
           <p className="shrink-0 text-[11.5px] text-muted-foreground">
             <span className="num font-semibold text-foreground">{filtered.length}</span>{" "}
             {filtered.length === 1 ? "produto" : "produtos"}
