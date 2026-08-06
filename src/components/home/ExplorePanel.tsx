@@ -89,7 +89,7 @@ function Zone({
 }) {
   return (
     <div
-      className={`relative min-h-0 overflow-hidden rounded-[12px] border bg-[var(--bg-surface)] px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
+      className={`relative min-h-0 overflow-hidden rounded-[16px] border bg-[var(--bg-surface)] px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
       style={{ borderColor: "var(--border-subtle)" }}
     >
       <span
