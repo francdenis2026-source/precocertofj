@@ -1,13 +1,38 @@
 import { motion } from "framer-motion";
 import { TrendingDown, ShoppingBag, PiggyBank, RefreshCw } from "lucide-react";
 import { Price } from "@/components/ds/Price";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { searchProductPrice } from "@/lib/price-search.functions";
+import { Route } from "@/routes/buscar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function SearchDashboard() {
+  const { q } = Route.useSearch();
+  const runSearch = useServerFn(searchProductPrice);
+  const { data: result, isLoading } = useQuery({
+    queryKey: ["price-search", q],
+    queryFn: () => runSearch({ data: { query: q } }),
+    enabled: !!q,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+        ))}
+      </div>
+    );
+  }
+
+  if (!result || !result.groups.length) return null;
+
   const stats = [
-    { label: "Melhor Preço", value: 12.90, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
-    { label: "Economia", value: 4.50, icon: <PiggyBank className="h-4 w-4" />, tone: "savings" as const },
-    { label: "Ofertados", value: 12, icon: <ShoppingBag className="h-4 w-4" />, isNumber: true },
-    { label: "Últimas 24h", value: 8, icon: <RefreshCw className="h-4 w-4" />, isNumber: true },
+    { label: "Melhor Preço", value: result.min ?? 0, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
+    { label: "Economia", value: (result.max ?? 0) - (result.min ?? 0), icon: <PiggyBank className="h-4 w-4" />, tone: "savings" as const },
+    { label: "Ofertados", value: result.samples ?? 0, icon: <ShoppingBag className="h-4 w-4" />, isNumber: true },
+    { label: "Produtos", value: result.groups.length ?? 0, icon: <RefreshCw className="h-4 w-4" />, isNumber: true },
   ];
 
   return (
