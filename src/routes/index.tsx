@@ -88,48 +88,48 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
+      <SiteHeader variant="overlay" showThemeToggle />
+      
       {/* Professional Realism Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 0.15, scale: 1 }}
+          animate={{ opacity: 0.1, scale: 1 }}
           transition={{ duration: 2 }}
           className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
         <div 
-          className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.12] blur-[120px]" 
+          className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.08] blur-[120px]" 
           style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
         />
       </div>
 
       <div className="relative z-10 flex flex-col">
-        <SiteHeader variant="overlay" showThemeToggle />
-        
-        <main className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           
           {/* Hero Section */}
           <motion.section 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col items-center text-center mb-24"
+            className="flex flex-col items-center text-center mb-16"
           >
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-8 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-6 backdrop-blur-md"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó</span>
             </motion.div>
             
-            <h1 className="font-display text-[44px] sm:text-[64px] font-bold tracking-[-0.04em] leading-[0.95] mb-8 max-w-4xl text-white">
+            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-white">
               Inteligência real para <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
             </h1>
@@ -149,7 +149,7 @@ function HomePage() {
           </motion.section>
 
           {/* Categories Grid */}
-          <section className="mb-24">
+          <section className="mb-16">
             <h2 className="section-title">Navegar por Categoria</h2>
             <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
                  onMouseDown={(e) => {
@@ -173,7 +173,7 @@ function HomePage() {
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
-                  className="group relative flex flex-col items-center justify-end min-w-[160px] h-[200px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
+                  className="group relative flex flex-col items-center justify-end min-w-[140px] h-[160px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
                 >
                   <div className="absolute inset-0 z-0">
                     <div 
@@ -185,14 +185,14 @@ function HomePage() {
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] mix-blend-overlay" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
                   </div>
-                  <div className="relative z-10 w-full p-6 flex flex-col items-center">
-                    <div className="relative mb-4">
+                  <div className="relative z-10 w-full p-4 flex flex-col items-center">
+                    <div className="relative mb-3">
                       <div 
-                        className="absolute inset-0 blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                        className="absolute inset-0 blur-xl opacity-10 group-hover:opacity-30 transition-opacity duration-500"
                         style={{ backgroundColor: color }}
                       />
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl text-white group-hover:scale-110 group-hover:bg-[var(--brand-primary)] group-hover:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
-                        <Icon className="h-7 w-7 transition-transform duration-500 group-hover:rotate-3" />
+                      <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl text-white group-hover:scale-110 group-hover:bg-[var(--brand-primary)] group-hover:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
+                        <Icon className="h-6 w-6 transition-transform duration-500 group-hover:rotate-3" />
                       </div>
                     </div>
                     <div className="flex flex-col items-center gap-1">
@@ -204,18 +204,23 @@ function HomePage() {
               ))}
               <Link 
                 to="/buscar" 
-                className="group relative flex flex-col items-center justify-center min-w-[160px] h-[200px] rounded-[24px] border border-dashed border-[var(--border-subtle)] transition-all hover:border-[var(--text-tertiary)] snap-start overflow-hidden"
+                className="group relative flex flex-col items-center justify-center min-w-[140px] h-[160px] rounded-[20px] border border-dashed border-[var(--border-subtle)] transition-all hover:border-[var(--text-tertiary)] snap-start overflow-hidden"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-white transition-all mb-3">
-                  <PlusCircle className="h-6 w-6" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-white transition-all mb-2">
+                  <PlusCircle className="h-5 w-5" />
                 </div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] group-hover:text-white transition-colors">Todas</span>
               </Link>
             </div>
           </section>
 
+          {/* New Sections for Recent and Trending Products */}
+          <div className="mb-16">
+            <RecentProductsCarousel />
+          </div>
+
           {/* Live Prices Table */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
             <div className="lg:col-span-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
