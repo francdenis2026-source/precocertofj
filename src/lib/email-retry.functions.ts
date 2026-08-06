@@ -9,7 +9,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  */
 export const adminResendActivationForWebhook = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { webhookEventId: string }) => ({
+  .validator((data: { webhookEventId: string }) => ({
     webhookEventId: String(data?.webhookEventId ?? ""),
   }))
   .handler(async ({ data, context }) => {

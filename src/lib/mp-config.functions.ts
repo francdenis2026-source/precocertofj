@@ -62,7 +62,7 @@ export const getMpConfig = createServerFn({ method: "GET" })
 
 export const saveMpConfig = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (d: {
       accessToken?: string;
       webhookSecret?: string;

@@ -8,7 +8,7 @@ import type { Database } from "@/integrations/supabase/types";
  * `meta.q` contém o termo pesquisado (já normalizado).
  */
 export const listPopularQueries = createServerFn({ method: "GET" })
-  .inputValidator((input: { days?: number; limit?: number } | undefined) => input ?? {})
+  .validator((input: { days?: number; limit?: number } | undefined) => input ?? {})
   .handler(async ({ data }) => {
     const days = Math.min(Math.max(data.days ?? 30, 1), 90);
     const limit = Math.min(Math.max(data.limit ?? 6, 1), 20);

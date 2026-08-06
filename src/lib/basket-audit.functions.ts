@@ -27,7 +27,7 @@ export type BasketAuditFilters = {
 
 export const listBasketAudit = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: Partial<BasketAuditFilters>): BasketAuditFilters => ({
+  .validator((input: Partial<BasketAuditFilters>): BasketAuditFilters => ({
     action: input?.action ? String(input.action).slice(0, 60) : null,
     limit: Math.min(Math.max(Number(input?.limit ?? 100), 1), 500),
   }))

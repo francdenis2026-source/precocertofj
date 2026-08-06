@@ -33,7 +33,7 @@ async function assertAdmin(supabase: any, userId: string) {
 
 export const listCollaboratorSubmissions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         status: z.enum(["received", "review", "approved", "rejected", "all"]).default("all"),
@@ -63,7 +63,7 @@ export const listCollaboratorSubmissions = createServerFn({ method: "GET" })
 
 export const reviewCollaboratorSubmission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -214,7 +214,7 @@ export type CollabAuditEntry = {
 
 export const listCollabAuditLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         submission_id: z.string().uuid().optional(),

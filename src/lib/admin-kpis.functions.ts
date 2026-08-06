@@ -71,7 +71,7 @@ export type BestPriceRow = {
 const isoDay = (d: Date) => d.toISOString().slice(0, 10);
 
 export const getAdminKpiBoard = createServerFn({ method: "POST" })
-  .inputValidator((input: { days?: number; minChangePct?: number } | undefined) => ({
+  .validator((input: { days?: number; minChangePct?: number } | undefined) => ({
     days: Math.min(180, Math.max(7, Math.round(Number(input?.days ?? 30)) || 30)),
     minChangePct: Math.min(90, Math.max(1, Number(input?.minChangePct ?? 8))),
   }))
@@ -255,7 +255,7 @@ export const getAdminKpiBoard = createServerFn({ method: "POST" })
 /* ------------------------------------------------------------------ */
 
 export const getBestPricesReport = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: { limit?: number; city?: string | null; neighborhood?: string | null } | undefined) => ({
       limit: Math.min(1000, Math.max(10, Math.round(Number(input?.limit ?? 200)) || 200)),
       city: input?.city?.trim() || null,

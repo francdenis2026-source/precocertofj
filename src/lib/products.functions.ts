@@ -20,7 +20,7 @@ export type ProductRegistrationResult = {
  */
 export const registerProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { products: ProductDraft[] }) => {
+  .validator((input: { products: ProductDraft[] }) => {
     if (!input || !Array.isArray(input.products) || input.products.length === 0) {
       throw new Error("Nenhum produto para cadastrar");
     }

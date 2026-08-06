@@ -71,7 +71,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 /** Public product detail by slug (uuid do catálogo) ou nome. Sem auth. */
 export const getPublicProduct = createServerFn({ method: "POST" })
-  .inputValidator((input: { slug: string }) => {
+  .validator((input: { slug: string }) => {
     const slug = (input?.slug ?? "").trim();
     if (slug.length < 2) throw new Error("slug inválido");
     if (slug.length > 120) throw new Error("slug muito longo");

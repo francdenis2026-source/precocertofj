@@ -153,7 +153,7 @@ export const getEconomyStat = createServerFn({ method: "GET" }).handler(
  * Public — últimos produtos cadastrados com o mercado mais comum.
  */
 export const getRecentProducts = createServerFn({ method: "GET" })
-  .inputValidator((input?: { limit?: number }) => {
+  .validator((input?: { limit?: number }) => {
     const limit = Math.min(Math.max(input?.limit ?? 6, 1), 24);
     return { limit };
   })

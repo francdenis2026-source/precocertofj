@@ -18,7 +18,7 @@ export type TrendingSearch = {
  * recência. Assim um termo que "bombou" hoje sobe na frente do histórico.
  */
 export const listTrendingSearches = createServerFn({ method: "GET" })
-  .inputValidator((input: { limit?: number } | undefined) => input ?? {})
+  .validator((input: { limit?: number } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<TrendingSearch[]> => {
     const limit = Math.min(Math.max(data.limit ?? 24, 1), 40);
 
@@ -64,7 +64,7 @@ export const listTrendingSearches = createServerFn({ method: "GET" })
  * divergem.
  */
 export const getSearchTrendsSeries = createServerFn({ method: "GET" })
-  .inputValidator((input: { days?: number } | undefined) => {
+  .validator((input: { days?: number } | undefined) => {
     const raw = input?.days ?? 7;
     const days = raw <= 1 ? 1 : raw <= 7 ? 7 : 30;
     return { days };

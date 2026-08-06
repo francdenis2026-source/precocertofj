@@ -180,7 +180,7 @@ const AnalyzeInputSchema = z.object({
 
 export const analyzeBatchPhotos = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => AnalyzeInputSchema.parse(input))
+  .validator((input: unknown) => AnalyzeInputSchema.parse(input))
   .handler(async ({ data, context }): Promise<Candidate[]> => {
     const out: Candidate[] = [];
     let imgIdx = 0;
@@ -373,7 +373,7 @@ const ManualInputSchema = z.object({
 
 export const analyzeManualItem = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => ManualInputSchema.parse(input))
+  .validator((input: unknown) => ManualInputSchema.parse(input))
   .handler(async ({ data, context }): Promise<Candidate> => {
     const candidate: Candidate = {
       clientId: `manual-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -455,7 +455,7 @@ const CommitInputSchema = z.object({
 
 export const commitScanBatch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => CommitInputSchema.parse(input))
+  .validator((input: unknown) => CommitInputSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { data: est } = await context.supabase
       .from("establishments")

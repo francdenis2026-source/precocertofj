@@ -70,7 +70,7 @@ export const listMyAlertSubscriptions = createServerFn({ method: "GET" })
 
 export const createAlertSubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: {
       productKey?: string;
       productName?: string;
@@ -131,7 +131,7 @@ export const createAlertSubscription = createServerFn({ method: "POST" })
 
 export const updateAlertSubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: {
       id: string;
       direction?: AlertDirection;
@@ -167,7 +167,7 @@ export const updateAlertSubscription = createServerFn({ method: "POST" })
 
 export const deleteAlertSubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -189,7 +189,7 @@ export const deleteAlertSubscription = createServerFn({ method: "POST" })
  */
 export const enableNearbyDropAlertsForFavorites = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input?: { thresholdPct?: number; scope?: "neighborhood" | "city" | "any" }) => {
       const pct = input?.thresholdPct ?? 5;
       if (!Number.isFinite(pct) || pct < 0 || pct > 90) {

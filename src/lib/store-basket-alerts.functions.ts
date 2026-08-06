@@ -57,7 +57,7 @@ export const listStoreBasketAlerts = createServerFn({ method: "GET" })
 
 export const createStoreBasketAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: {
       establishmentId: string;
       establishmentName: string;
@@ -92,7 +92,7 @@ export const createStoreBasketAlert = createServerFn({ method: "POST" })
 
 export const deleteStoreBasketAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     const { error } = await context.supabase
       .from("store_basket_alerts")
@@ -104,7 +104,7 @@ export const deleteStoreBasketAlert = createServerFn({ method: "POST" })
 
 export const toggleStoreBasketAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; active: boolean }) => input)
+  .validator((input: { id: string; active: boolean }) => input)
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("store_basket_alerts")

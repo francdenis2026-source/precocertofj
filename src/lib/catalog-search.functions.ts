@@ -86,7 +86,7 @@ function normalizeStr(s: string): string {
  * independentemente do estado da tabela `product_price_stats`.
  */
 export const searchCatalogAdvanced = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (data: {
       q?: string;
       category?: string | null;

@@ -128,7 +128,7 @@ export const listEstablishments = createServerFn({ method: "GET" })
 
 export const saveEstablishment = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: EstablishmentInput) => validate(input))
+  .validator((input: EstablishmentInput) => validate(input))
   .handler(async ({ data, context }): Promise<Establishment> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const payload = {
@@ -183,7 +183,7 @@ export const saveEstablishment = createServerFn({ method: "POST" })
 
 export const deleteEstablishment = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -199,7 +199,7 @@ export const deleteEstablishment = createServerFn({ method: "POST" })
 
 export const toggleEstablishmentActive = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; active: boolean }) => input)
+  .validator((input: { id: string; active: boolean }) => input)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const table = supabaseAdmin.from("establishments" as never) as unknown as {

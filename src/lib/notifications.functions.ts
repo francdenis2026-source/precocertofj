@@ -41,7 +41,7 @@ export const getNotificationPrefs = createServerFn({ method: "GET" })
 
 export const updateNotificationPrefs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: Partial<NotificationPrefs>) => {
+  .validator((input: Partial<NotificationPrefs>) => {
     const p = input ?? {};
     return {
       inApp: p.inApp ?? true,
@@ -126,7 +126,7 @@ export const markAllAlertsRead = createServerFn({ method: "POST" })
 
 export const deleteAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return { id: input.id };
   })
@@ -142,7 +142,7 @@ export const deleteAlert = createServerFn({ method: "POST" })
 
 export const toggleCartAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { catalogId: string; active: boolean }) => input)
+  .validator((input: { catalogId: string; active: boolean }) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     if (data.active) {
@@ -160,7 +160,7 @@ export const toggleCartAlert = createServerFn({ method: "POST" })
 
 export const getStoreAlertsStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { catalogIds: string[] }) => input)
+  .validator((input: { catalogIds: string[] }) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { data: monitors } = await supabase

@@ -29,7 +29,7 @@ function publicClient() {
 
 /** Preço médio público de um código de barras (somente registros públicos salvos). */
 export const getAveragePriceForBarcode = createServerFn({ method: "POST" })
-  .inputValidator((input: { barcode: string }) => {
+  .validator((input: { barcode: string }) => {
     if (!input.barcode || typeof input.barcode !== "string" || input.barcode.length > 32) {
       throw new Error("barcode inválido");
     }

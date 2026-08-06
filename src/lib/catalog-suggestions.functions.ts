@@ -121,7 +121,7 @@ function buildSuggestion(sourceName: string): {
 /** Gera sugestões a partir de scans que ainda não têm entrada em `product_catalog`. */
 export const generateSuggestionsFromScans = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { limit?: number; market_name?: string }) => ({
+  .validator((input?: { limit?: number; market_name?: string }) => ({
     limit: Math.max(1, Math.min(500, input?.limit ?? 200)),
     market_name: input?.market_name || null,
   }))
@@ -191,7 +191,7 @@ export const generateSuggestionsFromScans = createServerFn({ method: "POST" })
 
 export const listCatalogSuggestions = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { status?: string }) => ({
+  .validator((input?: { status?: string }) => ({
     status: input?.status || "pending",
   }))
   .handler(async ({ data }): Promise<CatalogSuggestion[]> => {
@@ -210,7 +210,7 @@ export const listCatalogSuggestions = createServerFn({ method: "GET" })
 
 export const updateSuggestion = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: {
+  .validator((input: {
     id: string;
     brand?: string | null;
     type?: string | null;
@@ -245,7 +245,7 @@ export const updateSuggestion = createServerFn({ method: "POST" })
 
 export const rejectSuggestion = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; notes?: string }) => {
+  .validator((input: { id: string; notes?: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return input;
   })
@@ -267,7 +267,7 @@ export const rejectSuggestion = createServerFn({ method: "POST" })
 /** Aprova + aplica no product_catalog em uma única ação. */
 export const approveAndApplySuggestion = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return input;
   })
@@ -389,7 +389,7 @@ async function classifyNameWithAi(name: string): Promise<{
 
 export const reclassifySuggestionWithAi = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return input;
   })
@@ -418,7 +418,7 @@ export const reclassifySuggestionWithAi = createServerFn({ method: "POST" })
 
 export const reclassifyLowConfidenceBatch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { threshold?: number; limit?: number }) => ({
+  .validator((input?: { threshold?: number; limit?: number }) => ({
     threshold: Math.max(0, Math.min(1, input?.threshold ?? 0.7)),
     limit: Math.max(1, Math.min(100, input?.limit ?? 30)),
   }))
@@ -458,7 +458,7 @@ export const reclassifyLowConfidenceBatch = createServerFn({ method: "POST" })
 
 export const approveHighConfidenceBatch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { threshold?: number; limit?: number }) => ({
+  .validator((input?: { threshold?: number; limit?: number }) => ({
     threshold: Math.max(0, Math.min(1, input?.threshold ?? 0.85)),
     limit: Math.max(1, Math.min(200, input?.limit ?? 100)),
   }))

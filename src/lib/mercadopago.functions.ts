@@ -71,7 +71,7 @@ export const getMercadoPagoStatus = createServerFn({ method: "GET" })
  */
 export const createMercadoPagoPreference = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
+  .validator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
   .handler(async ({ data, context }) => {
     const tokenInfo = inspectMpToken(process.env.MP_ACCESS_TOKEN);
     const token = process.env.MP_ACCESS_TOKEN!;
@@ -173,7 +173,7 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
 /** Admin: list webhook events for the Mercado Pago provider. */
 export const listMercadoPagoWebhookEvents = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { limit?: number } | undefined) => ({
+  .validator((data: { limit?: number } | undefined) => ({
     limit: Math.min(Math.max(Number(data?.limit ?? 100), 1), 500),
   }))
   .handler(async ({ data, context }) => {
@@ -217,7 +217,7 @@ function summarizePayload(payload: unknown): string {
  */
 export const simulateCheckoutApproval = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
+  .validator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
   .handler(async ({ data, context }) => {
     const { data: isAdmin } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
@@ -272,7 +272,7 @@ export const simulateCheckoutApproval = createServerFn({ method: "POST" })
  */
 export const createPixCharge = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
+  .validator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
   .handler(async ({ data, context }) => {
     const tokenInfo = inspectMpToken(process.env.MP_ACCESS_TOKEN);
     const token = process.env.MP_ACCESS_TOKEN!;

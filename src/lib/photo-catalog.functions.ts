@@ -19,7 +19,7 @@ export type PhotoCatalogResult = {
 
 export const savePhotoToCatalog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: PhotoCatalogInput) => {
+  .validator((input: PhotoCatalogInput) => {
     if (!input?.displayName || input.displayName.trim().length < 2) {
       throw new Error("Nome do produto obrigatório (mínimo 2 caracteres).");
     }

@@ -58,7 +58,7 @@ Regras:
 
 export const analyzeProductImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { image: string }) => {
+  .validator((input: { image: string }) => {
     if (!input.image) throw new Error("image obrigatória");
     if (typeof input.image !== "string" || input.image.length > 12_000_000) {
       throw new Error("Imagem inválida ou muito grande");

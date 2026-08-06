@@ -139,7 +139,7 @@ export const listBasketSets = createServerFn({ method: "GET" })
 
 export const listBasketItemsForSet = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ setId: z.string().uuid() }).parse(data ?? {}),
   )
   .handler(async ({ data }): Promise<BasketAdminItem[]> => {
@@ -157,7 +157,7 @@ export const listBasketItemsForSet = createServerFn({ method: "POST" })
 
 export const createBasketSet = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         label: z.string().trim().min(3).max(120),
@@ -235,7 +235,7 @@ export const createBasketSet = createServerFn({ method: "POST" })
 
 export const updateBasketItem = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -298,7 +298,7 @@ export const updateBasketItem = createServerFn({ method: "POST" })
 
 export const activateBasketSet = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ id: z.string().uuid() }).parse(data ?? {}),
   )
   .handler(async ({ data, context }) => {
@@ -340,7 +340,7 @@ export const activateBasketSet = createServerFn({ method: "POST" })
 
 export const deleteBasketSet = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ id: z.string().uuid() }).parse(data ?? {}),
   )
   .handler(async ({ data, context }) => {

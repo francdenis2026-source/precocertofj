@@ -238,7 +238,7 @@ export const listFavoriteItems = createServerFn({ method: "GET" })
 
 export const toggleFavoriteItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { catalogId: string }) => {
+  .validator((input: { catalogId: string }) => {
     if (!input?.catalogId) throw new Error("catalogId obrigatório");
     return { catalogId: input.catalogId };
   })
@@ -279,7 +279,7 @@ export const toggleFavoriteItem = createServerFn({ method: "POST" })
 
 export const removeFavoriteItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { favoriteId: string }) => {
+  .validator((input: { favoriteId: string }) => {
     if (!input?.favoriteId) throw new Error("favoriteId obrigatório");
     return { favoriteId: input.favoriteId };
   })
@@ -295,7 +295,7 @@ export const removeFavoriteItem = createServerFn({ method: "POST" })
 
 export const reorderFavoriteItems = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { ids: string[] }) => {
+  .validator((input: { ids: string[] }) => {
     if (!Array.isArray(input?.ids)) throw new Error("ids obrigatório");
     return { ids: input.ids.slice(0, 200) };
   })
@@ -313,7 +313,7 @@ export const reorderFavoriteItems = createServerFn({ method: "POST" })
 
 export const setFavoriteItemTarget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { favoriteId: string; targetPrice: number | null }) => {
+  .validator((input: { favoriteId: string; targetPrice: number | null }) => {
     if (!input?.favoriteId) throw new Error("favoriteId obrigatório");
     const tp = input.targetPrice;
     if (tp !== null && (typeof tp !== "number" || tp < 0)) {
@@ -333,7 +333,7 @@ export const setFavoriteItemTarget = createServerFn({ method: "POST" })
 
 export const setFavoriteItemStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { favoriteId: string; establishmentId: string | null }) => {
+  .validator((input: { favoriteId: string; establishmentId: string | null }) => {
     if (!input?.favoriteId) throw new Error("favoriteId obrigatório");
     return {
       favoriteId: input.favoriteId,
@@ -352,7 +352,7 @@ export const setFavoriteItemStore = createServerFn({ method: "POST" })
 
 export const addFavoriteToList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: { catalogId: string; listId: string; quantity?: number }) => {
       if (!input?.catalogId) throw new Error("catalogId obrigatório");
       if (!input?.listId) throw new Error("listId obrigatório");
@@ -420,7 +420,7 @@ export const listFavoriteMarkets = createServerFn({ method: "GET" })
 
 export const toggleFavoriteMarket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { marketName: string }) => {
+  .validator((input: { marketName: string }) => {
     const name = (input?.marketName ?? "").trim();
     if (!name) throw new Error("marketName obrigatório");
     return { marketName: name.slice(0, 120) };
@@ -460,7 +460,7 @@ export const toggleFavoriteMarket = createServerFn({ method: "POST" })
 
 export const removeFavoriteMarket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { favoriteId: string }) => {
+  .validator((input: { favoriteId: string }) => {
     if (!input?.favoriteId) throw new Error("favoriteId obrigatório");
     return { favoriteId: input.favoriteId };
   })
@@ -476,7 +476,7 @@ export const removeFavoriteMarket = createServerFn({ method: "POST" })
 
 export const reorderFavoriteMarkets = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { ids: string[] }) => {
+  .validator((input: { ids: string[] }) => {
     if (!Array.isArray(input?.ids)) throw new Error("ids obrigatório");
     return { ids: input.ids.slice(0, 200) };
   })

@@ -324,7 +324,7 @@ type ComparisonFilters = {
 };
 
 export const getBasketComparison = createServerFn({ method: "POST" })
-  .inputValidator((data?: ComparisonFilters) => {
+  .validator((data?: ComparisonFilters) => {
     const d = data ?? {};
     return {
       originLat: typeof d.originLat === "number" && Number.isFinite(d.originLat) ? d.originLat : null,
@@ -553,7 +553,7 @@ export type BudgetBasketResult = {
 };
 
 export const buildBudgetBasket = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (data: {
       budget: number;
       establishmentId?: string | null;
@@ -770,7 +770,7 @@ export type EssentialPricesResult = {
 
 /** Lista todas as mercados que vendem um essencial, ordenadas pelo menor preço. */
 export const listEssentialPrices = createServerFn({ method: "POST" })
-  .inputValidator((data: { key: string }) => {
+  .validator((data: { key: string }) => {
     const k = String(data?.key ?? "");
     const found = ESSENTIALS.find((e) => e.key === k);
     if (!found) throw new Error("Essencial inválido");

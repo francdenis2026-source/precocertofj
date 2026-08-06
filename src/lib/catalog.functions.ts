@@ -63,7 +63,7 @@ export const listCatalog = createServerFn({ method: "GET" })
 
 export const updateCatalogEntry = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator(
+  .validator(
     (input: {
       id: string;
       displayName?: string;
@@ -173,7 +173,7 @@ export const updateCatalogEntry = createServerFn({ method: "POST" })
  */
 export const uploadCatalogImage = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; dataUrl: string }) => {
+  .validator((input: { id: string; dataUrl: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     if (!input.dataUrl?.startsWith("data:")) throw new Error("dataUrl inválido");
     return input;

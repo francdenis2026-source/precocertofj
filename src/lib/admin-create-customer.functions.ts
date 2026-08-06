@@ -45,7 +45,7 @@ function genPin() {
 
 export const adminCreateCustomer = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((raw: unknown) => InputSchema.parse(raw))
+  .validator((raw: unknown) => InputSchema.parse(raw))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

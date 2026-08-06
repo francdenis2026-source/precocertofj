@@ -78,7 +78,7 @@ async function getOrCreateCartId(
 
 /** Resolve um slug (uuid ou nome de produto) para um catalog_id existente. */
 export const resolveCatalogId = createServerFn({ method: "POST" })
-  .inputValidator((input: { slug: string }) => {
+  .validator((input: { slug: string }) => {
     const slug = (input?.slug ?? "").trim();
     if (!slug) throw new Error("slug obrigatório");
     return { slug: slug.slice(0, 160) };
@@ -171,7 +171,7 @@ export const getCart = createServerFn({ method: "GET" })
 
 export const addToCart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { catalogId?: string; slug?: string; quantity?: number }) => {
+  .validator((input: { catalogId?: string; slug?: string; quantity?: number }) => {
     const catalogId = (input?.catalogId ?? "").trim();
     const slug = (input?.slug ?? "").trim();
     if (!catalogId && !slug) throw new Error("Produto não informado");
@@ -243,7 +243,7 @@ export const addToCart = createServerFn({ method: "POST" })
 
 export const removeFromCart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { itemId: string }) => {
+  .validator((input: { itemId: string }) => {
     if (!input?.itemId) throw new Error("itemId obrigatório");
     return { itemId: input.itemId };
   })
@@ -276,7 +276,7 @@ export const removeFromCart = createServerFn({ method: "POST" })
 
 export const updateCartQuantity = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { itemId: string; quantity: number }) => {
+  .validator((input: { itemId: string; quantity: number }) => {
     if (!input?.itemId) throw new Error("itemId obrigatório");
     const q = Number(input.quantity);
     if (!Number.isFinite(q) || q <= 0) throw new Error("quantidade inválida");

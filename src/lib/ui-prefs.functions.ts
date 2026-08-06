@@ -30,7 +30,7 @@ export const getMyUiPrefs = createServerFn({ method: "GET" })
 
 export const updateMyUiPrefs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: Partial<UiPrefs>) => {
+  .validator((input: Partial<UiPrefs>) => {
     const out: Partial<UiPrefs> = {};
     if (typeof input?.homeOnlyRegistered === "boolean") {
       out.homeOnlyRegistered = input.homeOnlyRegistered;

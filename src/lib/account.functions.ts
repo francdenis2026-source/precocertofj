@@ -67,7 +67,7 @@ function isValidPassword(pw: string): boolean {
  * para que o client rode `signInWithPassword` e obtenha a sessão.
  */
 export const signUpWithCpf = createServerFn({ method: "POST" })
-  .inputValidator((input: SignUpInput) => {
+  .validator((input: SignUpInput) => {
     if (!input) throw new Error("Dados obrigatórios");
     const cpf = stripCpf(input.cpf);
     if (!isValidCpf(cpf)) throw new Error("CPF inválido");
@@ -133,7 +133,7 @@ export const signUpWithCpf = createServerFn({ method: "POST" })
  * antes de chamar `supabase.auth.signInWithPassword`.
  */
 export const resolveLoginEmail = createServerFn({ method: "POST" })
-  .inputValidator((input: { cpf: string }) => {
+  .validator((input: { cpf: string }) => {
     const cpf = stripCpf(input.cpf);
     if (!isValidCpf(cpf)) throw new Error("CPF inválido");
     return { cpf };
@@ -203,7 +203,7 @@ export const getMyAccount = createServerFn({ method: "GET" })
  */
 export const updateMyCpf = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { cpf: string }) => {
+  .validator((input: { cpf: string }) => {
     const cpf = stripCpf(input?.cpf ?? "");
     if (!isValidCpf(cpf)) throw new Error("CPF inválido");
     return { cpf };
@@ -257,7 +257,7 @@ export type ProfileUpdateInput = {
  */
 export const updateMyProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: ProfileUpdateInput) => {
+  .validator((input: ProfileUpdateInput) => {
     const fullName = (input?.fullName ?? "").trim();
     if (fullName.length < 3) throw new Error("Informe seu nome completo");
     const phone = (input?.phone ?? "").replace(/\D/g, "");
@@ -307,7 +307,7 @@ export const updateMyProfile = createServerFn({ method: "POST" })
  */
 export const updateMyAvatar = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { path: string | null }) => {
+  .validator((input: { path: string | null }) => {
     const path = (input?.path ?? "").trim();
     if (path && path.length > 512) throw new Error("Caminho inválido");
     return { path: path || null };

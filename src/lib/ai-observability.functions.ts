@@ -59,7 +59,7 @@ export type AiUsageOverview = {
  */
 export const getAiUsageOverview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { hours?: number } | undefined) => ({
+  .validator((input: { hours?: number } | undefined) => ({
     hours: Math.min(Math.max(Math.round(Number(input?.hours) || 24), 1), 24 * 90),
   }))
   .handler(async ({ data, context }): Promise<AiUsageOverview> => {

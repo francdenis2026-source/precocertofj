@@ -68,7 +68,7 @@ export const getWhereToBuyRegions = createServerFn({ method: "GET" }).handler(
 );
 
 export const searchWhereToBuy = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: { q?: string; city?: string | null; neighborhood?: string | null; limit?: number } | undefined) => ({
       q: (input?.q ?? "").trim().slice(0, 80),
       city: input?.city?.trim() || null,
@@ -212,7 +212,7 @@ export type ProductComparisonDetail = {
 };
 
 export const getProductComparison = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: { productKey: string; city?: string | null; neighborhood?: string | null; days?: number }) => {
       const productKey = String(input?.productKey ?? "").trim();
       if (!productKey) throw new Error("Produto não informado.");

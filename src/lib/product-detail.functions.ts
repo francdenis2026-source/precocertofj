@@ -26,7 +26,7 @@ export type ProductDetail = {
 
 export const getProductDetail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -146,7 +146,7 @@ export type MyProductsPage = {
 
 export const listMyProductsPage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { offset?: number; limit?: number }) => ({
+  .validator((input: { offset?: number; limit?: number }) => ({
     offset: Math.max(0, Math.floor(input.offset ?? 0)),
     limit: Math.min(100, Math.max(1, Math.floor(input.limit ?? 30))),
   }))

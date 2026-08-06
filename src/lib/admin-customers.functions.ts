@@ -39,7 +39,7 @@ function maskCpf(cpf: string | null | undefined) {
 // ============================================================================
 export const adminListCustomers = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         search: z.string().trim().optional().default(""),
@@ -136,7 +136,7 @@ export const adminListCustomers = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminGetCustomer = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ userId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data }) => {
@@ -186,7 +186,7 @@ export const adminGetCustomer = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminUpdateCustomer = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         userId: z.string().uuid(),
@@ -232,7 +232,7 @@ export const adminUpdateCustomer = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminResetCustomerPin = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ userId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data, context }) => {
@@ -272,7 +272,7 @@ export const adminResetCustomerPin = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminListLoginEvents = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         limit: z.number().int().min(1).max(1000).optional().default(200),
@@ -305,7 +305,7 @@ export const adminListLoginEvents = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminGetLoginStats = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         sinceDays: z.number().int().min(1).max(90).optional().default(14),
@@ -374,7 +374,7 @@ export const adminGetLoginStats = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminSuspendCustomer = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         userId: z.string().uuid(),
@@ -415,7 +415,7 @@ export const adminSuspendCustomer = createServerFn({ method: "POST" })
 
 export const adminReactivateCustomer = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z.object({ userId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data, context }) => {
@@ -446,7 +446,7 @@ export const adminReactivateCustomer = createServerFn({ method: "POST" })
 // ============================================================================
 export const adminExportCustomers = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         search: z.string().trim().optional().default(""),

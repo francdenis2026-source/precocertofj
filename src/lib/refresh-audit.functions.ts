@@ -22,7 +22,7 @@ export type LogRefreshInput = z.infer<typeof schema>;
 
 export const logRefreshEvent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) => schema.parse(raw))
+  .validator((raw: unknown) => schema.parse(raw))
   .handler(async ({ data, context }): Promise<{ logged: boolean }> => {
     // Filtro para evitar spam: só registra se demorou ou falhou.
     if (data.result === "success" && data.durationMs <= 250) {

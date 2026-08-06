@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/require-admin";
  */
 export const uploadImageDataUrl = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { bucket: string; path: string; dataUrl: string }) => {
+  .validator((input: { bucket: string; path: string; dataUrl: string }) => {
     if (!input.bucket) throw new Error("bucket obrigatório");
     if (!input.path) throw new Error("path obrigatório");
     if (!input.dataUrl?.startsWith("data:")) throw new Error("dataUrl inválido");

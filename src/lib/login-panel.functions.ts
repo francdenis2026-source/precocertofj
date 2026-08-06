@@ -91,7 +91,7 @@ const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(Math.max(0, v));
 
 export const getLoginPanelMetrics = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => filterSchema.parse(input))
+  .validator((input: unknown) => filterSchema.parse(input))
   .handler(async ({ data }): Promise<LoginPanelMetrics> => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -217,7 +217,7 @@ export const getLoginPanelMetrics = createServerFn({ method: "POST" })
 });
 
 export const getRadarCategoryTop = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => radarInputSchema.parse(input))
+  .validator((input: unknown) => radarInputSchema.parse(input))
   .handler(async ({ data }): Promise<RadarCategoryTop> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const categories = RADAR_GROUPS[data.group as RadarGroupKey];

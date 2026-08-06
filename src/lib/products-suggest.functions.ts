@@ -33,7 +33,7 @@ const normalize = (s: string) =>
  * direto no dropdown da homepage.
  */
 export const getProductSuggestions = createServerFn({ method: "GET" })
-  .inputValidator((input?: { q?: string; limit?: number }) => {
+  .validator((input?: { q?: string; limit?: number }) => {
     const q = (input?.q ?? "").trim().slice(0, 60);
     const limit = Math.min(Math.max(input?.limit ?? 5, 1), 8);
     return { q, limit };

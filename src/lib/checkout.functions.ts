@@ -51,7 +51,7 @@ export const listPublicPlans = createServerFn({ method: "GET" }).handler(async (
 });
 
 export const validatePromoCoupon = createServerFn({ method: "POST" })
-  .inputValidator((data: { code: string }) => ({ code: String(data?.code ?? "").trim() }))
+  .validator((data: { code: string }) => ({ code: String(data?.code ?? "").trim() }))
   .handler(async ({ data }) => {
     if (!data.code) return { valid: false as const };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -81,7 +81,7 @@ export type CheckoutOrder = {
 
 export const createCheckoutOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { planId: string; couponCode?: string | null }) => ({
+  .validator((data: { planId: string; couponCode?: string | null }) => ({
     planId: String(data?.planId ?? ""),
     couponCode: data?.couponCode ? String(data.couponCode).trim() : null,
   }))
@@ -146,7 +146,7 @@ export function normalizeDeliveryEmail(raw: unknown): string {
  */
 export const setCheckoutEmail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; email: string }) => ({
+  .validator((data: { id: string; email: string }) => ({
     id: String(data?.id ?? ""),
     email: normalizeDeliveryEmail(data?.email),
   }))
@@ -175,7 +175,7 @@ export const setCheckoutEmail = createServerFn({ method: "POST" })
 
 export const getCheckoutOrder = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: isAdmin } = await context.supabase.rpc("has_role", {
@@ -212,7 +212,7 @@ export const listMyCheckoutOrders = createServerFn({ method: "GET" })
 /** Admin/manual approval — will be replaced by MP webhook later. */
 export const approveCheckoutOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; providerRef?: string | null }) => ({
+  .validator((data: { id: string; providerRef?: string | null }) => ({
     id: String(data?.id ?? ""),
     providerRef: data?.providerRef ? String(data.providerRef) : null,
   }))
@@ -256,7 +256,7 @@ export const listPromoCoupons = createServerFn({ method: "GET" })
 
 export const upsertPromoCoupon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: {
+  .validator((data: {
     id?: string;
     code: string;
     percent_off: number;
@@ -302,7 +302,7 @@ export const upsertPromoCoupon = createServerFn({ method: "POST" })
 
 export const deletePromoCoupon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

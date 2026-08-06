@@ -35,7 +35,7 @@ const TARGETS: Array<{ table: string; label: string; column: string; cascade: Es
 
 export const getEstablishmentDeletionImpact = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((raw: unknown) => InputSchema.parse(raw))
+  .validator((raw: unknown) => InputSchema.parse(raw))
   .handler(async ({ data }): Promise<EstablishmentImpact> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

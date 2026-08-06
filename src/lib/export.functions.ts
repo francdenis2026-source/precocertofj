@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const exportStoreCatalog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({
+  .validator(z.object({
     storeId: z.string(),
     format: z.enum(["csv", "pdf"]),
   }))

@@ -17,7 +17,7 @@ export type StoreContactInfo = {
  * observações como horário de funcionamento). Leitura pública somente.
  */
 export const getStoreContactInfo = createServerFn({ method: "GET" })
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     const id = String(input?.id ?? "").trim();
     if (!id) throw new Error("id obrigatório");
     return { id };

@@ -28,7 +28,7 @@ export type ReceiptJob = {
 /** Cria o job e devolve o id rapidinho. O cliente dispara `processReceiptJob` sem aguardar. */
 export const createReceiptJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { imageDataUrl: string }) => {
+  .validator((input: { imageDataUrl: string }) => {
     if (!input?.imageDataUrl?.startsWith("data:")) throw new Error("imageDataUrl inválido");
     return input;
   })
@@ -94,7 +94,7 @@ export const createReceiptJob = createServerFn({ method: "POST" })
 
 export const processReceiptJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { jobId: string }) => {
+  .validator((input: { jobId: string }) => {
     if (!input?.jobId) throw new Error("jobId obrigatório");
     return input;
   })
@@ -106,7 +106,7 @@ export const processReceiptJob = createServerFn({ method: "POST" })
 
 export const getReceiptJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { jobId: string }) => {
+  .validator((input: { jobId: string }) => {
     if (!input?.jobId) throw new Error("jobId obrigatório");
     return input;
   })
@@ -140,7 +140,7 @@ export const getReceiptJob = createServerFn({ method: "POST" })
 
 export const confirmReceiptImport = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator(
+  .validator(
     (input: {
       jobId: string;
       establishmentId: string | null;
@@ -184,7 +184,7 @@ export const confirmReceiptImport = createServerFn({ method: "POST" })
 
 export const cancelReceiptJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { jobId: string }) => {
+  .validator((input: { jobId: string }) => {
     if (!input?.jobId) throw new Error("jobId obrigatório");
     return input;
   })

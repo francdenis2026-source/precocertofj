@@ -35,7 +35,7 @@ const toggleSchema = z.object({
 /** Adiciona/remove um bairro favorito. Retorna o novo estado. */
 export const toggleFavoriteNeighborhood = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => toggleSchema.parse(input))
+  .validator((input) => toggleSchema.parse(input))
   .handler(async ({ data, context }): Promise<{ favored: boolean }> => {
     const { supabase, userId } = context;
 

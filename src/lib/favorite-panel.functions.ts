@@ -64,7 +64,7 @@ export const listFavoritedPanelKeys = createServerFn({ method: "GET" })
  */
 export const toggleFavoritePanelProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { productName: string }) => {
+  .validator((input: { productName: string }) => {
     const productName = (input?.productName ?? "").trim();
     if (!productName) throw new Error("productName obrigatório");
     if (productName.length > 200) throw new Error("productName muito longo");

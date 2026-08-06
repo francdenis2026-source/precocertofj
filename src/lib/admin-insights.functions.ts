@@ -86,7 +86,7 @@ const clampDay = (v: unknown, fallback: string) => {
 
 export const getAdminInsights = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: Partial<AdminInsightsFilters> | undefined): AdminInsightsFilters => {
+  .validator((input: Partial<AdminInsightsFilters> | undefined): AdminInsightsFilters => {
     const to = clampDay(input?.to, isoDay(new Date()));
     const from = clampDay(
       input?.from,
@@ -336,7 +336,7 @@ const normalize = (s: string) =>
 
 export const adminGlobalSearch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: Partial<GlobalSearchFilters>): GlobalSearchFilters => ({
+  .validator((input: Partial<GlobalSearchFilters>): GlobalSearchFilters => ({
     q: String(input?.q ?? "").slice(0, 120),
     scope:
       input?.scope === "products" || input?.scope === "stores" || input?.scope === "prices"

@@ -26,7 +26,7 @@ export type TrialCodeRow = {
 /** Lista códigos de acesso temporário. */
 export const listTrialCodes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { status?: string; search?: string; limit?: number }) => ({
+  .validator((data: { status?: string; search?: string; limit?: number }) => ({
     status: data?.status ?? null,
     search: data?.search ? String(data.search).trim() : null,
     limit: Math.min(500, Math.max(10, Math.floor(Number(data?.limit) || 200))),
@@ -49,7 +49,7 @@ export const listTrialCodes = createServerFn({ method: "POST" })
 /** Cria N códigos de acesso temporário (duração em minutos). */
 export const createTrialCodes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { quantity: number; durationMinutes: number; reservationDays?: number; notes?: string }) => ({
+  .validator((data: { quantity: number; durationMinutes: number; reservationDays?: number; notes?: string }) => ({
     quantity: Math.max(1, Math.min(500, Math.floor(Number(data?.quantity) || 1))),
     durationMinutes: Math.max(5, Math.min(60 * 24 * 365, Math.floor(Number(data?.durationMinutes) || 1440))),
     reservationDays: Math.max(1, Math.min(730, Math.floor(Number(data?.reservationDays) || 180))),
@@ -82,7 +82,7 @@ export const createTrialCodes = createServerFn({ method: "POST" })
 /** Atualiza duração/validade/notas de código não resgatado. */
 export const updateTrialCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; durationMinutes?: number; expiresAt?: string; notes?: string | null }) => ({
+  .validator((data: { id: string; durationMinutes?: number; expiresAt?: string; notes?: string | null }) => ({
     id: String(data?.id ?? ""),
     durationMinutes: data?.durationMinutes != null
       ? Math.max(5, Math.min(60 * 24 * 365, Math.floor(Number(data.durationMinutes)))) : undefined,
@@ -119,7 +119,7 @@ export const updateTrialCode = createServerFn({ method: "POST" })
 /** Exclui código não resgatado. */
 export const deleteTrialCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -141,7 +141,7 @@ export const deleteTrialCode = createServerFn({ method: "POST" })
 /** Revoga (mesmo se já resgatado ainda-vigente: encerra o acesso agora). */
 export const revokeTrialCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; endAccessNow?: boolean }) => ({
+  .validator((data: { id: string; endAccessNow?: boolean }) => ({
     id: String(data?.id ?? ""),
     endAccessNow: data?.endAccessNow !== false,
   }))
@@ -184,7 +184,7 @@ export type TrialUser = {
 
 export const listTrialAccessUsers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { includeEnded?: boolean }) => ({ includeEnded: !!data?.includeEnded }))
+  .validator((data: { includeEnded?: boolean }) => ({ includeEnded: !!data?.includeEnded }))
   .handler(async ({ data, context }): Promise<TrialUser[]> => {
     await assertAdmin(context);
     const { data: rows, error } = await context.supabase
