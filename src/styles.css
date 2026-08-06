@@ -81,31 +81,24 @@
 @theme {
   --pc-primary-rgb: 255 215 0;
   
-  --bg-base: var(--pc-deep-navy);
-  --bg-surface: var(--pc-navy-surface);
-  --bg-surface-elevated: var(--pc-navy-surface-elevated);
-  --border-subtle: var(--pc-border-gold);
+  --bg-base: var(--bg-base);
+  --bg-surface: var(--bg-surface);
+  --bg-surface-elevated: var(--bg-surface-elevated);
+  --border-subtle: var(--border-subtle);
   
-  --brand-primary: var(--pc-gold-primary);
-  --brand-glow: var(--pc-gold-glow);
+  --brand-primary: var(--brand-primary);
+  --brand-glow: var(--brand-glow);
   
   --success: #10B981;
   --danger: #EF4444;
   --warning: #F59E0B;
   
-  --text-primary: #FFFFFF;
-  --text-secondary: #94A3B8;
-  --text-tertiary: #64748B;
+  --text-primary: var(--text-primary);
+  --text-secondary: var(--text-secondary);
+  --text-tertiary: var(--text-tertiary);
 
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
-}
-
-:root[data-theme='light'] {
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A5568;
-  --text-tertiary: #718096;
-  --border-subtle: rgba(0, 0, 0, 0.08);
 }
 
 html {
