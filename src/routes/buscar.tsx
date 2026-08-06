@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, retainSearchParams } from "@tanstack/react-router";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
@@ -8,6 +8,8 @@ import { SearchDashboard } from "@/components/search/SearchDashboard";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { SearchResultsList } from "@/components/search/SearchResultsList";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { SearchDiscovery } from "@/components/search/SearchDiscovery";
+import { motion, AnimatePresence } from "framer-motion";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -45,33 +47,75 @@ export const Route = createFileRoute("/buscar")({
 
 function SearchPage() {
   const search = Route.useSearch();
+  const navigate = useNavigate({ from: "/buscar" });
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handlePickQuery = (q: string) => {
+    navigate({ search: (prev) => ({ ...prev, q }), replace: !!search.q });
+  };
 
   return (
-    <IsolatedPage fit={!search.q} className="pc-search-scope">
-      <div className="flex min-h-svh flex-col bg-background">
+    <IsolatedPage fit={!search.q} className="pc-search-scope min-h-screen bg-[#F8F9FA] dark:bg-[#050E1B]">
+      <div className="flex min-h-svh flex-col">
         {/* Sticky Search Header */}
-        <header className="sticky top-0 z-50 border-b border-border/60 bg-background/95 backdrop-blur-xl">
-           <div className="mx-auto max-w-7xl px-4 py-3">
-             <PriceSearchBar initialQuery={search.q} />
+        <header className={`sticky top-0 z-50 transition-all duration-300 border-b border-border/40 ${
+          scrolled ? "bg-background/95 backdrop-blur-xl py-3 shadow-lg" : "bg-transparent py-4"
+        }`}>
+           <div className="mx-auto max-w-7xl px-4 flex items-center gap-4">
+             <PriceSearchBar 
+               initialQuery={search.q} 
+               onQueryChange={(q) => navigate({ search: (prev) => ({ ...prev, q }), replace: !!search.q })}
+               fitResults={false}
+             />
            </div>
         </header>
 
-        {search.q ? (
-          <main className="mx-auto w-full max-w-7xl px-4 py-6 space-y-8">
-            <SearchHeroSection query={search.q} />
-            <SearchDashboard />
-            <div className="grid grid-cols-1 md:grid-cols-[280px,1fr] gap-8">
-              <SearchFiltersPanel isOpen={filtersOpen} onToggle={() => setFiltersOpen(!filtersOpen)} />
-              <SearchResultsList />
-            </div>
-          </main>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-             {/* Home discovery state */}
-             <p className="text-muted-foreground">Comece buscando um produto...</p>
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {search.q ? (
+            <motion.main 
+              key="results"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mx-auto w-full max-w-7xl px-4 py-6 space-y-8"
+            >
+              <SearchHeroSection query={search.q} />
+              <SearchDashboard />
+              
+              <div className="flex flex-col md:grid md:grid-cols-[280px,1fr] gap-8">
+                <SearchFiltersPanel isOpen={filtersOpen} onToggle={() => setFiltersOpen(!filtersOpen)} />
+                <SearchResultsList />
+              </div>
+            </motion.main>
+          ) : (
+            <motion.main 
+              key="discovery"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex-1 flex flex-col items-center justify-center p-4 max-w-4xl mx-auto w-full"
+            >
+               <div className="w-full text-center space-y-4 mb-12">
+                 <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+                   Sua economia começa <span className="text-primary italic">aqui</span>.
+                 </h1>
+                 <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                   Compare preços em tempo real nos principais mercados de Feijó e economize de verdade.
+                 </p>
+               </div>
+               <div className="w-full bg-card border border-border/60 rounded-[40px] p-6 shadow-2xl">
+                 <SearchDiscovery onPickQuery={handlePickQuery} />
+               </div>
+            </motion.main>
+          )}
+        </AnimatePresence>
       </div>
     </IsolatedPage>
   );
