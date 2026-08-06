@@ -8,8 +8,8 @@
 :root {
   /* Colors */
   --pc-deep-navy: #05070A;
-  --pc-navy-surface: #0E121F;
-  --pc-navy-surface-elevated: #161C2E;
+  --pc-navy-surface: #0A0D14;
+  --pc-navy-surface-elevated: #101520;
   --pc-gold-primary: #FFD700;
   --pc-gold-dark: #B8860B;
   --pc-gold-glow: rgba(255, 215, 0, 0.25);
