@@ -260,24 +260,35 @@ function HomePage() {
                 const startX = e.pageX - el.offsetLeft;
                 const scrollLeft = el.scrollLeft;
                 let isDragging = false;
+                let startTime = Date.now();
 
-                const onMouseMove = (e: MouseEvent) => {
-                  e.preventDefault();
-                  const x = e.pageX - el.offsetLeft;
+                const onMouseMove = (moveEvent: MouseEvent) => {
+                  moveEvent.preventDefault();
+                  const x = moveEvent.pageX - el.offsetLeft;
                   const walk = (x - startX) * 2;
-                  if (Math.abs(walk) > 5) isDragging = true;
+                  if (Math.abs(walk) > 5) {
+                    isDragging = true;
+                    el.classList.add('is-dragging');
+                  }
                   el.scrollLeft = scrollLeft - walk;
                 };
 
-                const onMouseUp = (e: MouseEvent) => {
+                const onMouseUp = (upEvent: MouseEvent) => {
                   el.classList.remove('grabbing');
+                  el.classList.remove('is-dragging');
                   document.removeEventListener('mousemove', onMouseMove);
                   document.removeEventListener('mouseup', onMouseUp);
                   
-                  if (isDragging) {
-                    // Prevent click if we were dragging
-                    e.preventDefault();
-                    e.stopPropagation();
+                  // Simple velocity-based momentum could be added here if needed
+                  
+                  if (isDragging || (Date.now() - startTime > 200)) {
+                    // Prevent click if we dragged or held for too long
+                    const captureClick = (clickEvent: MouseEvent) => {
+                      clickEvent.stopPropagation();
+                      clickEvent.preventDefault();
+                      el.removeEventListener('click', captureClick, true);
+                    };
+                    el.addEventListener('click', captureClick, true);
                   }
                 };
 
@@ -301,8 +312,10 @@ function HomePage() {
                   data-category-item
                   data-label={label}
                   onClick={(e) => {
-                    if (e.currentTarget.parentElement?.classList.contains('grabbing')) {
+                    const container = e.currentTarget.parentElement;
+                    if (container?.classList.contains('is-dragging')) {
                       e.preventDefault();
+                      e.stopPropagation();
                     }
                   }}
                   onKeyDown={(e) => {
