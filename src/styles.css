@@ -38,25 +38,14 @@
 
 @theme {
   --pc-primary-rgb: 255 215 0;
+  
   --bg-base: var(--pc-deep-navy);
   --bg-surface: var(--pc-navy-surface);
   --bg-surface-elevated: var(--pc-navy-surface-elevated);
   --border-subtle: var(--pc-border-gold);
-
-  @variant light {
-    --bg-base: #F8F9FA;
-    --bg-surface: #FFFFFF;
-    --bg-surface-elevated: #F1F3F5;
-    --border-subtle: rgba(0, 0, 0, 0.08);
-  }
   
   --brand-primary: var(--pc-gold-primary);
   --brand-glow: var(--pc-gold-glow);
-
-  @variant light {
-    --brand-primary: #B8860B;
-    --brand-glow: rgba(184, 134, 11, 0.1);
-  }
   
   --success: #10B981;
   --danger: #EF4444;
@@ -66,14 +55,15 @@
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
 
-  @variant light {
-    --text-primary: #1A1A1A;
-    --text-secondary: #4A5568;
-    --text-tertiary: #718096;
-  }
-
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
+}
+
+:root[data-theme='light'] {
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A5568;
+  --text-tertiary: #718096;
+  --border-subtle: rgba(0, 0, 0, 0.08);
 }
 
 html {
