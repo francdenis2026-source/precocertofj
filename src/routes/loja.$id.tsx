@@ -394,7 +394,7 @@ function StorePage() {
 
 
 
-        <header className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <header className="pc-print-header relative mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           {/* Gradient banner */}
           <div className="relative h-20 bg-gradient-to-br from-primary/25 via-primary/10 to-accent/20">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/30),transparent_60%)]" />
