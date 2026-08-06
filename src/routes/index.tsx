@@ -376,10 +376,10 @@ function HomePage() {
           </section>
 
           {/* Grid Category Navigation */}
-          <section className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-[12px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Navegar por Categorias</h2>
-              <Link to="/buscar" className="text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver tudo</Link>
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Categorias Principais</h2>
+              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver catálogo completo</Link>
             </div>
             
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
