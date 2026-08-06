@@ -320,24 +320,24 @@ function HomePage() {
               />
             </div>
 
-            <div className="flex flex-wrap justify-center gap-3 mb-4">
+            <div className="flex flex-wrap justify-center gap-3 mb-2">
               <Button 
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/registrar" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5"
+                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
-                <PlusCircle className="h-4 w-4" />
-                Registrar Preço
+                <PlusCircle className="h-3.5 w-3.5" />
+                Registrar
               </Button>
               <Button 
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/app" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5"
+                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
-                <ArrowRight className="h-4 w-4" />
-                Painel do Cliente
+                <ArrowRight className="h-3.5 w-3.5" />
+                Painel
               </Button>
             </div>
           </motion.section>
