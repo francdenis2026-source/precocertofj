@@ -482,13 +482,13 @@ function HomePage() {
                     console.log("[Analytics] Banner Click: Registrar Agora");
                     navigate({ to: "/registrar" });
                   }}
-                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[var(--brand-secondary)] text-white dark:bg-[var(--brand-primary)] dark:text-[#0B1E3A] font-black uppercase tracking-widest text-[10px] sm:text-xs lg:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
+                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[var(--brand-primary)] text-[#0B1E3A] font-black uppercase tracking-widest text-[10px] sm:text-xs lg:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3">
                     Contar pra gente
                     <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
                   </span>
-                  <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-black/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </Button>
               </div>
               
