@@ -51,7 +51,7 @@ const NAV_LINKS = [
   { to: "/planos", label: "Planos" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true, forceCompact = false }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
   const pathname = useLocation({ select: (l) => l.pathname });
   // Na homepage não há "tela anterior" dentro do app: o Voltar não faz sentido.

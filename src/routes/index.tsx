@@ -193,7 +193,7 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
-      <SiteHeader variant="overlay" showThemeToggle forceCompact={isSearchFocused} />
+      <SiteHeader variant="overlay" showThemeToggle />
       
       {/* Backdrop for focused search */}
       {/* Backdrop for focused search - Removed fixed backdrop to prevent focus issues */}
