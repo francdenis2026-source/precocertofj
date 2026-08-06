@@ -43,8 +43,8 @@ export function BottomTabBar() {
       aria-label="Navegação principal"
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 md:hidden",
-        "border-t border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85",
-        "pb-[env(safe-area-inset-bottom)]",
+        "border-t border-border bg-[var(--bg-surface)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-surface)]/85",
+        "pb-[env(safe-area-inset-bottom)] transition-colors duration-300",
       )}
       style={{ boxShadow: "0 -6px 20px -12px rgb(0 0 0 / 0.25)" }}
     >

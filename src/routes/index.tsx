@@ -147,7 +147,7 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="overlay" showThemeToggle />
       
       {/* Professional Realism Background */}
@@ -157,9 +157,9 @@ function HomePage() {
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.1, scale: 1 }}
           transition={{ duration: 2 }}
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity" 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity dark:opacity-10 opacity-5" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/95 to-[var(--bg-base)] transition-colors duration-300" />
         <div 
           className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.08] blur-[120px]" 
           style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
@@ -191,10 +191,10 @@ function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-white/40 mx-1">·</span> Acre</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-[var(--text-tertiary)] mx-1">·</span> Acre</span>
             </motion.div>
             
-            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-white">
+            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
               Inteligência real para <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
             </h1>
@@ -205,9 +205,9 @@ function HomePage() {
                 value={q} 
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Busque por arroz, feijão, leite..." 
-                className="flex-1 bg-transparent px-5 text-lg font-medium outline-none placeholder:text-[var(--text-tertiary)]" 
+                className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                 Buscar
               </Button>
             </form>
@@ -353,13 +353,13 @@ function HomePage() {
                         background: `radial-gradient(circle at 50% 40%, ${color} 0%, transparent 70%)`,
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent transition-colors duration-300" />
                   </div>
 
                   <div className="relative z-10 w-full p-6 flex flex-col items-center">
                     <div className="relative mb-4">
                       {/* Icon Container with Glassmorphism */}
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl text-white group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
+                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] dark:bg-white/[0.03] border border-white/10 dark:border-white/10 backdrop-blur-xl text-[var(--text-primary)] group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white dark:group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
                         <Icon className="h-7 w-7 transition-transform duration-500 group-hover/card:rotate-6" />
                       </div>
                       <div 
@@ -369,7 +369,7 @@ function HomePage() {
                     </div>
                     
                     <div className="flex flex-col items-center gap-1.5">
-                      <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-white/70 group-hover/card:text-white transition-colors">{label}</span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] group-hover/card:text-[var(--text-primary)] transition-colors">{label}</span>
                       <div className="h-[2px] w-0 bg-[var(--brand-primary)] group-hover/card:w-8 transition-all duration-500 rounded-full" />
                     </div>
                   </div>

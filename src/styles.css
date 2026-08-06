@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+
 /**
  * Design Tokens - Deep Navy & Gold
  * --------------------------------
@@ -24,15 +26,37 @@
   --pc-shadow-gold: 0 12px 24px -8px var(--brand-glow);
 }
 
+:root[data-theme='light'] {
+  --pc-deep-navy: #F8F9FA;
+  --pc-navy-surface: #FFFFFF;
+  --pc-navy-surface-elevated: #F1F3F5;
+  --pc-gold-primary: #B8860B; /* Darker gold for better contrast on light */
+  --pc-gold-dark: #8B6914;
+  --pc-gold-glow: rgba(184, 134, 11, 0.15);
+  --pc-border-gold: rgba(184, 134, 11, 0.2);
+}
+
 @theme {
   --pc-primary-rgb: 255 215 0;
   --bg-base: var(--pc-deep-navy);
   --bg-surface: var(--pc-navy-surface);
   --bg-surface-elevated: var(--pc-navy-surface-elevated);
   --border-subtle: var(--pc-border-gold);
+
+  @variant light {
+    --bg-base: #F8F9FA;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #F1F3F5;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+  }
   
   --brand-primary: var(--pc-gold-primary);
   --brand-glow: var(--pc-gold-glow);
+
+  @variant light {
+    --brand-primary: #B8860B;
+    --brand-glow: rgba(184, 134, 11, 0.1);
+  }
   
   --success: #10B981;
   --danger: #EF4444;
@@ -41,6 +65,12 @@
   --text-primary: #FFFFFF;
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
+
+  @variant light {
+    --text-primary: #1A1A1A;
+    --text-secondary: #4A5568;
+    --text-tertiary: #718096;
+  }
 
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
