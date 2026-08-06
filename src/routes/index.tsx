@@ -46,6 +46,7 @@ import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
 import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Carousel,
   CarouselContent,
@@ -343,6 +344,7 @@ function HomePage() {
           </motion.section>
 
           {/* How It Works Section - More Compact */}
+          <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
           <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
               <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-50 flex items-center justify-center text-[var(--brand-primary)]">
@@ -374,6 +376,7 @@ function HomePage() {
               </div>
             </div>
           </section>
+          </Suspense>
 
           {/* Grid Category Navigation */}
           <section className="mb-12">
