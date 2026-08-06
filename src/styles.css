@@ -96,10 +96,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', 'Inter', sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 @utility section-title {

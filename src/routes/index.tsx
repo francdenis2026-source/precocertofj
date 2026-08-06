@@ -282,8 +282,8 @@ function HomePage() {
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-lg transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto",
-                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-xl shadow-none border-[var(--brand-primary)]/20 max-w-lg"
+                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-secondary)] focus-within:ring-4 focus-within:ring-[var(--brand-secondary)]/5 mx-auto",
+                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-lg shadow-none border-[var(--brand-secondary)]/20 max-w-lg"
                 )}
               >
                 <Search className={cn(
@@ -352,8 +352,8 @@ function HomePage() {
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
           <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-50 flex items-center justify-center text-[var(--brand-primary)]">
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-10 w-10 shrink-0 rounded-lg bg-red-50 flex items-center justify-center text-[var(--brand-primary)]">
                 <Search className="h-5 w-5" />
               </div>
               <div>
@@ -362,8 +362,8 @@ function HomePage() {
               </div>
             </div>
             
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500">
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-10 w-10 shrink-0 rounded-lg bg-indigo-50 flex items-center justify-center text-[var(--brand-secondary)]">
                 <TrendingDown className="h-5 w-5" />
               </div>
               <div>
@@ -372,8 +372,8 @@ function HomePage() {
               </div>
             </div>
             
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-green-50 flex items-center justify-center text-green-500">
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
+              <div className="h-10 w-10 shrink-0 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
                 <PlusCircle className="h-5 w-5" />
               </div>
               <div>
