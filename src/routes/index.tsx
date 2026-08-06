@@ -147,7 +147,7 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="overlay" showThemeToggle />
       
       {/* Professional Realism Background */}
@@ -157,9 +157,9 @@ function HomePage() {
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.1, scale: 1 }}
           transition={{ duration: 2 }}
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity" 
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity dark:opacity-10 opacity-5" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/95 to-[var(--bg-base)]" />
         <div 
           className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.08] blur-[120px]" 
           style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
@@ -194,7 +194,7 @@ function HomePage() {
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-white/40 mx-1">·</span> Acre</span>
             </motion.div>
             
-            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-white">
+            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
               Inteligência real para <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
             </h1>
@@ -205,9 +205,9 @@ function HomePage() {
                 value={q} 
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Busque por arroz, feijão, leite..." 
-                className="flex-1 bg-transparent px-5 text-lg font-medium outline-none placeholder:text-[var(--text-tertiary)]" 
+                className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                 Buscar
               </Button>
             </form>
