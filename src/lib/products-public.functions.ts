@@ -157,7 +157,7 @@ export const getRecentProducts = createServerFn({ method: "GET" })
     const limit = Math.min(Math.max(input?.limit ?? 6, 1), 24);
     return { limit };
   })
-  .handler(async ({ data }): Promise<RecentProduct[]> => {
+  .handler(async ({ data: { limit } }): Promise<RecentProduct[]> => {
     try {
       setResponseHeader(
         "cache-control",

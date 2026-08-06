@@ -169,7 +169,7 @@ function HomePage() {
   const recentProductsFn = useServerFn(getRecentProducts);
   const { data: rawRecentProducts } = useQuery({
     queryKey: ["home-live-prices"],
-    queryFn: () => recentProductsFn({ data: { limit: 12 } }),
+    queryFn: () => recentProductsFn({ limit: 12 }),
     staleTime: 60_000,
   });
 

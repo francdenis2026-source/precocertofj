@@ -17,6 +17,6 @@ export const getAppDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AppDashboardData> => {
     // Importación dinámica del helper de servidor para evitar fugas al cliente
-    const { fetchDashboardData } = await import("./dashboard.server");
+    const { fetchDashboardData } = await import("@/server/dashboard.server");
     return fetchDashboardData(context.supabase as any, context.userId);
   });
