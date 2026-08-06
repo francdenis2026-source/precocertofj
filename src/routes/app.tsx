@@ -45,13 +45,15 @@ function StatusPage() {
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <SiteHeader showThemeToggle />
       
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-12">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Status do Sistema</h1>
-          <p className="text-[var(--text-tertiary)]">
-            Acompanhe a cobertura de dados e atualizações em tempo real em Feijó.
+      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <header className="mb-12 relative">
+          <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-12 bg-[var(--brand-primary)] rounded-full hidden md:block" />
+          <h1 className="text-4xl font-black tracking-tight mb-3 font-[var(--font-display)]">Status da Rede</h1>
+          <p className="text-[var(--text-secondary)] text-lg max-w-2xl font-medium">
+            Acompanhe a cobertura de dados, novos cadastros e atualizações de preços em tempo real em Feijó.
           </p>
         </header>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Sidebar: Stores List */}
