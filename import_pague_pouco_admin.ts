@@ -51,7 +51,7 @@ const productsToImport = [
 ];
 
 async function importProducts() {
-  console.log(`Starting admin import for Pague Pouco (${establishmentId})...`);
+  console.log(`Starting clean admin import for Pague Pouco (${establishmentId})...`);
 
   for (const item of productsToImport) {
     // 1. Find or Create in Catalog
@@ -78,13 +78,29 @@ async function importProducts() {
         .single();
       
       if (insertError) {
-        console.error(`Error inserting into catalog ${item.name}:`, insertError);
-        continue;
+        // If it's a duplicate key, just fetch it
+        if (insertError.code === '23505') {
+           const { data: existing } = await supabase
+            .from('product_catalog')
+            .select('id')
+            .ilike('display_name', item.name)
+            .single();
+           productId = existing?.id;
+        } else {
+          console.error(`Error inserting into catalog ${item.name}:`, insertError);
+          continue;
+        }
+      } else {
+        productId = newItem.id;
+        console.log(`Created new catalog entry: ${item.name}`);
       }
-      productId = newItem.id;
-      console.log(`Created new catalog entry: ${item.name}`);
     } else {
       productId = catalogItems[0].id;
+    }
+
+    if (!productId) {
+       console.error(`Could not determine productId for ${item.name}`);
+       continue;
     }
 
     // 2. Insert Scan
