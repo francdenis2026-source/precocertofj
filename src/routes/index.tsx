@@ -329,12 +329,12 @@ function HomePage() {
           </section>
 
           {/* New Sections for Recent and Trending Products */}
-          <div className="mb-16">
+          <div className="mb-12">
             <RecentProductsCarousel />
           </div>
 
           {/* Live Prices Table */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
