@@ -7,7 +7,7 @@
  * navegador. Use `setSearchHistoryPersistence(true)` após confirmar a sessão.
  */
 const KEY = "precocerto:search-history:v1";
-const MAX_ITEMS = 8;
+const MAX_ITEMS = 15; // Increased for better history tracking
 
 export type SearchHistoryEntry = {
   query: string;
