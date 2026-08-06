@@ -853,6 +853,7 @@ function ProductRow({
           to="/loja/$id/produto/$slug"
           params={{ id: storeId, slug: p.slug }}
           search={{ q: "" }}
+
           className="flex min-w-0 flex-1 flex-col justify-center"
         >
           <p className="truncate text-[13px] font-semibold leading-tight text-foreground">
@@ -940,6 +941,7 @@ function FeaturedCard({
         to="/loja/$id/produto/$slug"
         params={{ id: storeId, slug: p.slug }}
         search={{ q: "" }}
+
         className="grid h-[92px] w-full shrink-0 place-items-center overflow-hidden bg-gradient-to-br from-primary/10 via-surface to-accent/10"
       >
         {p.imageUrl ? (

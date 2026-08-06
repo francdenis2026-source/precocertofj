@@ -13,14 +13,13 @@ export const downloadFullDatabase = createServerFn({ method: "POST" })
       .select('role')
       .eq('user_id', context.userId)
       .eq('role', 'admin')
-      .single();
+      .maybeSingle();
 
     if (!roleData) {
       throw new Error("Acesso negado: Apenas administradores podem baixar o banco de dados.");
     }
 
     // Fetch core tables
-    // Use 'as any' for tables not yet in the generated types or if there's a mismatch
     const [establishments, products, scans, categories] = await Promise.all([
       supabaseAdmin.from("establishments").select("*"),
       supabaseAdmin.from("product_catalog" as any).select("*"),
