@@ -1960,9 +1960,6 @@ function ProductCardBase({
           <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
         </div>
       </button>
-
-
-
       </TeaserCard>
     </li>
   );
@@ -1970,4 +1967,5 @@ function ProductCardBase({
 
 // Memoizado: evita re-render de todos os cards a cada tecla/filtro no mobile.
 const ProductCard = memo(ProductCardBase);
+
 
