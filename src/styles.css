@@ -77,3 +77,11 @@ body {
 @utility badge-gold {
   @apply inline-flex items-center rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 px-2.5 py-0.5 text-xs font-bold text-[var(--brand-primary)];
 }
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
