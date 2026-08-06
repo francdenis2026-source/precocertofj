@@ -309,7 +309,7 @@ function HomePage() {
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                  placeholder="O que você deseja economizar hoje?" 
+                  placeholder="O que você quer comprar mais barato hoje?" 
                   className={cn(
                     "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
                     isScrolled && "text-[13px] px-3"
@@ -533,7 +533,7 @@ function HomePage() {
                       )}
                     >
                       <Clock className="h-3 w-3" />
-                      Recentes
+                      Mais novos
                     </button>
                     <button 
                       onClick={() => setSort("price")}
@@ -543,7 +543,7 @@ function HomePage() {
                       )}
                     >
                       <TrendingDown className="h-3 w-3" />
-                      Menor Preço
+                      Baratos
                     </button>
                     <button 
                       onClick={() => setSort("near")}
@@ -553,7 +553,7 @@ function HomePage() {
                       )}
                     >
                       <MapPin className="h-3 w-3" />
-                      Perto
+                      Mais pertinho
                     </button>
                   </div>
                 </div>
