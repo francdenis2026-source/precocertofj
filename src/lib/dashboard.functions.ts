@@ -20,10 +20,10 @@ export const getAppDashboard = createServerFn({ method: "GET" })
     // but for now, reusing existing functions ensures consistency.
     
     const [stats, scans, favorites, alerts] = await Promise.all([
-      getMyProfileStats(),
-      listMyScans(),
-      listFavoriteItems(),
-      listPriceAlerts(),
+      getMyProfileStats.fetcher(undefined, context),
+      listMyScans.fetcher(undefined, context),
+      listFavoriteItems.fetcher(undefined, context),
+      listPriceAlerts.fetcher(undefined, context),
     ]);
 
     return {
