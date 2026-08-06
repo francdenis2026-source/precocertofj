@@ -965,7 +965,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-5 grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/70 p-1"
+      className="mt-5 grid grid-cols-2 gap-1 rounded-2xl border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--bg-base)_55%,transparent)] p-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.25)]"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -977,15 +977,20 @@ function TabSwitch({
             aria-selected={active}
             onClick={() => onChange(t.key)}
             className={
-              "relative h-9 rounded-lg text-[12.5px] font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
-              (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
+              "relative h-10 rounded-xl text-[13px] font-bold tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
+              (active ? "text-[#0B1E3A]" : "text-muted-foreground hover:text-foreground")
             }
           >
             {active && (
               <motion.span
                 layoutId="login-tab-pill"
                 transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                className="absolute inset-0 rounded-lg bg-card shadow-sm ring-1 ring-border"
+                className="absolute inset-0 rounded-xl"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #F2D98B 0%, var(--brand-primary) 100%)",
+                  boxShadow: "0 6px 16px -8px var(--brand-glow)",
+                }}
               />
             )}
             <span className="relative">{t.label}</span>
