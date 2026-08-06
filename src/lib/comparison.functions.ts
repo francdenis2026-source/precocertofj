@@ -1,38 +1,69 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-export const getPriceComparison = createServerFn({ method: "GET" })
+export const getStoreComparisonStats = createServerFn({ method: "GET" })
   .inputValidator(z.object({
-    storeA: z.string(),
-    storeB: z.string(),
+    storeAId: z.string(),
+    storeBId: z.string(),
   }))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Fetch latest scans for both stores
-    const [scansA, scansB] = await Promise.all([
-      supabaseAdmin.from("scans").select("product_name, price_captured").eq("establishment_id", data.storeA).eq("status", "salvo"),
-      supabaseAdmin.from("scans").select("product_name, price_captured").eq("establishment_id", data.storeB).eq("status", "salvo"),
+    // Get latest scans for both stores to find overlapping products
+    const [scansARes, scansBRes] = await Promise.all([
+      supabaseAdmin
+        .from("scans")
+        .select("product_name, price_captured, unit")
+        .eq("establishment_id", data.storeAId)
+        .eq("status", "salvo")
+        .not("price_captured", "is", null),
+      supabaseAdmin
+        .from("scans")
+        .select("product_name, price_captured, unit")
+        .eq("establishment_id", data.storeBId)
+        .eq("status", "salvo")
+        .not("price_captured", "is", null),
     ]);
 
-    const productsA = scansA.data || [];
-    const productsB = scansB.data || [];
+    const scansA = scansARes.data || [];
+    const scansB = scansBRes.data || [];
 
-    // Map by normalized name
-    const mapB = new Map(productsB.map(p => [p.product_name?.toLowerCase().trim(), p.price_captured]));
+    // Simple normalization for matching
+    const normalize = (s: string) => s.toLowerCase().trim();
     
-    const comparison = productsA.map(p => {
-      const name = p.product_name?.toLowerCase().trim();
-      const priceB = name ? mapB.get(name) : null;
-      if (priceB === undefined || priceB === null) return null;
-      
-      return {
-        name: p.product_name,
-        priceA: p.price_captured,
-        priceB: priceB,
-        cheaperIn: p.price_captured! < priceB ? 'A' : p.price_captured! > priceB ? 'B' : 'Equal'
-      };
-    }).filter(Boolean);
+    const mapB = new Map();
+    scansB.forEach(s => {
+      if (s.product_name) mapB.set(normalize(s.product_name), s.price_captured);
+    });
 
-    return comparison;
+    const common = [];
+    let cheaperA = 0;
+    let cheaperB = 0;
+    let equal = 0;
+
+    for (const sA of scansA) {
+      if (!sA.product_name) continue;
+      const priceB = mapB.get(normalize(sA.product_name));
+      if (priceB !== undefined) {
+        const pA = Number(sA.price_captured);
+        const pB = Number(priceB);
+        common.push({
+          name: sA.product_name,
+          unit: sA.unit,
+          priceA: pA,
+          priceB: pB
+        });
+        if (pA < pB) cheaperA++;
+        else if (pB < pA) cheaperB++;
+        else equal++;
+      }
+    }
+
+    return {
+      totalCompared: common.length,
+      cheaperA,
+      cheaperB,
+      equal,
+      items: common.slice(0, 50) // Limit for UI performance
+    };
   });
