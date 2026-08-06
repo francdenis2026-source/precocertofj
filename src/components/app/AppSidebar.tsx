@@ -263,13 +263,12 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="pcsb-group" data-tone={group.tone ?? "brand"}>
-      <SidebarGroupLabel className="pcsb-grouplabel group-data-[collapsible=icon]:hidden">
-        <span>{group.label}</span>
-        <span aria-hidden className="pcsb-grouprule" />
+    <SidebarGroup key={group.label} className="pcsb-group px-2" data-tone={group.tone ?? "brand"}>
+      <SidebarGroupLabel className="pcsb-grouplabel group-data-[collapsible=icon]:hidden mb-1 px-4">
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">{group.label}</span>
       </SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu className="gap-[3px]">
+        <SidebarMenu className="gap-1">
           {group.items.map((n) => {
             const active = isActive(n);
             const key = `${n.to}?${n.search?.tab ?? ""}#${n.label}`;
@@ -278,7 +277,12 @@ export function AppSidebar() {
                 asChild
                 isActive={active}
                 data-active={active ? "true" : "false"}
-                className="pcsb-row"
+                className={cn(
+                  "pcsb-row group/row h-10 px-3 rounded-xl transition-all duration-300",
+                  active 
+                    ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" 
+                    : "hover:bg-[var(--bg-surface-elevated)]"
+                )}
               >
                 <Link
                   to={n.to}
@@ -287,12 +291,18 @@ export function AppSidebar() {
                   title={compact ? n.label : undefined}
                   aria-current={active ? "page" : undefined}
                   aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
+                  className="flex items-center gap-3 w-full"
                 >
-                  <span aria-hidden className="pcsb-rail" />
-                   <span aria-hidden className="pcsb-ico">
-                     <n.icon className="h-5 w-5" strokeWidth={active ? 2.2 : 1.8} />
+                   <span className={cn(
+                     "pcsb-ico flex items-center justify-center h-8 w-8 rounded-lg transition-all duration-300",
+                     active ? "bg-[var(--brand-primary)] text-[var(--brand-secondary)] shadow-lg" : "text-[var(--text-tertiary)] group-hover/row:text-[var(--text-primary)] group-hover/row:scale-110"
+                   )}>
+                     <n.icon className="h-4.5 w-4.5" strokeWidth={active ? 2.5 : 2} />
                    </span>
-                  <span className="pcsb-label">{n.label}</span>
+                  <span className={cn(
+                    "pcsb-label font-bold text-[13px] tracking-tight group-data-[collapsible=icon]:hidden transition-colors",
+                    active ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)] group-hover/row:text-[var(--text-primary)]"
+                  )}>{n.label}</span>
                   {n.shortcut && (
                     <kbd aria-hidden className="pcsb-kbd">
                       {n.shortcut}

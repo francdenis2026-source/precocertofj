@@ -44,9 +44,9 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
           )}
           <AppHeader scope={resolvedScope} />
           {isAdminScope ? (
-            <AutoAdminBreadcrumb className="border-b border-border/60 bg-card/40 px-4 py-2 backdrop-blur-sm" />
+            <AutoAdminBreadcrumb className="border-b border-border/40 bg-[var(--bg-surface)]/80 px-4 py-2.5 backdrop-blur-md" />
           ) : (
-            <AppBreadcrumb className="shrink-0 border-b border-border/60 bg-card/40 px-3 py-1 backdrop-blur-sm md:px-6" />
+            <AppBreadcrumb className="shrink-0 border-b border-border/40 bg-[var(--bg-surface)]/80 px-5 py-2 backdrop-blur-md md:px-8" />
           )}
 
           <main

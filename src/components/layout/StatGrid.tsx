@@ -34,7 +34,7 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
           <div
             key={i}
             className={cn(
-              "rounded-[var(--pc-radius)] border p-5 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] hover:shadow-[var(--pc-shadow-md)] hover:-translate-y-0.5",
+              "rounded-[20px] border p-6 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-1 group",
               toneMap[s.tone ?? "default"],
             )}
           >
