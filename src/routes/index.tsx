@@ -259,8 +259,8 @@ function HomePage() {
             </div>
 
             
-            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
-              Inteligência Real para Economizar
+            <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
+              Preço Inteligente, Economia Garantida.
             </h1>
 
             <div className="relative w-full max-w-2xl">
