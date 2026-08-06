@@ -61,12 +61,12 @@ export function Logo({
           {showTagline && (
             <span
               className={cn(
-                "mt-1 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.28em]",
+                "mt-1 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.28em]",
                 isDark
-                  ? "text-white/60"
+                  ? "text-white/80"
                   : onLight
-                    ? "text-[#41506b]"
-                    : "text-muted-foreground",
+                    ? "text-[#2d3a4f]"
+                    : "text-foreground",
               )}
             >
               <span

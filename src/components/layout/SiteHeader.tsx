@@ -125,15 +125,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               )}
             >
               Preço<span className="text-[var(--brand-primary)]">Certo</span>
-              <svg viewBox="0 0 24 24" className="ml-1.5 h-3 w-3 text-[var(--brand-primary)] inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg>
             </span>
             <span
               className={dsx(
-                "text-[12px] font-medium uppercase tracking-[0.06em] mt-1 antialiased opacity-40",
+                "text-[12px] font-bold uppercase tracking-[0.06em] mt-1 antialiased",
                 subTextClass,
               )}
             >
-              Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)] opacity-100">Acre</span>
+              Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)]">Acre</span>
             </span>
           </div>
         </Link>
