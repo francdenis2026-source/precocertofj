@@ -327,16 +327,6 @@ function HomePage() {
               ))}
             </div>
           </section>
-                {CATEGORIES.map(({ slug, label, Icon, color }) => (
-                  <CarouselItem 
-                    key={slug} 
-                    className="pl-4 basis-[45%] sm:basis-[30%] md:basis-[22%] lg:basis-[18%] xl:basis-[15%] snap-start"
-                  >
-                    <Link 
-                      to="/categoria/$slug" 
-                      params={{ slug: slug as any }}
-                      data-category-item
-                      data-label={label}
 
           {/* New Sections for Recent and Trending Products */}
           <div className="mb-16">
