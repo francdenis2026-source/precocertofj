@@ -10,19 +10,26 @@
 }
 
 /**
- * Design Tokens - Deep Navy & Gold
+ * Design Tokens - Identidade Visual Varejão Contamigos
  * --------------------------------
- * A high-end professional palette for utility and reliability.
  */
 :root {
-  /* Colors - Light Mode (Off-White & Indigo Base) */
-  --pc-bg-base: #F9FAFB;
+  /* Cores da Logomarca */
+  --pc-brand-red: #E63946;    /* Vermelho Contamigos */
+  --pc-brand-blue: #0B1E3A;   /* Azul Marinho Contamigos */
+  --pc-brand-white: #FFFFFF;  /* Branco Puro */
+  
+  /* Colors - Light Mode */
+  --pc-bg-base: #F8FAFC;
   --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F3F4F6;
-  --pc-brand-primary: #EE4444; /* Nexus-like Red/Orange accent - adapting to price alerts */
-  --pc-brand-secondary: #6366F1; /* Indigo for stability */
-  --pc-brand-glow: rgba(238, 68, 68, 0.08);
-  --pc-border-subtle: rgba(0, 0, 0, 0.05);
+  --pc-bg-surface-elevated: #F1F5F9;
+  
+  --pc-brand-primary: var(--pc-brand-red);
+  --pc-brand-secondary: var(--pc-brand-blue);
+  --pc-brand-accent: #F4A261;
+  
+  --pc-brand-glow: rgba(230, 57, 70, 0.08);
+  --pc-border-subtle: rgba(11, 30, 58, 0.06);
   --pc-text-primary: #0F172A;
   --pc-text-secondary: #475569;
   --pc-text-tertiary: #94A3B8;
@@ -34,26 +41,28 @@
   --border-subtle: var(--pc-border-subtle);
   --brand-primary: var(--pc-brand-primary);
   --brand-secondary: var(--pc-brand-secondary);
+  --brand-accent: var(--pc-brand-accent);
   --brand-glow: var(--pc-brand-glow);
   --text-primary: var(--pc-text-primary);
   --text-secondary: var(--pc-text-secondary);
   --text-tertiary: var(--pc-text-tertiary);
 
   /* Radius & Shadows */
-  --pc-radius: 12px;
-  --pc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --pc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --pc-radius: 14px;
+  --pc-shadow-sm: 0 1px 3px rgba(11, 30, 58, 0.05);
+  --pc-shadow-md: 0 8px 20px -4px rgba(11, 30, 58, 0.08);
+  --pc-shadow-lg: 0 20px 40px -8px rgba(11, 30, 58, 0.12);
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #0B0E14;
-  --pc-bg-surface: #141923;
-  --pc-bg-surface-elevated: #1D2432;
-  --pc-brand-primary: #F87171; /* Softer red for dark mode */
-  --pc-brand-secondary: #818CF8;
-  --pc-brand-glow: rgba(248, 113, 113, 0.15);
-  --pc-border-subtle: rgba(255, 255, 255, 0.06);
+  --pc-bg-base: #05080F;
+  --pc-bg-surface: #0B1220;
+  --pc-bg-surface-elevated: #161F30;
+  --pc-brand-primary: #FF4D5A;
+  --pc-brand-secondary: #E2E8F0;
+  --pc-brand-accent: #FFB347;
+  --pc-brand-glow: rgba(255, 77, 90, 0.15);
+  --pc-border-subtle: rgba(255, 255, 255, 0.04);
   --pc-text-primary: #F8FAFC;
   --pc-text-secondary: #94A3B8;
   --pc-text-tertiary: #64748B;
@@ -61,12 +70,13 @@
 
 @theme {
   --bg-base: var(--bg-base);
-  --bg-surface: var(--pc-bg-surface);
+  --bg-surface: var(--bg-surface);
   --bg-surface-elevated: var(--bg-surface-elevated);
   --border-subtle: var(--border-subtle);
   
   --brand-primary: var(--brand-primary);
   --brand-secondary: var(--brand-secondary);
+  --brand-accent: var(--brand-accent);
   --brand-glow: var(--brand-glow);
   
   --success: #10B981;
@@ -78,7 +88,7 @@
   --text-tertiary: var(--text-tertiary);
 
   --font-display: "Outfit", "Space Grotesk", sans-serif !important;
-  --font-body: "DM Sans", "Inter", sans-serif;
+  --font-body: "DM Sans", "Inter", sans-serif !important;
 }
 
 html {
@@ -103,7 +113,7 @@ body {
 }
 
 h1, h2, h3, h4, .font-display {
-  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  font-family: var(--font-display);
   letter-spacing: -0.02em;
 }
 
