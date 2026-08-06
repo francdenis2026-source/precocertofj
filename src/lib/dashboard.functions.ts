@@ -1,5 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { ProfileStats } from "./profile-stats.functions";
+import type { FavoriteItem } from "./favorites.functions";
+import type { MyScan } from "./scans-history.functions";
+import type { PriceAlert } from "./notifications.functions";
+
 
 export type AppDashboardData = {
   stats: {
