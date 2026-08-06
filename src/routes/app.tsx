@@ -1,421 +1,249 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef, useState } from "react";
-import { ArrowRight, Bell, Loader2, ShoppingCart, Star, TrendingDown, Wallet } from "lucide-react";
-
-import { AppShell } from "@/components/brand/AppShell";
-import { ProtectedGate } from "@/components/auth/ProtectedGate";
-import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
-import type { PublicStore } from "@/lib/stores-public.functions";
-import { QuickStoreCompare } from "@/components/app/QuickStoreCompare";
-
-import { DashboardSearch } from "@/components/app/DashboardSearch";
-import { StoresColumn } from "@/components/app/StoresColumn";
-import { FavoritesDock } from "@/components/app/FavoritesDock";
-
-import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
-import { MetricRailSkeleton, PanelBlockSkeleton, StalledNotice } from "@/components/app/PanelSkeletons";
-import { ErrorState } from "@/components/feedback";
+import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { listPublicStores, getPublicStoreCatalog } from "@/lib/stores-public.functions";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Search, Store, Clock, Package, ChevronRight, Filter } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Price } from "@/components/ds/Price";
-import { useAppHomeData } from "@/hooks/useAppHomeData";
-import { useMeasuredBar } from "@/hooks/use-measured-bar";
-import { useStalled } from "@/hooks/use-stalled";
-import { useWheelScrollForward } from "@/hooks/use-wheel-scroll-forward";
-import { cn } from "@/lib/utils";
-import { tc } from "@/lib/typeclear";
-
-
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app")({
+  loader: async () => {
+    return {
+      stores: await listPublicStores(),
+    };
+  },
   head: () => ({
     meta: [
-      { title: "Meu painel — PreçoCerto Feijó" },
-      {
-        name: "description",
-        content:
-          "Painel do cliente PreçoCerto: compare preços dos mercados de Feijó, acompanhe favoritos e monte listas mais baratas.",
-      },
-      { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Meu painel — PreçoCerto Feijó" },
-      {
-        property: "og:description",
-        content: "Compare preços, acompanhe favoritos e organize suas listas no painel PreçoCerto.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { title: "Status do Sistema | PreçoCerto" },
+      { name: "description", content: "Status de atualização e catálogo de produtos por estabelecimento." }
     ],
   }),
-  component: AppHome,
+  component: StatusPage,
 });
 
-function AppHome() {
-  return (
-    <ProtectedGate>
-      <AppHomeContent />
-    </ProtectedGate>
-  );
-}
+function StatusPage() {
+  const { stores } = useLoaderData({ from: "/app" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
 
-function AppHomeContent() {
-  const {
-    summaryQuery,
-    accountQuery,
-    listsQuery,
-    storesByName,
-    publicStoresQuery,
-    mutations: { removeItem, removeMarket, reorderItems, reorderMarkets, addToList },
-  } = useAppHomeData();
-
-  const [selectedStore, setSelectedStore] = useState<PublicStore | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [comparisonOpen, setComparisonOpen] = useState(false);
-  // Guarda o gatilho para devolver o foco ao fechar o drawer (WCAG 2.4.3).
-  const drawerTriggerRef = useRef<HTMLElement | null>(null);
-
-  const openStoreByName = (name: string) => {
-    const store = storesByName.get(name.trim().toLowerCase());
-    if (!store) return;
-    drawerTriggerRef.current = document.activeElement as HTMLElement | null;
-    setSelectedStore(store);
-    setDrawerOpen(true);
-  };
-
-  const handleDrawerOpenChange = (open: boolean) => {
-    setDrawerOpen(open);
-    if (!open) drawerTriggerRef.current?.focus?.();
-  };
-
-  const firstName = (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
-  // Altura real da faixa "Meu painel" publicada em --pc-panelbar-h, para que
-  // a grade abaixo se ajuste sem sobreposição em qualquer largura.
-  const panelBarRef = useMeasuredBar<HTMLElement>("--pc-panelbar-h");
-
-  const summary = summaryQuery.data;
-  const loading = summaryQuery.isLoading;
-  const summaryStalled = useStalled(loading && !summaryQuery.data);
-
-
-  const potentialSavings = (summary?.lists ?? []).reduce(
-    (acc, l) => acc + (l.potentialSavings ?? 0),
-    0,
-  );
-  const estimatedTotal = summary?.totals.estimatedCartTotal ?? 0;
-  const savingsRate = estimatedTotal > 0 ? Math.min(100, (potentialSavings / estimatedTotal) * 100) : 0;
-  const savingsHint =
-    potentialSavings <= 0
-      ? "adicione itens para estimar"
-      : savingsRate >= 20
-        ? `até ${Math.round(savingsRate)}% nas listas ativas`
-        : savingsRate >= 5
-          ? `${Math.round(savingsRate)}% estimados nas listas`
-          : "estimativa das listas ativas";
-
-  const moveItem = (ids: string[], idx: number, dir: -1 | 1) => {
-    const next = swap(ids, idx, dir);
-    if (next) reorderItems.mutate(next);
-  };
-  const moveMarket = (ids: string[], idx: number, dir: -1 | 1) => {
-    const next = swap(ids, idx, dir);
-    if (next) reorderMarkets.mutate(next);
-  };
-
-  const storeNameSet = new Set(storesByName.keys());
-
-  /** Roda do mouse sobre cabeçalhos/cards rola o painel interno mais próximo. */
-  const wheelRootRef = useWheelScrollForward<HTMLDivElement>();
+  const filteredStores = useMemo(() => {
+    return stores.filter((s: any) => 
+      s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.city.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [stores, searchTerm]);
 
   return (
-    <AppShell>
-      <div className="relative z-10 app-dashboard pc-page" ref={wheelRootRef}>
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute inset-0 bg-[var(--bg-base)]" />
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-[0.05] mix-blend-luminosity" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
-        </div>
-        <p className="sr-only">
-          Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
-          os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
-          abas de favoritos, Alt mais setas troca de página e Esc fecha menus e painéis abertos.
-        </p>
-        {/* Bloco único: saudação + ações + métricas */}
-
-        <header
-          ref={panelBarRef}
-          data-testid="panel-band"
-          className="overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 shadow-2xl backdrop-blur-xl"
-        >
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#B8860B] px-3 py-2 text-black md:px-4 md:py-2.5">
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl"
-            />
-            <div className="relative flex min-w-0 items-baseline gap-2">
-              <p className={cn(tc.eyebrow, "hidden shrink-0 text-black/60 sm:block")}>Meu painel</p>
-              <h1 className="font-display truncate whitespace-nowrap text-[16px] font-bold leading-tight tracking-[-0.02em] text-black md:text-[18px]">
-                Olá, {firstName}
-              </h1>
-            </div>
-            <div className="relative flex shrink-0 items-center gap-1.5">
-
-              {loading && (
-                <Loader2
-                  className="h-4 w-4 animate-spin text-black/70"
-                  aria-label="Atualizando preços"
-                />
-              )}
-              <Link
-                to="/alertas"
-                aria-label="Alertas de preço"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-black/30 bg-black/10 px-3 text-[12.5px] font-medium text-black transition hover:bg-black/20"
-              >
-                <Bell className="h-4 w-4" aria-hidden />
-                <span className="hidden md:inline">Alertas</span>
-              </Link>
-              <button
-                onClick={() => setComparisonOpen(true)}
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-black/30 bg-black/10 px-3 text-[12.5px] font-medium text-black transition hover:bg-black/20"
-              >
-                <TrendingDown className="h-4 w-4" aria-hidden />
-                <span className="hidden md:inline">Comparar Lojas</span>
-              </button>
-              <Link
-                to="/lista/nova"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-black px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-black/90"
-              >
-                Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
-              <span className="hidden lg:inline-flex">
-                <ForceUpdateButton />
-              </span>
-            </div>
-          </div>
-
-          {/* Métricas do banco */}
-          {summaryQuery.isError ? (
-            <div className="p-3.5 md:p-4">
-              <ErrorState
-                title="Não foi possível carregar seu painel"
-                message="A conexão falhou ao buscar suas listas e favoritos."
-                onRetry={() => void summaryQuery.refetch()}
-              />
-            </div>
-          ) : !summary && loading ? (
-            <>
-              <MetricRailSkeleton />
-              {summaryStalled && (
-                <div className="px-3.5 pb-3 md:px-4">
-                  <StalledNotice onRetry={() => void summaryQuery.refetch()} />
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="grid grid-cols-1 divide-y divide-[var(--border-subtle)] min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0">
-              <Metric
-                icon={ShoppingCart}
-                label="Suas listas"
-                value={summary ? String(summary.totals.listsCount) : "—"}
-                hint={
-                  !summary
-                    ? "sem dados por enquanto"
-                    : summary.totals.listsCount === 0
-                      ? "crie sua primeira lista"
-                      : `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
-                }
-                tone="primary"
-                to="/lista"
-              />
-              <Metric
-                icon={Star}
-                label="Favoritos"
-                value={summary ? String(summary.totals.favoritesCount) : "—"}
-                hint={
-                  summary && summary.totals.favoritesCount === 0
-                    ? "favorite produtos para acompanhar"
-                    : "preços acompanhados por você"
-                }
-                tone="brand"
-                to="/favoritos"
-              />
-              <Metric
-                icon={TrendingDown}
-                label="Cesta mais barata"
-                value={
-                  summary?.totals.estimatedCartTotal ? (
-                    <Price value={summary.totals.estimatedCartTotal} size="sm" />
-                  ) : (
-                    "—"
-                  )
-                }
-                hint={
-                  summary?.totals.estimatedCartMarket
-                    ? `hoje em ${summary.totals.estimatedCartMarket}`
-                    : "favorite produtos para calcular"
-                }
-                tone="savings"
-                to="/app/produtos"
-              />
-
-              <Metric
-                icon={Wallet}
-                label="Economia potencial"
-                value={
-                  potentialSavings > 0 ? (
-                    <Price value={potentialSavings} size="sm" tone="savings" />
-                  ) : (
-                    "—"
-                  )
-                }
-                hint={savingsHint}
-                tone="savings"
-              />
-            </div>
-          )}
-
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+      <SiteHeader showThemeToggle />
+      
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <header className="mb-12">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Status do Sistema</h1>
+          <p className="text-[var(--text-tertiary)]">
+            Acompanhe a cobertura de dados e atualizações em tempo real em Feijó.
+          </p>
         </header>
 
-        {/* Grade responsiva: busca | lojas | favoritos.
-            Mobile: 1 coluna · Tablet: 2 colunas (busca ocupa a linha toda)
-            Desktop: 12 colunas — todas com a mesma altura e rolagem interna. */}
-        <div className="pc-grid">
-          <div className="pc-col md:col-span-2 xl:col-span-6">
-            <DashboardSearch />
-          </div>
-
-          <div className="pc-col xl:col-span-3">
-            <StoresColumn
-              stores={publicStoresQuery.data ?? []}
-              loading={publicStoresQuery.isLoading}
-              onOpenDetails={openStoreByName}
-              storeNames={storeNameSet}
-            />
-          </div>
-
-          <div className="pc-col xl:col-span-3">
-            {summary ? (
-              <FavoritesDock
-                summary={summary}
-                lists={listsQuery.data ?? []}
-                storeNames={storeNameSet}
-                loading={loading}
-                onOpenStore={openStoreByName}
-                onMoveItem={moveItem}
-                onRemoveItem={(id) => removeItem.mutate(id)}
-                onAddToList={(input) => addToList.mutate(input)}
-                onMoveMarket={moveMarket}
-                onRemoveMarket={(id) => removeMarket.mutate(id)}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sidebar: Stores List */}
+          <aside className="lg:col-span-4 space-y-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)]" />
+              <Input 
+                placeholder="Buscar estabelecimento..." 
+                className="pl-10 bg-[var(--bg-surface)] border-[var(--border-subtle)]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-            ) : summaryQuery.isError ? (
-              <ErrorState
-                title="Favoritos indisponíveis"
-                message="Não conseguimos carregar seus favoritos agora."
-                onRetry={() => void summaryQuery.refetch()}
-                className="h-full"
-              />
+            </div>
+
+            <div className="space-y-3">
+              {filteredStores.map((store: any) => (
+                <button
+                  key={store.id}
+                  onClick={() => setSelectedStoreId(store.id)}
+                  className={`w-full text-left p-4 rounded-xl border transition-all ${
+                    selectedStoreId === store.id 
+                      ? "bg-[var(--brand-primary)]/10 border-[var(--brand-primary)] shadow-sm" 
+                      : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/30"
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-sm">{store.name}</h3>
+                    <Badge variant="secondary" className="text-[10px] font-bold">
+                      {store.productCount} itens
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider">
+                    <Clock className="h-3 w-3" />
+                    <span>Feijó, {store.state}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </aside>
+
+          {/* Main Content: Store Details / Catalog */}
+          <section className="lg:col-span-8">
+            {selectedStoreId ? (
+              <StoreCatalog storeId={selectedStoreId} />
             ) : (
-              <PanelBlockSkeleton label="Carregando favoritos" />
+              <div className="h-full flex flex-col items-center justify-center py-20 bg-[var(--bg-surface)] rounded-3xl border border-dashed border-[var(--border-subtle)] text-center px-6">
+                <Store className="h-12 w-12 text-[var(--text-tertiary)] mb-4 opacity-20" />
+                <h2 className="text-xl font-bold mb-2">Selecione um estabelecimento</h2>
+                <p className="text-[var(--text-tertiary)] max-w-xs mx-auto text-sm">
+                  Escolha um mercado na lista ao lado para ver o catálogo completo de produtos e status de atualização.
+                </p>
+              </div>
             )}
-
-          </div>
+          </section>
         </div>
-      </div>
-
-      <StoreDetailsDrawer
-        store={selectedStore}
-        open={drawerOpen}
-        onOpenChange={handleDrawerOpenChange}
-      />
-
-      {comparisonOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-200">
-          <div className="w-full max-w-lg">
-            <QuickStoreCompare
-              storeAId="5c71b8fb-4fe2-4f65-8bd0-80726d92a243"
-              storeAName="Doce Dia"
-              storeBId="eb1e6277-db89-4e94-950e-d14540ce71c6"
-              storeBName="Pague Pouco"
-              onClose={() => setComparisonOpen(false)}
-            />
-          </div>
-        </div>
-      )}
-    </AppShell>
+      </main>
+    </div>
   );
 }
 
-type MetricTone = "primary" | "brand" | "savings" | "warning";
+function StoreCatalog({ storeId }: { storeId: string }) {
+  const getCatalog = useServerFn(getPublicStoreCatalog);
+  const [productSearch, setProductSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-const METRIC_TONES: Record<MetricTone, { chip: string; rail: string }> = {
-  primary: { chip: "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/10", rail: "bg-[var(--brand-primary)]" },
-  brand: { chip: "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20", rail: "bg-[var(--brand-primary)]" },
-  savings: { chip: "bg-[var(--success)]/15 text-[var(--success)]", rail: "bg-[var(--success)]" },
-  warning: { chip: "bg-[var(--warning)]/20 text-[var(--warning)]", rail: "bg-[var(--warning)]" },
-};
+  const { data, isLoading } = useQuery({
+    queryKey: ["store-catalog", storeId],
+    queryFn: () => getCatalog({ data: { id: storeId } }),
+  });
 
-/**
- * Célula de métrica dentro da faixa única do topo do painel.
- * Proporção: rótulo pequeno, número em destaque, apoio discreto.
- */
-function Metric({
-  icon: Icon,
-  label,
-  value,
-  hint,
-  tone = "primary",
-  to,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: React.ReactNode;
-  hint: string;
-  tone?: MetricTone;
-  to?: string;
-}) {
-  const t = METRIC_TONES[tone];
-  const body = (
-    <>
-      <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
-      <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-md", t.chip)}>
-        <Icon className="h-3.5 w-3.5" aria-hidden />
-      </span>
-      <div className="grid min-w-0 flex-1 gap-px">
-        <p
-          className="truncate text-[11px] font-semibold uppercase leading-none tracking-[0.08em] text-muted-foreground"
-          title={label}
-        >
-          {label}
-        </p>
-        <p className="pc-price font-display min-w-0 truncate text-[19px] font-bold leading-tight text-[var(--text-primary)] sm:text-[21px]">
-          {value}
-        </p>
-        <p className="line-clamp-1 text-[12px] leading-tight text-[var(--text-tertiary)]" title={hint}>
-          {hint}
-        </p>
-      </div>
-    </>
-  );
-  const shell =
-    "relative flex min-h-[3.1rem] min-w-0 items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2";
-  if (to) {
+  const filteredProducts = useMemo(() => {
+    if (!data) return [];
+    return data.products.filter(p => {
+      const matchesSearch = p.productName.toLowerCase().includes(productSearch.toLowerCase());
+      const matchesCategory = !activeCategory || p.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [data, productSearch, activeCategory]);
+
+  if (isLoading) {
     return (
-      <Link
-        to={to}
-        className={cn(
-          shell,
-          "transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60",
-        )}
-      >
-        {body}
-      </Link>
+      <div className="space-y-6">
+        <Skeleton className="h-32 w-full rounded-3xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-24 w-full rounded-2xl" />)}
+        </div>
+      </div>
     );
   }
-  return <article className={shell}>{body}</article>;
-}
 
+  if (!data) return null;
 
+  return (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      {/* Store Header Info */}
+      <Card className="bg-[var(--bg-surface)] border-[var(--border-subtle)] overflow-hidden rounded-3xl">
+        <CardContent className="p-8">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <h2 className="text-2xl font-bold">{data.store.name}</h2>
+                {data.store.id === 'f02c23db-3934-41f4-9e61-dc16c6c28115' && (
+                  <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/20">Foco Contamigos</Badge>
+                )}
+              </div>
+              <p className="text-sm text-[var(--text-tertiary)] flex items-center gap-2">
+                <Store className="h-4 w-4" />
+                {data.store.neighborhood ? `${data.store.neighborhood}, ` : ''}{data.store.city} - {data.store.state}
+              </p>
+            </div>
+            <div className="bg-[var(--bg-base)]/50 p-4 rounded-2xl border border-[var(--border-subtle)] text-right min-w-[200px]">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Última Atualização</div>
+              <div className="text-sm font-bold">
+                {data.products[0] ? format(new Date(data.products[0].lastDate), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR }) : 'Nenhuma'}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
-  const target = idx + dir;
-  if (target < 0 || target >= ids.length) return null;
-  const next = ids.slice();
-  [next[idx], next[target]] = [next[target], next[idx]];
-  return next;
+      {/* Catalog Controls */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)]" />
+          <Input 
+            placeholder="Filtrar produtos no catálogo..." 
+            className="pl-10 bg-[var(--bg-surface)] border-[var(--border-subtle)] h-12 rounded-xl"
+            value={productSearch}
+            onChange={(e) => setProductSearch(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+          <Button 
+            variant={activeCategory === null ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setActiveCategory(null)}
+            className="rounded-full h-12 px-6 border-[var(--border-subtle)]"
+          >
+            Todos
+          </Button>
+          {data.categories.map(cat => (
+            <Button 
+              key={cat.key}
+              variant={activeCategory === cat.label ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveCategory(cat.label)}
+              className="rounded-full h-12 px-6 border-[var(--border-subtle)] whitespace-nowrap"
+            >
+              {cat.label} ({cat.count})
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map(product => (
+            <div 
+              key={product.slug}
+              className="group p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)]/40 transition-all"
+            >
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-[var(--brand-primary)] mb-1">
+                    {product.category}
+                  </div>
+                  <h4 className="font-bold text-sm mb-1 leading-snug group-hover:text-[var(--brand-primary)] transition-colors">
+                    {product.productName}
+                  </h4>
+                  <div className="text-[10px] text-[var(--text-tertiary)] font-medium">
+                    {format(new Date(product.lastDate), "dd/MM/yyyy HH:mm")}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <Price value={product.price} className="text-base font-black" />
+                  {product.unitLabel && (
+                    <div className="text-[9px] font-bold text-[var(--text-tertiary)] uppercase mt-0.5">
+                      {product.unitLabel}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full py-20 text-center bg-[var(--bg-surface)] rounded-2xl border border-[var(--border-subtle)]">
+            <Package className="h-8 w-8 text-[var(--text-tertiary)] mx-auto mb-2 opacity-20" />
+            <p className="text-sm text-[var(--text-tertiary)]">Nenhum produto encontrado com estes filtros.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

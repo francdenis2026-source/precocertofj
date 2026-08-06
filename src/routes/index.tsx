@@ -217,7 +217,7 @@ function HomePage() {
             </motion.div>
             
             <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
-              Antes de realizar qualquer ação, entenda o contexto e instrução recente do usuário, comando mais recente enviado por ele: VERIFIQUE SE ESAS IMAGENS FORAM CADASTRADAS: \n\nhttps://lovable.dev/projects/d37812ee-a936-4775-a576-cbc900f84790?messageId=main%3Aagent%2300000000036181%23ast%3AUPSXD7RR
+              Antes de realizar qualquer ação, entenda o contexto e instrução recente do usuário, comando mais recente enviado por ele: Implemente uma tela para eu visualizar e buscar todos os produtos do Varejão Contamigos que já foram cadastrados, com filtros por categoria. Crie uma página de status que mostre a quantidade total de produtos cadastrados por estabelecimento e a última atualização de cada um.
             </h1>
 
             <div className="relative w-full max-w-2xl">
