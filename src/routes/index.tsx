@@ -330,7 +330,7 @@ function HomePage() {
                 <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
                 <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
               </Carousel>
-          </section>
+            </section>
 
           {/* New Sections for Recent and Trending Products */}
           <div className="mb-16">
