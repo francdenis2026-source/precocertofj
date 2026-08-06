@@ -358,7 +358,7 @@ export function AppSidebar() {
                 )}
               </span>
               <span className="pcsb-kicker">
-                {isAdminArea ? "Painel de Controle" : <>Acompanhamento Inteligente <span className="font-bold text-[var(--text-primary)]">Feijó · AC</span></>}
+                {isAdminArea ? "Painel de Controle" : <span className="flex items-center gap-1">Acompanhamento Inteligente <span className="h-0.5 w-0.5 rounded-full bg-[var(--text-tertiary)]" aria-hidden /> <span className="font-bold text-[var(--text-primary)]">Feijó · AC</span></span>}
               </span>
             </span>
           </Link>
