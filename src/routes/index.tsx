@@ -268,25 +268,19 @@ function HomePage() {
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
-                className="group relative w-full flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
+                className="group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
               >
                 <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
-                  onFocus={() => { console.log("Input focused"); setIsSearchFocused(true); }}
-                  onBlur={() => { console.log("Input blurred"); setTimeout(() => setIsSearchFocused(false), 200); }}
-                  onKeyDown={(e) => {
-                    if (searchSuggestionsRef.current?.handleKeyDown(e)) {
-                      // Se a sugestão consumiu o evento, não faz nada
-                      return;
-                    }
-                  }}
-                  placeholder="Busque por arroz, feijão, leite..." 
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  placeholder="O que você deseja economizar hoje?" 
                   className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
                 />
-                <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
-                  Buscar
+                <Button type="submit" className="hidden sm:flex rounded-xl px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[60px] font-bold text-white hover:brightness-110 active:scale-95 transition-all">
+                  Buscar Ofertas
                 </Button>
               </form>
 
@@ -317,9 +311,9 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group flex flex-col items-center gap-2 sm:w-20"
                 >
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm">
-                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors" />
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity" style={{ backgroundColor: color }} />
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm group-hover:shadow-md">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--brand-primary)] transition-colors" />
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity" style={{ backgroundColor: color }} />
                   </div>
                   <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full text-center px-1">
                     {label}
