@@ -447,7 +447,7 @@ function HomePage() {
                                 <div className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">{product.name}</div>
                                 <div className="text-[10px] text-[var(--text-tertiary)] flex items-center gap-1 mt-0.5">
                                   <Clock className="h-3 w-3" />
-                                  {new Date(product.when).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {new Date(product.when).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                                 </div>
                               </div>
                             </div>
