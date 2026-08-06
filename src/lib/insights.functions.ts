@@ -35,7 +35,7 @@ export const getInsightsData = createServerFn({ method: "GET" })
     // Suggest a route based on regional best prices
     const stores = new Map<string, PurchaseRoute>();
     
-    regional.items.slice(0, 10).forEach((item, idx) => {
+    (regional.items || []).slice(0, 10).forEach((item: any, idx: number) => {
       const storeName = item.cheapestStore || "Mercado Local";
       if (!stores.has(storeName)) {
         stores.set(storeName, {
