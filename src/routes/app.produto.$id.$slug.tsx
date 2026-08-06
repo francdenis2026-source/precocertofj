@@ -120,12 +120,13 @@ function ProductDetailDashboard() {
                     )}
                   </div>
                   <div className="flex items-baseline gap-3">
-                    <Price value={product.price} size="2xl" className="font-black" />
+                    <Price value={product.price} size="xl" className="font-black" />
                     {product.pricePerUnit && product.unitLabel && (
                       <p className="text-sm text-muted-foreground font-medium">
-                        ({product.unitLabel} <Price value={product.pricePerUnit} size="xs" inline />)
+                        ({product.unitLabel} <Price value={product.pricePerUnit} size="xs" />)
                       </p>
                     )}
+
                   </div>
                   <div className="mt-4 flex items-center gap-2 text-sm font-medium">
                     <Clock className="h-4 w-4 text-primary" />
@@ -149,7 +150,7 @@ function ProductDetailDashboard() {
           </SectionCard>
 
           {/* History */}
-          <SectionCard title="Histórico de Preço" icon={HistoryIcon}>
+          <SectionCard title={<div className="flex items-center gap-2"><HistoryIcon className="h-4 w-4" /> Histórico de Preço</div>}>
             <div className="pt-4">
               <Sparkline points={history} />
               <div className="mt-6 overflow-hidden rounded-xl border">
@@ -177,7 +178,7 @@ function ProductDetailDashboard() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Comparison */}
-          <SectionCard title="Onde comprar" icon={MapPin}>
+          <SectionCard title={<div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Onde comprar</div>}>
             <div className="space-y-3 pt-2">
               {compareData && compareData.length > 0 ? (
                 compareData.map((offer) => (
@@ -209,7 +210,7 @@ function ProductDetailDashboard() {
 
           {/* Variations */}
           {variations.length > 0 && (
-            <SectionCard title="Variações" icon={Tag}>
+            <SectionCard title={<div className="flex items-center gap-2"><Tag className="h-4 w-4" /> Variações</div>}>
               <div className="space-y-2 pt-2">
                 {variations.map((v) => (
                   <Link 
