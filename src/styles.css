@@ -15,77 +15,58 @@
  * A high-end professional palette for utility and reliability.
  */
 :root {
-  /* Colors - Light Mode (Default) */
-  --pc-bg-base: #FFFFFF;
-  --pc-bg-surface: #F8F9FA;
-  --pc-bg-surface-elevated: #F1F3F5;
-  --pc-brand-primary: #6366F1; /* Indigo vibrant */
-  --pc-brand-glow: rgba(99, 102, 241, 0.1);
-  --pc-border-subtle: rgba(0, 0, 0, 0.08);
-  --pc-text-primary: #1A1A1A;
-  --pc-text-secondary: #4B5563;
-  --pc-text-tertiary: #9CA3AF;
+  /* Colors - Light Mode (Off-White & Indigo Base) */
+  --pc-bg-base: #F9FAFB;
+  --pc-bg-surface: #FFFFFF;
+  --pc-bg-surface-elevated: #F3F4F6;
+  --pc-brand-primary: #EE4444; /* Nexus-like Red/Orange accent - adapting to price alerts */
+  --pc-brand-secondary: #6366F1; /* Indigo for stability */
+  --pc-brand-glow: rgba(238, 68, 68, 0.08);
+  --pc-border-subtle: rgba(0, 0, 0, 0.05);
+  --pc-text-primary: #0F172A;
+  --pc-text-secondary: #475569;
+  --pc-text-tertiary: #94A3B8;
   
-  /* Semantic Tokens for Components */
+  /* Semantic Tokens */
   --bg-base: var(--pc-bg-base);
   --bg-surface: var(--pc-bg-surface);
   --bg-surface-elevated: var(--pc-bg-surface-elevated);
   --border-subtle: var(--pc-border-subtle);
   --brand-primary: var(--pc-brand-primary);
+  --brand-secondary: var(--pc-brand-secondary);
   --brand-glow: var(--pc-brand-glow);
   --text-primary: var(--pc-text-primary);
   --text-secondary: var(--pc-text-secondary);
   --text-tertiary: var(--pc-text-tertiary);
 
-  /* Border & Shadow System */
-  --pc-shadow-gold: 0 12px 24px -8px var(--brand-glow);
-}
-
-@utility animate-gradient-x {
-  animation: gradient-x 3s ease infinite;
+  /* Radius & Shadows */
+  --pc-radius: 12px;
+  --pc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --pc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #0A0F1A;
-  --pc-bg-surface: #121826;
-  --pc-bg-surface-elevated: #1A2234;
-  --pc-brand-primary: #FFD700;
-  --pc-brand-glow: rgba(255, 215, 0, 0.15);
-  --pc-border-subtle: rgba(255, 215, 0, 0.12);
-  --pc-text-primary: #FFFFFF;
+  --pc-bg-base: #0B0E14;
+  --pc-bg-surface: #141923;
+  --pc-bg-surface-elevated: #1D2432;
+  --pc-brand-primary: #F87171; /* Softer red for dark mode */
+  --pc-brand-secondary: #818CF8;
+  --pc-brand-glow: rgba(248, 113, 113, 0.15);
+  --pc-border-subtle: rgba(255, 255, 255, 0.06);
+  --pc-text-primary: #F8FAFC;
   --pc-text-secondary: #94A3B8;
   --pc-text-tertiary: #64748B;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    /* Auto-dark inherits default :root values */
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --bg-base: #F8F9FA;
-    --bg-surface: #FFFFFF;
-    --bg-surface-elevated: #F1F3F5;
-    --border-subtle: rgba(0, 0, 0, 0.08);
-    --brand-primary: #B8860B;
-    --brand-glow: rgba(184, 134, 11, 0.1);
-    --text-primary: #1A1A1A;
-    --text-secondary: #4A5568;
-    --text-tertiary: #718096;
-  }
-}
-
 @theme {
-  --pc-primary-rgb: 255 215 0;
-  
   --bg-base: var(--bg-base);
-  --bg-surface: var(--bg-surface);
+  --bg-surface: var(--pc-bg-surface);
   --bg-surface-elevated: var(--bg-surface-elevated);
   --border-subtle: var(--border-subtle);
   
   --brand-primary: var(--brand-primary);
+  --brand-secondary: var(--brand-secondary);
   --brand-glow: var(--brand-glow);
   
   --success: #10B981;
@@ -96,8 +77,8 @@
   --text-secondary: var(--text-secondary);
   --text-tertiary: var(--text-tertiary);
 
-  --font-display: "Space Grotesk", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-display: "Outfit", "Space Grotesk", sans-serif !important;
+  --font-body: "DM Sans", "Inter", sans-serif;
 }
 
 html {
@@ -115,10 +96,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
   letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Outfit', 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 @utility section-title {
