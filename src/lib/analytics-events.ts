@@ -25,6 +25,9 @@ export type AnalyticsEvent =
   | "user_open_comparador_drilldown"
   | "unlock_conversion"
   | "search_query"
+  | "search_suggest_load"
+  | "search_enrich_complete"
+  | "search_suggest_click"
   | "perf_skeleton_shown"
   | "perf_first_content";
 

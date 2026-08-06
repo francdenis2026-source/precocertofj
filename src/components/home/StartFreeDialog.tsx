@@ -112,9 +112,8 @@ export function StartFreeDialog({ children, redirect }: Props) {
               style={{
                 background: "var(--pc-home-gold)",
                 color: "var(--pc-home-navy)",
-                // @ts-expect-error css var
-                "--tw-ring-color": "var(--pc-home-gold)",
-                "--tw-ring-offset-color": "var(--pc-home-card)",
+                outlineColor: "var(--pc-home-gold)",
+                backgroundColor: "var(--pc-home-gold)",
               }}
             >
               Criar conta grátis
@@ -128,9 +127,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
                 borderColor: "var(--pc-home-line)",
                 color: "var(--pc-home-heading)",
                 background: "transparent",
-                // @ts-expect-error css var
-                "--tw-ring-color": "var(--pc-home-gold)",
-                "--tw-ring-offset-color": "var(--pc-home-card)",
+                outlineColor: "var(--pc-home-gold)",
               }}
             >
               <LogIn className="h-4 w-4" strokeWidth={2.2} />

@@ -318,7 +318,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           <button
             type="button"
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => handlePick(q)}
+            onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
             className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-slate-700"
           >
             <Search className="h-4 w-4 text-primary" />
@@ -504,7 +504,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           <button
             type="button"
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => handlePick(q)}
+            onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
             className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold uppercase tracking-wide transition-all hover:scale-105 active:scale-95"
             style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
           >
