@@ -142,7 +142,7 @@ function HomePage() {
                 placeholder="Busque por arroz, feijão, leite..." 
                 className="flex-1 bg-transparent px-5 text-lg font-medium outline-none placeholder:text-[var(--text-tertiary)]" 
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white hover:scale-[1.02] active:scale-95 transition-all shadow-[0_8px_20px_-4px_var(--brand-glow)]">
+              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                 Buscar
               </Button>
             </form>
@@ -280,7 +280,7 @@ function HomePage() {
                     {loaderData.economy?.avgSavingsPct ? `${loaderData.economy.avgSavingsPct}%` : "—"}
                   </div>
                 </div>
-                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_8px_20px_-4px_var(--brand-glow)]">
+                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                   Acessar Aplicativo
                 </Button>
               </div>

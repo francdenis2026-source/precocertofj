@@ -141,10 +141,10 @@ function AppHomeContent() {
           data-testid="panel-band"
           className="overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm backdrop-blur-md"
         >
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-[var(--brand-primary)] px-3 py-1 text-white md:px-4 md:py-1.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#5848d6] px-3 py-2 text-white md:px-4 md:py-2.5">
             <span
               aria-hidden
-              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/20 blur-3xl"
+              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl"
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
               <p className={cn(tc.eyebrow, "hidden shrink-0 text-white/60 sm:block")}>Meu painel</p>
