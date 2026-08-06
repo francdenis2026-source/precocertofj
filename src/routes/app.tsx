@@ -237,7 +237,7 @@ function DashboardPage() {
                   >
                     <Link 
                       to="/app/produto/$id/$slug" 
-                      params={{ id: alert.establishmentId || "catalogo", slug: alert.productSlug }}
+                      params={{ id: alert.establishmentId || "catalogo", slug: alert.productSlug || "" }}
 
                       className="flex w-full gap-3"
                     >
@@ -286,7 +286,7 @@ function DashboardPage() {
                     <Link 
                       key={scan.id} 
                       to="/app/produto/$id/$slug" 
-                      params={{ id: scan.establishmentId || "catalogo", slug: scan.productSlug }}
+                      params={{ id: scan.establishmentId || "catalogo", slug: scan.productSlug || "" }}
 
                     className="group flex flex-col items-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/40 hover:bg-muted/10 transition-all"
                   >
