@@ -427,6 +427,7 @@ function StorePage() {
                   <StoreIcon className="h-7 w-7" strokeWidth={1.75} />
                 </span>
               )}
+
               <div className="min-w-0 flex-1 pb-1">
                 <h1 className="truncate font-display text-[19px] font-bold leading-tight text-foreground">
                   {store.name}
@@ -439,6 +440,8 @@ function StorePage() {
                 </p>
               </div>
             </div>
+          </div>
+        </header>
 
             {store.address && (
               <p className="mt-2 line-clamp-2 text-[11px] text-muted-foreground">
