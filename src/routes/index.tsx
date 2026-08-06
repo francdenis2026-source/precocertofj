@@ -258,20 +258,20 @@ function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 mb-6 backdrop-blur-md hover:scale-105 transition-transform cursor-default"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-surface)]/80 border border-[var(--border-subtle)] mb-6 shadow-sm backdrop-blur-md hover:scale-105 transition-all duration-300 cursor-default"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-secondary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Economia em Tempo Real <span className="text-[var(--brand-primary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="font-display text-[32px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-4 max-w-4xl text-[var(--text-primary)]"
+              className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)]"
             >
               Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </motion.h1>
@@ -317,7 +317,7 @@ function HomePage() {
                 <Button 
                   type="submit" 
                   className={cn(
-                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
+                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-[0.15em] text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
                     isScrolled && "h-[36px] sm:h-[42px] px-6 text-[10px]"
                   )}
                 >
@@ -364,18 +364,17 @@ function HomePage() {
 
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
-          <section className="mb-12 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
+          <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             <motion.div 
-              whileHover={{ y: -4, scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+              whileHover={{ y: -6 }}
+              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300"
             >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
-                <Search className="h-5 w-5 sm:h-6 sm:w-6" />
+              <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] shadow-inner">
+                <Search className="h-6 w-6" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Pesquise</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Tempo real.</p>
+                <h3 className="text-sm font-black uppercase tracking-wider text-[var(--brand-secondary)] mb-1">Pesquise</h3>
+                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">Acesse preços atualizados em tempo real nos principais estabelecimentos.</p>
               </div>
             </motion.div>
             

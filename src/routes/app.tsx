@@ -121,8 +121,9 @@ function DashboardPage() {
           <SectionCard 
             title="Favoritos monitorados" 
             description="Seus itens favoritos e preços atuais."
+            className="pc-animate-fade-in [animation-delay:100ms]"
             action={
-              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider">
                 <Link to="/favoritos">Ver todos <ChevronRight className="ml-1 h-3 w-3" /></Link>
               </Button>
             }

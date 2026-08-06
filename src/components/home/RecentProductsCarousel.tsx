@@ -128,13 +128,13 @@ export function RecentProductsCarousel() {
     >
       <div className="absolute top-0 right-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-base)]/80 to-transparent z-20 pointer-events-none hidden md:block" />
 
-      <header className="mb-2 flex items-end justify-between gap-3">
+      <header className="mb-4 flex items-end justify-between gap-3 px-1">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
-            <Sparkles className="h-3 w-3" strokeWidth={2.4} aria-hidden />
+          <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
+            <Sparkles className="h-3 w-3" strokeWidth={3} aria-hidden />
             Catálogo Vivo
           </p>
-          <h2 className="mt-0.5 text-[15px] font-black tracking-tight text-[var(--text-primary)] md:text-[17px]">
+          <h2 className="mt-1 text-[20px] sm:text-[24px] font-black tracking-tight text-[var(--text-primary)] leading-none">
             Novidades Recentes
           </h2>
         </div>

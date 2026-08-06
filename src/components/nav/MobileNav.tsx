@@ -76,7 +76,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-background/95 backdrop-blur pb-[env(safe-area-inset-bottom)] md:hidden [overscroll-behavior:contain] [touch-action:manipulation]"
+      className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 backdrop-blur-[12px] pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.05)]"
     >
       <div className="mx-auto flex max-w-md items-stretch justify-between px-1">
         {items.map((it) => {
