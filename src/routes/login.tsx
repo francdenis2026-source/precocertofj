@@ -328,7 +328,7 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex h-full max-h-[700px] min-h-[580px] w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
+        className="relative z-10 flex h-full max-h-[720px] min-h-[580px] w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
       >
         <div className="relative hidden w-full shrink-0 md:block md:w-[392px]">
           <AuthHero variant="login" className="h-full w-full" />
