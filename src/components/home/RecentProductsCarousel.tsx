@@ -257,7 +257,7 @@ export function RecentProductsCarousel() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </CarouselItem>
             );
           })}
         </CarouselContent>
