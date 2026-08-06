@@ -192,45 +192,67 @@ export function DashboardSearch() {
         </div>
 
 
-        <label className="relative block min-w-0">
-          <span className="sr-only">Buscar produto</span>
-          <SearchIcon
-            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-          />
-          <Input
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Buscar produto: arroz, café, sabão…"
-            className={cn(
-              tc.body,
-              "h-12 w-full rounded-lg border-border/80 bg-background/90 pl-10 pr-10 text-[15px] shadow-sm transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-            )}
-            maxLength={80}
-            inputMode="search"
-            autoComplete="off"
-            onKeyDown={onInputKeyDown}
-            role="combobox"
-            aria-expanded={active && results.length > 0}
-            aria-controls="dashboard-search-results"
-            aria-describedby="dashboard-search-help"
-          />
+        <div className="relative flex flex-col gap-2">
+          <label className="relative block min-w-0">
+            <span className="sr-only">Buscar produto</span>
+            <SearchIcon
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
+            <Input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Buscar produto: arroz, café, sabão…"
+              className={cn(
+                tc.body,
+                "h-12 w-full rounded-lg border-border/80 bg-background/90 pl-10 pr-10 text-[15px] shadow-sm transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+              )}
+              maxLength={80}
+              inputMode="search"
+              autoComplete="off"
+              onKeyDown={onInputKeyDown}
+              role="combobox"
+              aria-expanded={active && results.length > 0}
+              aria-controls="dashboard-search-results"
+              aria-describedby="dashboard-search-help"
+            />
 
-          {input && (
-            <button
-              type="button"
-              aria-label="Limpar busca"
-              onClick={() => {
-                setInput("");
-                inputRef.current?.focus();
-              }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
+            {input && (
+              <button
+                type="button"
+                aria-label="Limpar busca"
+                onClick={() => {
+                  setInput("");
+                  inputRef.current?.focus();
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </label>
+
+          {input.length >= 2 && (
+            <div className="flex flex-wrap gap-1">
+              {queryClient
+                .getQueryData<CatalogSearchItem[]>(["app-dashboard-search", filters])
+                ?.slice(0, 3)
+                .map((s) => (
+                  <button
+                    key={s.catalogId}
+                    onClick={() => {
+                      setInput(s.displayName);
+                      inputRef.current?.focus();
+                    }}
+                    className="rounded-full bg-background/80 px-2.5 py-1 text-[11px] font-medium text-muted-foreground border border-border/40 hover:border-primary/40 hover:text-primary transition-colors"
+                  >
+                    {s.displayName}
+                  </button>
+                ))}
+            </div>
           )}
-        </label>
+        </div>
 
         <div className="flex flex-wrap items-stretch gap-2">
 
