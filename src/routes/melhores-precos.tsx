@@ -1,4 +1,6 @@
 import { createFileRoute, useNavigate, Link, retainSearchParams } from "@tanstack/react-router";
+import { Scale } from "lucide-react";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -202,7 +204,11 @@ function formatSize(size_value: number | null, size_unit: string): string | null
 }
 
 function MelhoresPrecosPage() {
+  const [selected, setSelected] = useState<string[]>([]);
+  const MAX_SEL = 5;
+
   const search = Route.useSearch() as any;
+
   const navigate = useNavigate({ from: "/melhores-precos" }) as any;
   const activeCategory = search.cat || null;
   const activeType = search.type || null;
@@ -434,6 +440,12 @@ function MelhoresPrecosPage() {
     [rows, currentPage],
   );
 
+  const selectedRows = useMemo(
+    () => allRows.filter((r) => selected.includes(r.product_key)),
+    [allRows, selected],
+  );
+
+
   const totalSavings = rows.reduce(
     (acc, r) => acc + (Number(r.avg_price) - Number(r.min_price)),
     0,
@@ -452,7 +464,7 @@ function MelhoresPrecosPage() {
   return (
     <PageShell fit hideFooter>
       <Nav />
-      <PageShellContent fit className="!pb-0">
+      <PageShellContent fit className="relative !pb-0">
       <main className="mx-auto w-full max-w-7xl flex-1 min-h-0 overflow-y-auto px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-1 md:px-6 md:pb-6">
 
         {/* ---------- Cabeçalho editorial compacto ---------- */}
