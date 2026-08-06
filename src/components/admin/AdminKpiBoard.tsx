@@ -230,7 +230,7 @@ export function AdminKpiBoard() {
                   <XAxis dataKey="label" tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} interval="preserveStartEnd" />
                   <YAxis tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} width={44} />
                   <Tooltip
-                    formatter={(v: number, name) => [brl(Number(v)), name === "avgPrice" ? "Média" : "Menor"]}
+                    formatter={(v: any, name: any) => [brl(Number(v)), name === "avgPrice" ? "Média" : "Menor"] as any}
                     contentStyle={tooltipStyle}
                     labelStyle={tooltipLabelStyle}
                     itemStyle={tooltipItemStyle}
@@ -293,7 +293,7 @@ export function AdminKpiBoard() {
                   />
                   <YAxis tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} width={44} unit="%" />
                   <Tooltip
-                    formatter={(v: number) => [`${Number(v).toFixed(1)}%`, "Participação"]}
+                    formatter={(v: any) => [`${Number(v).toFixed(1)}%`, "Participação"] as any}
                     contentStyle={tooltipStyle}
                     labelStyle={tooltipLabelStyle}
                     itemStyle={tooltipItemStyle}

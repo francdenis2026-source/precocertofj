@@ -495,7 +495,7 @@ function DashboardView({
                 <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} tickFormatter={(v) => `R$${v}`} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
-                  formatter={(v: number) => BRL(v)}
+                  formatter={(v: any) => BRL(Number(v)) as any}
                 />
                 <Line type="monotone" dataKey="anterior" stroke="hsl(var(--muted-foreground))" strokeWidth={1.5} strokeDasharray="4 4" dot={false} name="Anterior" />
                 <Line type="monotone" dataKey="atual" stroke="url(#finStroke)" strokeWidth={2.5} dot={false} name="Atual" />
@@ -515,7 +515,7 @@ function DashboardView({
                     <Pie data={donutData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={80} paddingAngle={2}>
                       {donutData.map((d, i) => <Cell key={i} fill={d.color} />)}
                     </Pie>
-                    <Tooltip formatter={(v: number) => BRL(v)} contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                    <Tooltip formatter={(v: any) => BRL(Number(v)) as any} contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
                   </RePie>
                 </ResponsiveContainer>
               </div>
