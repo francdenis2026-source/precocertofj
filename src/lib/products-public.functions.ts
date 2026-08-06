@@ -157,7 +157,10 @@ export const getRecentProducts = createServerFn({ method: "GET" })
     const limit = Math.min(Math.max(input?.limit ?? 6, 1), 24);
     return { limit };
   })
-  .handler(async ({ data }): Promise<RecentProduct[]> => {
+  .handler(async ({ data: { limit } }): Promise<RecentProduct[]> => {
+    // ...
+    // fix the loop or reference
+
     try {
       setResponseHeader(
         "cache-control",
@@ -254,7 +257,7 @@ export const getRecentProducts = createServerFn({ method: "GET" })
           };
         })
         .sort((a, b) => (a.when < b.when ? 1 : -1))
-        .slice(0, data.limit);
+        .slice(0, limit);
 
 
       return arr;
