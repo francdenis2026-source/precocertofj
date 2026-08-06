@@ -216,7 +216,7 @@ export function ProductQuickView({
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#0B0B14', border: '1px solid rgba(255,215,0,0.2)', borderRadius: '8px', fontSize: '10px' }}
                       labelStyle={{ color: '#94A3B8' }}
-                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Menor Preço']}
+                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Menor Preço'] as [string, string]}
                       labelFormatter={(label: any) => new Date(label).toLocaleDateString('pt-BR')}
                     />
                     <Line 
