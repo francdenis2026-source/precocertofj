@@ -28,6 +28,7 @@ import {
   Apple,
   Wine,
   BookOpen,
+  MapPin,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -195,22 +196,14 @@ function CategoryPage() {
     [nicheStoreNames],
   );
 
-  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
-  const displayStores = useMemo(() => {
-    const list = data?.stores ?? [];
-    if (!filtersActive) return list;
-    return [...list]
-      .map((s: any) => {
-        const f = savings.byStore.get(s.id);
-        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
-      })
-      .sort(
-        (a: any, b: any) =>
-          Number(b.isNicheStore) - Number(a.isNicheStore) ||
-          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
-          b.productCount - a.productCount,
-      );
-  }, [data, savings, filtersActive]);
+  /**
+   * Economia média recalculada sobre os produtos realmente exibidos, para que
+   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
+   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
+   */
+  const filtersActive = useMemo(() => {
+    return Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
+  }, [q, storeFilter, search.sub, search.corte, search.so_cortes]);
 
   const products = useMemo(() => {
     let list = data?.products ?? [];
@@ -244,6 +237,31 @@ function CategoryPage() {
       });
       return filtered.map((x: any) => x.p);
     }
+
+    return list;
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+
+  const savings = useMemo(() => computeHubSavings(products), [products]);
+
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s: any) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a: any, b: any) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
+
+  const productsWithProximity = useMemo(() => {
+    let list = products;
     if (view === "near" && userLocation) {
       const getDist = (p: any) => {
         const store = displayStores.find((s: any) => p.storeNames.includes(s.name));
@@ -255,9 +273,8 @@ function CategoryPage() {
       };
       list = [...list].sort((a: any, b: any) => getDist(a) - getDist(b));
     }
-
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein, view, userLocation, displayStores]);
+  }, [products, view, userLocation, displayStores]);
 
   // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
   // respeita busca e loja para não anunciar filtros que resultariam em vazio).
@@ -281,13 +298,6 @@ function CategoryPage() {
     return acc;
   }, [data, slug, q, storeFilter]);
 
-  /**
-   * Economia média recalculada sobre os produtos realmente exibidos, para que
-   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
-   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
-   */
-  const filtersActive = Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
-  const savings = useMemo(() => computeHubSavings(products), [products]);
   const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
   const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
 
@@ -324,10 +334,10 @@ function CategoryPage() {
   const closeQuickView = useCallback(() => setSearch({ p: "" }), [setSearch]);
 
   // Contagens e páginas sempre coerentes com filtros/loja/categoria ativa
-  const totalPages = Math.max(1, Math.ceil(products.length / perPage));
+  const totalPages = Math.max(1, Math.ceil(productsWithProximity.length / perPage));
   const safePage = Math.min(page, totalPages);
   const pageStart = (safePage - 1) * perPage;
-  const visible = ["list", "near"].includes(view) ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
+  const visible = ["list", "near"].includes(view) ? productsWithProximity.slice(pageStart, pageStart + perPage) : productsWithProximity.slice(0, limit);
 
   useEffect(() => {
     setLimit(24);
@@ -751,12 +761,13 @@ function ViewToggle({
   view,
   onChange,
 }: {
-  view: "list" | "grid";
-  onChange: (v: "list" | "grid") => void;
+  view: "list" | "grid" | "near";
+  onChange: (v: "list" | "grid" | "near") => void;
 }) {
   const options = [
     { id: "list", label: "Lista", Icon: List },
     { id: "grid", label: "Grade", Icon: LayoutGrid },
+    { id: "near", label: "Perto", Icon: MapPin },
   ] as const;
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
