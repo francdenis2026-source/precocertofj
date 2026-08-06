@@ -495,6 +495,7 @@ function StorePage() {
               </button>
             </div>
           </div>
+        </header>
 
         {/* Search */}
         <div className="no-print mt-4 relative">
