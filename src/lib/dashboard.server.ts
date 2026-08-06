@@ -12,11 +12,10 @@ export async function fetchDashboardData(supabase: SupabaseClient, userId: strin
   // Since we are already on the server and have context.
   
   const [stats, scans, favorites, alerts] = await Promise.all([
-    // Passing the context that the middleware would have provided
-    (getMyProfileStats as any).handler({ context, data: undefined }),
-    (listMyScans as any).handler({ context, data: undefined }),
-    (listFavoriteItems as any).handler({ context, data: undefined }),
-    (listPriceAlerts as any).handler({ context, data: undefined }),
+    (getMyProfileStats as any)._serverFn({ context, data: undefined }),
+    (listMyScans as any)._serverFn({ context, data: undefined }),
+    (listFavoriteItems as any)._serverFn({ context, data: undefined }),
+    (listPriceAlerts as any)._serverFn({ context, data: undefined }),
   ]);
 
   return {
