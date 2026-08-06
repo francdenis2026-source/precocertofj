@@ -1242,10 +1242,18 @@ export function PriceSearchBar({
 
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-[12.5px] font-medium text-gold-ink/90">
-                          Menor preço agora
-                          <LiveUpdateBadge active={live.active} tone="onDark" />
-                        </p>
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="flex items-center gap-2 text-[12.5px] font-medium text-gold-ink/90">
+                            Menor preço agora
+                            <LiveUpdateBadge active={live.active} tone="onDark" />
+                          </p>
+                          {result.cheapest?.distance && (
+                            <span className="flex items-center gap-1 text-[11px] font-bold text-white/70 bg-white/10 px-1.5 py-0.5 rounded">
+                              <MapPin className="h-3 w-3" />
+                              {result.cheapest.distance.toFixed(1)}km
+                            </span>
+                          )}
+                        </div>
                         <Price
                           as="p"
                           size="xl"
