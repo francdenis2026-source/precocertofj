@@ -67,7 +67,7 @@ function StatusPage() {
             </div>
 
             <div className="space-y-3">
-              {filteredStores.map(store => (
+              {filteredStores.map((store: any) => (
                 <button
                   key={store.id}
                   onClick={() => setSelectedStoreId(store.id)}
