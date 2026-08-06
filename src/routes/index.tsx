@@ -403,11 +403,7 @@ function HomePage() {
                           <td className="px-6 py-5">
                             <div className="flex items-center gap-4">
                               <div className="h-12 w-12 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
-                                {product.name ? (
-                                  <img src={product.name} alt={product.name} className="h-full w-full object-cover" />
-                                ) : (
-                                  <ShoppingCart className="h-5 w-5 text-[var(--text-tertiary)]" />
-                                )}
+                                <ShoppingCart className="h-5 w-5 text-[var(--text-tertiary)]" />
                               </div>
                               <div>
                                 <div className="text-sm font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">{product.name}</div>
