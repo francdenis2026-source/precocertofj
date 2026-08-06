@@ -112,8 +112,8 @@ type SortKey = "price" | "savings" | "name";
 function PrecosPorCategoriaPage() {
   // Rótulos podem ser personalizados pelo admin (overrides no banco).
   const categoryLabel = useCategoryLabelResolver();
-  const search = Route.useSearch();
-  const navigate = Route.useNavigate();
+  const search = Route.useSearch() as any;
+  const navigate = Route.useNavigate() as any;
 
   const sort: SortKey =
     search.sort === "savings" ? "savings" : search.sort === "name" ? "name" : "price";

@@ -164,7 +164,7 @@ function CestaPage() {
                   <div className="min-w-0 flex-1">
                     <Link
                       to="/produto-publico/$slug"
-                      params={{ slug: it.catalogId }}
+                      params={{ slug: it.catalogId || "" }}
                       className="line-clamp-2 text-[14px] font-semibold leading-tight text-foreground hover:underline"
                     >
                       {it.displayName}

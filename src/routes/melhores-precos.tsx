@@ -202,8 +202,8 @@ function formatSize(size_value: number | null, size_unit: string): string | null
 }
 
 function MelhoresPrecosPage() {
-  const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/melhores-precos" });
+  const search = Route.useSearch() as any;
+  const navigate = useNavigate({ from: "/melhores-precos" }) as any;
   const activeCategory = search.cat || null;
   const activeType = search.type || null;
   const sortBy: "savings" | "price" | "trend" | "unit" | "ticket" =
