@@ -356,7 +356,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-red-50 flex items-center justify-center text-[var(--brand-primary)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
                 <Search className="h-6 w-6" />
               </div>
               <div>
@@ -369,7 +369,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-blue-50 flex items-center justify-center text-[var(--brand-secondary)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
                 <TrendingDown className="h-6 w-6" />
               </div>
               <div>
@@ -382,7 +382,7 @@ function HomePage() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-orange-50 flex items-center justify-center text-[var(--brand-accent)]">
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
                 <PlusCircle className="h-6 w-6" />
               </div>
               <div>
