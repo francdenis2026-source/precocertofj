@@ -539,7 +539,7 @@ function HomePage() {
                             {product.dropPct !== null && (
                               <div className={cn(
                                 "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider",
-                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+                                product.dropPct > 0 ? "bg-emerald-500/10 text-emerald-500" : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                               )}>
                                 {product.dropPct > 0 ? <TrendingDown className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5 rotate-180" />}
                                 {Math.abs(product.dropPct)}%
