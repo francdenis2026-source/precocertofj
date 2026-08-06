@@ -316,47 +316,54 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           >
 
         {loading && items.length === 0 ? (
-          <div className="p-4 space-y-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
+          <div className="p-4 space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3 animate-pulse">
+                <div className="h-10 w-10 rounded-lg bg-[var(--bg-surface-elevated)] shrink-0" />
                 <div className="flex-1 space-y-2">
-                  <Skeleton className="h-4 w-3/4 rounded" />
-                  <Skeleton className="h-3 w-1/2 rounded" />
+                  <div className="h-3.5 w-3/4 rounded-full bg-[var(--bg-surface-elevated)]" />
+                  <div className="h-2.5 w-1/4 rounded-full bg-[var(--bg-surface-elevated)]" />
                 </div>
               </div>
             ))}
           </div>
         ) : err ? (
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="px-4 py-6 text-center"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="px-6 py-10 text-center"
           >
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-500 mb-3">
-              <Search className="h-5 w-5" />
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-rose-500/10 text-rose-500">
+              <Search className="h-7 w-7" />
             </div>
-            <p className="text-[13px] font-medium text-slate-900 mb-1">Ops! Algo deu errado</p>
-            <p className="text-[12px] text-slate-500">{err}</p>
+            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">Ops! Não conseguimos buscar agora</p>
+            <p className="mb-6 text-sm text-[var(--text-secondary)]">Ocorreu um erro ao carregar as sugestões. Pode ser sua conexão ou uma instabilidade momentânea.</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all shadow-md"
+            >
+              Tentar Novamente
+            </button>
           </motion.div>
         ) : items.length === 0 ? (
-          <motion.button
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            type="button"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
-            className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50"
+            className="flex flex-col items-center justify-center px-6 py-10 text-center"
           >
-            <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
-              <Search className="h-5 w-5" />
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
+              <Search className="h-7 w-7" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-bold text-slate-900 truncate">Ver tudo para “{q}”</p>
-              <p className="text-[12px] text-slate-500">Nenhum resultado exato encontrado ainda.</p>
-            </div>
-            <ArrowRight className="h-5 w-5 text-slate-300" />
-          </motion.button>
+            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">“{q}” não encontrado</p>
+            <p className="mb-6 text-sm text-[var(--text-secondary)]">Não encontramos resultados exatos para este termo em nosso catálogo atual.</p>
+            <button
+              onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
+              className="inline-flex items-center gap-2 rounded-lg border border-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/5 active:scale-95 transition-all"
+            >
+              Fazer busca global
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </motion.div>
         ) : (
           <ul
             ref={listRef}
