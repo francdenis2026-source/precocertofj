@@ -78,7 +78,7 @@
   --text-tertiary: var(--text-tertiary);
 
   --font-display: "Outfit", "Space Grotesk", sans-serif !important;
-  --font-body: "DM Sans", "Inter", sans-serif !important;
+  --font-body: "DM Sans", "Inter", sans-serif;
 }
 
 html {
@@ -96,7 +96,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'DM Sans', 'Inter', sans-serif !important;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
   letter-spacing: -0.01em;
