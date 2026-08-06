@@ -90,12 +90,21 @@ function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const searchSuggestionsRef = useRef<any>(null);
   const searchAnchorRef = useRef<HTMLFormElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [showLogoPreview, setShowLogoPreview] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const availableLogos = [
     { name: "Central Super Color (Dark)", path: "/logos/central-super-color-dark.svg" },
