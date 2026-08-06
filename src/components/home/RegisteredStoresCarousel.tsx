@@ -108,7 +108,7 @@ export function RegisteredStoresCarousel() {
                 "group-hover:border-[var(--brand-primary)] group-hover:scale-105 group-hover:-translate-y-1"
               )}>
                 {store.name.includes("Contamigos") ? (
-                  <ContamigosLogo size="sm" />
+                  <ContamigosLogo size="sm" title="Logo" />
                 ) : (
                   <StoreLogoThumb 
                     src={store.logoUrl} 
