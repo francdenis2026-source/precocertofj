@@ -88,10 +88,18 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
-      {/* Background Gradient - Pure Radial, No Texture */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[var(--bg-base)]">
+      {/* Professional Realism Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-[var(--bg-base)]" />
+        <motion.div 
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 0.15, scale: 1 }}
+          transition={{ duration: 2 }}
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]" />
         <div 
-          className="absolute top-[-20%] left-[10%] w-[80%] h-[60%] rounded-full opacity-[0.08] blur-[120px]" 
+          className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.12] blur-[120px]" 
           style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
         />
       </div>
