@@ -133,6 +133,7 @@ function ProductDetailPage() {
         <Link
           to="/loja/$id"
           params={{ id }}
+          search={{ q: "", from: "" }}
           className="inline-flex items-center gap-1.5 pt-2 text-[12px] font-semibold text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -279,6 +280,7 @@ function ProductDetailPage() {
                   <Link
                     to="/loja/$id/produto/$slug"
                     params={{ id, slug: v.slug }}
+                    search={{ q: "", from: "" }}
                     className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-muted/50"
                   >
                     <div className="min-w-0 flex-1">
@@ -551,6 +553,7 @@ function CompareSection({
               <Link
                 to="/loja/$id/produto/$slug"
                 params={{ id: o.storeId, slug: o.slug }}
+                search={{ q: "", from: "" }}
                 className="flex items-center gap-3 px-3 py-2.5 hover:bg-muted/50"
               >
                 <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border border-border bg-background">
