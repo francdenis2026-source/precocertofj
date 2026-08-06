@@ -41,8 +41,10 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
   const validateField = (name: string, value: string) => {
     let error = "";
     if (name === "cpf") {
-      const { valid, message } = validateCpfDetailed(value);
-      if (!valid) error = message;
+      const check = validateCpfDetailed(value);
+      if (!check.valid) {
+        error = (check as any).message || "CPF inválido";
+      }
     } else if (name === "email") {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "E-mail inválido";
     } else if (name === "phone") {
@@ -54,7 +56,6 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
     setErrors(prev => ({ ...prev, [name]: error }));
     return !error;
   };
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -71,7 +72,6 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
 
     setLoading(true);
     try {
-      // Simulação de leitura de arquivo para base64
       const reader = new FileReader();
       const base64Promise = new Promise<string>((resolve) => {
         reader.onload = () => resolve(reader.result as string);
@@ -104,11 +104,11 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
       if (!loading) {
         onOpenChange(val);
         if (!val) {
-          // Reset after animation
           setTimeout(() => {
             setSuccess(false);
             setFile(null);
             setFormData({ fullName: "", cpf: "", phone: "", email: "" });
+            setErrors({});
           }, 300);
         }
       }
