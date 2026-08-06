@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --pc-primary-rgb: 108 92 231; /* #6C5CE7 */
+  --pc-primary-rgb: 108 92 231;
   --bg-base: #0B0B14;
-  --bg-surface: #12121F;
-  --bg-surface-elevated: #191929;
-  --border-subtle: rgba(255, 255, 255, 0.08);
+  --bg-surface: #16162A;
+  --bg-surface-elevated: #1F1F38;
+  --border-subtle: rgba(255, 255, 255, 0.10);
   
   --brand-primary: #6C5CE7;
   --brand-glow: rgba(108, 92, 231, 0.2);
@@ -14,12 +14,11 @@
   --danger: #F43F5E;
   --warning: #F59E0B;
   
-  --text-primary: #F5F5F7;
-  --text-secondary: rgba(245, 245, 247, 0.6);
-  --text-tertiary: rgba(245, 245, 247, 0.4);
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
 }
 
-/* Base resets */
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -40,160 +39,10 @@ body {
   line-height: 1.5;
 }
 
-/* Utilities */
-@utility glass-card {
-  @apply rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-300 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40;
-}
-
 @utility section-title {
-  @apply text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-4;
+  @apply text-[12px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] mb-6;
 }
 
-@utility indigo-glow {
-  @apply shadow-[0_0_40px_-10px_var(--brand-glow)];
-}
-
-@utility scan-line {
-  @apply absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--brand-primary)] to-transparent blur-[2px];
-}
-
-.pc-nav-link {
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.pc-nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.pc-nav-link:hover::after,
-.pc-nav-link[aria-current="page"]::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-@keyframes scan {
-  0% { top: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-.animate-scan {
-  animation: scan 3s linear infinite;
-}
-
-/* Sidebar Overhaul */
-.pcsb {
-  --pcsb-bg: var(--bg-surface);
-  --pcsb-border: var(--border-subtle);
-  --pcsb-text-primary: var(--text-primary);
-  --pcsb-text-secondary: var(--text-secondary);
-  --pcsb-text-tertiary: var(--text-tertiary);
-  
-  background-color: var(--pcsb-bg) !important;
-  border-right: 1px solid var(--pcsb-border) !important;
-}
-
-.pcsb-header {
-  border-bottom: 1px solid var(--pcsb-border);
-  padding: 1rem 0.75rem !important;
-}
-
-.pcsb-brandtext {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.pcsb-wordmark {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: -0.02em;
-  color: var(--pcsb-text-primary);
-}
-
-.pcsb-kicker {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--pcsb-text-tertiary);
-}
-
-.pcsb-grouplabel {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--pcsb-text-tertiary);
-  padding: 1.5rem 0.75rem 0.5rem !important;
-}
-
-.pcsb-row {
-  margin: 0 0.5rem;
-  border-radius: 8px !important;
-  transition: all 0.2s ease !important;
-  height: 40px !important;
-  position: relative;
-  overflow: hidden;
-}
-
-.pcsb-row:hover {
-  background-color: var(--bg-surface-elevated) !important;
-  color: var(--pcsb-text-primary) !important;
-}
-
-.pcsb-row[data-active="true"] {
-  background-color: var(--brand-glow) !important;
-  color: var(--brand-primary) !important;
-  font-weight: 600;
-}
-
-.pcsb-ico {
-  transition: transform 0.2s ease;
-}
-
-.pcsb-row:hover .pcsb-ico {
-  transform: scale(1.1);
-}
-
-.pcsb-label {
-  font-size: 14px;
-  margin-left: 0.5rem;
-}
-
-.pcsb-rail {
-  position: absolute;
-  left: 0;
-  top: 15%;
-  height: 70%;
-  width: 3px;
-  border-radius: 0 4px 4px 0;
-  background-color: var(--brand-primary);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.pcsb-row[data-active="true"] .pcsb-rail {
-  opacity: 1;
-}
-
-.pcsb-footer {
-  border-top: 1px solid var(--pcsb-border);
-  padding: 0.75rem !important;
-}
-
-.pcsb-row--logout:hover {
-  background-color: var(--danger) / 0.1 !important;
-  color: var(--danger) !important;
+@utility glass-card {
+  @apply rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)];
 }
