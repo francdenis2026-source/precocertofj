@@ -297,7 +297,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
     if (!visible || typeof document === "undefined") return null;
 
     const panel = (
-      <div className="contents">
+      <>
         <AnimatePresence>
           {visible && rect && (
           <motion.div
@@ -562,7 +562,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         </motion.div>
       )}
     </AnimatePresence>
-  </div>
+      </>
 );
 
 return createPortal(panel, document.body);
