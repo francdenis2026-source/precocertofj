@@ -522,8 +522,8 @@ function SearchPage() {
             RAIL SUPERIOR — linha única de 44px, hairline dourada abaixo.
             Densidade tipográfica editorial, sem redundâncias.
         ================================================================= */}
-        <header className="shrink-0 border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
-          <div className="mx-auto grid w-full max-w-[1360px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 md:gap-6 md:px-6">
+        <header className="shrink-0 border-b border-[var(--border-subtle)] bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
+          <div className="mx-auto grid w-full max-w-[1360px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 py-2 md:gap-6 md:px-6">
             <div className="flex min-w-0 items-center gap-1.5">
               {hasQuery ? (
                 <button
@@ -547,14 +547,13 @@ function SearchPage() {
               <HomeBrandLink />
             </div>
 
-            <div className="flex min-w-0 items-baseline gap-2">
-              <span className="hidden shrink-0 text-[12.5px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
-                Pesquisa por preços
+            <div className="flex min-w-0 flex-col justify-center">
+              <span className="hidden text-[10px] font-black uppercase tracking-[0.3em] text-[var(--brand-primary)] md:block">
+                Pesquisa de preços
               </span>
-              <span aria-hidden className="hidden h-3 w-px bg-border md:block" />
-              <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[16px] font-normal leading-tight tracking-tight text-foreground sm:text-[17px]">
+              <h1 className="min-w-0 truncate whitespace-nowrap text-[15px] font-bold leading-tight tracking-tight text-foreground sm:text-[17px]">
                 Buscar <PrecoCertoMark variant="inline">preço certo</PrecoCertoMark>
-                <span className="hidden text-muted-foreground sm:inline"> · por nome do produto</span>
+                <span className="hidden font-medium text-muted-foreground sm:inline"> · por nome do produto</span>
               </h1>
             </div>
 
