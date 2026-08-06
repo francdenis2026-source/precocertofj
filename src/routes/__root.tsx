@@ -188,6 +188,7 @@ function RootComponent() {
 
   // "Rolagem por Mouse Sofisticada" (Lenis implementation)
   // Lenis desativado temporariamente para debugar trava de scroll
+  /*
   useLayoutEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -210,6 +211,7 @@ function RootComponent() {
       lenis.destroy();
     };
   }, []);
+  */
 
   useAutoTranslate();
   useTheme();
