@@ -91,10 +91,7 @@ function HomePage() {
   const { user, loading: sessionLoading } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const searchSuggestionsRef = useRef<any>(null);
-  const searchAnchorRef = useRef<HTMLFormElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -149,12 +146,6 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
-    if (isSearchFocused && searchAnchorRef.current && !isScrolled) {
-      searchAnchorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [isSearchFocused, isScrolled]);
-
-  useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
     window.addEventListener('open-quick-view', handler);
     window.addEventListener('internal-open-quick-view', handler);
@@ -199,12 +190,6 @@ function HomePage() {
     
     return list.slice(0, 6);
   }, [rawRecentProducts, q, sort]);
-
-  const submitSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!q.trim()) return;
-    navigate({ to: "/buscar", search: { q: q.trim() } as any });
-  };
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
