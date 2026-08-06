@@ -1155,11 +1155,12 @@ function CartDrawer({
                 const res = await exportStoreCatalog({
                   data: { storeId: Route.useParams().id, format: "csv" },
                 });
+                if (!res?.content) return;
                 const blob = new Blob([res.content], { type: "text/csv;charset=utf-8;" });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
                 link.setAttribute("href", url);
-                link.setAttribute("download", res.filename);
+                link.setAttribute("download", res.filename || "catalogo.csv");
                 link.style.visibility = "hidden";
                 document.body.appendChild(link);
                 link.click();
