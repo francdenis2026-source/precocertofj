@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
+import { normalize, tokenizeQuery } from "@/lib/search-tokens";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -143,7 +144,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         } finally {
           if (!ctrl.signal.aborted) setLoading(false);
         }
-      }, 180);
+      }, 120);
       return () => {
         clearTimeout(timer);
         ctrl.abort();
@@ -350,7 +351,28 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         (blocked ? "select-none blur-sm" : "")
                       }
                     >
-                      {s.displayName}
+                      {(() => {
+                        const name = s.displayName;
+                        const tokens = tokenizeQuery(query);
+                        if (tokens.length === 0) return name;
+                        
+                        // Escapa caracteres especiais de regex em cada token
+                        const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                        
+                        // Cria uma regex que busca qualquer um dos tokens (normalizados)
+                        // A busca deve ser case-insensitive e considerar acentos (via normalização)
+                        // Como o DOM usa o nome original, precisamos de uma estratégia de substituição cuidadosa.
+                        
+                        // Estratégia simples: Highlight case-insensitive do primeiro token significativo
+                        // Para um sistema profissional de highlight, costuma-se usar uma lib ou regex complexa.
+                        const parts = name.split(new RegExp(`(${tokens.map(esc).join('|')})`, 'gi'));
+                        return parts.map((part, index) => {
+                          const isMatch = tokens.some(t => normalize(part) === normalize(t));
+                          return isMatch ? (
+                            <span key={index} className="text-[var(--brand-primary)] font-bold">{part}</span>
+                          ) : part;
+                        });
+                      })()}
                     </span>
                     <span
                       className={
