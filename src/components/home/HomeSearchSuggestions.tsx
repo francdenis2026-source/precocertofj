@@ -135,8 +135,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             }),
           );
           if (ctrl.signal.aborted) return;
-          setItems(enriched);
-          qc.setQueryData(enrichedKey, enriched, { updatedAt: Date.now() });
+          const sortedEnriched = enriched.sort((a, b) => {
+            if (a.minPrice === null) return 1;
+            if (b.minPrice === null) return -1;
+            return a.minPrice - b.minPrice;
+          });
+          if (ctrl.signal.aborted) return;
+          setItems(sortedEnriched);
+          qc.setQueryData(enrichedKey, sortedEnriched, { updatedAt: Date.now() });
         } catch (e: any) {
           if (ctrl.signal.aborted) return;
           setErr(e?.message ?? "Falha ao buscar sugestões");
@@ -404,33 +410,37 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   </span>
                   <span className="ml-1 flex shrink-0 flex-col items-end">
                     {typeof s.minPrice === "number" ? (
-                      <span
-                        className={
-                          "inline-flex items-center gap-1 text-[13px] font-bold tabular-nums " +
-                          (blocked ? "select-none blur-sm" : "") +
-                          (active === i ? " text-primary-foreground" : " text-primary")
-                        }
-                      >
-                        <TrendingDown
-                          className={cn("h-3.5 w-3.5", active === i ? "text-primary-foreground" : "text-savings")}
-                        />
-
-
-                        {BRL(s.minPrice)}
-                      </span>
+                      <div className="flex flex-col items-end">
+                        {i === 0 && items.length > 1 && (
+                          <span className="mb-1 rounded-full bg-[var(--brand-primary)]/20 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-[var(--brand-primary)] animate-pulse">
+                            Melhor Preço
+                          </span>
+                        )}
+                        <span
+                          className={
+                            "inline-flex items-center gap-1 text-[14px] font-black tabular-nums " +
+                            (blocked ? "select-none blur-sm" : "") +
+                            (active === i ? " text-[var(--text-primary)]" : " text-[var(--brand-primary)]")
+                          }
+                        >
+                          <TrendingDown
+                            className={cn("h-3.5 w-3.5", active === i ? "text-[var(--text-primary)]" : "text-[var(--brand-primary)]")}
+                          />
+                          {BRL(s.minPrice)}
+                        </span>
+                      </div>
                     ) : (
-                      <span className={active === i ? "text-[11px] text-primary-foreground/60" : "text-[11px] text-muted-foreground/50"}>—</span>
+                      <span className={active === i ? "text-[11px] text-[var(--text-primary)]/60" : "text-[11px] text-[var(--text-tertiary)]/50"}>—</span>
                     )}
                     {s.market ? (
                       <span
                         className={
-                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none " +
+                          "mt-0.5 max-w-[190px] truncate text-[10px] font-medium leading-none " +
                           (blocked ? "select-none blur-sm" : "") +
-                          (active === i ? " text-primary-foreground/70" : " text-muted-foreground")
-
+                          (active === i ? " text-[var(--text-primary)]/70" : " text-[var(--text-tertiary)]")
                         }
                       >
-                        {s.market}
+                        no {s.market}
                       </span>
                     ) : null}
                   </span>
