@@ -1148,6 +1148,31 @@ function CartDrawer({
             <Scale className="h-4 w-4" />
             Comparar com outros mercados
           </button>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await exportStoreCatalog({
+                  data: { storeId: Route.useParams().id, format: "csv" },
+                });
+                const blob = new Blob([res.content], { type: "text/csv;charset=utf-8;" });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", res.filename);
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              } catch (err) {
+                toast.error("Falha ao exportar catálogo");
+              }
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Exportar Catálogo CSV
+          </button>
           <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
