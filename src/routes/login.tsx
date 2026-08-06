@@ -1009,10 +1009,10 @@ function Field({
   // Uses semantic tokens so the inputs are legible in both light and dark themes.
   const borderCls =
     status === "success"
-      ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
+      ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/20"
       : status === "error"
-        ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
-        : "border-input hover:border-ring focus:border-ring focus:ring-ring/20";
+        ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/20"
+        : "border-input hover:border-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/20";
   const hintCls =
     status === "success"
       ? "text-emerald-600 dark:text-emerald-400"
@@ -1020,14 +1020,14 @@ function Field({
         ? "text-rose-600 dark:text-rose-400"
         : "text-muted-foreground";
   return (
-    <label className="block">
-      <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+    <label className="group block">
+      <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors group-focus-within:text-[var(--brand-primary)]">
         {label}
       </span>
 
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/70" />
+          <Icon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 transition-colors group-focus-within:text-[var(--brand-primary)]" />
         )}
         <input
           type={type}
@@ -1040,29 +1040,47 @@ function Field({
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
           className={
-            "h-9 w-full rounded-lg bg-background text-foreground text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
+            "h-11 w-full rounded-xl bg-background text-foreground text-[13.5px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
-            (Icon ? "pl-9 " : "pl-3 ") +
+            (Icon ? "pl-10 " : "pl-3.5 ") +
             (status !== "idle" ? "pr-9" : "pr-3")
           }
         />
-        {status === "success" && (
-          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
-        )}
-        {status === "error" && (
-          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600 dark:text-rose-400" />
-        )}
+        <AnimatePresence initial={false}>
+          {status !== "idle" && (
+            <motion.span
+              key={status}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.7 }}
+              transition={{ duration: 0.18 }}
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
+            >
+              {status === "success" ? (
+                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              ) : (
+                <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
+              )}
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
 
-      {hint && (
-        <p
-          className={`mt-1 pl-0.5 text-[11px] font-medium ${hintCls}`}
-          aria-live="polite"
-        >
-          {hint}
-        </p>
-      )}
+      <AnimatePresence initial={false}>
+        {hint && (
+          <motion.p
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.18 }}
+            className={`overflow-hidden pl-0.5 pt-1 text-[11px] font-medium ${hintCls}`}
+            aria-live="polite"
+          >
+            {hint}
+          </motion.p>
+        )}
+      </AnimatePresence>
     </label>
   );
 }
@@ -1113,11 +1131,16 @@ function PinField({
   return (
     <div className="space-y-2">
       <div className="flex items-end justify-between">
-        <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           PIN de 6 dígitos
         </label>
+        <span className="text-[10.5px] text-muted-foreground/70">só números</span>
       </div>
-      <div className="grid grid-cols-6 gap-1.5">
+      <motion.div
+        animate={hasError ? { x: [0, -6, 6, -4, 4, 0] } : { x: 0 }}
+        transition={{ duration: 0.35 }}
+        className="grid grid-cols-6 gap-2"
+      >
         {digits.map((d, i) => (
           <input
             key={i}
@@ -1133,7 +1156,7 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-10 w-full rounded-md border bg-background text-foreground text-center text-base font-bold outline-none transition"
+            className="h-12 w-full rounded-xl border bg-background text-center text-lg font-bold text-foreground outline-none transition-all duration-200"
             style={{
               borderColor: hasError
                 ? "#dc2626"
@@ -1144,7 +1167,7 @@ function PinField({
             }}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = "var(--brand-primary)";
-              e.currentTarget.style.boxShadow = `0 0 0 3px var(--brand-glow)`;
+              e.currentTarget.style.boxShadow = `0 0 0 4px color-mix(in oklab, var(--brand-primary) 22%, transparent)`;
             }}
             onBlur={(e) => {
               e.currentTarget.style.boxShadow = "none";
@@ -1156,7 +1179,7 @@ function PinField({
             }}
           />
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
