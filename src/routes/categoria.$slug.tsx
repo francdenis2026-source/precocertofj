@@ -195,22 +195,14 @@ function CategoryPage() {
     [nicheStoreNames],
   );
 
-  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
-  const displayStores = useMemo(() => {
-    const list = data?.stores ?? [];
-    if (!filtersActive) return list;
-    return [...list]
-      .map((s: any) => {
-        const f = savings.byStore.get(s.id);
-        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
-      })
-      .sort(
-        (a: any, b: any) =>
-          Number(b.isNicheStore) - Number(a.isNicheStore) ||
-          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
-          b.productCount - a.productCount,
-      );
-  }, [data, savings, filtersActive]);
+  /**
+   * Economia média recalculada sobre os produtos realmente exibidos, para que
+   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
+   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
+   */
+  const filtersActive = useMemo(() => {
+    return Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
+  }, [q, storeFilter, search.sub, search.corte, search.so_cortes]);
 
   const products = useMemo(() => {
     let list = data?.products ?? [];
@@ -244,6 +236,31 @@ function CategoryPage() {
       });
       return filtered.map((x: any) => x.p);
     }
+
+    return list;
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+
+  const savings = useMemo(() => computeHubSavings(products), [products]);
+
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s: any) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a: any, b: any) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
+
+  const productsWithProximity = useMemo(() => {
+    let list = products;
     if (view === "near" && userLocation) {
       const getDist = (p: any) => {
         const store = displayStores.find((s: any) => p.storeNames.includes(s.name));
@@ -255,9 +272,8 @@ function CategoryPage() {
       };
       list = [...list].sort((a: any, b: any) => getDist(a) - getDist(b));
     }
-
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein, view, userLocation, displayStores]);
+  }, [products, view, userLocation, displayStores]);
 
   // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
   // respeita busca e loja para não anunciar filtros que resultariam em vazio).
