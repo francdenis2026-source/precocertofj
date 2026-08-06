@@ -837,56 +837,83 @@ export function PriceSearchBar({
               <ul
                 id="price-search-suggestions"
                 role="listbox"
+                className="divide-y divide-border/50"
               >
-
-              {suggestions.map((s, i) => (
-                <li key={s.id} role="option" aria-selected={i === activeIdx}>
-                  <button
-                    type="button"
-                    onMouseEnter={() => setActiveIdx(i)}
-                    onClick={() => chooseSuggestion(s)}
-                    className={
-                      "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition " +
-                      (i === activeIdx
-                        ? "bg-primary/10 text-foreground"
-                        : "text-foreground hover:bg-primary/5")
-                    }
-                  >
-                    {s.imageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={s.imageUrl}
-                        alt=""
-                        loading="lazy"
-                        className="h-8 w-8 shrink-0 rounded-md border border-border object-contain bg-background"
-                      />
-                    ) : (
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted/30">
-                        <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                      </div>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[14.5px] font-medium">
-                        {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
-                        <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
-                      </p>
-                      <p className="truncate font-mono text-[12.5px] text-muted-foreground">
-                        {[s.brand, s.category].filter(Boolean).join(" · ") ? (
-                          <HighlightMatch
-                            text={[s.brand, s.category].filter(Boolean).join(" · ")}
-                            tokens={highlightTokens}
-                            mode="loose"
-                            className="rounded bg-accent/20 px-0.5 font-bold text-foreground"
-                          />
-                        ) : (
-                          "Produto"
-                        )}
-                      </p>
-                    </div>
-                  </button>
-                </li>
-              ))}
-
+              {(() => {
+                // Mix in category suggestions based on current query if any
+                const catMatches = query.length >= 2 
+                  ? CATEGORIES.filter(c => c.label.toLowerCase().includes(query.toLowerCase())).slice(0, 2)
+                  : [];
+                
+                return (
+                  <>
+                    {catMatches.map((cat, ci) => (
+                      <li key={`cat-${cat.slug}`} role="option">
+                        <Link
+                          to="/categoria/$slug"
+                          params={{ slug: cat.slug as any }}
+                          className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-brand-gold/10"
+                        >
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-gold/20 text-brand-gold">
+                            <Sparkles className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[13px] font-bold text-foreground">Ir para {cat.label}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-bold">Categoria Sugerida</p>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-brand-gold" />
+                        </Link>
+                      </li>
+                    ))}
+                    
+                    {suggestions.map((s, i) => (
+                      <li key={s.id} role="option" aria-selected={i === activeIdx}>
+                        <button
+                          type="button"
+                          onMouseEnter={() => setActiveIdx(i)}
+                          onClick={() => chooseSuggestion(s)}
+                          className={
+                            "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition " +
+                            (i === activeIdx
+                              ? "bg-primary/10 text-foreground"
+                              : "text-foreground hover:bg-primary/5")
+                          }
+                        >
+                          {s.imageUrl ? (
+                            <img
+                              src={s.imageUrl}
+                              alt=""
+                              loading="lazy"
+                              className="h-8 w-8 shrink-0 rounded-md border border-border object-contain bg-background"
+                            />
+                          ) : (
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted/30">
+                              <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-[14.5px] font-medium">
+                              <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
+                            </p>
+                            <p className="truncate font-mono text-[12.5px] text-muted-foreground">
+                              {[s.brand, s.category].filter(Boolean).join(" · ") ? (
+                                <HighlightMatch
+                                  text={[s.brand, s.category].filter(Boolean).join(" · ")}
+                                  tokens={highlightTokens}
+                                  mode="loose"
+                                  className="rounded bg-accent/20 px-0.5 font-bold text-foreground"
+                                />
+                              ) : (
+                                "Produto"
+                              )}
+                            </p>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </>
+                );
+              })()}
               </ul>
             </div>
           </AnchoredDropdown>
