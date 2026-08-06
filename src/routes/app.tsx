@@ -67,6 +67,7 @@ function AppHomeContent() {
 
   const [selectedStore, setSelectedStore] = useState<PublicStore | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [comparisonOpen, setComparisonOpen] = useState(false);
   // Guarda o gatilho para devolver o foco ao fechar o drawer (WCAG 2.4.3).
   const drawerTriggerRef = useRef<HTMLElement | null>(null);
 
