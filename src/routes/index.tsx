@@ -36,7 +36,9 @@ import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { PromoBanner } from "@/components/promo/PromoBanner";
+import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -248,10 +250,19 @@ function HomePage() {
           <PromoBanner />
         </section>
 
+        {/* Optimized Baskets - Smart Intelligence System */}
+        <section className="max-w-7xl mx-auto px-4 mb-24">
+          <OptimizedBasketSection />
+        </section>
+
         {/* Live Market Insights (formerly Recent Products) */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
           <RecentProductsCarousel />
         </section>
+
+
+
+
 
         {/* Dashboard Table Section */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
