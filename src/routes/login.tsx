@@ -61,11 +61,12 @@ const emptyAddress: Address = {
   state: "",
 };
 
-// Redesign tokens — alinhados à nova identidade (Midnight Navy + Electric Indigo).
-const PC_BRAND = "#6C5CE7";
-const PC_SURFACE = "#12121F";
-const PC_DISPLAY = "'Space Grotesk', system-ui, sans-serif";
-const PC_BODY = "'Inter', system-ui, sans-serif";
+// Redesign tokens — alinhados à nova identidade (Midnight Navy + Gold).
+const PC_BRAND = "var(--brand-primary)";
+const PC_SURFACE = "var(--bg-surface)";
+const PC_DISPLAY = "var(--font-display)";
+const PC_BODY = "var(--font-body)";
+
 
 
 function LoginPage() {
@@ -316,11 +317,12 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex w-full max-w-[1024px] flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl md:h-[640px] md:flex-row"
+        className="relative z-10 flex w-full max-w-[1024px] flex-col overflow-hidden rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl md:h-[720px] md:flex-row"
       >
-        <div className="relative h-[200px] w-full shrink-0 md:h-full md:w-[420px]">
+        <div className="relative h-[240px] w-full shrink-0 md:h-full md:w-[460px]">
           <AuthHero variant="login" className="h-full w-full" />
         </div>
+
 
         <div className="flex flex-1 flex-col overflow-y-auto p-6 sm:p-8 md:p-12">
 
@@ -342,9 +344,10 @@ function LoginPage() {
           </div>
 
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
-            {mode === "login" ? "Área do assinante" : "Comece grátis"}
+          <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
+            {mode === "login" ? "Acesso Exclusivo" : "Novo Assinante"}
           </p>
+
           <h1
             className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
             style={{ fontFamily: PC_DISPLAY }}
