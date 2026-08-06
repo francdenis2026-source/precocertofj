@@ -820,6 +820,8 @@ function ComparadorPage() {
         }
       );
     }
+  };
+
 
   const handleShare = async () => {
     if (typeof window === "undefined") return;
