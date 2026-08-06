@@ -607,6 +607,7 @@ function LoginPage() {
               )}
             </AnimatePresence>
 
+            </div>
             <motion.button
               type="submit"
               whileTap={{ scale: 0.985 }}
