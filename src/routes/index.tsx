@@ -43,6 +43,13 @@ import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -251,124 +258,65 @@ function HomePage() {
               </div>
             </div>
             
-            <div 
-              id="category-scroll-container"
-              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none touch-pan-x overscroll-x-contain"
-              onMouseDown={(e) => {
-                const el = e.currentTarget;
-                el.classList.add('grabbing');
-                
-                // Disable smooth scroll during manual drag to avoid "fighting" the mouse
-                el.style.scrollBehavior = 'auto';
-                
-                const startX = e.pageX - el.offsetLeft;
-                const scrollLeft = el.scrollLeft;
-                let isDragging = false;
-                let lastX = e.pageX;
-                let velocity = 0;
-
-                const onMouseMove = (moveEvent: MouseEvent) => {
-                  const x = moveEvent.pageX - el.offsetLeft;
-                  const walk = (x - startX); 
-                  
-                  // Calculate velocity for momentum
-                  velocity = moveEvent.pageX - lastX;
-                  lastX = moveEvent.pageX;
-
-                  if (Math.abs(x - startX) > 5) {
-                    isDragging = true;
-                    el.classList.add('is-dragging');
-                  }
-                  
-                  el.scrollLeft = scrollLeft - walk;
-                };
-
-                const onMouseUp = () => {
-                  el.classList.remove('grabbing');
-                  el.classList.remove('is-dragging');
-                  el.style.scrollBehavior = ''; // Restore smooth scroll
-                  
-                  document.removeEventListener('mousemove', onMouseMove);
-                  document.removeEventListener('mouseup', onMouseUp);
-                  
-                  if (isDragging) {
-                    // Apply momentum scroll
-                    const momentum = () => {
-                      if (Math.abs(velocity) < 0.5) return;
-                      el.scrollLeft -= velocity;
-                      velocity *= 0.95; // Friction
-                      requestAnimationFrame(momentum);
-                    };
-                    requestAnimationFrame(momentum);
-
-                    // Block clicks on items during/immediately after drag
-                    const captureClick = (clickEvent: MouseEvent) => {
-                      clickEvent.stopPropagation();
-                      clickEvent.preventDefault();
-                      el.removeEventListener('click', captureClick, true);
-                    };
-                    el.addEventListener('click', captureClick, true);
-                  }
-                };
-                
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-              }}
-              onKeyDown={(e) => {
-                const el = e.currentTarget;
-                if (e.key === 'ArrowRight') {
-                  el.scrollBy({ left: 200, behavior: 'smooth' });
-                } else if (e.key === 'ArrowLeft') {
-                  el.scrollBy({ left: -200, behavior: 'smooth' });
-                }
-              }}
+            <Carousel
+              opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true }}
+              className="group/carousel relative"
             >
-              {CATEGORIES.map(({ slug, label, Icon, color }) => (
-                <Link 
-                  key={slug} 
-                  to="/categoria/$slug" 
-                  params={{ slug: slug as any }}
-                  data-category-item
-                  data-label={label}
-                  onClick={(e) => {
-                    const container = e.currentTarget.parentElement;
-                    if (container?.classList.contains('is-dragging')) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      navigate({ to: "/categoria/$slug", params: { slug: slug as any } });
-                    }
-                  }}
-                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start"
-                >
-                  {/* Category Ambient Glow */}
-                  <div className="absolute inset-0 z-0">
-                    <div 
-                      className="absolute inset-0 opacity-5 group-hover/card:opacity-15 transition-opacity duration-700" 
-                      style={{ 
-                        background: `radial-gradient(circle at 50% 40%, ${color} 0%, transparent 70%)`,
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent transition-colors duration-300" />
-                  </div>
-
-                  <div className="relative z-10 w-full p-6 flex flex-col items-center">
-                    <div className="relative mb-4">
-                      {/* Icon Container with Glassmorphism */}
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] dark:bg-white/[0.03] border border-white/10 dark:border-white/10 backdrop-blur-xl text-[var(--text-primary)] group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white dark:group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
-                        <Icon className="h-7 w-7 transition-transform duration-500 group-hover/card:rotate-6" />
+              <CarouselContent 
+                id="category-scroll-container"
+                className="-ml-4 pb-6 select-none"
+              >
+                {CATEGORIES.map(({ slug, label, Icon, color }) => (
+                  <CarouselItem 
+                    key={slug} 
+                    className="pl-4 basis-[45%] sm:basis-[30%] md:basis-[22%] lg:basis-[18%] xl:basis-[15%] snap-start"
+                  >
+                    <Link 
+                      to="/categoria/$slug" 
+                      params={{ slug: slug as any }}
+                      data-category-item
+                      data-label={label}
+                      className="group/card relative flex flex-col items-center justify-end h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
+                    >
+                      {/* Category Ambient Glow */}
+                      <div className="absolute inset-0 z-0">
+                        <div 
+                          className="absolute inset-0 opacity-5 group-hover/card:opacity-15 transition-opacity duration-700" 
+                          style={{ 
+                            background: `radial-gradient(circle at 50% 40%, ${color} 0%, transparent 70%)`,
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent transition-colors duration-300" />
                       </div>
-                      <div 
-                        className="absolute -inset-2 blur-2xl opacity-0 group-hover/card:opacity-20 transition-opacity duration-500 rounded-full"
-                        style={{ backgroundColor: color }}
-                      />
-                    </div>
-                    
-                    <div className="flex flex-col items-center gap-1.5">
+
+                      <div className="relative z-10 w-full p-6 flex flex-col items-center">
+                        <div className="relative mb-4">
+                          {/* Icon Container with Glassmorphism */}
+                          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] dark:bg-white/[0.03] border border-white/10 dark:border-white/10 backdrop-blur-xl text-[var(--text-primary)] group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white dark:group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
+                            <Icon className="h-7 w-7 transition-transform duration-500 group-hover/card:rotate-6" />
+                          </div>
+                          <div 
+                            className="absolute -inset-2 blur-2xl opacity-0 group-hover/card:opacity-20 transition-opacity duration-500 rounded-full"
+                            style={{ backgroundColor: color }}
+                          />
+                        </div>
+                        
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-sm font-bold tracking-tight text-[var(--text-primary)] group-hover/card:text-[var(--brand-primary)] transition-colors">
+                            {label}
+                          </span>
+                          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-[var(--brand-primary)]/70 transition-colors">
+                            Explorar
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
+              <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
+            </Carousel>
                       <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--text-secondary)] group-hover/card:text-[var(--text-primary)] transition-colors">{label}</span>
                       <div className="h-[2px] w-0 bg-[var(--brand-primary)] group-hover/card:w-8 transition-all duration-500 rounded-full" />
                     </div>
