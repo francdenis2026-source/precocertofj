@@ -312,20 +312,25 @@ function HomePage() {
                       </div>
                     </Link>
                   </CarouselItem>
+                  <CarouselItem 
+                    key="all-categories" 
+                    className="pl-4 basis-[45%] sm:basis-[30%] md:basis-[22%] lg:basis-[18%] xl:basis-[15%] snap-start"
+                  >
+                    <Link 
+                      to="/buscar" 
+                      className="group/card relative flex flex-col items-center justify-center h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
+                        <PlusCircle className="h-6 w-6" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-white transition-colors">Todas</span>
+                    </Link>
+                  </CarouselItem>
                 ))}
               </CarouselContent>
               <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
               <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
             </Carousel>
-            <Link 
-              to="/buscar" 
-              className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start ml-4"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
-                <PlusCircle className="h-6 w-6" />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-white transition-colors">Todas</span>
-            </Link>
           </section>
 
           {/* New Sections for Recent and Trending Products */}
