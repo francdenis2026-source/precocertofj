@@ -340,7 +340,21 @@ function LoginPage() {
         </div>
 
 
-        <div className="flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9">
+        <div
+          className="relative flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--bg-surface-elevated) 92%, transparent) 0%, var(--bg-surface) 62%)",
+          }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-px"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, color-mix(in oklab, var(--brand-primary) 70%, transparent), transparent)",
+            }}
+          />
 
           {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
@@ -603,9 +617,10 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="group relative mt-1 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[var(--brand-primary)] text-[15px] font-bold text-[#0B1E3A] shadow-lg transition-[filter,box-shadow] duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+              className="group relative mt-2 inline-flex h-[54px] w-full items-center justify-center gap-2 overflow-hidden rounded-2xl text-[16px] font-black tracking-tight text-[#0B1E3A] transition-[filter,box-shadow,transform] duration-200 hover:brightness-[1.06] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
               style={{
-                boxShadow: `0 12px 24px -10px var(--brand-glow)`,
+                background: "linear-gradient(180deg, #F5DE95 0%, #E8C25A 45%, #D4AF37 100%)",
+                boxShadow: `0 18px 34px -14px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.45)`,
                 fontFamily: PC_DISPLAY,
               }}
             >
@@ -951,7 +966,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-5 grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/70 p-1"
+      className="mt-5 grid grid-cols-2 gap-1 rounded-2xl border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--bg-base)_55%,transparent)] p-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.25)]"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -963,15 +978,20 @@ function TabSwitch({
             aria-selected={active}
             onClick={() => onChange(t.key)}
             className={
-              "relative h-9 rounded-lg text-[12.5px] font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
-              (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
+              "relative h-10 rounded-xl text-[13px] font-bold tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
+              (active ? "text-[#0B1E3A]" : "text-muted-foreground hover:text-foreground")
             }
           >
             {active && (
               <motion.span
                 layoutId="login-tab-pill"
                 transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                className="absolute inset-0 rounded-lg bg-card shadow-sm ring-1 ring-border"
+                className="absolute inset-0 rounded-xl"
+                style={{
+                  background:
+                    "linear-gradient(180deg, #F2D98B 0%, var(--brand-primary) 100%)",
+                  boxShadow: "0 6px 16px -8px var(--brand-glow)",
+                }}
               />
             )}
             <span className="relative">{t.label}</span>
@@ -1047,7 +1067,7 @@ function Field({
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
           className={
-            "h-11 w-full rounded-xl bg-background text-foreground text-[13.5px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
+            "h-12 w-full rounded-xl bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-foreground text-[14.5px] font-semibold tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
             (Icon ? "pl-10 " : "pl-3.5 ") +
@@ -1163,7 +1183,7 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-12 w-full rounded-xl border bg-background text-center text-lg font-bold text-foreground outline-none transition-all duration-200"
+          className="h-[52px] w-full rounded-xl border-2 bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-center text-xl font-bold text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] outline-none transition-all duration-200"
             style={{
               borderColor: hasError
                 ? "#dc2626"
