@@ -118,13 +118,26 @@ function CategoryPage() {
   const { slug } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const def = categoryBySlug(slug);
+
+  useEffect(() => {
+    if (search.view === "near" && !userLocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (err) => {
+          console.error("Erro ao obter localização:", err);
+          setSearch({ view: "list" });
+        }
+      );
+    }
+  }, [search.view, userLocation]);
   const fetchHub = useServerFn(getCategoryHub);
 
   // Estado derivado da URL (compartilhável + voltar/avançar do navegador)
   const q = search.q;
   const storeFilter = search.loja;
-  const view: "list" | "grid" = search.view === "grid" ? "grid" : "list";
+  const view: "list" | "grid" | "near" = ["grid", "near"].includes(search.view) ? (search.view as any) : "list";
   const perPage = [30, 60, 120].includes(search.per) ? search.per : 30;
   const page = Math.max(1, search.page);
 
@@ -214,8 +227,20 @@ function CategoryPage() {
       });
       return filtered.map((x) => x.p);
     }
+    if (view === "near" && userLocation) {
+      const getDist = (p: any) => {
+        const store = displayStores.find(s => p.storeNames.includes(s.name));
+        if (!store?.lat || !store?.lng) return 999999;
+        return Math.sqrt(
+          Math.pow(store.lat - userLocation.lat, 2) + 
+          Math.pow(store.lng - userLocation.lng, 2)
+        );
+      };
+      list = [...list].sort((a, b) => getDist(a) - getDist(b));
+    }
+
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein, view, userLocation, displayStores]);
 
   // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
   // respeita busca e loja para não anunciar filtros que resultariam em vazio).
@@ -302,7 +327,7 @@ function CategoryPage() {
   const totalPages = Math.max(1, Math.ceil(products.length / perPage));
   const safePage = Math.min(page, totalPages);
   const pageStart = (safePage - 1) * perPage;
-  const visible = view === "list" ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
+  const visible = ["list", "near"].includes(view) ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
 
   useEffect(() => {
     setLimit(24);

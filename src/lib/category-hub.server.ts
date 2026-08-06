@@ -20,6 +20,8 @@ export type HubStore = {
   neighborhood: string | null;
   address: string | null;
   kind: string | null;
+  lat: number | null;
+  lng: number | null;
   productCount: number;
   /** loja é do próprio nicho (ex.: açougue) ou só tem itens do nicho */
   isNicheStore: boolean;
@@ -87,6 +89,8 @@ type EstabRow = {
   brand_color: string | null;
   neighborhood: string | null;
   address: string | null;
+  latitude: number | null;
+  longitude: number | null;
   active: boolean | null;
 };
 
@@ -109,7 +113,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
       eq: (c: string, v: boolean) => Promise<{ data: EstabRow[] | null }>;
     };
   })
-    .select("id, name, kind, logo_url, brand_color, neighborhood, address, active")
+    .select("id, name, kind, logo_url, brand_color, neighborhood, address, latitude, longitude, active")
     .eq("active", true);
 
   const estabs = estabsRaw ?? [];
@@ -260,6 +264,8 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
         neighborhood: e.neighborhood,
         address: e.address,
         kind: e.kind,
+        lat: e.latitude,
+        lng: e.longitude,
         productCount: storeProducts.get(e.id)?.size ?? 0,
         isNicheStore: nicheStoreIds.has(e.id),
         avgSavingPct: avg(sv),
