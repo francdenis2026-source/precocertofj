@@ -180,7 +180,7 @@ function SearchPage() {
                      <div className="space-y-1">
                        <h1 className="text-3xl font-bold tracking-tight">{activeMarket.name}</h1>
                        <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#6B7280]">
-                         <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {activeMarket.city || "Endereço não informado"}</span>
+                         <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" /> {activeMarket.city || "Feijó, AC"}</span>
                          <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> 08:00 às 19:00</span>
                          <span className="flex items-center gap-1.5 text-[#16A34A] font-bold">Aberto agora</span>
                        </div>
