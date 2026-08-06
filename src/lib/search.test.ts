@@ -21,24 +21,27 @@ describe("Search Logic", () => {
   });
 });
 
-describe("Price Sorting Logic (Mocked)", () => {
-  it("should sort items by min price correctly", () => {
+describe("Price Sorting Logic (Enriched Suggestions)", () => {
+  it("should sort items by min price correctly, handling nulls", () => {
     const items = [
-      { id: "1", minPrice: 10.5 },
-      { id: "2", minPrice: 5.2 },
-      { id: "3", minPrice: null },
-      { id: "4", minPrice: 8.9 }
+      { id: "1", minPrice: 10.5, market: "A" },
+      { id: "2", minPrice: 5.2, market: "B" },
+      { id: "3", minPrice: null, market: null },
+      { id: "4", minPrice: 8.9, market: "C" },
+      { id: "5", minPrice: 5.2, market: "D" } // Tie
     ];
 
-    const sorted = items.sort((a, b) => {
+    const sorted = [...items].sort((a, b) => {
       if (a.minPrice === null) return 1;
       if (b.minPrice === null) return -1;
       return a.minPrice - b.minPrice;
     });
 
-    expect(sorted[0].id).toBe("2");
-    expect(sorted[1].id).toBe("4");
-    expect(sorted[2].id).toBe("1");
-    expect(sorted[3].id).toBe("3");
+    expect(sorted[0].minPrice).toBe(5.2);
+    expect(sorted[1].minPrice).toBe(5.2);
+    expect(sorted[2].minPrice).toBe(8.9);
+    expect(sorted[3].minPrice).toBe(10.5);
+    expect(sorted[4].minPrice).toBe(null);
   });
 });
+
