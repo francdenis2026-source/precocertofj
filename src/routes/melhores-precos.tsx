@@ -813,7 +813,20 @@ function MelhoresPrecosPage() {
 
             {!isLoading && !error && rows.length > 0 && (
               <>
-                <MelhoresList rows={pagedRows} startIndex={(currentPage - 1) * PAGE_SIZE} />
+                <MelhoresList
+                  rows={pagedRows}
+                  startIndex={(currentPage - 1) * PAGE_SIZE}
+                  selected={selected}
+                  onToggle={(id) =>
+                    setSelected((prev) =>
+                      prev.includes(id)
+                        ? prev.filter((p) => p !== id)
+                        : prev.length < MAX_SEL
+                        ? [...prev, id]
+                        : prev,
+                    )
+                  }
+                />
                 {totalPages > 1 && (
                   <Pagination
                     page={currentPage}
@@ -835,7 +848,17 @@ function MelhoresPrecosPage() {
 }
 
 
-function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex?: number }) {
+function MelhoresList({
+  rows,
+  startIndex = 0,
+  selected,
+  onToggle,
+}: {
+  rows: Comparison[];
+  startIndex?: number;
+  selected: string[];
+  onToggle: (id: string) => void;
+}) {
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
   return (
     <>
@@ -856,6 +879,8 @@ function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex
                   row={row}
                   rank={globalIdx + 1}
                   imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
+                  isSelected={selected.includes(row.product_key)}
+                  onToggle={() => onToggle(row.product_key)}
                 />
               </TeaserCard>
             </li>
