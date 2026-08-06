@@ -295,7 +295,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-svh w-full items-center justify-center bg-[var(--bg-base)] px-4 py-8 sm:px-6">
+    <div className="relative flex h-svh min-h-svh w-full items-center justify-center overflow-hidden bg-[var(--bg-base)] px-4 py-8 sm:px-6">
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute -left-40 -top-52 h-[760px] w-[760px] rounded-full opacity-[0.18] blur-[130px]"
@@ -328,7 +328,7 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:max-h-[700px] md:flex-row"
+        className="relative z-10 flex h-full max-h-[720px] min-h-[580px] w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
       >
         <div className="relative hidden w-full shrink-0 md:block md:w-[392px]">
           <AuthHero variant="login" className="h-full w-full" />
@@ -341,7 +341,7 @@ function LoginPage() {
 
 
         <div
-          className="relative flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9"
+          className="relative flex flex-1 flex-col p-5 sm:p-7 md:p-9"
           style={{
             background:
               "linear-gradient(180deg, color-mix(in oklab, var(--bg-surface-elevated) 92%, transparent) 0%, var(--bg-surface) 62%)",
@@ -404,7 +404,8 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-3 space-y-2.5" onSubmit={handleSubmit}>
+          <form className="mt-3 flex flex-1 flex-col gap-2.5 overflow-hidden" onSubmit={handleSubmit}>
+            <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
 
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
@@ -605,8 +606,9 @@ function LoginPage() {
                 </motion.p>
               )}
             </AnimatePresence>
+          </div>
 
-            <motion.button
+          <motion.button
               type="submit"
               whileTap={{ scale: 0.985 }}
               disabled={
