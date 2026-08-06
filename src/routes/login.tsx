@@ -340,7 +340,21 @@ function LoginPage() {
         </div>
 
 
-        <div className="flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9">
+        <div
+          className="relative flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--bg-surface-elevated) 92%, transparent) 0%, var(--bg-surface) 62%)",
+          }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-px"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, color-mix(in oklab, var(--brand-primary) 70%, transparent), transparent)",
+            }}
+          />
 
           {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
