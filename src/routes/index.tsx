@@ -236,96 +236,76 @@ function HomePage() {
       </div>
 
       <div className="relative z-10 flex flex-col">
-        <main className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
           <script dangerouslySetInnerHTML={{ __html: `
             window.addEventListener('open-quick-view', (e) => {
               window.dispatchEvent(new CustomEvent('internal-open-quick-view', { detail: e.detail }));
             });
           `}} />
           
-          {/* Hero Section - Clarity & Connection Theme */}
+          {/* Hero Section - Compact & Professional */}
           <motion.section 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex flex-col items-center text-center mb-16 pt-8"
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center text-center mb-12 pt-2 sm:pt-4"
           >
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-8 backdrop-blur-md"
+              transition={{ delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 mb-6 backdrop-blur-md"
             >
-              <span className="relative flex h-2.5 w-2.5">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
-            {/* Logo Preview Trigger (Hidden Admin Feature) */}
-            <div className="absolute top-4 left-4 z-50 flex gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setShowLogoPreview(true)}
-                className="rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
-              >
-                Preview Logomarcas
-              </Button>
-            </div>
-
-            
-            <h1 className="font-display text-[42px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-8 max-w-3xl text-[var(--text-primary)]">
+            <h1 className="font-display text-[32px] sm:text-[48px] font-black tracking-tight leading-[1.1] mb-4 max-w-3xl text-[var(--text-primary)]">
               Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed">
-              Descubra os melhores preços em Feijó com uma interface moderna, rápida e intuitiva. 
-              Conectamos você às melhores ofertas da cidade.
+            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed">
+              Descubra os melhores preços em Feijó com uma interface moderna e intuitiva. 
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 mb-10">
-              <Button 
-                onClick={() => navigate({ to: "/registrar" })}
-                className="bg-[var(--brand-primary)] text-white hover:brightness-110 font-black h-14 px-8 rounded-2xl shadow-xl transition-all active:scale-95 text-lg flex items-center gap-2"
-              >
-                <PlusCircle className="h-5 w-5" />
-                Registrar Preço
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => navigate({ to: "/app" })}
-                className="bg-transparent border-2 border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--brand-primary)] font-black h-14 px-8 rounded-2xl transition-all active:scale-95 text-lg"
-              >
-                Status do Sistema
-              </Button>
-            </div>
-
-
             <div className={cn(
-              "w-full max-w-2xl transition-all duration-500",
-              isSearchFocused || isScrolled ? "fixed top-4 left-1/2 -translate-x-1/2 z-[100] scale-[0.95]" : "relative"
+              "w-full max-w-xl transition-all duration-500",
+              isSearchFocused || isScrolled ? "fixed top-3 left-1/2 -translate-x-1/2 z-[100] scale-[0.98] px-4" : "relative mb-12"
             )}>
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10",
-                  (isSearchFocused || isScrolled) && "h-[54px] sm:h-[60px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]"
+                  "group relative w-full flex items-center h-[56px] sm:h-[64px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1.5 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5",
+                  (isSearchFocused || isScrolled) && "h-[48px] sm:h-[52px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] bg-[var(--bg-surface)]/90 backdrop-blur-xl border-[var(--brand-primary)]/20"
                 )}
               >
-                <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
+                <Search className={cn(
+                  "ml-4 h-5 w-5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors",
+                  (isSearchFocused || isScrolled) && "h-4 w-4 ml-3"
+                )} />
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                  placeholder="O que você deseja economizar hoje?" 
-                  className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
+                  placeholder="Pesquisar produtos ou mercados..." 
+                  className={cn(
+                    "flex-1 bg-transparent px-4 text-base font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
+                    (isSearchFocused || isScrolled) && "text-sm px-3"
+                  )} 
                 />
-                <Button type="submit" className="hidden sm:flex rounded-xl px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[60px] font-bold text-white hover:brightness-110 active:scale-95 transition-all">
-                  Buscar Ofertas
+                <Button 
+                  type="submit" 
+                  className={cn(
+                    "hidden sm:flex rounded-xl bg-[var(--brand-primary)] font-bold text-white hover:brightness-110 active:scale-95 transition-all h-[44px] sm:h-[52px] px-8",
+                    (isSearchFocused || isScrolled) && "h-[36px] sm:h-[40px] px-6 text-sm"
+                  )}
+                >
+                  Buscar
                 </Button>
               </form>
 
@@ -338,6 +318,27 @@ function HomePage() {
                 isLoggedOut={!user}
                 onBlocked={() => {}}
               />
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-3 mb-4">
+              <Button 
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate({ to: "/registrar" })}
+                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <PlusCircle className="h-4 w-4" />
+                Registrar Preço
+              </Button>
+              <Button 
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate({ to: "/app" })}
+                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <ArrowRight className="h-4 w-4" />
+                Painel do Cliente
+              </Button>
             </div>
           </motion.section>
 
