@@ -272,6 +272,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
             <Link
               to="/loja/$id/produto/$slug"
               params={{ id: report.establishmentId, slug: report.productSlug }}
+              search={{ q: "", from: "" }}
               className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-primary hover:underline"
             >
               Ver produto <ExternalLink className="h-3 w-3" />
