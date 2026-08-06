@@ -8,6 +8,7 @@ import { normalize, tokenizeQuery } from "@/lib/search-tokens";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackEvent } from "@/lib/analytics-events";
 
 import {
   suggestProducts,
