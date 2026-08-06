@@ -374,8 +374,8 @@ function HomePage() {
                 <Search className="h-6 w-6" strokeWidth={2.5} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-black uppercase tracking-wider text-[var(--brand-secondary)] mb-1">Pesquise</h3>
-                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">Acesse preços atualizados em tempo real nos principais estabelecimentos.</p>
+                <h3 className="text-sm font-black uppercase tracking-wider text-[var(--brand-secondary)] mb-1">Procure</h3>
+                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">Encontre o que você precisa em todos os mercados de Feijó num só lugar.</p>
               </div>
             </motion.div>
             
@@ -389,7 +389,7 @@ function HomePage() {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Compare</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Economize 40%.</p>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Veja onde o seu dinheiro rende mais e escolha o melhor preço para o seu bolso.</p>
               </div>
             </motion.div>
             
@@ -402,8 +402,8 @@ function HomePage() {
                 <PlusCircle className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Colabore</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Com a rede.</p>
+                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Ajude</h3>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Viu um preço novo? Compartilhe com a gente e ajude todo mundo a economizar.</p>
               </div>
             </motion.div>
           </section>
@@ -412,8 +412,8 @@ function HomePage() {
           {/* Grid Category Navigation */}
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Categorias Principais</h2>
-              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver catálogo completo</Link>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">O que você busca hoje?</h2>
+              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver tudo</Link>
             </div>
             
             <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">{Array.from({length: 7}).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-[32px]" />)}</div>}>
@@ -474,7 +474,7 @@ function HomePage() {
                 
                 <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl font-black text-[var(--text-primary)] mb-4 sm:mb-6 leading-[1.05] tracking-tight">
                   Viu um preço <span className="relative inline-block">
-                    <span className="relative z-10 text-[var(--brand-primary)]">diferente</span>
+                    <span className="relative z-10 text-[var(--brand-primary)]">novo por aí</span>
                     <svg className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2 sm:h-3 text-[var(--brand-primary)]/30" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
                       <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
                     </svg>
@@ -482,7 +482,7 @@ function HomePage() {
                 </h2>
                 
                 <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-8 sm:mb-10 leading-relaxed font-body max-w-md">
-                  Sua colaboração fortalece a rede de economia em Feijó. Registre ofertas em tempo real e ajude a comunidade.
+                  Ajude o pessoal de Feijó a economizar também. Viu uma oferta? Conta pra gente e vamos fazer o dinheiro de todo mundo render mais!
                 </p>
                 
                 <Button 
@@ -493,7 +493,7 @@ function HomePage() {
                   className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[var(--brand-secondary)] text-white dark:bg-[var(--brand-primary)] dark:text-[#0B1E3A] font-black uppercase tracking-widest text-[10px] sm:text-xs lg:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3">
-                    Registrar Agora
+                    Contar pra gente
                     <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
                   </span>
                   <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
@@ -521,7 +521,7 @@ function HomePage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="section-title font-display font-bold text-[var(--text-primary)] mb-0">Preços ao Vivo</h2>
+                <h2 className="section-title font-display font-bold text-[var(--text-primary)] mb-0">Preços que estão rolando agora</h2>
                 
                 <div className="flex items-center gap-2">
                   <div className="flex bg-[var(--bg-surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
