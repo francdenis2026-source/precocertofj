@@ -90,7 +90,7 @@ export const listPriceAlerts = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("price_alerts")
       .select(
-        "id, kind, catalog_id, market_name, display_name, prev_price, new_price, diff_pct, read_at, created_at, establishment_id",
+        "id, kind, catalog_id, market_name, display_name, prev_price, new_price, diff_pct, read_at, created_at",
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
@@ -101,7 +101,7 @@ export const listPriceAlerts = createServerFn({ method: "GET" })
       kind: r.kind as PriceAlert["kind"],
       catalogId: r.catalog_id,
       productSlug: slugifyText(r.display_name || "produto"),
-      establishmentId: r.establishment_id || null,
+      establishmentId: null,
       marketName: r.market_name,
       displayName: r.display_name,
       prevPrice: r.prev_price !== null ? Number(r.prev_price) : null,
