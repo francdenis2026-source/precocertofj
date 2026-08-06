@@ -342,33 +342,36 @@ function HomePage() {
             </div>
           </motion.section>
 
-          {/* How It Works Section */}
-          <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-12 w-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4 text-[var(--brand-primary)]">
-                <Search className="h-6 w-6" />
+          {/* How It Works Section - More Compact */}
+          <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-50 flex items-center justify-center text-[var(--brand-primary)]">
+                <Search className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold mb-2">1. Pesquise</h3>
-              <p className="text-sm text-[var(--text-tertiary)] mb-4">Encontre qualquer produto nos mercados da cidade em segundos.</p>
-              <Link to="/buscar" className="text-xs font-black uppercase tracking-widest text-[var(--brand-primary)] hover:underline">Ver catálogo</Link>
+              <div>
+                <h3 className="text-sm font-bold">1. Pesquise</h3>
+                <p className="text-[12px] text-[var(--text-tertiary)]">Produtos em tempo real.</p>
+              </div>
             </div>
             
-            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-12 w-12 rounded-2xl bg-pink-50 flex items-center justify-center mb-4 text-pink-500">
-                <TrendingDown className="h-6 w-6" />
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500">
+                <TrendingDown className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold mb-2">2. Compare</h3>
-              <p className="text-sm text-[var(--text-tertiary)] mb-4">Veja onde está mais barato e economize até 40% nas suas compras.</p>
-              <Link to="/app" className="text-xs font-black uppercase tracking-widest text-pink-500 hover:underline">Status ao vivo</Link>
+              <div>
+                <h3 className="text-sm font-bold">2. Compare</h3>
+                <p className="text-[12px] text-[var(--text-tertiary)]">Economize até 40%.</p>
+              </div>
             </div>
             
-            <div className="flex flex-col items-center text-center p-6 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-              <div className="h-12 w-12 rounded-2xl bg-green-50 flex items-center justify-center mb-4 text-green-500">
-                <PlusCircle className="h-6 w-6" />
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-green-50 flex items-center justify-center text-green-500">
+                <PlusCircle className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold mb-2">3. Colabore</h3>
-              <p className="text-sm text-[var(--text-tertiary)] mb-4">Registre preços novos e ajude a comunidade a economizar.</p>
-              <Link to="/registrar" className="text-xs font-black uppercase tracking-widest text-green-500 hover:underline">Registrar preço</Link>
+              <div>
+                <h3 className="text-sm font-bold">3. Colabore</h3>
+                <p className="text-[12px] text-[var(--text-tertiary)]">Ajude a comunidade.</p>
+              </div>
             </div>
           </section>
 
