@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+
 /**
  * Design Tokens - Deep Navy & Gold
  * --------------------------------
@@ -63,6 +65,12 @@
   --text-primary: #FFFFFF;
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
+
+  @variant light {
+    --text-primary: #1A1A1A;
+    --text-secondary: #4A5568;
+    --text-tertiary: #718096;
+  }
 
   @variant light {
     --text-primary: #1A1A1A;
