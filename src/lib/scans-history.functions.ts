@@ -116,6 +116,8 @@ export const getMyScan = createServerFn({ method: "POST" })
     return {
       id: row.id,
       productName: row.product_name,
+      productSlug: slugifyText(row.product_name || "produto"),
+      establishmentId: (row as any).establishment_id || null,
       priceCaptured: row.price_captured !== null ? Number(row.price_captured) : null,
       averagePrice: row.average_price !== null ? Number(row.average_price) : null,
       diffPct: row.diff_pct !== null ? Number(row.diff_pct) : null,
