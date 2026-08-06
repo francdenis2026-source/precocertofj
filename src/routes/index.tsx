@@ -404,6 +404,7 @@ function HomePage() {
                 </Link>
               ))}
             </div>
+            </Suspense>
           </section>
 
           {/* CTA Banner */}
