@@ -142,9 +142,13 @@ export function PriceSearchBar({
   const runSuggest = useServerFn(suggestProducts);
   const qc = useQueryClient();
 
-
-
   const { user, loading: sessionLoading } = useSession();
+  const isPremium = useMemo(() => {
+    // Mock premium check: assume user with certain metadata/email or role is premium
+    // In a real app, this would check a 'role' or 'subscription' claim
+    return !!user && (user.app_metadata?.role === 'admin' || user.email?.includes('premium'));
+  }, [user]);
+
   const isVisitor = !user;
   const quota = useTeaserQuota(3);
   const [quotaBlocked, setQuotaBlocked] = useState(false);
@@ -786,8 +790,12 @@ export function PriceSearchBar({
                 ))}
               </div>
               {isVisitor ? (
-                <p className="border-t border-border px-3 py-1.5 text-[13px] text-muted-foreground">
-                  Sem conta, o histórico fica só nesta visita — entre para salvá-lo.
+                <p className="border-t border-border px-3 py-1.5 text-[11px] font-medium text-muted-foreground bg-muted/20">
+                  <Link to="/auth" className="text-brand-gold hover:underline">Entre</Link> para salvar suas buscas. Histórico persistente é exclusivo para <span className="text-brand-gold font-bold">Planos Premium</span>.
+                </p>
+              ) : !isPremium ? (
+                <p className="border-t border-border px-3 py-1.5 text-[11px] font-medium text-muted-foreground bg-amber-500/5">
+                  Seu histórico é temporário. Assine o <span className="text-amber-500 font-bold">Plano Premium</span> para salvar para sempre.
                 </p>
               ) : null}
             </div>

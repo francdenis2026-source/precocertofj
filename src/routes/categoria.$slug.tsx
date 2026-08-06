@@ -387,9 +387,22 @@ function CategoryPage() {
               <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="gold-on-dark text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-gold-ink">
-                Categoria
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="gold-on-dark text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-gold-ink">
+                  Categoria
+                </p>
+                <button 
+                  onClick={() => {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url);
+                    // Minimal feedback - could use a toast if available
+                    alert("Link da categoria copiado!");
+                  }}
+                  className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-white/70 hover:bg-white/20 transition-colors"
+                >
+                  Compartilhar
+                </button>
+              </div>
               <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] text-white sm:text-[22px]">
                 {catLabel(def.slug, def.label)}
               </h1>
