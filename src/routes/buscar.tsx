@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { 
@@ -12,31 +12,22 @@ import {
   TrendingDown, 
   ChevronRight, 
   Star, 
-  Share2, 
-  Bell, 
   ArrowRight, 
-  ArrowLeft,
   Filter,
   LayoutGrid,
   Rows3,
-  ShoppingCart,
-  Maximize2,
+  Package,
   TrendingUp,
-  Plus,
-  ChevronDown,
-  Info,
-  Pill,
-  MoreHorizontal
+  X
 } from "lucide-react";
 
 import { searchProductPrice, type PriceSearchResult, type ProductGroup } from "@/lib/price-search.functions";
-import { listPublicEstablishments, type EstablishmentStat } from "@/lib/establishments-public.functions";
+import { listPublicEstablishments } from "@/lib/establishments-public.functions";
 import { Price } from "@/components/ds/Price";
 import { Badge } from "@/components/ds/Badge";
 import { ProductImage } from "@/components/ds/ProductImage";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -46,7 +37,7 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["q"])],
+    middlewares: [retainSearchParams(["q", "sel"])],
   },
   head: () => ({
     meta: [
@@ -73,7 +64,7 @@ function SearchPage() {
   const fetchMarkets = useServerFn(listPublicEstablishments);
   const { data: marketsData, isLoading: isMarketsLoading } = useQuery({
     queryKey: ["public-establishments-list"],
-    queryFn: () => fetchList({}),
+    queryFn: () => fetchMarkets({}),
     staleTime: 5 * 60_000,
   });
 
@@ -105,7 +96,10 @@ function SearchPage() {
         {/* Left Sidebar: Markets List */}
         <aside className="w-full md:w-[360px] lg:w-[380px] bg-white border-r border-[#E5E7EB] flex flex-col shrink-0">
           <div className="p-4 border-b border-[#E5E7EB] bg-white sticky top-0 z-20">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#6B7280] mb-3">Estabelecimentos</h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-[#6B7280]">Estabelecimentos</h2>
+              <span className="text-[10px] font-bold text-[#2563EB] bg-[#2563EB]/10 px-2 py-0.5 rounded-full">{markets.length}</span>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
               <input 
@@ -135,8 +129,8 @@ function SearchPage() {
                 >
                   <div className="flex gap-3 relative z-10">
                     <div className="h-12 w-12 shrink-0 rounded-lg bg-[#F3F4F6] border border-[#E5E7EB] flex items-center justify-center overflow-hidden">
-                      {m.logo_url ? (
-                         <img src={m.logo_url} alt={m.name} className="h-full w-full object-contain" />
+                      {m.logoUrl ? (
+                         <img src={m.logoUrl} alt={m.name} className="h-full w-full object-contain" />
                       ) : (
                          <Store className="h-5 w-5 text-[#9CA3AF]" />
                       )}
@@ -144,7 +138,7 @@ function SearchPage() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-bold text-sm truncate group-hover:text-[#2563EB] transition-colors">{m.name}</h3>
-                        <Badge variant="savingsSoft" size="xs" className="bg-[#16A34A]/10 text-[#16A34A] border-none">-{m.maxSavings || 12}%</Badge>
+                        {m.maxSavings > 0 && <Badge variant="savingsSoft" size="xs" className="bg-[#16A34A]/10 text-[#16A34A] border-none">-{m.maxSavings}%</Badge>}
                       </div>
                       <p className="text-[11px] text-[#6B7280] font-medium mt-0.5">{m.neighborhood || "Centro"}</p>
                       <div className="flex items-center gap-3 mt-2">
@@ -179,7 +173,7 @@ function SearchPage() {
               </div>
               <div className="px-8 pb-8 -mt-10 relative z-10 flex flex-col md:flex-row gap-6">
                 <div className="h-24 w-24 rounded-2xl bg-white border-2 border-white shadow-xl flex items-center justify-center overflow-hidden shrink-0">
-                   {activeMarket.logo_url ? <img src={activeMarket.logo_url} alt="" className="h-full w-full object-contain" /> : <Store className="h-10 w-10 text-[#2563EB]" />}
+                   {activeMarket.logoUrl ? <img src={activeMarket.logoUrl} alt="" className="h-full w-full object-contain" /> : <Store className="h-10 w-10 text-[#2563EB]" />}
                 </div>
                 <div className="flex-1 pt-10">
                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -212,9 +206,9 @@ function SearchPage() {
           {/* Stats Row */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Produtos Disponíveis" value={String(activeMarket?.productsCount || 0)} icon={<Package className="h-4 w-4" />} />
-            <StatCard label="Categorias" value="12" icon={<Filter className="h-4 w-4" />} />
-            <StatCard label="Economia Média" value="14%" icon={<TrendingDown className="h-4 w-4" />} tone="savings" />
-            <StatCard label="Promoções Ativas" value="48" icon={<TrendingUp className="h-4 w-4" />} tone="offers" />
+            <StatCard label="Categorias" value={String(activeMarket?.topCategories?.length || 0)} icon={<Filter className="h-4 w-4" />} />
+            <StatCard label="Economia Média" value={`${activeMarket?.maxSavings || 0}%`} icon={<TrendingDown className="h-4 w-4" />} tone="savings" />
+            <StatCard label="Preço Mínimo" value={activeMarket?.minPrice ? `R$ ${activeMarket.minPrice.toFixed(2)}` : "—"} icon={<TrendingUp className="h-4 w-4" />} tone="offers" />
           </div>
 
           {/* Featured/Results Area */}
