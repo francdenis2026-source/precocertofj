@@ -292,12 +292,12 @@ function HomePage() {
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-lg hover:border-[var(--brand-secondary)]/20",
+                  "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
                   (isSearchFocused || isScrolled) && "h-[46px] sm:h-[52px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg"
                 )}
               >
                 <Search className={cn(
-                  "ml-4 h-4.5 w-4.5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors",
+                  "ml-4 h-4.5 w-4.5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] group-focus-within:scale-110 transition-all duration-300",
                   (isSearchFocused || isScrolled) && "h-4 w-4 ml-3"
                 )} />
                 <input 

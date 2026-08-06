@@ -300,10 +300,10 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
       <AnimatePresence>
         {visible && rect && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            initial={{ opacity: 0, y: -8, scale: 0.99 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            exit={{ opacity: 0, y: -8, scale: 0.99 }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
             className={cn("fixed z-[110] flex flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]", className)}
             style={{
               left: rect.left,
@@ -376,9 +376,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   onMouseEnter={() => setActive(i)}
                   onClick={() => handlePick(s)}
                   className={
-                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
+                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2.5 text-left transition-all duration-300 ease-out " +
                     (active === i
-                      ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 text-[var(--text-primary)]"
+                      ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/8 text-[var(--text-primary)] translate-x-1"
                       : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]")
                   }
                 >
