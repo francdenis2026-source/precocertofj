@@ -218,7 +218,7 @@ function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[2px]"
             onClick={() => setIsSearchFocused(false)}
           />
         )}
@@ -234,7 +234,7 @@ function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.9) contrast(1.1) saturate(1.2) blur(2px)"
+            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(2px)"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
@@ -272,7 +272,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)]"
+              className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[1] sm:leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)] px-2 sm:px-0"
             >
               Economize de verdade em cada compra na <span className="text-[var(--brand-primary)]">nossa Feijó</span>
             </motion.h1>
@@ -289,8 +289,8 @@ function HomePage() {
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
               isScrolled 
-                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
-                : "relative mb-12"
+                ? "fixed top-0 left-0 right-0 z-[110] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
+                : "relative z-[110] mb-12"
             )}>
               <form 
                 ref={searchAnchorRef}
@@ -452,7 +452,7 @@ function HomePage() {
             >
               {/* background image without yellow tint, high contrast, lazy loading optimization */}
               <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
+                className="absolute inset-0 bg-cover bg-center opacity-40 saturate-[0.8] brightness-[0.9] group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
                 style={{ 
                   backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')",
                   backgroundColor: 'var(--bg-surface-elevated)'
