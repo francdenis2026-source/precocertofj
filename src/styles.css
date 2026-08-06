@@ -72,12 +72,6 @@
     --text-tertiary: #718096;
   }
 
-  @variant light {
-    --text-primary: #1A1A1A;
-    --text-secondary: #4A5568;
-    --text-tertiary: #718096;
-  }
-
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
 }
