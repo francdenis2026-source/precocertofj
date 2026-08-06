@@ -132,7 +132,7 @@ export function RecentProductsCarousel() {
     >
       <header className="mb-2.5 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+          <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--brand-primary)]">
             <Sparkles className="h-3 w-3" strokeWidth={2.4} aria-hidden />
             Novidades no catálogo
           </p>
@@ -142,8 +142,9 @@ export function RecentProductsCarousel() {
         </div>
         <Link
           to="/melhores-precos"
-          className="hidden shrink-0 text-[11.5px] font-semibold text-primary hover:underline md:inline"
+          className="hidden shrink-0 text-[11.5px] font-bold text-[var(--brand-primary)] hover:underline md:inline"
         >
+
           Ver catálogo completo →
         </Link>
       </header>
@@ -174,7 +175,8 @@ export function RecentProductsCarousel() {
                   to="/produto-publico/$slug"
                   params={{ slug }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40"
+                  className="group/card relative block h-full overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40"
+
                 >
                   {/* Scanning Effect for "Eyeing the product" feature - subtly updated */}
                   <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[12px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
@@ -246,7 +248,7 @@ export function RecentProductsCarousel() {
                         )}
                       </div>
                       
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] transition-all duration-300 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] transition-all duration-300 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white">
                         <ArrowRight className="h-5 w-5" />
                       </div>
                     </div>

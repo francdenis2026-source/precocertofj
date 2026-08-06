@@ -30,8 +30,9 @@ export function RegisteredStoresCarousel() {
   return (
     <div className="relative w-full overflow-hidden">
       {/* Fade Edges */}
-      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[var(--bg-surface)] to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[var(--bg-surface)] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-[var(--bg-base)] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[var(--bg-base)] to-transparent pointer-events-none" />
+
       
       <motion.div 
         className="flex gap-6 py-2"
