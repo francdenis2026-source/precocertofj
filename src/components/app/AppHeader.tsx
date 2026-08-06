@@ -203,7 +203,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         <span
           data-tone={isAdminScope ? "catalog" : "overview"}
           className={cn(
-            "pc-tone-chip hidden items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)]",
+            "pc-tone-chip hidden items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--text-primary)]",
             tight ? "xl:inline-flex" : "md:inline-flex",
           )}
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
