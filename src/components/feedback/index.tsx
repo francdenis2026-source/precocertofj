@@ -99,7 +99,7 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-[13px] sm:text-sm leading-relaxed text-foreground sm:flex-row sm:items-center",
+        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/25 bg-destructive/5 p-5 text-[13px] sm:text-sm leading-relaxed text-foreground sm:flex-row sm:items-center shadow-lg shadow-destructive/5",
         className,
       )}
     >
@@ -276,7 +276,7 @@ export function EmptyState({
       role={role}
       aria-live={ariaLive ?? (role === "status" ? "polite" : undefined)}
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/60 text-center",
+        "flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/60 text-center shadow-xl shadow-black/20",
         isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
@@ -284,7 +284,7 @@ export function EmptyState({
 
       <span
         className={cn(
-          "mb-2.5 grid place-items-center rounded-full bg-primary/12 text-primary ring-1 ring-primary/25 dark:bg-primary/20 dark:text-primary-foreground dark:ring-primary/40",
+          "mb-2.5 grid place-items-center rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] ring-1 ring-[var(--brand-primary)]/20 shadow-[0_0_15px_rgba(255,215,0,0.1)]",
           isSm ? "h-9 w-9" : "h-10 w-10",
         )}
       >

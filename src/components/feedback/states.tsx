@@ -128,7 +128,7 @@ export function IllustratedEmptyState({
       role="status"
       aria-live="polite"
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/60 text-center animate-in fade-in-0 slide-in-from-bottom-1 duration-300",
+        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 text-center animate-in fade-in-0 slide-in-from-bottom-1 duration-300 shadow-2xl backdrop-blur-md",
         compact ? "px-4 py-6" : "px-6 py-10",
         className,
       )}
@@ -294,7 +294,7 @@ export function SmartErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/35 bg-destructive/8 text-left animate-in fade-in-0 duration-200 sm:flex-row sm:items-center",
+        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 text-left animate-in fade-in-0 duration-200 sm:flex-row sm:items-center shadow-lg shadow-destructive/5 backdrop-blur-sm",
         compact ? "p-3.5" : "p-5",
         className,
       )}
