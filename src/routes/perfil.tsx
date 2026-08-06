@@ -236,7 +236,7 @@ function Perfil() {
         <PageHeader
           breadcrumbs={[{ label: "Início", to: "/app" }, { label: "Meu perfil" }]}
           title="Meu perfil"
-          description="Atualize sua foto, dados pessoais, endereço e preferências de acompanhamento de preços."
+          description="Aqui você troca sua foto, ajusta seus dados e escolhe como quer ver os preços."
         />
         <div className="grid gap-3 pb-4 md:grid-cols-[1fr_2fr]">
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
@@ -345,7 +345,7 @@ function Perfil() {
             <form onSubmit={handleSaveCpf} className="rounded-2xl border border-border bg-card p-4">
               <p className="font-display text-lg text-foreground">CPF</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Usado para acessar sua conta.
+                É o número que você usa para entrar na sua conta.
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-start">
                 <label className="flex-1">
@@ -377,13 +377,13 @@ function Perfil() {
               <div>
                 <p className="font-display text-lg text-foreground">Dados pessoais</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Mantenha nome, telefone e endereço atualizados para receber alertas certos.
+                  Deixe tudo certinho para a gente te mandar os melhores avisos de preço.
                 </p>
               </div>
 
               <ProfileField label="Nome completo" icon={User} value={fullName} onChange={setFullName}>
                 {fullName.length > 0 && !nameOk && (
-                  <InlineError>Informe seu nome completo (mínimo 3 letras).</InlineError>
+                  <InlineError>Escreva seu nome completo (pelo menos 3 letras).</InlineError>
                 )}
               </ProfileField>
 

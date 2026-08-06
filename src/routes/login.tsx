@@ -142,7 +142,7 @@ function LoginPage() {
     if (target.startsWith("/app")) return "Painel do cliente";
     if (target.startsWith("/buscar")) return "Buscar preços";
     if (target.startsWith("/mercados") || target.startsWith("/estabelecimentos"))
-      return "Mercados de Feijó";
+      return "Comércios da nossa Feijó";
     if (target.startsWith("/colaborador")) return "Área do colaborador";
     if (target === "/" || target === "") return "Página inicial";
     return "Área restrita";
@@ -277,7 +277,7 @@ function LoginPage() {
         clearAttempts(digits);
         notify.success(`Login aprovado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: `CPF ${maskCpf(digits)} verificado. Carregando suas listas, favoritos e alertas de preço.`,
+          description: `Tudo pronto! Estamos carregando os preços para você.`,
         });
       }
       await router.invalidate();
@@ -310,7 +310,7 @@ function LoginPage() {
         to="/"
         className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-3 py-1.5 text-[13px] font-medium text-[var(--text-secondary)] backdrop-blur transition hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] sm:right-8 sm:top-8"
       >
-        ← Voltar ao site
+        ← Voltar para o início
       </Link>
 
       <motion.div
@@ -352,7 +352,7 @@ function LoginPage() {
             className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
             style={{ fontFamily: PC_DISPLAY }}
           >
-            {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
+            {mode === "login" ? "Entrar na sua conta" : "Criar sua conta agora"}
           </h1>
 
 
@@ -719,13 +719,13 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
           <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-[12px] text-amber-100">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold">Não conseguimos calcular o barômetro agora.</p>
+              <p className="font-semibold">Opa! Não conseguimos ver os preços agora.</p>
               <button
                 type="button"
                 onClick={() => refetch()}
                 className="mt-1 text-[11px] font-semibold text-white underline underline-offset-2 hover:text-emerald-200"
               >
-                Tentar novamente
+                Tentar de novo
               </button>
             </div>
           </div>
@@ -741,7 +741,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
             <div className="relative flex items-end justify-between gap-6">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/80">
-                  Maior oscilação da semana
+                  Maior diferença da semana
                 </p>
                 <p className="mt-2 font-display text-[22px] font-semibold leading-tight text-white">
                   {isLoading ? (
@@ -751,7 +751,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                   )}
                 </p>
                 <p className="mt-1 text-[12px] text-white/85">
-                  variação registrada entre mercados monitorados
+                  de economia entre os comércios monitorados
                 </p>
               </div>
               <div className="text-right">
@@ -768,13 +768,12 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                   )}
                 </p>
                 <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-                  oscilação da semana
-
+                  de economia na semana
                 </p>
               </div>
             </div>
             <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-[11px] text-white/80">Economia estimada por família</span>
+              <span className="text-[11px] text-white/80">O que você pode guardar no bolso</span>
               <span className="font-display text-[18px] font-bold tabular-nums text-white">
                 {isLoading ? (
                   <span className="inline-block h-4 w-24 animate-pulse rounded bg-white/10" />

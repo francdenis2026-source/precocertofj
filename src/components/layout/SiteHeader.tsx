@@ -129,7 +129,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 subTextClass,
               )}
             >
-              Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)]">Acre</span>
+              Nossa Feijó <span className="mx-0.5 opacity-60">·</span> <span className="text-[var(--brand-primary)]">Acre</span>
             </span>
           </div>
         </Link>
@@ -320,7 +320,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 "font-display inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-bold text-black shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
               )}
             >
-              Entrar
+              Entrar na conta
             </Link>
 
 

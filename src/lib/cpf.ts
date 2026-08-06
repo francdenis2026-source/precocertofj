@@ -53,20 +53,20 @@ export type CpfValidationResult =
 export function validateCpfDetailed(input: string): CpfValidationResult {
   const cpf = stripCpf(input);
   if (cpf.length === 0) {
-    return { valid: false, reason: "empty", message: "Informe seu CPF." };
+    return { valid: false, reason: "empty", message: "Escreva seu CPF." };
   }
   if (cpf.length < 11) {
     return {
       valid: false,
       reason: "incomplete",
-      message: `CPF incompleto — faltam ${11 - cpf.length} dígito${11 - cpf.length > 1 ? "s" : ""}.`,
+      message: `Tá faltando número — faltam ${11 - cpf.length} dígito${11 - cpf.length > 1 ? "s" : ""}.`,
     };
   }
   if (/^(\d)\1{10}$/.test(cpf)) {
     return {
       valid: false,
       reason: "repeated",
-      message: "CPF inválido — sequências como 111.111.111-11 não são aceitas.",
+      message: "CPF não vale — números repetidos assim não servem.",
     };
   }
 
@@ -85,7 +85,7 @@ export function validateCpfDetailed(input: string): CpfValidationResult {
     return {
       valid: false,
       reason: "checksum",
-      message: "CPF inválido — dígitos verificadores não conferem. Confira os números digitados.",
+      message: "Tem algo errado no CPF — confere os números que você escreveu.",
     };
   }
   return { valid: true, digits: cpf };

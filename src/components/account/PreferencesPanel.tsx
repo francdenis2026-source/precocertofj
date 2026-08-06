@@ -104,7 +104,7 @@ export function PreferencesPanel() {
         <div>
           <h2 className="font-display text-lg text-foreground">Preferências</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Personalize o que você acompanha e como quer ser avisado sobre os preços.
+            Escolha o que você quer acompanhar e por onde quer receber os avisos de preço.
           </p>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function PreferencesPanel() {
       {/* Categorias */}
       <div>
         <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-          <Tag className="h-3.5 w-3.5" /> Categorias de interesse
+          <Tag className="h-3.5 w-3.5" /> Coisas que me interessam
         </p>
         <div className="flex flex-wrap gap-2">
           {PREFERENCE_CATEGORIES.map((cat) => {
@@ -140,10 +140,10 @@ export function PreferencesPanel() {
       {/* Mercados preferidos */}
       <div>
         <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-          <Store className="h-3.5 w-3.5" /> Mercados preferidos
+          <Store className="h-3.5 w-3.5" /> Mercados que eu mais vou
         </p>
         {stores.length === 0 ? (
-          <p className="text-xs text-muted-foreground">Nenhum mercado disponível no momento.</p>
+          <p className="text-xs text-muted-foreground">Não encontramos nenhum comércio agora.</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {stores.map((store: { id: string; name: string }) => {
@@ -173,7 +173,7 @@ export function PreferencesPanel() {
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="mb-1.5 block text-xs font-medium text-foreground">
-            Raio de busca: <span className="font-bold text-primary">{prefs.searchRadiusKm} km</span>
+            Distância da busca: <span className="font-bold text-primary">{prefs.searchRadiusKm} km</span>
           </span>
           <input
             type="range"
@@ -188,7 +188,7 @@ export function PreferencesPanel() {
 
         <label className="block">
           <span className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-foreground">
-            <Wallet className="h-3.5 w-3.5" /> Meta de gasto mensal (R$)
+            <Wallet className="h-3.5 w-3.5" /> Quanto pretendo gastar por mês (R$)
           </span>
           <input
             value={prefs.monthlyBudget ?? ""}
@@ -210,17 +210,17 @@ export function PreferencesPanel() {
         </p>
         <div className="space-y-2">
           <ToggleRow
-            label="Queda de preço nos meus favoritos"
+            label="Avisar quando o preço baixar nos meus favoritos"
             checked={prefs.notifyPriceDrop}
             onChange={(v) => patch({ notifyPriceDrop: v })}
           />
           <ToggleRow
-            label="Resumo semanal de economia"
+            label="Resumo de quanto economizei na semana"
             checked={prefs.notifyWeeklyDigest}
             onChange={(v) => patch({ notifyWeeklyDigest: v })}
           />
           <ToggleRow
-            label="Novidades e promoções da plataforma"
+            label="Novidades e ofertas do PreçoCerto"
             checked={prefs.notifyNews}
             onChange={(v) => patch({ notifyNews: v })}
           />
@@ -252,7 +252,7 @@ export function PreferencesPanel() {
         disabled={saving || !dirty}
         className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Check className="h-4 w-4" /> Salvar preferências</>)}
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Check className="h-4 w-4" /> Salvar tudo</>)}
       </button>
     </section>
   );

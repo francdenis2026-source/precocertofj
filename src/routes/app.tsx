@@ -104,7 +104,7 @@ function DashboardPage() {
       <div className="mx-auto max-w-6xl px-4 md:px-6 pb-20">
         <PageHeader
           title="Meu Painel"
-          description="Acompanhe seus produtos, histórico e notificações em um só lugar."
+          description="Aqui você acompanha seus produtos, quanto economizou e seus avisos de preço."
           actions={
             <div className="flex gap-2">
               <Button asChild size="sm" variant="outline">
@@ -116,7 +116,7 @@ function DashboardPage() {
               <Button asChild size="sm" variant="outline">
                 <Link to="/app/estabelecimentos">
                   <Store className="mr-2 h-4 w-4" />
-                  Rede de Mercados
+                  Ver comércios
                 </Link>
               </Button>
             </div>
@@ -129,11 +129,11 @@ function DashboardPage() {
           {/* Nova Seção de Insights Rápidos */}
           <SectionCard 
             title="Insights & Economia" 
-            description="Como você está economizando este mês."
+            description="Veja como o seu dinheiro rendeu mais este mês."
             className="lg:col-span-2 pc-animate-fade-in"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider">
-                <Link to="/app/insights">Ver Insights Detalhados <ChevronRight className="ml-1 h-3 w-3" /></Link>
+                <Link to="/app/insights">Ver tudo sobre minha economia <ChevronRight className="ml-1 h-3 w-3" /></Link>
               </Button>
             }
           >
@@ -150,14 +150,14 @@ function DashboardPage() {
               </div>
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Rota Sugerida</p>
-                <p className="text-sm font-bold truncate">Rota Econômica: Atacadão + Farmácia</p>
+                <p className="text-sm font-bold truncate">Melhor caminho: Atacadão + Farmácia</p>
                 <p className="text-[10px] font-bold text-primary flex items-center gap-1">
                   <TrendingDown className="h-3 w-3" /> Economia de R$ 42,90
                 </p>
               </div>
               <div className="flex items-center justify-end">
                 <Button asChild variant="outline" size="sm" className="w-full md:w-auto font-black text-[10px] uppercase">
-                  <Link to="/app/insights">Calcular Rota <Zap className="ml-2 h-3.5 w-3.5 fill-primary text-primary" /></Link>
+                  <Link to="/app/insights">Achar melhor caminho <Zap className="ml-2 h-3.5 w-3.5 fill-primary text-primary" /></Link>
                 </Button>
               </div>
             </div>
@@ -165,8 +165,8 @@ function DashboardPage() {
 
           {/* Tracked Products */}
           <SectionCard 
-            title="Favoritos monitorados" 
-            description="Seus itens favoritos e preços atuais."
+            title="Produtos que eu sigo" 
+            description="Seus itens favoritos e quanto estão custando hoje."
             className="pc-animate-fade-in [animation-delay:100ms]"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider">
@@ -178,7 +178,7 @@ function DashboardPage() {
               <EmptyState 
                 icon={Star} 
                 title="Sem favoritos" 
-                message="Favorite produtos para monitorar preços aqui." 
+                message="Marque o coração nos produtos para acompanhar os preços aqui." 
                 action={<Button asChild variant="outline" size="sm"><Link to="/app/produtos">Buscar produtos</Link></Button>}
               />
             ) : (
@@ -211,8 +211,8 @@ function DashboardPage() {
 
           {/* Recent Alerts */}
           <SectionCard 
-            title="Alertas recentes" 
-            description="Notificações de queda de preço e metas atingidas."
+            title="Avisos recentes" 
+            description="Mensagens de quando o preço baixou ou atingiu sua meta."
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
                 <Link to="/alertas">Gerenciar <ChevronRight className="ml-1 h-3 w-3" /></Link>
@@ -223,7 +223,7 @@ function DashboardPage() {
               <EmptyState 
                 icon={Bell} 
                 title="Sem alertas recentes" 
-                message="Você será avisado quando seus favoritos caírem de preço." 
+                message="A gente te avisa quando os preços dos seus produtos favoritos baixarem." 
               />
             ) : (
               <ul className="space-y-3">
@@ -265,8 +265,8 @@ function DashboardPage() {
 
           {/* Recent History */}
           <SectionCard 
-            title="Histórico recente" 
-            description="Últimos produtos que você consultou ou escaneou."
+            title="Coisas que vi antes" 
+            description="Últimos produtos que você olhou ou registrou."
             className="lg:col-span-2"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
@@ -278,7 +278,7 @@ function DashboardPage() {
               <EmptyState 
                 icon={History} 
                 title="Nenhum registro" 
-                message="Escaneie um produto ou busque no catálogo para ver aqui." 
+                message="Busque ou registre um produto para ele aparecer aqui." 
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -312,7 +312,7 @@ function DashboardPage() {
             <Button asChild className="rounded-full h-12 px-8 font-bold">
               <Link to="/app/produtos">
                 <Search className="mr-2 h-4 w-4" />
-                Buscar Preços
+                Achar Menor Preço
               </Link>
             </Button>
             <Button asChild variant="outline" className="rounded-full h-12 px-8 font-bold border-2">
@@ -324,7 +324,7 @@ function DashboardPage() {
             <Button asChild variant="outline" className="rounded-full h-12 px-8 font-bold border-2">
               <Link to="/app/estabelecimentos">
                 <Store className="mr-2 h-4 w-4" />
-                Ver Mercados
+                Ver Comércios
               </Link>
             </Button>
           </div>
