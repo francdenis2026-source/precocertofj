@@ -366,7 +366,7 @@ function StorePage() {
   return (
     <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+5.5rem)] text-foreground">
       <div className="mx-auto max-w-md px-4 pt-[max(env(safe-area-inset-top),0.75rem)]">
-        <div className="flex items-center justify-between gap-2">
+        <div className="no-print flex items-center justify-between gap-2">
           {Route.useSearch().from === "ranking" ? (
             <Link
               to="/app"
