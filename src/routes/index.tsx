@@ -301,52 +301,32 @@ function HomePage() {
             </div>
           </motion.section>
 
-          {/* Categories Horizontal Navigation */}
-          <section className="mb-16">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
-              <div className="flex flex-col gap-1">
-                <h2 className="section-title mb-0">Navegar por Categoria</h2>
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
-                  <span className="w-6 h-[1px] bg-[var(--border-subtle)]"></span>
-                  Explore nosso catálogo
-                </div>
-              </div>
-
-              {/* Fast Filter/Search for categories */}
-              <div className="relative group/search w-full sm:w-80">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)] group-focus-within/search:text-[var(--brand-primary)] transition-colors" />
-                <input 
-                  type="text"
-                  placeholder="Filtrar categorias ou itens..."
-                  onChange={(e) => {
-                    const term = e.target.value.toLowerCase();
-                    const container = document.getElementById('category-scroll-container');
-                    if (!container) return;
-                    const items = container.querySelectorAll('[data-category-item]');
-                    items.forEach((item: any) => {
-                      const label = item.getAttribute('data-label')?.toLowerCase() || '';
-                      if (label.includes(term) || term === '') {
-                        item.style.display = 'flex';
-                        item.style.opacity = '1';
-                      } else {
-                        item.style.display = 'none';
-                        item.style.opacity = '0';
-                      }
-                    });
-                  }}
-                  className="w-full h-11 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 text-xs font-medium outline-none focus:border-[var(--brand-primary)]/50 focus:ring-4 focus:ring-[var(--brand-primary)]/5 transition-all"
-                />
-              </div>
+          {/* Compact Category Navigation */}
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Categorias</h2>
+              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver todas</Link>
             </div>
             
-            <Carousel
-              opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true, containScroll: "trimSnaps" }}
-              className="group/carousel relative"
-            >
-              <CarouselContent 
-                id="category-scroll-container"
-                className="-ml-4 pb-6 select-none"
-              >
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
+              {CATEGORIES.map(({ slug, label, Icon, color }) => (
+                <Link 
+                  key={slug} 
+                  to="/categoria/$slug" 
+                  params={{ slug: slug as any }}
+                  className="group flex flex-col items-center gap-2"
+                >
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors" />
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity" style={{ backgroundColor: color }} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full text-center px-1">
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
                 {CATEGORIES.map(({ slug, label, Icon, color }) => (
                   <CarouselItem 
                     key={slug} 
