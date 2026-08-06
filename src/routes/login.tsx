@@ -328,7 +328,7 @@ function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex h-full max-h-[720px] min-h-[580px] w-full max-w-[1000px] flex-col overflow-hidden rounded-[26px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
+        className="relative z-10 flex h-full max-h-[660px] min-h-[500px] w-full max-w-[900px] flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
       >
         <div className="relative hidden w-full shrink-0 md:block md:w-[392px]">
           <AuthHero variant="login" className="h-full w-full" />
@@ -388,7 +388,7 @@ function LoginPage() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             >
               <h1
-                className="mt-2 text-[23px] font-bold leading-[1.12] tracking-tight text-foreground sm:text-[27px]"
+                className="mt-2 text-[20px] font-bold leading-[1.12] tracking-tight text-foreground sm:text-[24px]"
                 style={{ fontFamily: PC_DISPLAY }}
               >
                 {mode === "login" ? "Bem-vindo de volta" : "Criar sua conta agora"}
@@ -404,7 +404,7 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-3 flex flex-1 flex-col gap-2.5 overflow-hidden" onSubmit={handleSubmit}>
+          <form className="mt-2 flex flex-1 flex-col gap-2 overflow-hidden" onSubmit={handleSubmit}>
             <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
 
             {mode === "signup" && (() => {
@@ -1069,7 +1069,7 @@ function Field({
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
           className={
-            "h-12 w-full rounded-xl bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-foreground text-[14.5px] font-semibold tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
+            "h-10 w-full rounded-xl bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-foreground text-[14px] font-semibold tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
             (Icon ? "pl-10 " : "pl-3.5 ") +
