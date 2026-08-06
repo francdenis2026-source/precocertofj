@@ -257,7 +257,7 @@ export const getRecentProducts = createServerFn({ method: "GET" })
           };
         })
         .sort((a, b) => (a.when < b.when ? 1 : -1))
-        .slice(0, data.limit);
+        .slice(0, limit);
 
 
       return arr;
