@@ -768,8 +768,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                   )}
                 </p>
                 <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-                  oscilação da semana
-
+                  de economia na semana
                 </p>
               </div>
             </div>
