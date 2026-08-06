@@ -461,34 +461,34 @@ function HomePage() {
 
             {/* Platform Stats Column */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="p-8 rounded-[32px] bg-gradient-to-br from-[var(--brand-primary)] to-[#FFA500] text-white dark:text-black shadow-2xl relative overflow-hidden group">
+              <div className="p-8 rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
                 
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="h-10 w-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                      <TrendingDown className="h-5 w-5" />
+                    <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center border border-[var(--brand-primary)]/20">
+                      <TrendingDown className="h-5 w-5 text-[var(--brand-primary)]" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Economia Estimada</span>
                   </div>
                   
                   <div className="mb-2">
-                    <div className="text-4xl font-black tracking-tight mb-1">
+                    <div className="text-4xl font-black tracking-tight mb-1 text-[var(--brand-primary)]">
                       <Price value={loaderData.economy?.total || 0} />
                     </div>
                     <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">Poupados pelos usuários</div>
                   </div>
                   
-                  <div className="mt-8 pt-8 border-t border-white/20">
+                  <div className="mt-8 pt-8 border-t border-[var(--border-subtle)]">
                     <div className="flex items-center justify-between">
                       <div className="flex -space-x-3">
                         {[1, 2, 3, 4].map(i => (
-                          <div key={i} className="h-8 w-8 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-md overflow-hidden">
+                          <div key={i} className="h-8 w-8 rounded-full border-2 border-[var(--bg-surface)] bg-[var(--bg-base)] overflow-hidden">
                             <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="h-full w-full grayscale contrast-125" />
                           </div>
                         ))}
                       </div>
-                      <div className="text-[9px] font-black uppercase tracking-wider bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-md">
+                      <div className="text-[9px] font-black uppercase tracking-wider bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] px-3 py-1.5 rounded-full border border-[var(--brand-primary)]/20">
                         +1.2k usuários ativos
                       </div>
                     </div>
