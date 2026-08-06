@@ -209,6 +209,19 @@ function HomePage() {
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="overlay" showThemeToggle />
       
+      {/* Backdrop for focused search */}
+      <AnimatePresence>
+        {isSearchFocused && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm"
+            onClick={() => setIsSearchFocused(false)}
+          />
+        )}
+      </AnimatePresence>
+      
       {/* Light & Professional Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
