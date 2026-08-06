@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { prefetchRouteData } from "@/lib/route-prefetch";
 import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu, ShieldCheck } from "lucide-react";
+import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { ds, dsx } from "@/lib/ds";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useMyRoles } from "@/hooks/useMyRoles";
