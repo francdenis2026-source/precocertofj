@@ -58,9 +58,8 @@ export function RegisteredStoresCarousel() {
                 src={store.logoUrl} 
                 name={store.name} 
                 className="h-full w-full border-none p-0 bg-transparent"
-                imgClassName="object-contain filter brightness-100"
+                imgClassName="object-contain"
                 initialsClassName="text-slate-900 font-bold text-[12px]"
-                vector
               />
             </div>
             <span className="text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] transition-colors truncate max-w-[80px]">
