@@ -58,7 +58,7 @@ function SearchPage() {
   }, []);
 
   const handlePickQuery = (q: string) => {
-    navigate({ search: (prev) => ({ ...prev, q }), replace: !!search.q });
+    navigate({ search: (prev: any) => ({ ...prev, q }), replace: !!search.q });
   };
 
   return (
@@ -71,7 +71,7 @@ function SearchPage() {
            <div className="mx-auto max-w-7xl px-4 flex items-center gap-4">
              <PriceSearchBar 
                initialQuery={search.q} 
-               onQueryChange={(q) => navigate({ search: (prev) => ({ ...prev, q }), replace: !!search.q })}
+               onQueryChange={(q) => navigate({ search: (prev: any) => ({ ...prev, q }), replace: !!search.q })}
                fitResults={false}
              />
            </div>
