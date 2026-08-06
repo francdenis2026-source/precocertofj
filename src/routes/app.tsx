@@ -360,7 +360,7 @@ function Metric({
         >
           {label}
         </p>
-        <p className="pc-price min-w-0 truncate text-[19px] font-semibold leading-tight text-[var(--text-primary)] sm:text-[21px]">
+        <p className="pc-price font-display min-w-0 truncate text-[19px] font-bold leading-tight text-[var(--text-primary)] sm:text-[21px]">
           {value}
         </p>
         <p className="line-clamp-1 text-[12px] leading-tight text-[var(--text-tertiary)]" title={hint}>
