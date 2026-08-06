@@ -348,6 +348,7 @@ function HomePage() {
             </div>
           </motion.section>
 
+
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
           <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
