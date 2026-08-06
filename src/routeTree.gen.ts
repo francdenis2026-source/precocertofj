@@ -13,6 +13,7 @@ import { Route as TendenciasRouteImport } from './routes/tendencias'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
 import { Route as ResgatarRouteImport } from './routes/resgatar'
+import { Route as RegistrarRouteImport } from './routes/registrar'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as PrecosPorCategoriaRouteImport } from './routes/precos-por-categoria'
 import { Route as PrecosRouteImport } from './routes/precos'
@@ -138,6 +139,11 @@ const SemPermissaoRoute = SemPermissaoRouteImport.update({
 const ResgatarRoute = ResgatarRouteImport.update({
   id: '/resgatar',
   path: '/resgatar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistrarRoute = RegistrarRouteImport.update({
+  id: '/registrar',
+  path: '/registrar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacidadeRoute = PrivacidadeRouteImport.update({
@@ -717,6 +723,7 @@ export interface FileRoutesByFullPath {
   '/precos': typeof PrecosRoute
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/registrar': typeof RegistrarRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -829,6 +836,7 @@ export interface FileRoutesByTo {
   '/precos': typeof PrecosRoute
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/registrar': typeof RegistrarRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -942,6 +950,7 @@ export interface FileRoutesById {
   '/precos': typeof PrecosRoute
   '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
+  '/registrar': typeof RegistrarRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -1056,6 +1065,7 @@ export interface FileRouteTypes {
     | '/precos'
     | '/precos-por-categoria'
     | '/privacidade'
+    | '/registrar'
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
@@ -1168,6 +1178,7 @@ export interface FileRouteTypes {
     | '/precos'
     | '/precos-por-categoria'
     | '/privacidade'
+    | '/registrar'
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
@@ -1280,6 +1291,7 @@ export interface FileRouteTypes {
     | '/precos'
     | '/precos-por-categoria'
     | '/privacidade'
+    | '/registrar'
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
@@ -1393,6 +1405,7 @@ export interface RootRouteChildren {
   PrecosRoute: typeof PrecosRoute
   PrecosPorCategoriaRoute: typeof PrecosPorCategoriaRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
+  RegistrarRoute: typeof RegistrarRoute
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -1487,6 +1500,13 @@ declare module '@tanstack/react-router' {
       path: '/resgatar'
       fullPath: '/resgatar'
       preLoaderRoute: typeof ResgatarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registrar': {
+      id: '/registrar'
+      path: '/registrar'
+      fullPath: '/registrar'
+      preLoaderRoute: typeof RegistrarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacidade': {
@@ -2335,6 +2355,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrecosRoute: PrecosRoute,
   PrecosPorCategoriaRoute: PrecosPorCategoriaRoute,
   PrivacidadeRoute: PrivacidadeRoute,
+  RegistrarRoute: RegistrarRoute,
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

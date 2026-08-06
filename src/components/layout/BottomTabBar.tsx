@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Search, Heart, User } from "lucide-react";
+import { Home, Search, Heart, User, PlusCircle } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 
@@ -18,8 +18,8 @@ type Tab = {
 
 const TABS: Tab[] = [
   { to: "/", label: "Início", Icon: Home },
-  { to: "/buscar", label: "Buscar", Icon: Search, matchPrefix: "/buscar" },
-  { to: "/favoritos", label: "Favoritos", Icon: Heart, matchPrefix: "/favoritos", requiresAuth: true },
+  { to: "/buscar", label: "Categorias", Icon: Search, matchPrefix: "/categoria" },
+  { to: "/registrar", label: "Registrar", Icon: PlusCircle, matchPrefix: "/registrar" },
   { to: "/perfil", label: "Perfil", Icon: User, matchPrefix: "/perfil", requiresAuth: true },
 ];
 
@@ -42,7 +42,7 @@ export function BottomTabBar() {
     <nav
       aria-label="Navegação principal"
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 md:hidden",
+        "fixed inset-x-0 bottom-0 z-40 flex lg:hidden",
         "border-t border-border bg-[var(--bg-surface)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-surface)]/85",
         "pb-[env(safe-area-inset-bottom)] transition-colors duration-300",
       )}
@@ -69,15 +69,19 @@ export function BottomTabBar() {
               >
                 <span
                   className={cn(
-                    "grid h-8 w-8 place-items-center rounded-xl transition-colors",
+                    "grid h-9 w-9 place-items-center rounded-xl transition-all duration-300",
                     active
-                      ? "bg-primary/10 text-primary"
-                      : "text-current group-hover:bg-muted/60",
+                      ? "bg-[var(--brand-primary)] text-black shadow-[0_0_20px_rgba(255,215,0,0.3)]"
+                      : "text-[var(--text-secondary)] group-hover:bg-white/5",
+                    label === "Registrar" && !active && "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                   )}
                 >
-                  <Icon className="h-5 w-5" strokeWidth={active ? 2.4 : 2} aria-hidden />
+                  <Icon className={cn("h-5 w-5", active ? "h-6 w-6" : "")} strokeWidth={active ? 3 : 2} aria-hidden />
                 </span>
-                <span className="tracking-[0.02em]">{label}</span>
+                <span className={cn(
+                  "tracking-[0.05em] uppercase text-[9px] mt-1 transition-colors",
+                  active ? "text-[var(--brand-primary)] font-black" : "text-[var(--text-tertiary)] font-bold"
+                )}>{label}</span>
               </Link>
             </li>
           );

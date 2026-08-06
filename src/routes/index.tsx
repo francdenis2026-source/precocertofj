@@ -260,7 +260,9 @@ function HomePage() {
 
             
             <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
-              Preço Inteligente, Economia Garantida.
+              Antes de realizar qualquer ação, entenda o contexto e instrução recente do usuário, comando mais recente enviado por ele: Implementar uma barra de busca para eu digitar um produto e ver resultados de preços por categoria e localização. 
+
+Melhorar o menu mobile com navegação simplificada, atalhos rápidos para categorias e um CTA fixo para registrar preço. Adicionar uma página dedicada para cada categoria, com filtros (marca, unidade, faixa de preço) e lista de estabelecimentos.
             </h1>
 
             <div className="relative w-full max-w-2xl">
