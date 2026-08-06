@@ -201,17 +201,18 @@ function HomePage() {
       {/* Realistic Supermarket Background Hero */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{ 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
+          style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(0px)"
+            filter: "brightness(0.75) contrast(1.15) saturate(1.05) blur(4px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-[var(--bg-base)]/60 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-[var(--bg-base)]/30" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -424,12 +425,6 @@ function HomePage() {
                 </Button>
               </div>
               
-              {/* Decorative side element */}
-              <div className="hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
-                <div className="relative h-64 w-64 rounded-full border-2 border-[var(--brand-primary)] animate-[spin_20s_linear_infinite]">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-[var(--brand-primary)] shadow-[0_0_15px_var(--brand-primary)]" />
-                </div>
-              </div>
             </motion.div>
           </section>
 
