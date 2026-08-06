@@ -7,6 +7,7 @@ import { SearchHeroSection } from "@/components/search/SearchHeroSection";
 import { SearchDashboard } from "@/components/search/SearchDashboard";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { SearchResultsList } from "@/components/search/SearchResultsList";
+import { SimilarProductsSection } from "@/components/search/SimilarProductsSection";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { SearchDiscovery } from "@/components/search/SearchDiscovery";
 import { motion, AnimatePresence } from "framer-motion";
@@ -91,7 +92,10 @@ function SearchPage() {
               
               <div className="flex flex-col md:grid md:grid-cols-[280px,1fr] gap-8">
                 <SearchFiltersPanel isOpen={filtersOpen} onToggle={() => setFiltersOpen(!filtersOpen)} />
-                <SearchResultsList />
+                <div className="space-y-12">
+                  <SearchResultsList />
+                  <SimilarProductsSection query={search.q} />
+                </div>
               </div>
             </motion.main>
           ) : (
