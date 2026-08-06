@@ -332,7 +332,7 @@ function HomePage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
+                <h2 className="section-title font-display font-bold text-[var(--text-primary)] mb-0">Preços ao Vivo</h2>
                 
                 <div className="flex items-center gap-2">
                   <div className="flex bg-[var(--bg-surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
