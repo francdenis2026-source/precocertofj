@@ -7,15 +7,10 @@ import type { PriceAlert } from "./notifications.functions";
 
 
 export type AppDashboardData = {
-  stats: {
-    favoritesCount: number;
-    contributionsCount: number;
-    totalSavings: number;
-    potentialSavings: number;
-  };
-  recentScans: any[];
-  trackedItems: any[];
-  recentAlerts: any[];
+  stats: ProfileStats;
+  recentScans: MyScan[];
+  trackedItems: FavoriteItem[];
+  recentAlerts: PriceAlert[];
 };
 
 export const getAppDashboard = createServerFn({ method: "GET" })
