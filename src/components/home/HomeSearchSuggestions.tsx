@@ -297,8 +297,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
     if (!visible || typeof document === "undefined") return null;
 
     const panel = (
-      <AnimatePresence>
-        {visible && rect && (
+      <FocusTrap active={visible && !!rect}>
+        <AnimatePresence>
+          {visible && rect && (
           <motion.div
             initial={{ opacity: 0, y: -8, scale: 0.99 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -558,11 +559,52 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
           </button>
         </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    );
-
-    return createPortal(panel, document.body);
-  },
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </FocusTrap>
 );
+
+return createPortal(panel, document.body);
+}
+);
+
+function FocusTrap({ children, active }: { children: React.ReactNode; active: boolean }) {
+  const rootRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!active) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      const root = rootRef.current;
+      if (!root) return;
+
+      const focusables = root.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [active]);
+
+  return <div ref={rootRef} className="contents">{children}</div>;
+}

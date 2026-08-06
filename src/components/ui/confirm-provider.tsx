@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  useEffect,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -245,7 +246,8 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
   return (
     <ConfirmContext.Provider value={api}>
       {children}
-      <AnimatePresence>
+      <FocusTrap active={!!state}>
+        <AnimatePresence>
         {state && (
           <motion.div
             key="confirm-backdrop"
@@ -374,9 +376,50 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>
+      </FocusTrap>
     </ConfirmContext.Provider>
   );
+}
+
+function FocusTrap({ children, active }: { children: ReactNode; active: boolean }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!active) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      const root = rootRef.current;
+      if (!root) return;
+
+      const focusables = root.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [active]);
+
+  return <div ref={rootRef} className="contents">{children}</div>;
 }
 
 export function useConfirm(): ConfirmContextValue {
