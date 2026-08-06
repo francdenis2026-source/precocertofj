@@ -574,16 +574,23 @@ function LoginPage() {
               );
             })()}
 
-            {formError && (
-              <p
-                role="alert"
-                aria-live="assertive"
-                className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/5 px-3.5 py-2 text-xs font-medium text-destructive"
-              >
-                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                <span>{formError}</span>
-              </p>
-            )}
+            <AnimatePresence initial={false}>
+              {formError && (
+                <motion.p
+                  key={formError}
+                  role="alert"
+                  aria-live="assertive"
+                  initial={{ opacity: 0, y: -6, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -6, height: 0 }}
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-start gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-xs font-medium text-destructive"
+                >
+                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  <span>{formError}</span>
+                </motion.p>
+              )}
+            </AnimatePresence>
 
             <motion.button
               type="submit"
