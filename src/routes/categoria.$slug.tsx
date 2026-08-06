@@ -297,13 +297,7 @@ function CategoryPage() {
     return acc;
   }, [data, slug, q, storeFilter]);
 
-  /**
-   * Economia média recalculada sobre os produtos realmente exibidos, para que
-   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
-   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
-   */
-  const filtersActive = Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
-  const savings = useMemo(() => computeHubSavings(products), [products]);
+  const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
   const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
   const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
 
@@ -340,10 +334,10 @@ function CategoryPage() {
   const closeQuickView = useCallback(() => setSearch({ p: "" }), [setSearch]);
 
   // Contagens e páginas sempre coerentes com filtros/loja/categoria ativa
-  const totalPages = Math.max(1, Math.ceil(products.length / perPage));
+  const totalPages = Math.max(1, Math.ceil(productsWithProximity.length / perPage));
   const safePage = Math.min(page, totalPages);
   const pageStart = (safePage - 1) * perPage;
-  const visible = ["list", "near"].includes(view) ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
+  const visible = ["list", "near"].includes(view) ? productsWithProximity.slice(pageStart, pageStart + perPage) : productsWithProximity.slice(0, limit);
 
   useEffect(() => {
     setLimit(24);
