@@ -1,18 +1,20 @@
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ContamigosLogoProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "on-dark";
   size?: "sm" | "md" | "lg";
+  hideName?: boolean;
 }
 
 /**
  * Logo profissional para Varejão Contamigos.
- * Inspirada na fachada original (vermelho e branco) com tipografia robusta.
- * Design modernizado com um ícone de "check/cesta" estilizado.
+ * Design modernizado com um ícone de "check/cesta" estilizado e nome em SVG no hover.
  */
 export function ContamigosLogo({
   variant = "default",
   size = "md",
+  hideName = false,
   className,
   ...props
 }: ContamigosLogoProps) {
@@ -24,20 +26,33 @@ export function ContamigosLogo({
     lg: "h-20"
   };
 
+  const iconSizes = {
+    sm: "h-8 w-8",
+    md: "h-10 w-10",
+    lg: "h-16 w-16"
+  };
+
+  const svgSizes = {
+    sm: "h-5 w-5",
+    md: "h-6 w-6",
+    lg: "h-10 w-10"
+  };
+
   return (
-    <div 
+    <motion.div 
       className={cn(
-        "flex items-center gap-3 select-none",
+        "group relative flex items-center gap-3 select-none",
         sizes[size],
         className
       )} 
+      initial={false}
       {...props}
     >
       {/* Ícone Estilizado: Uma cesta/sacola formada por linhas geométricas */}
       <div className={cn(
-        "relative flex shrink-0 items-center justify-center rounded-xl",
-        size === "sm" ? "h-8 w-8" : size === "md" ? "h-10 w-10" : "h-16 w-16",
-        "bg-[#D4AF37] shadow-lg shadow-[#D4AF37]/20"
+        "relative flex shrink-0 items-center justify-center rounded-xl transition-all duration-300 transform-gpu",
+        iconSizes[size],
+        "bg-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 group-hover:shadow-[#D4AF37]/40 group-hover:scale-105"
       )}>
         <svg 
           viewBox="0 0 24 24" 
@@ -46,7 +61,7 @@ export function ContamigosLogo({
           strokeWidth="2.5" 
           strokeLinecap="round" 
           strokeLinejoin="round"
-          className={size === "sm" ? "h-5 w-5" : size === "md" ? "h-6 w-6" : "h-10 w-10"}
+          className={svgSizes[size]}
         >
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
           <path d="M3 6h18" />
@@ -54,25 +69,37 @@ export function ContamigosLogo({
         </svg>
       </div>
 
-      {!props.title && (
-        <div className="flex flex-col justify-center leading-none">
-          <span className={cn(
-            "font-display font-black tracking-tighter uppercase italic",
-            size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
-            isDark ? "text-white" : "text-[#0B1E3A]"
-          )}>
-            Varejão
-            <span className="text-[#D4AF37] not-italic ml-1">Contamigos</span>
-          </span>
-          <span className={cn(
-            "font-mono font-bold tracking-[0.2em] uppercase",
-            size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
-            isDark ? "text-white/60" : "text-[#0B1E3A]/60"
-          )}>
-            Preço Baixo de Verdade
-          </span>
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {(!hideName || props.title === "Logo") && (
+          <motion.div 
+            className={cn(
+              "flex flex-col justify-center leading-none",
+              hideName && "absolute left-full ml-3 opacity-0 group-hover:opacity-100 whitespace-nowrap z-50 bg-[var(--bg-surface)] p-2 rounded-lg border border-border shadow-xl"
+            )}
+            initial={hideName ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={hideName ? { opacity: 0, x: -10 } : undefined}
+          >
+            <div className="flex items-center">
+              <span className={cn(
+                "font-display font-black tracking-tighter uppercase italic",
+                size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
+                isDark ? "text-white" : "text-[#0B1E3A]"
+              )}>
+                Varejão
+                <span className="text-[#D4AF37] not-italic ml-1">Contamigos</span>
+              </span>
+            </div>
+            <span className={cn(
+              "font-mono font-bold tracking-[0.2em] uppercase",
+              size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
+              isDark ? "text-white/60" : "text-[#0B1E3A]/60"
+            )}>
+              Preço Baixo de Verdade
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
