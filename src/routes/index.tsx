@@ -150,7 +150,7 @@ function HomePage() {
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!q.trim()) return;
-    navigate({ to: "/buscar", search: { q: q.trim() } as any });
+    navigate({ to: "/buscar", search: { q: q.trim(), from: "home_hero" } as any });
   };
 
   return (
@@ -260,7 +260,7 @@ function HomePage() {
             </div>
             
             <Carousel
-              opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true }}
+              opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true, containScroll: "trimSnaps" }}
               className="group/carousel relative"
             >
               <CarouselContent 
