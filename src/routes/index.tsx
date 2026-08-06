@@ -425,12 +425,6 @@ function HomePage() {
                 </Button>
               </div>
               
-              {/* Decorative side element */}
-              <div className="hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
-                <div className="relative h-64 w-64 rounded-full border-2 border-[var(--brand-primary)] animate-[spin_20s_linear_infinite]">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-[var(--brand-primary)] shadow-[0_0_15px_var(--brand-primary)]" />
-                </div>
-              </div>
             </motion.div>
           </section>
 
