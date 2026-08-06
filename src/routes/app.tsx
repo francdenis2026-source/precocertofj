@@ -19,12 +19,14 @@ import {
   Package,
   Store,
   Tag,
-  ArrowRight
+  Search,
+  ShoppingCart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ds/Price";
-import { LoadingSkeleton, EmptyState } from "@/components/feedback";
+import { ListRowsSkeleton, EmptyState } from "@/components/feedback";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -87,8 +89,8 @@ function DashboardPage() {
               {[1, 2, 3, 4].map(i => <div key={i} className="h-24 rounded-xl border animate-pulse bg-muted/50" />)}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <LoadingSkeleton rows={4} />
-              <LoadingSkeleton rows={4} />
+              <ListRowsSkeleton rows={4} />
+              <ListRowsSkeleton rows={4} />
             </div>
           </div>
         </div>
