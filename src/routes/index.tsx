@@ -229,10 +229,45 @@ function HomePage() {
           </section>
 
           {/* Registered Stores */}
-          <section>
-            <h2 className="section-title">Mercados Parceiros</h2>
-            <div className="glass-card p-8">
-              <RegisteredStoresCarousel />
+          <section className="relative overflow-hidden rounded-[24px] border border-[var(--border-subtle)]">
+            <div className="absolute inset-0 z-0">
+              <img 
+                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
+                alt="" 
+                className="h-full w-full object-cover opacity-20 transition-transform duration-700 hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]" />
+            </div>
+            
+            <div className="relative z-10 p-8 sm:p-12">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div className="max-w-xl">
+                  <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-3">Rede de Parcerias</h2>
+                  <h3 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
+                    Comércios Parceiros
+                  </h3>
+                  <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
+                    Trabalhamos em conjunto com os principais estabelecimentos locais para garantir 
+                    transparência e os melhores preços para a população de Feijó.
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="h-10 w-10 rounded-full border-2 border-[var(--bg-base)] bg-[var(--bg-surface-elevated)] overflow-hidden">
+                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="" className="h-full w-full object-cover grayscale opacity-80" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
+                    +15 Mercados
+                  </div>
+                </div>
+              </div>
+              
+              <div className="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
+                <RegisteredStoresCarousel />
+              </div>
             </div>
           </section>
 
