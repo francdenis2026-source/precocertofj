@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import Autoplay from "embla-carousel-autoplay";
+
 import { Sparkles, Clock3, ArrowRight, TrendingDown } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -152,11 +152,10 @@ export function RecentProductsCarousel() {
 
       <Carousel
         setApi={setApi}
-        opts={{ align: "start", loop: true, dragFree: true }}
-        plugins={[Autoplay({ delay: 3800, stopOnInteraction: true, stopOnMouseEnter: true })]}
+        opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true }}
         className="group/carousel relative"
       >
-        <CarouselContent className="-ml-2.5">
+        <CarouselContent className="-ml-4">
           {products.map((p) => {
             const cmp = priceByName.get(norm(p.displayName));
             const slug = cmp?.catalog_slug ?? p.id;
