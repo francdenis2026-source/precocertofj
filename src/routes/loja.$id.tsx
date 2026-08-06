@@ -409,8 +409,8 @@ function StorePage() {
             {/* Logo overlaps the banner */}
             <div className="-mt-8 flex items-end gap-3">
               {store.name.includes("Contamigos") ? (
-                <div className="flex h-16 shrink-0 items-center rounded-2xl border-2 border-background bg-background px-2 shadow-md">
-                  <ContamigosLogo size="sm" title="Logo" />
+                <div className="flex h-16 shrink-0 items-center justify-center rounded-2xl border-2 border-background bg-background px-3 shadow-md">
+                  <ContamigosLogo size="md" />
                 </div>
               ) : store.logoUrl ? (
                 <img
