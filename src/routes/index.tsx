@@ -45,7 +45,7 @@ import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCaro
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
-import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
+import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -91,10 +91,7 @@ function HomePage() {
   const { user, loading: sessionLoading } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const searchSuggestionsRef = useRef<any>(null);
-  const searchAnchorRef = useRef<HTMLFormElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -149,12 +146,6 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
-    if (isSearchFocused && searchAnchorRef.current && !isScrolled) {
-      searchAnchorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [isSearchFocused, isScrolled]);
-
-  useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
     window.addEventListener('open-quick-view', handler);
     window.addEventListener('internal-open-quick-view', handler);
@@ -199,12 +190,6 @@ function HomePage() {
     
     return list.slice(0, 6);
   }, [rawRecentProducts, q, sort]);
-
-  const submitSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!q.trim()) return;
-    navigate({ to: "/buscar", search: { q: q.trim() } as any });
-  };
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
@@ -275,61 +260,8 @@ function HomePage() {
               Com o PreçoCerto, você encontra o menor preço em segundos. Tecnologia simples e moderna para valorizar o seu bolso e a nossa gente.
             </motion.p>
 
-            <div className={cn(
-              "w-full max-w-xl transition-all duration-300 relative z-[110]",
-              isScrolled 
-                ? "fixed top-0 left-0 right-0 z-[120] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
-                : "mb-12"
-            )}>
-              <form 
-                ref={searchAnchorRef}
-                onSubmit={submitSearch} 
-                className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]",
-                  isSearchFocused && !isScrolled && "ring-offset-4 ring-offset-black/20"
-                )}
-              >
-                <Search className={cn(
-                  "ml-4 h-4.5 w-4.5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] group-focus-within:scale-110 transition-all duration-300",
-                  isScrolled && "h-4 w-4 ml-3"
-                )} />
-                <input 
-                  value={q} 
-                  onChange={(e) => setQ(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => {
-                    setTimeout(() => setIsSearchFocused(false), 200);
-                  }}
-                  placeholder="O que você quer comprar mais barato hoje?" 
-                  className={cn(
-                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
-                    isScrolled && "text-[13px] px-3"
-                  )} 
-                />
-                <Button 
-                  type="submit" 
-                  className={cn(
-                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-[0.15em] text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
-                    isScrolled && "h-[36px] sm:h-[42px] px-6 text-[10px]"
-                  )}
-                >
-                  Buscar
-                </Button>
-              </form>
-
-              <HomeSearchSuggestions 
-                ref={searchSuggestionsRef}
-                query={q}
-                open={isSearchFocused}
-                onClose={() => setIsSearchFocused(false)}
-                anchorRef={searchAnchorRef as any}
-                isLoggedOut={!user}
-                onBlocked={() => {}}
-                className={cn(
-                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[130]"
-                )}
-              />
+            <div className="w-full mb-12">
+              <SmartSearchBar />
             </div>
 
             <div className="flex flex-wrap justify-center gap-3 mb-2">
