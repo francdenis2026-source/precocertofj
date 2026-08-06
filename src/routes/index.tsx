@@ -45,6 +45,7 @@ import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
+import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
 import {
   Carousel,
   CarouselContent,
@@ -94,6 +95,35 @@ function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [showLogoPreview, setShowLogoPreview] = useState(false);
+
+  const availableLogos = [
+    { name: "Central Super Color (Dark)", path: "/logos/central-super-color-dark.svg" },
+    { name: "Central Super Color", path: "/logos/central-super-color.svg" },
+    { name: "Central Super Mono", path: "/logos/central-super-mono.svg" },
+    { name: "Claudia v5", path: "/logos/claudia-v5.png" },
+    { name: "Comercial Claudia", path: "/logos/comercial-claudia.png" },
+    { name: "Doce Dia Color", path: "/logos/doce-dia-color.svg" },
+    { name: "Doce Dia Mono", path: "/logos/doce-dia-mono.svg" },
+    { name: "Facem Color", path: "/logos/facem-color.svg" },
+    { name: "Facem Mono", path: "/logos/facem-mono.svg" },
+    { name: "Feijoense Color", path: "/logos/feijoense-color.svg" },
+    { name: "Feijoense Mono", path: "/logos/feijoense-mono.svg" },
+    { name: "Pague Pouco", path: "/logos/pague-pouco-v6.webp" },
+    { name: "Parceirão Color", path: "/logos/parceirao-color.svg" },
+    { name: "Parceirão Mono", path: "/logos/parceirao-mono.svg" },
+    { name: "Rebouças Color", path: "/logos/reboucas-color.svg" },
+    { name: "Rebouças Mono", path: "/logos/reboucas-mono.svg" },
+    { name: "Recanto Color", path: "/logos/recanto-color.svg" },
+    { name: "Recanto Mono", path: "/logos/recanto-mono.svg" },
+    { name: "Ultra Color", path: "/logos/ultra-color.svg" },
+    { name: "Ultra Mono", path: "/logos/ultra-mono.svg" },
+    { name: "Vanderley Color", path: "/logos/vanderley-color.svg" },
+    { name: "Vanderley Mono", path: "/logos/vanderley-mono.svg" },
+    { name: "Logo Lockup", path: "/logo-lockup.png" },
+    { name: "Logo Mark", path: "/logo-mark.svg" }
+  ];
+
 
   useEffect(() => {
     if (sort === "near" && !userLocation) {
@@ -215,6 +245,19 @@ function HomePage() {
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-[var(--text-tertiary)] mx-1">·</span> Acre</span>
             </motion.div>
+            
+            {/* Logo Preview Trigger (Hidden Admin Feature) */}
+            <div className="absolute top-4 left-4 z-50 flex gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowLogoPreview(true)}
+                className="rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
+              >
+                Preview Logomarcas
+              </Button>
+            </div>
+
             
             <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
               Inteligência Real para Economizar
@@ -560,6 +603,16 @@ function HomePage() {
         product={selectedProduct} 
         onClose={() => setSelectedProduct(null)} 
       />
+
+      <AnimatePresence>
+        {showLogoPreview && (
+          <LogoPreviewList 
+            logos={availableLogos} 
+            onClose={() => setShowLogoPreview(false)} 
+          />
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
