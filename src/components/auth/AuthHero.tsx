@@ -169,34 +169,30 @@ export function AuthHero({
 
       {/* Top: brand + badge + headline */}
       <div className="relative">
-        <div className="flex items-center gap-2.5">
-          <img
-            src="/logo-mark.png?v=5"
-            alt=""
-            aria-hidden
-            width={44}
-            height={44}
-            className="h-11 w-11 shrink-0 object-contain drop-shadow-[0_4px_12px_rgb(0_0_0/0.35)]"
-          />
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-[var(--brand-primary)] rounded-xl shadow-[0_0_15px_rgba(255,215,0,0.3)]">
+            <BrandIcon className="h-6 w-6 text-black" strokeWidth={2.5} />
+          </div>
 
           <span
-            className="text-[18px] font-bold tracking-tight sm:text-[19px]"
-            style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
+            className="text-[20px] font-black tracking-tight"
+            style={{ color: T.onNavy, fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}
           >
             PreçoCerto
           </span>
         </div>
 
         <span
-          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] md:mt-8"
+          className="mt-6 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.25em]"
           style={{
-            borderColor: `color-mix(in oklab, ${T.brand} 30%, transparent)`,
-            background: `color-mix(in oklab, ${T.brand} 10%, transparent)`,
-            color: T.eyebrow,
+            borderColor: `var(--brand-primary)`,
+            background: `color-mix(in oklab, var(--brand-primary) 15%, transparent)`,
+            color: "var(--brand-primary)",
           }}
         >
-          <BadgeIcon className="h-3 w-3" /> {preset.badge.label}
+          <BadgeIcon className="h-3.5 w-3.5" /> {preset.badge.label}
         </span>
+
 
 
         <h2

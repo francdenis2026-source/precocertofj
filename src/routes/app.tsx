@@ -73,11 +73,12 @@ function StatusPage() {
                 <button
                   key={store.id}
                   onClick={() => setSelectedStoreId(store.id)}
-                  className={`w-full text-left p-4 rounded-xl border transition-all ${
+                  className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
                     selectedStoreId === store.id 
-                      ? "bg-[var(--brand-primary)]/10 border-[var(--brand-primary)] shadow-sm" 
-                      : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/30"
+                      ? "bg-[var(--brand-primary)]/10 border-[var(--brand-primary)] shadow-[0_0_20px_rgba(255,215,0,0.1)] ring-1 ring-[var(--brand-primary)]/20" 
+                      : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]"
                   }`}
+
                 >
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-bold text-sm">{store.name}</h3>
@@ -149,8 +150,9 @@ function StoreCatalog({ storeId }: { storeId: string }) {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
       {/* Store Header Info */}
-      <Card className="bg-[var(--bg-surface)] border-[var(--border-subtle)] overflow-hidden rounded-3xl">
-        <CardContent className="p-8">
+      <Card className="bg-[var(--bg-surface)] border-[var(--border-subtle)] overflow-hidden rounded-[32px] shadow-xl">
+        <CardContent className="p-10">
+
           <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -214,8 +216,9 @@ function StoreCatalog({ storeId }: { storeId: string }) {
           filteredProducts.map(product => (
             <div 
               key={product.slug}
-              className="group p-4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)]/40 transition-all"
+              className="group p-5 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
             >
+
               <div className="flex justify-between items-start gap-4">
                 <div className="flex-1">
                   <div className="text-[9px] font-black uppercase tracking-widest text-[var(--brand-primary)] mb-1">
