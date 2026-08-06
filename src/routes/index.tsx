@@ -437,7 +437,7 @@ function HomePage() {
 
           {/* CTA Banner */}
           <section className="mb-16">
-            <div className="relative rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-indigo-700 p-8 sm:p-12 overflow-hidden shadow-2xl">
+            <div className="relative rounded-[32px] sm:rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] p-6 sm:p-12 overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 h-full w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-10 mix-blend-overlay pointer-events-none" />
               <div className="relative z-10 max-w-xl">
                 <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 leading-tight">Viu um preço novo?</h2>
