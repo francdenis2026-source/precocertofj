@@ -223,17 +223,20 @@ function HomePage() {
         )}
       </AnimatePresence>
       
-      {/* Light & Professional Background */}
+      {/* Realistic Supermarket Background Hero */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.05 }}
+          animate={{ opacity: 0.15 }}
           transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center" 
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')" }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{ 
+            backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')",
+            filter: "brightness(0.8) contrast(1.1)"
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/60 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -285,7 +288,7 @@ function HomePage() {
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
               (isSearchFocused || isScrolled) 
-                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)] border-b border-[var(--border-subtle)] shadow-md" 
+                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)] border-b border-[var(--border-subtle)] shadow-lg" 
                 : "relative mb-12"
             )}>
               <form 
@@ -293,7 +296,7 @@ function HomePage() {
                 onSubmit={submitSearch} 
                 className={cn(
                   "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg scale-[0.98]"
+                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-lg shadow-none border-[var(--brand-primary)]/40 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]"
                 )}
               >
                 <Search className={cn(
