@@ -255,17 +255,17 @@ function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 mb-6 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 mb-6 backdrop-blur-md hover:scale-105 transition-transform cursor-default"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
               <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
             <h1 className="font-display text-[32px] sm:text-[48px] font-black tracking-tight leading-[1.1] mb-4 max-w-3xl text-[var(--text-primary)]">
-              Clareza e Conexão para sua <span className="text-[var(--brand-secondary)]">Economia Real</span>
+              Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </h1>
             
             <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed font-body">
@@ -282,8 +282,8 @@ function HomePage() {
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-secondary)] focus-within:ring-4 focus-within:ring-[var(--brand-secondary)]/5 mx-auto",
-                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-lg shadow-none border-[var(--brand-secondary)]/20 max-w-lg"
+                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-lg hover:border-[var(--brand-secondary)]/20",
+                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg"
                 )}
               >
                 <Search className={cn(
@@ -304,7 +304,7 @@ function HomePage() {
                 <Button 
                   type="submit" 
                   className={cn(
-                    "hidden sm:flex rounded-xl bg-[var(--brand-primary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[50px] px-8 text-[11px]",
+                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[50px] px-8 text-[11px] shadow-sm hover:shadow-md",
                     (isSearchFocused || isScrolled) && "h-[34px] sm:h-[38px] px-6 text-[10px]"
                   )}
                 >
@@ -351,36 +351,45 @@ function HomePage() {
 
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
-          <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
-              <div className="h-10 w-10 shrink-0 rounded-lg bg-red-50 flex items-center justify-center text-[var(--brand-primary)]">
-                <Search className="h-5 w-5" />
+          <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <motion.div 
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-red-50 flex items-center justify-center text-[var(--brand-primary)]">
+                <Search className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold">1. Pesquise</h3>
+                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">1. Pesquise</h3>
                 <p className="text-[12px] text-[var(--text-tertiary)]">Produtos em tempo real.</p>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
-              <div className="h-10 w-10 shrink-0 rounded-lg bg-indigo-50 flex items-center justify-center text-[var(--brand-secondary)]">
-                <TrendingDown className="h-5 w-5" />
+            <motion.div 
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-blue-50 flex items-center justify-center text-[var(--brand-secondary)]">
+                <TrendingDown className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold">2. Compare</h3>
+                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">2. Compare</h3>
                 <p className="text-[12px] text-[var(--text-tertiary)]">Economize até 40%.</p>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow">
-              <div className="h-10 w-10 shrink-0 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500">
-                <PlusCircle className="h-5 w-5" />
+            <motion.div 
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="h-12 w-12 shrink-0 rounded-lg bg-orange-50 flex items-center justify-center text-[var(--brand-accent)]">
+                <PlusCircle className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold">3. Colabore</h3>
+                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">3. Colabore</h3>
                 <p className="text-[12px] text-[var(--text-tertiary)]">Ajude a comunidade.</p>
               </div>
-            </div>
+            </motion.div>
           </section>
           </Suspense>
 

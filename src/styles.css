@@ -61,12 +61,13 @@
 
 @theme {
   --bg-base: var(--bg-base);
-  --bg-surface: var(--pc-bg-surface);
+  --bg-surface: var(--bg-surface);
   --bg-surface-elevated: var(--bg-surface-elevated);
   --border-subtle: var(--border-subtle);
   
   --brand-primary: var(--brand-primary);
   --brand-secondary: var(--brand-secondary);
+  --brand-accent: var(--brand-accent);
   --brand-glow: var(--brand-glow);
   
   --success: #10B981;
