@@ -298,7 +298,6 @@ function CategoryPage() {
   }, [data, slug, q, storeFilter]);
 
   const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
-  const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
   const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
 
   /** Menor preço encontrado no recorte atual — métrica mais útil que a contagem de coletas. */
