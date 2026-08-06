@@ -8,6 +8,7 @@ import { normalize, tokenizeQuery } from "@/lib/search-tokens";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackEvent } from "@/lib/analytics-events";
 
 import {
   suggestProducts,
@@ -96,7 +97,17 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
       abortRef.current = ctrl;
       const timer = setTimeout(async () => {
         try {
+          const startTime = performance.now();
           const suggestions = await fetchSuggestions(qc, runSuggest as never, q, ctrl.signal);
+          const suggestTime = performance.now() - startTime;
+          
+          if (import.meta.env.PROD) {
+            trackEvent("search_suggest_load", { 
+              query: q, 
+              duration_ms: Math.round(suggestTime),
+              count: suggestions?.length || 0 
+            });
+          }
           if (ctrl.signal.aborted) return;
           const base = (suggestions ?? []).slice(0, MAX_ITEMS);
           
@@ -138,11 +149,22 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           const sortedEnriched = enriched.sort((a, b) => {
             if (a.minPrice === null) return 1;
             if (b.minPrice === null) return -1;
-            return a.minPrice - b.minPrice;
+            if (a.minPrice !== b.minPrice) return a.minPrice - b.minPrice;
+            return (a.market || "").localeCompare(b.market || "");
           });
           if (ctrl.signal.aborted) return;
           setItems(sortedEnriched);
           qc.setQueryData(enrichedKey, sortedEnriched, { updatedAt: Date.now() });
+
+          if (import.meta.env.PROD) {
+             const enrichTime = performance.now() - startTime;
+             trackEvent("search_enrich_complete", { 
+               query: q, 
+               total_duration_ms: Math.round(enrichTime),
+               cheapest: sortedEnriched[0]?.minPrice,
+               market: sortedEnriched[0]?.market
+             });
+          }
         } catch (e: any) {
           if (ctrl.signal.aborted) return;
           setErr(e?.message ?? "Falha ao buscar sugestões");
@@ -160,7 +182,17 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
     const blocked = isLoggedOut && isGuestAtLimit();
 
     const handlePick = React.useCallback(
-      (term: string) => {
+      (suggestion: ProductSuggestion & { minPrice?: number | null; market?: string | null }) => {
+        const term = suggestion.displayName;
+        if (import.meta.env.PROD) {
+          trackEvent("search_suggest_click", { 
+            query: q, 
+            selection: term,
+            price: suggestion.minPrice,
+            market: suggestion.market,
+            is_cheapest: items[0]?.id === suggestion.id
+          });
+        }
         if (isLoggedOut) {
           const { blocked: b } = consumeGuest("search", term);
           if (b) {
@@ -172,7 +204,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         onClose();
         navigate({ to: "/buscar", search: { q: term } as any });
       },
-      [isLoggedOut, navigate, onBlocked, onClose],
+      [isLoggedOut, navigate, onBlocked, onClose, q, items],
     );
 
     // Mantém o item ativo visível dentro do trilho rolável.
@@ -217,7 +249,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           }
           if (e.key === "Enter" && cur >= 0 && list[cur]) {
             e.preventDefault();
-            handlePick(list[cur].displayName);
+            handlePick(list[cur]);
             return true;
           }
           return false;
@@ -311,7 +343,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   aria-selected={active === i}
                   onMouseDown={(e) => e.preventDefault()}
                   onMouseEnter={() => setActive(i)}
-                  onClick={() => handlePick(s.displayName)}
+                  onClick={() => handlePick(s)}
                   className={
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
                     (active === i
