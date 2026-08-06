@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, CheckCircle2, AlertCircle, LucideIcon } from "lucide-react";
 
 interface AuthButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
