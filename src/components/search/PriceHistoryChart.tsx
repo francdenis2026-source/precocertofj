@@ -52,10 +52,11 @@ export function PriceHistoryChart({ productName, compact = false }: { productNam
         <Tooltip 
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
+              const value = Number(payload[0].value);
               return (
                 <div className="rounded-lg border bg-background p-2 shadow-md text-[10px] space-y-1">
                   <p className="font-bold">{payload[0].payload.date}</p>
-                  <p className="text-primary">R$ {payload[0].value?.toFixed(2)}</p>
+                  <p className="text-primary">R$ {value?.toFixed(2)}</p>
                   <p className="text-muted-foreground truncate max-w-[120px]">{payload[0].payload.market}</p>
                 </div>
               );
