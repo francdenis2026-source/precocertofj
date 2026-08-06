@@ -697,7 +697,9 @@ function SearchPage() {
               </section>
 
               <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
-                <SearchDiscovery onPickQuery={pickQuery} />
+                <Suspense fallback={<SearchDiscoverySkeleton />}>
+                  <SearchDiscovery onPickQuery={pickQuery} />
+                </Suspense>
               </div>
             </>
           )}
