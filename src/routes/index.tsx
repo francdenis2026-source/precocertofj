@@ -49,13 +49,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store },
-  { slug: "padarias", label: "Padarias", Icon: Coffee },
-  { slug: "acougues", label: "Açougues", Icon: Utensils },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets },
-  { slug: "higiene", label: "Higiene", Icon: Smile },
+  { slug: "supermercados", label: "Mercados", Icon: Store, image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=60&w=400" },
+  { slug: "padarias", label: "Padarias", Icon: Coffee, image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=60&w=400" },
+  { slug: "acougues", label: "Açougues", Icon: Utensils, image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=60&w=400" },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=60&w=400" },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&q=60&w=400" },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=60&w=400" },
+  { slug: "higiene", label: "Higiene", Icon: Smile, image: "https://images.unsplash.com/photo-1559594861-16383c899062?auto=format&fit=crop&q=60&w=400" },
 ];
 
 function HomePage() {
