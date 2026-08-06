@@ -469,7 +469,7 @@ function StorePage() {
               </div>
             </div>
 
-            <div className="mt-3 flex gap-2">
+            <div className="no-print mt-3 flex gap-2">
               <button
                 type="button"
                 disabled={isExporting}
