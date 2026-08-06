@@ -38,7 +38,7 @@ export function RegisteredStoresCarousel() {
         className="flex gap-6 py-2"
         animate={{ x: [0, -100 * stores.length] }}
         transition={{ 
-          duration: stores.length * 3, 
+          duration: stores.length * 8, 
           repeat: Infinity, 
           ease: "linear" 
         }}
