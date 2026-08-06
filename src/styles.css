@@ -10,7 +10,7 @@
 }
 
 /**
- * Design Tokens - Identidade Visual Varejão Contamigos
+ * Design Tokens - Identidade Visual Varejão Contamigos (Midnight Executive)
  * --------------------------------
  */
 :root {
@@ -19,20 +19,20 @@
   --pc-brand-navy: #0B1E3A;   /* Azul Marinho Contamigos */
   --pc-brand-white: #FFFFFF;  /* Branco Puro */
   
-  /* Colors - Light Mode */
-  --pc-bg-base: #F9FAFB;
+  /* Primary Palette - Light Mode */
+  --pc-bg-base: #F8FAFC;       /* Slate 50 ultra suave */
   --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F3F4F6;
+  --pc-bg-surface-elevated: #F1F5F9;
   
   --pc-brand-primary: var(--pc-brand-gold);
   --pc-brand-secondary: var(--pc-brand-navy);
-  --pc-brand-accent: #1E293B; /* Slate 800 para contraste */
+  --pc-brand-accent: #6366F1;  /* Indigo vibrante para microinterações */
   
-  --pc-brand-glow: rgba(212, 175, 55, 0.08);
-  --pc-border-subtle: rgba(11, 30, 58, 0.06);
-  --pc-text-primary: #111827;
-  --pc-text-secondary: #4B5563;
-  --pc-text-tertiary: #9CA3AF;
+  --pc-brand-glow: rgba(212, 175, 55, 0.12);
+  --pc-border-subtle: rgba(11, 30, 58, 0.08);
+  --pc-text-primary: #0F172A;   /* Slate 900 */
+  --pc-text-secondary: #475569; /* Slate 600 */
+  --pc-text-tertiary: #94A3B8;  /* Slate 400 */
   
   /* Semantic Tokens */
   --bg-base: var(--pc-bg-base);
@@ -47,23 +47,26 @@
   --text-secondary: var(--pc-text-secondary);
   --text-tertiary: var(--pc-text-tertiary);
 
-  /* Radius & Shadows */
-  --pc-radius: 14px;
-  --pc-shadow-sm: 0 1px 3px rgba(11, 30, 58, 0.05);
-  --pc-shadow-md: 0 8px 20px -4px rgba(11, 30, 58, 0.08);
-  --pc-shadow-lg: 0 20px 40px -8px rgba(11, 30, 58, 0.12);
+  /* Radius & Transitions */
+  --pc-radius: 12px;
+  --pc-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --pc-shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  --pc-shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.12);
+  
+  --dur-base: 200ms;
+  --ease-out-smooth: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 :root[data-theme='dark'] {
   --pc-bg-base: #05080F;
   --pc-bg-surface: #0B1220;
   --pc-bg-surface-elevated: #161F30;
-  --pc-brand-primary: #FFD700; /* Gold mais vibrante para Dark Mode */
-  --pc-brand-secondary: #F8FAFC;
-  --pc-brand-accent: #94A3B8;
+  --pc-brand-primary: #FFD700;
+  --pc-brand-secondary: #F1F5F9;
+  --pc-brand-accent: #818CF8;
   --pc-brand-glow: rgba(255, 215, 0, 0.15);
-  --pc-border-subtle: rgba(255, 255, 255, 0.04);
-  --pc-text-primary: #F8FAFC;
+  --pc-border-subtle: rgba(255, 255, 255, 0.06);
+  --pc-text-primary: #F1F5F9;
   --pc-text-secondary: #94A3B8;
   --pc-text-tertiary: #64748B;
 }
@@ -108,13 +111,13 @@ body {
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
   letter-spacing: -0.01em;
 }
 
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 @utility section-title {
