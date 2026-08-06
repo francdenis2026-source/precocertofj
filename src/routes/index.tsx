@@ -272,7 +272,7 @@ function HomePage() {
                 Monitoramento ao vivo
               </h2>
               <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)]">
-                Preços que estão rolando agora
+                Preços de todos os comércios
               </h3>
             </div>
             
