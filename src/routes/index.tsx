@@ -265,7 +265,7 @@ function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Economia em Tempo Real <span className="text-[var(--brand-primary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Seu dinheiro vale mais <span className="text-[var(--brand-primary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
             </motion.div>
             
             <motion.h1 
@@ -274,7 +274,7 @@ function HomePage() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)]"
             >
-              Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
+              Economize de verdade em cada compra no <span className="text-[var(--brand-primary)]">nosso Feijó</span>
             </motion.h1>
             
             <motion.p 
@@ -283,7 +283,7 @@ function HomePage() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="text-base sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed font-body"
             >
-              Compare preços em tempo real com a inteligência do PreçoCerto. A melhor tecnologia para o seu bolso.
+              Com o PreçoCerto, você encontra o menor preço em segundos. Tecnologia simples e moderna para valorizar o seu bolso e a nossa gente.
             </motion.p>
 
             <div className={cn(
