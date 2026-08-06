@@ -279,7 +279,7 @@ function DashboardPage() {
                 icon={History} 
                 title="Nenhum registro" 
                 message="Busque ou registre um produto para ele aparecer aqui." 
-              />
+                action={<Button asChild variant="outline" size="sm"><Link to="/precos">Começar busca</Link></Button>}
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {data?.recentScans.map((scan) => (
