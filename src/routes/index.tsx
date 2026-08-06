@@ -164,7 +164,8 @@ function HomePage() {
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 0.1, scale: 1 }}
           transition={{ duration: 2 }}
-          className="absolute inset-0 bg('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity dark:opacity-10 opacity-5" 
+          className="absolute inset-0 bg-cover bg-center mix-blend-luminosity dark:opacity-10 opacity-5" 
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/95 to-[var(--bg-base)] transition-colors duration-300" />
         <div 
