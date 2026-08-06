@@ -118,13 +118,26 @@ function CategoryPage() {
   const { slug } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const def = categoryBySlug(slug);
+
+  useEffect(() => {
+    if (search.view === "near" && !userLocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (err) => {
+          console.error("Erro ao obter localização:", err);
+          setSearch({ view: "list" });
+        }
+      );
+    }
+  }, [search.view, userLocation]);
   const fetchHub = useServerFn(getCategoryHub);
 
   // Estado derivado da URL (compartilhável + voltar/avançar do navegador)
   const q = search.q;
   const storeFilter = search.loja;
-  const view: "list" | "grid" = search.view === "grid" ? "grid" : "list";
+  const view: "list" | "grid" | "near" = ["grid", "near"].includes(search.view) ? (search.view as any) : "list";
   const perPage = [30, 60, 120].includes(search.per) ? search.per : 30;
   const page = Math.max(1, search.page);
 
@@ -182,40 +195,69 @@ function CategoryPage() {
     [nicheStoreNames],
   );
 
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s: any) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a: any, b: any) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
+
   const products = useMemo(() => {
     let list = data?.products ?? [];
     const term = norm(q.trim());
-    if (term) list = list.filter((p) => norm(p.name).includes(term));
-    if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
+    if (term) list = list.filter((p: any) => norm(p.name).includes(term));
+    if (storeFilter) list = list.filter((p: any) => p.storeNames.includes(storeFilter));
 
     // Hortifrúti: subgrupos (frutas, verduras, legumes, tubérculos, temperos, cogumelos)
     if (slug === "hortifruti" && search.sub) {
-      list = list.filter((p) => hortifrutiSubgroup(p.name) === search.sub);
+      list = list.filter((p: any) => hortifrutiSubgroup(p.name) === search.sub);
     }
 
     if (slug === "acougues") {
       // Anexa a proteína classificada e reordena para cortes primeiro
       const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
-      const enriched = list.map((p) => {
+      const enriched = list.map((p: any) => {
         const prot = classifyProtein(p);
         const bucket = prot ?? "outros";
         return { p, prot, bucket };
       });
-      const filtered = enriched.filter((x) => {
+      const filtered = enriched.filter((x: any) => {
         if (search.so_cortes && x.bucket === "outros") return false;
         if (search.corte && x.bucket !== search.corte) return false;
         return true;
       });
-      filtered.sort((a, b) => {
+      filtered.sort((a: any, b: any) => {
         const oa = ORDER[a.bucket] ?? 9;
         const ob = ORDER[b.bucket] ?? 9;
         if (oa !== ob) return oa - ob;
         return a.p.minPrice - b.p.minPrice;
       });
-      return filtered.map((x) => x.p);
+      return filtered.map((x: any) => x.p);
     }
+    if (view === "near" && userLocation) {
+      const getDist = (p: any) => {
+        const store = displayStores.find((s: any) => p.storeNames.includes(s.name));
+        if (!store?.lat || !store?.lng) return 999999;
+        return Math.sqrt(
+          Math.pow(store.lat - userLocation.lat, 2) + 
+          Math.pow(store.lng - userLocation.lng, 2)
+        );
+      };
+      list = [...list].sort((a: any, b: any) => getDist(a) - getDist(b));
+    }
+
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein, view, userLocation, displayStores]);
 
   // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
   // respeita busca e loja para não anunciar filtros que resultariam em vazio).
@@ -251,26 +293,9 @@ function CategoryPage() {
 
   /** Menor preço encontrado no recorte atual — métrica mais útil que a contagem de coletas. */
   const cheapestPrice = useMemo(() => {
-    const values = products.map((p) => p.minPrice).filter((v) => Number.isFinite(v) && v > 0);
+    const values = products.map((p: any) => p.minPrice).filter((v: any) => Number.isFinite(v) && v > 0);
     return values.length ? Math.min(...values) : null;
   }, [products]);
-
-  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
-  const displayStores = useMemo(() => {
-    const list = data?.stores ?? [];
-    if (!filtersActive) return list;
-    return [...list]
-      .map((s) => {
-        const f = savings.byStore.get(s.id);
-        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
-      })
-      .sort(
-        (a, b) =>
-          Number(b.isNicheStore) - Number(a.isNicheStore) ||
-          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
-          b.productCount - a.productCount,
-      );
-  }, [data, savings, filtersActive]);
 
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
@@ -302,7 +327,7 @@ function CategoryPage() {
   const totalPages = Math.max(1, Math.ceil(products.length / perPage));
   const safePage = Math.min(page, totalPages);
   const pageStart = (safePage - 1) * perPage;
-  const visible = view === "list" ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
+  const visible = ["list", "near"].includes(view) ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
 
   useEffect(() => {
     setLimit(24);
@@ -442,7 +467,7 @@ function CategoryPage() {
             <EmptyCard text="Nenhum estabelecimento desta categoria cadastrado ainda." />
           ) : (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {displayStores.map((s) => (
+              {(displayStores as any[]).map((s: any) => (
                 <li key={s.id}>
                   <Link
                     to="/estabelecimento/$slug"
@@ -536,7 +561,7 @@ function CategoryPage() {
               />
             </div>
             <ViewToggle
-              view={view}
+              view={view as any}
               onChange={(v) => setSearch({ view: v, page: 1 })}
             />
           </div>

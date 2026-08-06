@@ -456,7 +456,7 @@ export function AdminInsightsPanel() {
                   itemStyle={tooltipItemStyle}
                   cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
                   labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
-                  formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros de preço"]}
+                  formatter={(v: any, n: any) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros de preço"] as any}
                 />
                 <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "minPriceAvg" ? "Média" : "Mínimo")} />
                 <Area type="monotone" dataKey="minPriceAvg" stroke={chartTheme.primary} strokeWidth={metrics.strokeWidth} fill="url(#pcTrend)" />
@@ -504,7 +504,7 @@ export function AdminInsightsPanel() {
                   labelStyle={tooltipLabelStyle}
                   itemStyle={tooltipItemStyle}
                   cursor={{ fill: "rgba(226, 232, 240, 0.08)" }}
-                  formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]}
+                  formatter={(v: any, n: any) => [String(v), n === "products" ? "Produtos" : "Lojas"] as any}
                 />
                 <Bar dataKey="products" fill={chartTheme.primary} radius={[4, 4, 0, 0]} maxBarSize={metrics.barMaxSize} />
               </BarChart>
@@ -549,7 +549,7 @@ export function AdminInsightsPanel() {
                   itemStyle={tooltipItemStyle}
                   cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
                   labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
-                  formatter={(v: number, n) => [String(v), n === "prices" ? "Novos preços" : "Verificados"]}
+                  formatter={(v: any, n: any) => [String(v), n === "prices" ? "Novos preços" : "Verificados"] as any}
                 />
                 <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "prices" ? "Novos preços" : "Verificados")} />
                 <Line type="monotone" dataKey="prices" stroke={chartTheme.primary} strokeWidth={metrics.strokeWidth} dot={false} />

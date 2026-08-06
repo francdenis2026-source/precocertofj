@@ -133,7 +133,7 @@ export function FoodTrendChart({
                     borderRadius: 12,
                     fontSize: 12,
                   }}
-                  formatter={(v: number) => BRL(Number(v))}
+                  formatter={(v: any) => BRL(Number(v)) as any}
                 />
                 <Legend wrapperStyle={{ fontSize: 11 }} iconType="circle" />
                 <Bar dataKey="Anterior" fill="hsl(var(--muted-foreground) / 0.5)" radius={[6, 6, 0, 0]} maxBarSize={38} />

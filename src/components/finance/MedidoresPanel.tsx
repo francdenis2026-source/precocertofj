@@ -467,7 +467,7 @@ export function MedidoresPanel({ month, categories }: { month: string; categorie
               <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} />
               <Tooltip
                 contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }}
-                formatter={(v: number, name) => [`${numFmt(v, 1)} ${UTILS[nameToKey(name as string)]?.unit ?? ""}`, name]}
+                formatter={(v: any, name: any) => [`${numFmt(Number(v), 1)} ${UTILS[nameToKey(name as string)]?.unit ?? ""}`, name] as any}
               />
               <Area type="monotone" dataKey="Energia" stroke={UTILS.energia.accent} fill="url(#ga-energia)" strokeWidth={2} />
               <Area type="monotone" dataKey="Água" stroke={UTILS.agua.accent} fill="url(#ga-agua)" strokeWidth={2} />

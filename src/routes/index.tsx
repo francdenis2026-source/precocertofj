@@ -19,7 +19,8 @@ import {
   ShoppingCart,
   Filter,
   ArrowDownWideNarrow,
-  Clock
+  Clock,
+  MapPin
 } from "lucide-react";
 import { 
   GroceryIcon, 
@@ -78,7 +79,20 @@ function HomePage() {
   const { user, loading: sessionLoading } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
-  const [sort, setSort] = useState<"recent" | "price">("recent");
+  const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (sort === "near" && !userLocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        (err) => {
+          console.error("Erro ao obter localização:", err);
+          setSort("recent");
+        }
+      );
+    }
+  }, [sort, userLocation]);
 
   useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
@@ -110,7 +124,16 @@ function HomePage() {
 
     if (sort === "price") {
       list.sort((a, b) => a.price - b.price);
-    } else {
+    } else if (sort === "near" && userLocation) {
+      const getDist = (p: any) => {
+        if (!p.lat || !p.lng) return 999999;
+        return Math.sqrt(
+          Math.pow(p.lat - userLocation.lat, 2) + 
+          Math.pow(p.lng - userLocation.lng, 2)
+        );
+      };
+      list.sort((a, b) => getDist(a) - getDist(b));
+    } else if (sort === "recent") {
       list.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
     }
     
@@ -285,7 +308,16 @@ function HomePage() {
                         sort === "price" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
                       )}
                     >
-                      <ArrowDownWideNarrow className="h-3 w-3" /> Menor Preço
+                      <ArrowDownWideNarrow className="h-3 w-3" /> Preço
+                    </button>
+                    <button 
+                      onClick={() => setSort("near")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase transition-all",
+                        sort === "near" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
+                      )}
+                    >
+                      <MapPin className="h-3 w-3" /> Perto
                     </button>
                   </div>
                   <Link to="/buscar" className="hidden sm:flex text-[12px] font-bold text-[var(--brand-primary)] hover:underline items-center gap-1 ml-2">

@@ -331,7 +331,7 @@ function PrecosPage() {
                               ]}
                             />
                             <Tooltip
-                              formatter={(v: number) => [fmtBRL(v), "Preço"]}
+                              formatter={(v: any) => [fmtBRL(Number(v)), "Preço"] as any}
                               labelFormatter={(l) => `Data: ${l}`}
                               cursor={{ stroke: "var(--color-primary)", strokeOpacity: 0.35, strokeWidth: 1 }}
                               contentStyle={{

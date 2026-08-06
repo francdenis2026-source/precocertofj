@@ -1,9 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { Price } from "@/components/ds/Price";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, ArrowRight, RotateCcw, Store, TrendingDown } from "lucide-react";
+import { 
+  AlertTriangle, 
+  ArrowRight, 
+  RotateCcw, 
+  Store, 
+  TrendingDown,
+  History,
+  Scale,
+  BellPlus
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine
+} from "recharts";
 
 import {
   Dialog,
@@ -19,8 +38,6 @@ import { pickBestValue } from "@/lib/best-value";
 import { getPublicProduct } from "@/lib/public-product.functions";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
-
-
 
 export type QuickViewProduct = {
   name: string;
@@ -166,11 +183,56 @@ export function ProductQuickView({
 
         <div
           ref={bodyRef}
-          className="max-h-[52svh] overflow-y-auto p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+          className="max-h-[65svh] overflow-y-auto p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
           tabIndex={0}
           role="region"
           aria-label="Detalhes e preços do produto"
         >
+          {/* Price History Section */}
+          {!isLoading && data?.history && data.history.length > 1 && (
+            <div className="mb-4 rounded-xl border border-border bg-card/40 p-3">
+              <div className="mb-3 flex items-center justify-between">
+                <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                  <History className="h-3 w-3" /> Histórico de Preços
+                </p>
+                <div className="flex gap-2">
+                  <button className="flex items-center gap-1 text-[10px] font-bold text-brand-gold hover:underline">
+                    <BellPlus className="h-3 w-3" /> Monitorar
+                  </button>
+                </div>
+              </div>
+              <div className="h-32 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={data.history}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                    <XAxis 
+                      dataKey="date" 
+                      hide 
+                    />
+                    <YAxis 
+                      hide 
+                      domain={['dataMin - 1', 'dataMax + 1']}
+                    />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#0B0B14', border: '1px solid rgba(255,215,0,0.2)', borderRadius: '8px', fontSize: '10px' }}
+                      labelStyle={{ color: '#94A3B8' }}
+                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Menor Preço'] as any}
+                      labelFormatter={(label: any) => new Date(label).toLocaleDateString('pt-BR')}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="min" 
+                      stroke="#FFD700" 
+                      strokeWidth={2} 
+                      dot={false}
+                      activeDot={{ r: 4, fill: '#FFD700' }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
           {cheapest && (
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
               <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
@@ -193,9 +255,21 @@ export function ProductQuickView({
 
 
 
-          <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
-          </p>
+          <div className="mb-4 flex flex-col gap-2">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
+            </p>
+            
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
+                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Acompanhar Preço
+              </button>
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
+                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Adicionar à Lista
+              </button>
+            </div>
+          </div>
 
           {isLoading ? (
             <ul

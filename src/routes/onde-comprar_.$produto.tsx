@@ -271,7 +271,7 @@ function ProdutoComparacaoPage() {
                           <XAxis dataKey="label" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
                           <YAxis tick={{ fontSize: 10 }} width={44} />
                           <Tooltip
-                            formatter={(v: number, k) => [brl(Number(v)), k === "minPrice" ? "Menor" : "Média"]}
+                            formatter={(v: any, k: any) => [brl(Number(v)), k === "minPrice" ? "Menor" : "Média"] as any}
                             contentStyle={{ fontSize: 12 }}
                           />
                           <Area

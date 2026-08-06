@@ -321,7 +321,7 @@ function TrendsPage() {
                         fontSize: 12,
                       }}
                       labelFormatter={(l) => `Dia ${l}`}
-                      formatter={(v: number) => [v, "buscas"]}
+                      formatter={(v: any) => [v, "buscas"] as any}
                     />
                     <Area
                       type="monotone"
@@ -367,7 +367,7 @@ function TrendsPage() {
                         borderRadius: 10,
                         fontSize: 12,
                       }}
-                      formatter={(v: number) => [v, "buscas"]}
+                      formatter={(v: any) => [v, "buscas"] as any}
                     />
                     <Bar dataKey="buscas" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
                   </BarChart>
