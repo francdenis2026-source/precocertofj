@@ -35,7 +35,7 @@ export function ForceUpdateButton({ className }: { className?: string }) {
       title={`Versão atual: ${APP_BUILD_ID}`}
       aria-label="Forçar atualização do site e recarregar"
       className={cn(
-        "h-7 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2 text-[11px] font-medium text-primary-foreground shadow-none hover:bg-primary-foreground/20 disabled:opacity-60",
+        "h-7 rounded-md border border-black/30 bg-black/10 px-2 text-[11px] font-medium text-black shadow-none hover:bg-black/20 disabled:opacity-60",
         className,
       )}
 

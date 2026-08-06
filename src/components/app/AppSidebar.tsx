@@ -427,7 +427,7 @@ export function AppSidebar() {
                       <SidebarMenuButton
                         disabled={signingOut}
                         aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
-                        className={cn("pcsb-row pcsb-row--logout")}
+                        className={cn("pcsb-row pcsb-row--logout hover:bg-[var(--danger)]/10 hover:text-[var(--danger)]")}
                       >
                         <span aria-hidden className="pcsb-ico">
                           {signingOut ? (

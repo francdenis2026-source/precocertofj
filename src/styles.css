@@ -1,14 +1,20 @@
 @import "tailwindcss";
 
+:root {
+  --pc-price-fg: var(--text-primary);
+  --pc-price-best: var(--brand-primary);
+  --pc-price-savings: var(--success);
+}
+
 @theme {
   --pc-primary-rgb: 255 215 0;
-  --bg-base: #0A0F1E;
-  --bg-surface: #141C32;
-  --bg-surface-elevated: #1E294B;
-  --border-subtle: rgba(255, 255, 255, 0.05);
+  --bg-base: #05070A;
+  --bg-surface: #0E121F;
+  --bg-surface-elevated: #161C2E;
+  --border-subtle: rgba(255, 215, 0, 0.1);
   
   --brand-primary: #FFD700;
-  --brand-glow: rgba(255, 215, 250, 0.15);
+  --brand-glow: rgba(255, 215, 0, 0.25);
   
   --success: #10B981;
   --danger: #EF4444;
