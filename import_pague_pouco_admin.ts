@@ -25,7 +25,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
 });
 
 const establishmentId = 'eb1e6277-db89-4e94-950e-d14540ce71c6'; // DROGARIA PAGUE POUCO
-const userId = '64e8e19e-4e44-486a-8d1a-464a9355f94d'; // Admin/System user
+const userId = 'f07ae64f-dfa6-4624-8f3d-65d4a438e1cd'; // Active User Profile ID
 
 const productsToImport = [
   // Row 1
