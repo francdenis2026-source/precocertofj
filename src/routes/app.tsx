@@ -139,8 +139,9 @@ function DashboardPage() {
                 {data?.trackedItems.map((item) => (
                   <li key={item.id} className="py-3 first:pt-0 last:pb-0">
                     <Link 
-                      to="/loja/$id/produto/$slug" 
+                      to="/app/produto/$id/$slug" 
                       params={{ id: item.lastEstablishmentId || "catalogo", slug: item.catalogSlug }} 
+
                       className="flex items-center gap-3 hover:opacity-80 transition-opacity"
                     >
                       <ProductImage src={item.imageUrl} alt={item.displayName} width={40} height={40} className="rounded-md border bg-muted/30" />
@@ -188,8 +189,9 @@ function DashboardPage() {
                     )}
                   >
                     <Link 
-                      to="/loja/$id/produto/$slug" 
+                      to="/app/produto/$id/$slug" 
                       params={{ id: alert.establishmentId || "catalogo", slug: alert.productSlug }}
+
                       className="flex w-full gap-3"
                     >
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -234,10 +236,11 @@ function DashboardPage() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {data?.recentScans.map((scan) => (
-                  <Link 
-                    key={scan.id} 
-                    to="/loja/$id/produto/$slug" 
-                    params={{ id: scan.establishmentId || "catalogo", slug: scan.productSlug }}
+                    <Link 
+                      key={scan.id} 
+                      to="/app/produto/$id/$slug" 
+                      params={{ id: scan.establishmentId || "catalogo", slug: scan.productSlug }}
+
                     className="group flex flex-col items-center p-4 rounded-xl border border-border/50 bg-background hover:border-primary/40 hover:bg-muted/10 transition-all"
                   >
                     <ProductImage src={scan.imageUrl} alt={scan.productName || ""} width={60} height={60} className="mb-3 rounded-lg" />
