@@ -474,6 +474,8 @@ function Perfil() {
               </ul>
             </div>
 
+            <PreferencesPanel />
+
             <SubscriptionStatusCard />
 
             <CollaboratorStatusCard />
