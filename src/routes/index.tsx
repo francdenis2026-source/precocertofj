@@ -45,7 +45,7 @@ import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCaro
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
-import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
+import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
