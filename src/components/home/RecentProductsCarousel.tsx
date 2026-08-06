@@ -18,7 +18,6 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { getHomeShowcase, type HomeShowcase } from "@/lib/home-showcase.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { shortenStoreName } from "@/lib/store-name";
-import { formatBRL } from "@/components/ds";
 import { Price } from "@/components/ds/Price";
 
 type StoreEntry = {
@@ -226,13 +225,17 @@ export function RecentProductsCarousel() {
                         {price != null ? (
                           <>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-2xl font-bold tracking-tight text-[var(--text-primary)] tabular-nums">
-                                {formatBRL(price)}
-                              </span>
+                              <Price 
+                                value={price} 
+                                size="xl" 
+                                className="font-bold tracking-tight"
+                              />
                               {avg != null && avg > price && (
-                                <span className="text-xs font-normal text-[var(--text-tertiary)] line-through">
-                                  {formatBRL(avg)}
-                                </span>
+                                <Price 
+                                  value={avg} 
+                                  tone="strike" 
+                                  size="xs" 
+                                />
                               )}
                             </div>
                             {store && (
