@@ -216,8 +216,8 @@ export function ProductQuickView({
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#0B0B14', border: '1px solid rgba(255,215,0,0.2)', borderRadius: '8px', fontSize: '10px' }}
                       labelStyle={{ color: '#94A3B8' }}
-                      formatter={(value: number) => [`R$ ${value.toFixed(2)}`, 'Menor Preço']}
-                      labelFormatter={(label) => new Date(label).toLocaleDateString('pt-BR')}
+                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Menor Preço']}
+                      labelFormatter={(label: any) => new Date(label).toLocaleDateString('pt-BR')}
                     />
                     <Line 
                       type="monotone" 
@@ -255,9 +255,21 @@ export function ProductQuickView({
 
 
 
-          <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
-          </p>
+          <div className="mb-4 flex flex-col gap-2">
+            <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
+            </p>
+            
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
+                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Acompanhar Preço
+              </button>
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/5">
+                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Adicionar à Lista
+              </button>
+            </div>
+          </div>
 
           {isLoading ? (
             <ul
