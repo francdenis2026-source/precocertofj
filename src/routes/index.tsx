@@ -81,19 +81,13 @@ function HomePage() {
   const [sort, setSort] = useState<"recent" | "price">("recent");
 
   useEffect(() => {
-    const handleOpenQuickView = (e: any) => {
-      setSelectedProduct(e.detail);
-    };
-    window.addEventListener('open-quick-view', handleOpenQuickView);
-    return () => window.removeEventListener('open-quick-view', handleOpenQuickView);
-  }, []);
-  const [sort, setSort] = useState<"price" | "recent">("recent");
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-
-  useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
+    window.addEventListener('open-quick-view', handler);
     window.addEventListener('internal-open-quick-view', handler);
-    return () => window.removeEventListener('internal-open-quick-view', handler);
+    return () => {
+      window.removeEventListener('open-quick-view', handler);
+      window.removeEventListener('internal-open-quick-view', handler);
+    };
   }, []);
   
   const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
@@ -425,13 +419,8 @@ function HomePage() {
                 </div>
               </div>
               
-              <div className="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
-      <ProductQuickView
-        product={selectedProduct}
-        open={!!selectedProduct}
-        onOpenChange={(open) => !open && setSelectedProduct(null)}
-      />
-      <RegisteredStoresCarousel />
+              <div class="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
+                <RegisteredStoresCarousel />
               </div>
             </div>
           </section>
