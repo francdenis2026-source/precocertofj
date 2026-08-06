@@ -43,8 +43,9 @@ export function RegisteredStoresCarousel() {
           {stores.map((store) => (
             <Link
               key={store.id}
-              to="/estabelecimento/$id"
+              to="/loja/$id"
               params={{ id: store.id }}
+              search={{ q: "" }}
               className="group flex flex-col items-center gap-2 shrink-0 snap-start"
             >
               <div className={cn(
@@ -86,8 +87,9 @@ export function RegisteredStoresCarousel() {
           {displayStores.map((store, i) => (
             <Link
               key={`${store.id}-${i}`}
-              to="/estabelecimento/$id"
+              to="/loja/$id"
               params={{ id: store.id }}
+              search={{ q: "" }}
               onClick={(e) => {
                 if (isDrag) {
                   e.preventDefault();
