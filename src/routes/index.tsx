@@ -149,11 +149,10 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
-    // Removido scroll automático ao focar para evitar travamentos e manter posição
-    if (isSearchFocused && searchAnchorRef.current) {
-      // Logic for fixed position could be handled via CSS or state if needed
+    if (isSearchFocused && searchAnchorRef.current && !isScrolled) {
+      searchAnchorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [isSearchFocused]);
+  }, [isSearchFocused, isScrolled]);
 
   useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
