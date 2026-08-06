@@ -77,8 +77,8 @@ async function run() {
         product_name: p.name,
         price_captured: p.price,
         category: p.category,
-        verdict: 'good',
-        status: 'verified',
+        verdict: 'unknown',
+        status: 'salvo',
         verified: true,
         verified_at: new Date().toISOString()
       });
