@@ -37,7 +37,7 @@ export function ContamigosLogo({
       <div className={cn(
         "relative flex shrink-0 items-center justify-center rounded-xl",
         size === "sm" ? "h-8 w-8" : size === "md" ? "h-10 w-10" : "h-16 w-16",
-        "bg-[#E63946] shadow-lg shadow-[#E63946]/20"
+        "bg-[#D4AF37] shadow-lg shadow-[#D4AF37]/20"
       )}>
         <svg 
           viewBox="0 0 24 24" 
@@ -61,7 +61,7 @@ export function ContamigosLogo({
           isDark ? "text-white" : "text-[#0B1E3A]"
         )}>
           Varejão
-          <span className="text-[#E63946] not-italic ml-1">Contamigos</span>
+          <span className="text-[#D4AF37] not-italic ml-1">Contamigos</span>
         </span>
         <span className={cn(
           "font-mono font-bold tracking-[0.2em] uppercase",
