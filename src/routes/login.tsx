@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, Lock, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, Ticket } from "lucide-react";
+import { ArrowRight, Loader2, Lock, User, Phone, MapPin, Hash, ShieldAlert, ShieldCheck, AlertCircle, Check, Ticket } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -944,7 +944,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-border bg-muted p-0.5"
+      className="mt-5 grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/70 p-1"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -956,13 +956,18 @@ function TabSwitch({
             aria-selected={active}
             onClick={() => onChange(t.key)}
             className={
-              "relative h-8 rounded-md text-[12px] font-semibold transition " +
-              (active
-                ? "bg-card text-foreground shadow-sm ring-1 ring-border"
-                : "text-muted-foreground hover:text-foreground")
+              "relative h-9 rounded-lg text-[12.5px] font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
+              (active ? "text-foreground" : "text-muted-foreground hover:text-foreground")
             }
           >
-            {t.label}
+            {active && (
+              <motion.span
+                layoutId="login-tab-pill"
+                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                className="absolute inset-0 rounded-lg bg-card shadow-sm ring-1 ring-border"
+              />
+            )}
+            <span className="relative">{t.label}</span>
           </button>
         );
       })}
