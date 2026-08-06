@@ -138,10 +138,9 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
+    // Removido scroll automático ao focar para evitar travamentos e manter posição
     if (isSearchFocused && searchAnchorRef.current) {
-      const yOffset = -100; // Ajuste para deixar a barra de busca em uma posição "profissional"
-      const y = searchAnchorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      // Logic for fixed position could be handled via CSS or state if needed
     }
   }, [isSearchFocused]);
 
