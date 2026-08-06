@@ -20,11 +20,12 @@ export const downloadFullDatabase = createServerFn({ method: "POST" })
     }
 
     // Fetch core tables
+    // Use 'as any' for tables not yet in the generated types or if there's a mismatch
     const [establishments, products, scans, categories] = await Promise.all([
       supabaseAdmin.from("establishments").select("*"),
-      supabaseAdmin.from("product_catalog").select("*"),
+      supabaseAdmin.from("product_catalog" as any).select("*"),
       supabaseAdmin.from("scans").select("*"),
-      supabaseAdmin.from("category_hub").select("*"),
+      supabaseAdmin.from("category_hub" as any).select("*"),
     ]);
 
     const dataDump = {
