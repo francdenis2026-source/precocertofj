@@ -341,7 +341,7 @@ function LoginPage() {
 
 
         <div
-          className="relative flex flex-1 flex-col overflow-y-auto p-5 sm:p-7 md:p-9"
+          className="relative flex flex-1 flex-col p-5 sm:p-7 md:p-9"
           style={{
             background:
               "linear-gradient(180deg, color-mix(in oklab, var(--bg-surface-elevated) 92%, transparent) 0%, var(--bg-surface) 62%)",
@@ -404,7 +404,8 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-3 space-y-2.5" onSubmit={handleSubmit}>
+          <form className="mt-3 flex flex-1 flex-col gap-2.5 overflow-hidden" onSubmit={handleSubmit}>
+            <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
 
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
