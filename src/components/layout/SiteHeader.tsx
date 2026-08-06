@@ -78,17 +78,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // if (pathname !== "/") return null;
 
   const shellClass = isOverlay
-    ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
-      // flutua por cima do hero e a marca colide com o título/badge.
-      "relative z-30 w-full shrink-0"
-    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)] text-[var(--text-primary)] shadow-xl backdrop-blur-md transition-colors duration-300";
+    ? "sticky top-0 z-40 w-full shrink-0 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 backdrop-blur-md"
+    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 text-[var(--text-primary)] shadow-sm backdrop-blur-md transition-colors duration-300";
   const brandTextClass = "text-[var(--text-primary)]";
   const brandAccentClass = "text-[var(--brand-primary)]";
   const subTextClass = "text-[var(--text-tertiary)]";
-  // Nav: hover/active sempre em gold (brand) — legível em light e dark, sem tons cyan.
-  const navClass = "relative text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] [&.active]:text-[var(--brand-primary)] after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--brand-primary)] after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
-  const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]";
-  const loginClass = "bg-[var(--brand-primary)] text-black shadow-[0_15px_30px_-5px_var(--brand-glow)] transition-all duration-300 hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98]";
+  const navClass = "relative text-[var(--text-secondary)] transition-colors hover:text-[var(--brand-primary)] [&.active]:text-[var(--brand-primary)]";
+  const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]";
+  const loginClass = "bg-[var(--brand-primary)] text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]";
 
 
 

@@ -75,13 +75,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#FFD700" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#FD79A8" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#E17055" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#00B894" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#0984E3" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#00CEC9" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#FDCB6E" },
+  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#6366F1" },
+  { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#EC4899" },
+  { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#EF4444" },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#10B981" },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk, SVG: DrinkIcon, color: "#3B82F6" },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets, SVG: CleaningIcon, color: "#06B6D4" },
+  { slug: "higiene", label: "Higiene", Icon: Smile, SVG: HygieneIcon, color: "#F59E0B" },
 ];
 
 function HomePage() {
@@ -201,21 +201,17 @@ function HomePage() {
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="overlay" showThemeToggle />
       
-      {/* Professional Realism Background */}
+      {/* Light & Professional Background */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
+          animate={{ opacity: 0.05 }}
           transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center brightness-[0.4] saturate-[1.1]" 
+          className="absolute inset-0 bg-cover bg-center" 
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/95 to-[var(--bg-base)] transition-colors duration-300" />
-        <div 
-          className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.08] blur-[120px]" 
-          style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -226,24 +222,24 @@ function HomePage() {
             });
           `}} />
           
-          {/* Hero Section */}
+          {/* Hero Section - Clarity & Connection Theme */}
           <motion.section 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col items-center text-center mb-16"
+            className="flex flex-col items-center text-center mb-16 pt-8"
           >
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-6 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-8 backdrop-blur-md"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-[var(--text-tertiary)] mx-1">·</span> Acre</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
             {/* Logo Preview Trigger (Hidden Admin Feature) */}
@@ -252,40 +248,39 @@ function HomePage() {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setShowLogoPreview(true)}
-                className="rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
+                className="rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
               >
                 Preview Logomarcas
               </Button>
             </div>
 
             
-            <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
-              Sua Inteligência Real para Economizar todos os dias em Feijó
+            <h1 className="font-display text-[42px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-8 max-w-3xl text-[var(--text-primary)]">
+              Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </h1>
+            
+            <p className="text-lg sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed">
+              Descubra os melhores preços em Feijó com uma interface moderna, rápida e intuitiva. 
+              Conectamos você às melhores ofertas da cidade.
+            </p>
 
             <div className="relative w-full max-w-2xl">
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
-                className="group relative w-full flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
+                className="group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
               >
                 <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
-                  onFocus={() => { console.log("Input focused"); setIsSearchFocused(true); }}
-                  onBlur={() => { console.log("Input blurred"); setTimeout(() => setIsSearchFocused(false), 200); }}
-                  onKeyDown={(e) => {
-                    if (searchSuggestionsRef.current?.handleKeyDown(e)) {
-                      // Se a sugestão consumiu o evento, não faz nada
-                      return;
-                    }
-                  }}
-                  placeholder="Busque por arroz, feijão, leite..." 
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  placeholder="O que você deseja economizar hoje?" 
                   className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
                 />
-                <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
-                  Buscar
+                <Button type="submit" className="hidden sm:flex rounded-xl px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[60px] font-bold text-white hover:brightness-110 active:scale-95 transition-all">
+                  Buscar Ofertas
                 </Button>
               </form>
 
@@ -316,9 +311,9 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group flex flex-col items-center gap-2 sm:w-20"
                 >
-                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm">
-                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors" />
-                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity" style={{ backgroundColor: color }} />
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm group-hover:shadow-md">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--brand-primary)] transition-colors" />
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity" style={{ backgroundColor: color }} />
                   </div>
                   <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full text-center px-1">
                     {label}
@@ -337,7 +332,7 @@ function HomePage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
+                <h2 className="section-title font-display font-bold text-[var(--text-primary)] mb-0">Preços ao Vivo</h2>
                 
                 <div className="flex items-center gap-2">
                   <div className="flex bg-[var(--bg-surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
