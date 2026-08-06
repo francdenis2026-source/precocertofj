@@ -139,7 +139,7 @@ function AppHomeContent() {
         <header
           ref={panelBarRef}
           data-testid="panel-band"
-          className="overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm backdrop-blur-md"
+          className="overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 shadow-2xl backdrop-blur-xl"
         >
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#5848d6] px-3 py-2 text-white md:px-4 md:py-2.5">
             <span
