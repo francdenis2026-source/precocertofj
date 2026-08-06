@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { Home, Search, ShoppingBag, ShoppingCart, Star, User } from "lucide-react";
+import { Home, Search, ShoppingBag, ShoppingCart, Star, User, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/hooks/useSession";
 import { loginHrefWithRedirect } from "@/lib/auth-redirect";
@@ -49,7 +49,8 @@ export function MobileNav() {
   // "Minha lista" e "Favoritos" sempre visíveis em telas pequenas.
   const items: Item[] = isAppActive || (isAuthed && pathname === "/favoritos")
     ? [
-        { to: "/app", label: "Painel", icon: Home, match: () => pathname === "/app" },
+      { to: "/app", label: "Painel", icon: Home, match: () => pathname === "/app" },
+        { to: "/app/insights", label: "Insights", icon: TrendingDown, match: (p) => p.startsWith("/app/insights") },
         {
           to: "/app/produtos",
           label: "Buscar",
