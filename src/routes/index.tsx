@@ -385,6 +385,7 @@ function HomePage() {
               <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver catálogo completo</Link>
             </div>
             
+            <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">{Array.from({length: 7}).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-[32px]" />)}</div>}>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
