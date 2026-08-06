@@ -492,7 +492,7 @@ function StorePage() {
         </header>
 
         {/* Search */}
-        <div className="mt-4 relative">
+        <div className="no-print mt-4 relative">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={q}
@@ -517,7 +517,7 @@ function StorePage() {
 
         {/* Category chips */}
         {categories.length > 0 && (
-          <div className="mt-3">
+          <div className="no-print mt-3">
             <SwipeRow ariaLabel="Filtrar por categoria">
               <CategoryChip
                 active={cat === "all"}
