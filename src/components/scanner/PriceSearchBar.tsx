@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
