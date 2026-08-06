@@ -91,7 +91,7 @@ function HomePage() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [q, setQ] = useState("");
+  // const [q, setQ] = useState(""); // Removed q from state as we now use SmartSearchBar exclusively for searching
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -170,10 +170,8 @@ function HomePage() {
     if (!rawRecentProducts) return [];
     let list = [...rawRecentProducts];
     
-    if (q.trim()) {
-      const term = q.toLowerCase();
-      list = list.filter(p => p.name.toLowerCase().includes(term));
-    }
+    // We removed 'q' filtering from here because the main search happens via SmartSearchBar which navigates to /buscar
+    // The products shown here are 'live' recent prices, not necessarily search results.
 
     if (sort === "price") {
       list.sort((a, b) => a.price - b.price);
@@ -191,7 +189,7 @@ function HomePage() {
     }
     
     return list.slice(0, 6);
-  }, [rawRecentProducts, q, sort]);
+  }, [rawRecentProducts, sort]);
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">

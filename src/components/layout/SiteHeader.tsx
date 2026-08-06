@@ -207,52 +207,18 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </Sheet>
           )}
 
-          {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero ou quando focado */}
-          {showNav && (scrolled || forceCompact) && (
+          {/* Busca compacta no topo — aparece na homepage apenas após rolar o hero */}
+          {showNav && scrolled && (
             <motion.div
-              initial={forceCompact ? { y: 20, opacity: 0 } : { y: -20, opacity: 0 }}
+              initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={forceCompact ? { y: 20, opacity: 0 } : { y: -20, opacity: 0 }}
+              exit={{ y: -20, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="hidden md:block"
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const term = q.trim();
-                  if (term) navigate({ to: "/buscar", search: { q: term } as any });
-                }}
-                role="search"
-              >
-                <label className="sr-only" htmlFor="header-search">Buscar produto</label>
-                <div
-                  className={dsx(
-                    "flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-primary/40",
-                    isOverlay ? "border-on-media-border bg-on-media-surface/80 backdrop-blur-md" : "border-border bg-card/80 backdrop-blur-md",
-                    forceCompact && "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)]/20 shadow-xl"
-                  )}
-                >
-                  <Search className={dsx("h-4 w-4", isOverlay ? "text-on-media-muted" : "text-muted-foreground")} />
-                  <input
-                    id="header-search"
-                    autoFocus={forceCompact}
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    onFocus={() => {
-                      if (pathname === "/" && !forceCompact && !scrolled) {
-                        // Se focar na barra compacta mas não estamos no estado compactado,
-                        // podemos disparar um evento para a home sincronizar ou apenas permitir a digitação.
-                        // Mas aqui a barra só APARECE se forceCompact ou scrolled.
-                      }
-                    }}
-                    placeholder="Buscar preço…"
-                    className={dsx(
-                      "w-32 bg-transparent text-[13.5px] font-medium outline-none xl:w-44",
-                      isOverlay ? "text-on-media placeholder:text-on-media-muted" : "text-foreground placeholder:text-muted-foreground",
-                    )}
-                  />
-                </div>
-              </form>
+              <div className="w-64 xl:w-80">
+                <SmartSearchBar compact />
+              </div>
             </motion.div>
           )}
 
