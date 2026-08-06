@@ -96,7 +96,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'DM Sans', 'Inter', sans-serif;
+  font-family: 'DM Sans', 'Inter', sans-serif !important;
   font-size: 14px;
   line-height: 1.5;
   letter-spacing: -0.01em;
