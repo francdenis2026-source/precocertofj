@@ -13,9 +13,9 @@ const focusRing =
 
 const linkClass = dsx(
   "inline-flex min-h-9 items-center rounded-md px-2 py-1 font-black uppercase tracking-widest text-[11px] text-white/40",
-  "transition-all hover:text-indigo-400 hover:bg-white/5",
-  "hover:text-indigo-400",
-  "outline-none focus-visible:ring-2 focus-visible:ring-indigo-500",
+  "transition-all hover:text-[var(--brand-primary)] hover:bg-white/5",
+  "hover:text-[var(--brand-primary)]",
+  "outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
 );
 
 /**
