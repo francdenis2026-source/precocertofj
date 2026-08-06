@@ -238,6 +238,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                     autoFocus={forceCompact}
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
+                    onFocus={() => {
+                      if (pathname === "/" && !forceCompact && !scrolled) {
+                        // Se focar na barra compacta mas não estamos no estado compactado,
+                        // podemos disparar um evento para a home sincronizar ou apenas permitir a digitação.
+                        // Mas aqui a barra só APARECE se forceCompact ou scrolled.
+                      }
+                    }}
                     placeholder="Buscar preço…"
                     className={dsx(
                       "w-32 bg-transparent text-[13.5px] font-medium outline-none xl:w-44",

@@ -46,6 +46,7 @@ import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
+import { PromoBanner } from "@/components/promo/PromoBanner";
 import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -334,6 +335,11 @@ function HomePage() {
             </motion.div>
           </section>
           </Suspense>
+
+          {/* Promo Section */}
+          <section className="mb-16">
+            <PromoBanner />
+          </section>
 
           {/* Grid Category Navigation */}
           <section className="mb-12">
