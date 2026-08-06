@@ -119,7 +119,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           <div className="flex min-w-0 flex-col leading-none">
             <span
               className={dsx(
-                "truncate text-xl font-black leading-tight tracking-[-0.05em] antialiased sm:text-2xl",
+                "font-display truncate text-xl font-black leading-tight tracking-[-0.05em] antialiased sm:text-2xl",
                 brandTextClass,
               )}
             >
@@ -316,7 +316,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <Link
               to="/login"
               className={cn(
-                "inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-semibold text-white shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
+                "font-display inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-bold text-white shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
               )}
             >
               Entrar

@@ -88,10 +88,18 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
-      {/* Background Gradient - Pure Radial, No Texture */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[var(--bg-base)]">
+      {/* Professional Realism Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-[var(--bg-base)]" />
+        <motion.div 
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 0.15, scale: 1 }}
+          transition={{ duration: 2 }}
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center mix-blend-luminosity" 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]" />
         <div 
-          className="absolute top-[-20%] left-[10%] w-[80%] h-[60%] rounded-full opacity-[0.08] blur-[120px]" 
+          className="absolute top-[-10%] right-[10%] w-[60%] h-[50%] rounded-full opacity-[0.12] blur-[120px]" 
           style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
         />
       </div>
@@ -108,17 +116,22 @@ function HomePage() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center text-center mb-24"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md"
+            >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
-            </div>
+            </motion.div>
             
-            <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl text-white">
+            <h1 className="font-display text-[44px] sm:text-[64px] font-bold tracking-[-0.04em] leading-[0.95] mb-8 max-w-4xl text-white">
               Inteligência real para <br />
-              economizar em cada compra
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#a29bfe]">economizar</span> em cada compra
             </h1>
 
             <form onSubmit={submitSearch} className="group relative w-full max-w-2xl flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10">
@@ -129,7 +142,7 @@ function HomePage() {
                 placeholder="Busque por arroz, feijão, leite..." 
                 className="flex-1 bg-transparent px-5 text-lg font-medium outline-none placeholder:text-[var(--text-tertiary)]" 
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white hover:scale-[1.02] active:scale-95 transition-all shadow-[0_8px_20px_-4px_var(--brand-glow)]">
+              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                 Buscar
               </Button>
             </form>
@@ -205,7 +218,7 @@ function HomePage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
             <div className="lg:col-span-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="section-title mb-0">Preços ao Vivo</h2>
+                <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
                 <Link to="/buscar" className="text-[12px] font-bold text-[var(--brand-primary)] hover:underline flex items-center gap-1">
                   Ver tudo <ArrowRight className="h-3 w-3" />
                 </Link>
@@ -251,7 +264,7 @@ function HomePage() {
 
             {/* Sidebar / Stats */}
             <div className="lg:col-span-4 space-y-6">
-              <h2 className="section-title">Transparência</h2>
+              <h2 className="section-title font-display font-bold text-white">Transparência</h2>
               <div className="glass-card p-6 flex flex-col gap-6">
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-1">Mercados Auditados</div>
@@ -267,7 +280,7 @@ function HomePage() {
                     {loaderData.economy?.avgSavingsPct ? `${loaderData.economy.avgSavingsPct}%` : "—"}
                   </div>
                 </div>
-                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_8px_20px_-4px_var(--brand-glow)]">
+                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                   Acessar Aplicativo
                 </Button>
               </div>
@@ -289,7 +302,7 @@ function HomePage() {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                 <div className="max-w-xl">
                   <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-3">Rede de Parcerias</h2>
-                  <h3 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
+                  <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
                     Comércios Parceiros
                   </h3>
                   <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">

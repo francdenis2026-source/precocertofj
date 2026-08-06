@@ -123,7 +123,12 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard pc-page" ref={wheelRootRef}>
+      <div className="relative z-10 app-dashboard pc-page" ref={wheelRootRef}>
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 bg-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-[0.05] mix-blend-luminosity" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
+        </div>
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
@@ -134,16 +139,16 @@ function AppHomeContent() {
         <header
           ref={panelBarRef}
           data-testid="panel-band"
-          className="overflow-hidden rounded-[12px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm backdrop-blur-md"
+          className="overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 shadow-2xl backdrop-blur-xl"
         >
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-[var(--brand-primary)] px-3 py-1 text-white md:px-4 md:py-1.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#5848d6] px-3 py-2 text-white md:px-4 md:py-2.5">
             <span
               aria-hidden
-              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/20 blur-3xl"
+              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl"
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
               <p className={cn(tc.eyebrow, "hidden shrink-0 text-white/60 sm:block")}>Meu painel</p>
-              <h1 className="truncate whitespace-nowrap text-[14px] font-semibold leading-tight tracking-[-0.01em] text-primary-foreground md:text-[15.5px]">
+              <h1 className="font-display truncate whitespace-nowrap text-[16px] font-bold leading-tight tracking-[-0.02em] text-white md:text-[18px]">
                 Olá, {firstName}
               </h1>
             </div>
@@ -355,7 +360,7 @@ function Metric({
         >
           {label}
         </p>
-        <p className="pc-price min-w-0 truncate text-[19px] font-semibold leading-tight text-[var(--text-primary)] sm:text-[21px]">
+        <p className="pc-price font-display min-w-0 truncate text-[19px] font-bold leading-tight text-[var(--text-primary)] sm:text-[21px]">
           {value}
         </p>
         <p className="line-clamp-1 text-[12px] leading-tight text-[var(--text-tertiary)]" title={hint}>
