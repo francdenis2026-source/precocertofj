@@ -487,9 +487,48 @@ function HomePage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-[var(--border-subtle)] bg-white/[0.02]">
+                      <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Produto</th>
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Mercado</th>
+                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Preço</th>
+                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Atualização</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[var(--border-subtle)]">
+                      {filteredProducts.map((p, i) => (
+                        <motion.tr
+                          key={p.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          onClick={() => setSelectedProduct(p)}
+                          className="group cursor-pointer hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                             <div className="flex items-center gap-3">
+                               <div className="h-10 w-10 shrink-0 rounded-lg bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-hidden">
+                                 {p.imageUrl && <img src={p.imageUrl} alt="" className="h-full w-full object-cover" />}
+                               </div>
+                               <div>
+                                 <p className="text-[13px] font-bold text-[var(--text-primary)] leading-tight">{p.name}</p>
+                                 <p className="text-[10px] font-medium text-[var(--text-tertiary)]">{p.brand ?? "Genérico"}</p>
+                               </div>
+                             </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="text-[12px] font-semibold text-[var(--text-secondary)]">{p.marketName ?? "—"}</span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <Price value={p.price} size="md" className="font-bold" />
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <span className="text-[11px] font-mono text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Preço</th>
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Variação</th>
                         <th className="px-6 py-5" aria-hidden="true"><span className="sr-only">Ações</span></th>
