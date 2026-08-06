@@ -157,7 +157,6 @@ export function RecentProductsCarousel() {
         <CarouselContent className="-ml-4">
           {products.map((p) => {
             const cmp = priceByName.get(norm(p.displayName));
-            const slug = cmp?.catalog_slug ?? p.id;
             const price = cmp ? Number(cmp.min_price) : null;
             const avg = cmp ? Number(cmp.avg_price) : null;
             const savings = price != null && avg != null && avg > price
@@ -170,12 +169,34 @@ export function RecentProductsCarousel() {
                   key={p.id}
                   className="basis-[75%] pl-4 sm:basis-[45%] md:basis-[33%] lg:basis-[25%] xl:basis-[20%] snap-start"
                 >
-                <Link
-                  to="/produto-publico/$slug"
-                  params={{ slug }}
+                <div
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-quick-view', { detail: { 
+                    name: p.displayName,
+                    unit: cmp?.size_unit || null,
+                    minPrice: price,
+                    maxPrice: null,
+                    cheapestStore: store,
+                    storeCount: cmp?.store_count || 0,
+                    updatedAt: p.createdAt
+                  }}))}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      window.dispatchEvent(new CustomEvent('open-quick-view', { detail: { 
+                        name: p.displayName,
+                        unit: cmp?.size_unit || null,
+                        minPrice: price,
+                        maxPrice: null,
+                        cheapestStore: store,
+                        storeCount: cmp?.store_count || 0,
+                        updatedAt: p.createdAt
+                      }}));
+                    }
+                  }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40"
-
+                  className="group/card relative block h-full overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 cursor-pointer"
                 >
                   {/* Scanning Effect for "Eyeing the product" feature - subtly updated */}
                   <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[12px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
@@ -256,7 +277,7 @@ export function RecentProductsCarousel() {
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               </CarouselItem>
             );
           })}
