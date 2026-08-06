@@ -76,7 +76,17 @@ const CATEGORIES = [
 function HomePage() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
+  const [sort, setSort] = useState<"recent" | "price">("recent");
+
+  useEffect(() => {
+    const handleOpenQuickView = (e: any) => {
+      setSelectedProduct(e.detail);
+    };
+    window.addEventListener('open-quick-view', handleOpenQuickView);
+    return () => window.removeEventListener('open-quick-view', handleOpenQuickView);
+  }, []);
   const [sort, setSort] = useState<"price" | "recent">("recent");
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
@@ -416,7 +426,12 @@ function HomePage() {
               </div>
               
               <div className="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
-                <RegisteredStoresCarousel />
+      <ProductQuickView
+        product={selectedProduct}
+        open={!!selectedProduct}
+        onOpenChange={(open) => !open && setSelectedProduct(null)}
+      />
+      <RegisteredStoresCarousel />
               </div>
             </div>
           </section>
