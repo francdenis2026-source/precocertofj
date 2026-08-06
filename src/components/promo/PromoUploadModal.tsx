@@ -36,6 +36,26 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
     email: "",
   });
 
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+
+  const validateField = (name: string, value: string) => {
+    let error = "";
+    if (name === "cpf") {
+      const { valid, message } = validateCpfDetailed(value);
+      if (!valid) error = message;
+    } else if (name === "email") {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "E-mail inválido";
+    } else if (name === "phone") {
+      const digits = value.replace(/\D/g, "");
+      if (digits.length < 10) error = "Mínimo 10 dígitos";
+    } else if (name === "fullName") {
+      if (value.trim().length < 3) error = "Nome muito curto";
+    }
+    setErrors(prev => ({ ...prev, [name]: error }));
+    return !error;
+  };
+
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       setFile(e.target.files[0]);
