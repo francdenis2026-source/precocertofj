@@ -38,6 +38,8 @@ type Props = {
   showThemeToggle?: boolean;
   /** Mostra o botão "Voltar" (padrão true na variante solid). */
   showBack?: boolean;
+  /** Força o estado compacto (ex: busca ativa na home). */
+  forceCompact?: boolean;
 };
 
 const NAV_LINKS = [
@@ -48,7 +50,7 @@ const NAV_LINKS = [
   { to: "/planos", label: "Planos" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true, forceCompact = false }: Props) {
   const isOverlay = variant === "overlay";
   const pathname = useLocation({ select: (l) => l.pathname });
   // Na homepage não há "tela anterior" dentro do app: o Voltar não faz sentido.
@@ -205,38 +207,46 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </Sheet>
           )}
 
-          {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero */}
-          {showNav && scrolled && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const term = q.trim();
-                if (term) navigate({ to: "/buscar", search: { q: term } as any });
-              }}
-              role="search"
+          {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero ou quando focado */}
+          {showNav && (scrolled || forceCompact) && (
+            <motion.div
+              initial={forceCompact ? { y: 20, opacity: 0 } : { y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={forceCompact ? { y: 20, opacity: 0 } : { y: -20, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="hidden md:block"
             >
-              <label className="sr-only" htmlFor="header-search">Buscar produto</label>
-              <div
-                className={dsx(
-                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-primary/40",
-                  isOverlay ? "border-on-media-border bg-on-media-surface/80 backdrop-blur-md" : "border-border bg-card/80 backdrop-blur-md",
-                )}
-
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const term = q.trim();
+                  if (term) navigate({ to: "/buscar", search: { q: term } as any });
+                }}
+                role="search"
               >
-                <Search className={dsx("h-4 w-4", isOverlay ? "text-on-media-muted" : "text-muted-foreground")} />
-                <input
-                  id="header-search"
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Buscar preço…"
+                <label className="sr-only" htmlFor="header-search">Buscar produto</label>
+                <div
                   className={dsx(
-                    "w-32 bg-transparent text-[13.5px] font-medium outline-none xl:w-44",
-                    isOverlay ? "text-on-media placeholder:text-on-media-muted" : "text-foreground placeholder:text-muted-foreground",
+                    "flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-primary/40",
+                    isOverlay ? "border-on-media-border bg-on-media-surface/80 backdrop-blur-md" : "border-border bg-card/80 backdrop-blur-md",
+                    forceCompact && "border-[var(--brand-primary)] ring-2 ring-[var(--brand-primary)]/20 shadow-xl"
                   )}
-                />
-              </div>
-            </form>
+                >
+                  <Search className={dsx("h-4 w-4", isOverlay ? "text-on-media-muted" : "text-muted-foreground")} />
+                  <input
+                    id="header-search"
+                    autoFocus={forceCompact}
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="Buscar preço…"
+                    className={dsx(
+                      "w-32 bg-transparent text-[13.5px] font-medium outline-none xl:w-44",
+                      isOverlay ? "text-on-media placeholder:text-on-media-muted" : "text-foreground placeholder:text-muted-foreground",
+                    )}
+                  />
+                </div>
+              </form>
+            </motion.div>
           )}
 
           {!isOverlay && canShowBack && (
