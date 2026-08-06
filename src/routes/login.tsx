@@ -594,7 +594,7 @@ function LoginPage() {
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
             <p>
               Ao continuar, você concorda com nossos{" "}
-              <Link to="/privacidade" search={{}} as any className="underline hover:text-foreground">Termos</Link> e{" "}
+              <Link to={"/privacidade" as any} search={{}} as any className="underline hover:text-foreground">Termos</Link> e{" "}
               <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
             </p>
             <span aria-hidden className="hidden h-3 w-px bg-border sm:block" />

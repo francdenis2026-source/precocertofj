@@ -153,7 +153,7 @@ function CestaAdminPage() {
           </p>
         </div>
         <Button variant="outline" asChild size="sm">
-          <Link to="/admin/vitrine" search={{}} as any>
+          <Link to={"/admin/vitrine" as any} search={{}} as any>
             <ArrowLeft className="mr-1.5 h-4 w-4" /> Voltar ao hub
           </Link>
         </Button>
