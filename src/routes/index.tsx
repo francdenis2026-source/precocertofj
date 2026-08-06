@@ -150,7 +150,7 @@ function HomePage() {
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!q.trim()) return;
-    navigate({ to: "/buscar", search: { q: q.trim(), from: "home_hero" } as any });
+    navigate({ to: "/buscar", search: { q: q.trim() } as any });
   };
 
   return (
@@ -483,8 +483,8 @@ function HomePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex -space-x-3">
                         {[1, 2, 3, 4].map(i => (
-                          <div key={i} className="h-8 w-8 rounded-full border-2 border-[var(--bg-surface)] bg-[var(--bg-base)] overflow-hidden">
-                            <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="h-full w-full grayscale contrast-125" />
+                          <div key={i} className="h-8 w-8 rounded-full border-2 border-[var(--bg-surface)] bg-[var(--bg-base)] flex items-center justify-center">
+                            <Store className="h-4 w-4 text-[var(--brand-primary)] opacity-40" />
                           </div>
                         ))}
                       </div>
