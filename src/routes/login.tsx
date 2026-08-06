@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, Lock, User, Phone, MapPin, Hash, ShieldAlert, ShieldCheck, AlertCircle, Check, Ticket } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Lock, User, Phone, MapPin, Hash, ShieldCheck, Ticket, Calendar, Home, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -13,21 +13,16 @@ import {
   getBlockStatus,
   registerFailure,
   clearAttempts,
-  formatCountdown,
   MAX_ATTEMPTS,
-  BLOCK_MINUTES,
   type BlockStatus,
 } from "@/lib/login-rate-limit";
 import { toast } from "sonner";
 import { notify } from "@/lib/notify";
-import { useQuery } from "@tanstack/react-query";
-import { getLoginPanelMetrics } from "@/lib/login-panel.functions";
-import { pickEditorialBackground } from "@/lib/editorial-background";
-import { RegionSelector, readStoredRegion, type SelectedRegion } from "@/components/login/RegionSelector";
-import { RadarCategorySheet } from "@/components/login/RadarCategorySheet";
-import { CollaborativeCTA } from "@/components/collab/CollaborativeCTA";
-import { SocialProofStrip } from "@/components/collab/SocialProofStrip";
-import { AuthHero } from "@/components/auth/AuthHero";
+
+import { AuthSidebar } from "@/components/auth/AuthSidebar";
+import { AuthInput } from "@/components/auth/AuthInput";
+import { AuthButton } from "@/components/auth/AuthButton";
+import { PinInput } from "@/components/auth/PinInput";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -61,14 +56,6 @@ const emptyAddress: Address = {
   state: "",
 };
 
-// Redesign tokens — alinhados à nova identidade (Midnight Navy + Gold).
-const PC_BRAND = "var(--brand-primary)";
-const PC_SURFACE = "var(--bg-surface)";
-const PC_DISPLAY = "var(--font-display)";
-const PC_BODY = "var(--font-body)";
-
-
-
 function LoginPage() {
   const [mode, setModeState] = useState<"login" | "signup">(() => {
     if (typeof window === "undefined") return "login";
@@ -76,16 +63,18 @@ function LoginPage() {
     return p === "signup" ? "signup" : "login";
   });
 
-  // Login fields
+  // Signup Steps: 1 (Personal), 2 (Contact), 3 (Security)
+  const [signupStep, setSignupStep] = useState(1);
+  const [success, setSuccess] = useState(false);
+
+  // Form states
   const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState("");
-
-  // Signup fields
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [address, setAddress] = useState<Address>(emptyAddress);
-  const [cepLoading, setCepLoading] = useState(false);
-
+  
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [blockStatus, setBlockStatus] = useState<BlockStatus | null>(null);
@@ -94,6 +83,7 @@ function LoginPage() {
   const setMode = (next: "login" | "signup") => {
     setModeState(next);
     setFormError(null);
+    setSignupStep(1);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
       if (next === "signup") url.searchParams.set("mode", "signup");
@@ -102,19 +92,11 @@ function LoginPage() {
     }
   };
 
-
-  // Rotating editorial background — resolved once per mount (client-only variation).
-  const editorialBg = useMemo(() => pickEditorialBackground(), []);
-  const [region, setRegion] = useState<SelectedRegion | null>(() =>
-    typeof window === "undefined" ? null : readStoredRegion(),
-  );
-
   const signUpFn = useServerFn(signUpWithCpf);
   const resolveEmailFn = useServerFn(resolveLoginEmail);
 
   const cpfDigits = useMemo(() => stripCpf(cpf), [cpf]);
 
-  // Recalcula bloqueio quando CPF muda ou a cada segundo enquanto bloqueado
   useEffect(() => {
     if (cpfDigits.length !== 11) {
       setBlockStatus(null);
@@ -136,46 +118,23 @@ function LoginPage() {
     return "/app";
   }
 
-  /** Rótulo legível da área para onde o login vai levar o usuário. */
-  function postAuthAreaLabel(target: string): string {
-    if (target.startsWith("/admin")) return "Painel administrativo";
-    if (target.startsWith("/app")) return "Painel do cliente";
-    if (target.startsWith("/buscar")) return "Buscar preços";
-    if (target.startsWith("/mercados") || target.startsWith("/estabelecimentos"))
-      return "Comércios da nossa Feijó";
-    if (target.startsWith("/colaborador")) return "Área do colaborador";
-    if (target === "/" || target === "") return "Página inicial";
-    return "Área restrita";
-  }
-
   function goToPostAuthTarget() {
     const target = resolvePostAuthTarget();
     router.history.replace(target);
   }
 
-
-
-
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) goToPostAuthTarget();
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleCepBlur() {
     const zip = address.zip.replace(/\D/g, "");
     if (zip.length !== 8) return;
-    setCepLoading(true);
     try {
       const res = await fetch(`https://viacep.com.br/ws/${zip}/json/`);
-      const data = (await res.json()) as {
-        erro?: boolean;
-        logradouro?: string;
-        bairro?: string;
-        localidade?: string;
-        uf?: string;
-      };
+      const data = (await res.json()) as any;
       if (data.erro) throw new Error("CEP não encontrado");
       setAddress((a) => ({
         ...a,
@@ -185,51 +144,62 @@ function LoginPage() {
         state: data.uf ?? a.state,
       }));
     } catch {
-      toast.error("Não foi possível buscar o CEP");
-    } finally {
-      setCepLoading(false);
+      toast.error("CEP não encontrado");
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const validateStep = () => {
+    setFormError(null);
+    if (signupStep === 1) {
+      if (fullName.trim().split(" ").length < 2) {
+        setFormError("Informe seu nome completo");
+        return false;
+      }
+      if (!isValidCpf(cpf)) {
+        setFormError("CPF inválido");
+        return false;
+      }
+    } else if (signupStep === 2) {
+      if (phone.replace(/\D/g, "").length < 10) {
+        setFormError("Celular inválido");
+        return false;
+      }
+      if (!address.city) {
+        setFormError("Informe sua cidade");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const nextStep = () => {
+    if (validateStep()) setSignupStep((s) => s + 1);
+  };
+
+  const prevStep = () => setSignupStep((s) => s - 1);
+
+  async function handleSubmit(e?: React.FormEvent) {
+    e?.preventDefault();
     if (loading) return;
     setFormError(null);
 
-    const cpfCheck = validateCpfDetailed(cpf);
-    if (!cpfCheck.valid) {
-      setFormError(cpfCheck.message);
-      return;
-    }
-    const digits = cpfCheck.digits;
-
-    // Rate limit apenas no fluxo de login (não bloqueia cadastro de novo CPF)
+    const digits = stripCpf(cpf);
     if (mode === "login") {
       const status = getBlockStatus(digits);
       if (status.blocked) {
-        const msg = `Muitas tentativas erradas. Tente novamente em ${formatCountdown(status.remainingSeconds)}.`;
-        setBlockStatus(status);
-        setFormError(msg);
+        setFormError("Muitas tentativas erradas. Tente novamente mais tarde.");
         return;
       }
     }
 
-    const isSixDigitPin = /^\d{6}$/.test(password);
-    if (!isSixDigitPin) {
-      setFormError(
-        mode === "signup"
-          ? "Crie um PIN numérico de exatamente 6 dígitos."
-          : "PIN inválido — informe os 6 dígitos numéricos.",
-      );
+    if (password.length !== 6) {
+      setFormError("Informe seu PIN de 6 dígitos");
       return;
     }
 
     setLoading(true);
     try {
       if (mode === "signup") {
-        if (fullName.trim().length < 3) throw new Error("Informe seu nome completo");
-        if (phone.replace(/\D/g, "").length < 10) throw new Error("Celular inválido");
-
         const { hiddenEmail } = await signUpFn({
           data: {
             cpf: digits,
@@ -251,11 +221,7 @@ function LoginPage() {
           password,
         });
         if (error) throw error;
-        clearAttempts(digits);
-        notify.success(`Cadastro confirmado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
-          id: "auth-session",
-          description: `Conta criada para o CPF ${maskCpf(digits)} com acesso completo por 30 dias.`,
-        });
+        setSuccess(true);
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
         const { error } = await supabase.auth.signInWithPassword({
@@ -263,953 +229,311 @@ function LoginPage() {
           password,
         });
         if (error) {
-          const status = registerFailure(digits);
-          setBlockStatus(status);
-          if (status.blocked) {
-            throw new Error(
-              `PIN incorreto. Você excedeu ${MAX_ATTEMPTS} tentativas — aguarde ${BLOCK_MINUTES} minutos ou recupere seu PIN.`,
-            );
-          }
-          throw new Error(
-            `CPF ou PIN incorretos. ${status.attemptsLeft} tentativa${status.attemptsLeft !== 1 ? "s" : ""} restante${status.attemptsLeft !== 1 ? "s" : ""}.`,
-          );
+          registerFailure(digits);
+          throw new Error("CPF ou PIN incorretos.");
         }
-        clearAttempts(digits);
-        notify.success(`Login aprovado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
-          id: "auth-session",
-          description: `Tudo pronto! Estamos carregando os preços para você.`,
-        });
+        setSuccess(true);
       }
-      await router.invalidate();
-      goToPostAuthTarget();
+      
+      clearAttempts(digits);
+      setTimeout(() => {
+        router.invalidate().then(() => goToPostAuthTarget());
+      }, 1500);
+
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
-      notify.error(`Login recusado — ${postAuthAreaLabel(resolvePostAuthTarget())} continua bloqueada`, {
-        id: "auth-session",
-        description: msg,
-      });
+      notify.error("Acesso negado", { description: msg });
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="relative flex h-svh min-h-svh w-full items-center justify-center overflow-hidden bg-[var(--bg-base)] px-4 py-8 sm:px-6">
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute -left-40 -top-52 h-[760px] w-[760px] rounded-full opacity-[0.18] blur-[130px]"
-          style={{ background: `radial-gradient(circle, var(--brand-primary), transparent 70%)` }}
-        />
-        <div
-          className="absolute -bottom-56 -right-40 h-[620px] w-[620px] rounded-full opacity-[0.12] blur-[140px]"
-          style={{ background: `radial-gradient(circle, var(--brand-accent), transparent 70%)` }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.5]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, color-mix(in oklab, var(--border-subtle) 60%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--border-subtle) 60%, transparent) 1px, transparent 1px)",
-            backgroundSize: "72px 72px",
-            maskImage: "radial-gradient(ellipse at center, black 10%, transparent 72%)",
-            WebkitMaskImage: "radial-gradient(ellipse at center, black 10%, transparent 72%)",
-          }}
-        />
-      </div>
-
-      <Link
-        to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-3 py-1.5 text-[13px] font-medium text-[var(--text-secondary)] backdrop-blur transition hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] sm:right-8 sm:top-8"
-      >
-        ← Voltar para o início
-      </Link>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex h-full max-h-[660px] min-h-[500px] w-full max-w-[900px] flex-col overflow-hidden rounded-[22px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 shadow-[0_36px_90px_-38px_rgba(11,30,58,0.65)] backdrop-blur-2xl md:flex-row"
-      >
-        <div className="relative hidden w-full shrink-0 md:block md:w-[392px]">
-          <AuthHero variant="login" className="h-full w-full" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 w-px"
-            style={{ background: `linear-gradient(to bottom, transparent, var(--brand-primary), transparent)`, opacity: 0.35 }}
-          />
+    <div className="flex h-svh w-full items-center justify-center bg-[var(--bg-base)] p-0 sm:p-4 overflow-hidden">
+      <div className="relative flex h-full max-h-full sm:max-h-[720px] w-full max-w-[1100px] overflow-hidden sm:rounded-[var(--pc-radius-lg)] border-0 sm:border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl">
+        
+        {/* Lado Esquerdo - Painel Institucional (Escondido em Mobile) */}
+        <div className="hidden lg:block w-[45%] shrink-0">
+          <AuthSidebar />
         </div>
 
-
-        <div
-          className="relative flex flex-1 flex-col p-5 sm:p-7 md:p-9"
-          style={{
-            background:
-              "linear-gradient(180deg, color-mix(in oklab, var(--bg-surface-elevated) 92%, transparent) 0%, var(--bg-surface) 62%)",
-          }}
-        >
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-px"
-            style={{
-              background:
-                "linear-gradient(to right, transparent, color-mix(in oklab, var(--brand-primary) 70%, transparent), transparent)",
-            }}
-          />
-
-          {/* Mobile-only compact brand row — logomarca oficial */}
-          <div className="mb-4 flex items-center gap-2 md:hidden">
-            <img
-              src="/logo-mark.png?v=5"
-              alt="PreçoCerto"
-              width={34}
-              height={34}
-              className="h-[34px] w-[34px] shrink-0 object-contain"
-            />
-            <span
-              className="text-[16px] font-bold tracking-tight text-foreground"
-              style={{ fontFamily: PC_DISPLAY }}
-            >
-              PreçoCerto
-            </span>
-          </div>
-
-
-          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-[var(--brand-primary)]">
-            <ShieldCheck className="h-3 w-3" />
-            {mode === "login" ? "Acesso seguro" : "Cadastro grátis"}
-          </span>
-
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={mode}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <h1
-                className="mt-2 text-[20px] font-bold leading-[1.12] tracking-tight text-foreground sm:text-[24px]"
-                style={{ fontFamily: PC_DISPLAY }}
-              >
-                {mode === "login" ? "Bem-vindo de volta" : "Criar sua conta agora"}
-              </h1>
-              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
-                {mode === "login"
-                  ? "Use seu CPF e o PIN de 6 dígitos para continuar."
-                  : "Leva menos de um minuto. É de graça."}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-
-          <TabSwitch mode={mode} onChange={setMode} />
-
-          <form className="mt-2 flex flex-1 flex-col gap-2 overflow-hidden" onSubmit={handleSubmit}>
-            <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
-
-            {mode === "signup" && (() => {
-              const trimmed = fullName.trim();
-              const nameOk = trimmed.length >= 3 && /\s/.test(trimmed);
-              const nameStatus: FieldStatus =
-                fullName.length === 0 ? "idle" : nameOk ? "success" : "error";
-              const nameMsg =
-                fullName.length === 0
-                  ? null
-                  : nameOk
-                    ? "✓ Nome válido"
-                    : trimmed.length < 3
-                      ? "Informe pelo menos 3 letras"
-                      : "Digite nome e sobrenome";
-              return (
-                <Field
-                  label="Nome completo"
-                  placeholder="Como aparece no documento"
-                  icon={User}
-                  value={fullName}
-                  onChange={setFullName}
-                  status={nameStatus}
-                  hint={nameMsg}
-                  required
-                />
-              );
-            })()}
-
-            {(() => {
-              const check = cpf.length > 0 ? validateCpfDetailed(cpf) : null;
-              const status: FieldStatus =
-                !check ? "idle" : check.valid ? "success" : check.reason === "incomplete" ? "idle" : "error";
-              const hint = !check
-                ? null
-                : check.valid
-                  ? "✓ CPF válido"
-                  : check.message;
-              return (
-                <Field
-                  label="CPF"
-                  placeholder="000.000.000-00"
-                  icon={Hash}
-                  value={maskCpf(cpf)}
-                  onChange={(v) => setCpf(stripCpf(v))}
-                  inputMode="numeric"
-                  status={status}
-                  hint={hint}
-                  required
-                />
-              );
-            })()}
-
-            {mode === "login" && blockStatus?.blocked && (
-              <div
-                role="alert"
-                className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-xs text-destructive"
-              >
-                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" />
-                <div className="space-y-0.5">
-                  <p className="font-semibold">Acesso temporariamente bloqueado</p>
-                  <p>
-                    Excedeu {MAX_ATTEMPTS} tentativas. Aguarde{" "}
-                    <strong>{formatCountdown(blockStatus.remainingSeconds)}</strong> ou recupere seu PIN.
-                  </p>
-                </div>
-              </div>
-            )}
-            {mode === "login" && blockStatus && !blockStatus.blocked && blockStatus.attemptsUsed > 0 && (
-              <p className="pl-1 text-[11px] font-medium text-amber-600 dark:text-amber-400" aria-live="polite">
-                {blockStatus.attemptsLeft} tentativa{blockStatus.attemptsLeft !== 1 ? "s" : ""} restante{blockStatus.attemptsLeft !== 1 ? "s" : ""} antes do bloqueio.
-              </p>
-            )}
-
-            {mode === "signup" && (() => {
-              const digits = phone.replace(/\D/g, "");
-              const phoneOk = digits.length >= 10 && digits.length <= 11 && (digits.length === 10 || digits[2] === "9");
-              const status: FieldStatus =
-                digits.length === 0 ? "idle" : phoneOk ? "success" : digits.length < 10 ? "idle" : "error";
-              const hint =
-                digits.length === 0
-                  ? null
-                  : phoneOk
-                    ? "✓ Celular válido"
-                    : digits.length < 10
-                      ? `Faltam ${10 - digits.length} dígito${10 - digits.length > 1 ? "s" : ""}`
-                      : digits.length === 11 && digits[2] !== "9"
-                        ? "Celulares começam com 9 após o DDD"
-                        : "Número inválido";
-              return (
-                <Field
-                  label="Celular"
-                  placeholder="(00) 00000-0000"
-                  icon={Phone}
-                  value={maskPhone(phone)}
-                  onChange={(v) => setPhone(v.replace(/\D/g, ""))}
-                  inputMode="tel"
-                  status={status}
-                  hint={hint}
-                  required
-                />
-              );
-            })()}
-
-            {mode === "signup" && (
-              <details className="group rounded-xl border border-border bg-muted/40">
-                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition hover:text-foreground">
-                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">(opcional)</span>
-                  <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
-                    adicionar
-                  </span>
-                </summary>
-                <div className="space-y-3 border-t border-border bg-card px-3.5 py-3.5">
-
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="col-span-1">
-                      <Field
-                        label="CEP"
-                        placeholder="00000-000"
-                        value={maskCep(address.zip)}
-                        onChange={(v) => setAddress({ ...address, zip: v.replace(/\D/g, "") })}
-                        onBlur={handleCepBlur}
-                        inputMode="numeric"
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <Field
-                        label={cepLoading ? "Buscando..." : "Rua"}
-                        icon={MapPin}
-                        placeholder="Rua / Avenida"
-                        value={address.street}
-                        onChange={(v) => setAddress({ ...address, street: v })}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <Field
-                      label="Número"
-                      placeholder="123"
-                      value={address.number}
-                      onChange={(v) => setAddress({ ...address, number: v })}
-                    />
-                    <div className="col-span-2">
-                      <Field
-                        label="Bairro"
-                        placeholder="Bairro"
-                        value={address.district}
-                        onChange={(v) => setAddress({ ...address, district: v })}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="col-span-2">
-                      <Field
-                        label="Cidade"
-                        placeholder="Cidade"
-                        value={address.city}
-                        onChange={(v) => setAddress({ ...address, city: v })}
-                      />
-                    </div>
-                    <Field
-                      label="UF"
-                      placeholder="UF"
-                      value={address.state}
-                      onChange={(v) => setAddress({ ...address, state: v.toUpperCase().slice(0, 2) })}
-                    />
-                  </div>
-                </div>
-              </details>
-            )}
-
-            {(() => {
-              const pinOk = /^\d{6}$/.test(password);
-              const errored = password.length === 6 && !pinOk;
-              return (
-                <PinField
-                  value={password}
-                  onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
-                  hasError={errored || (mode === "login" && !!blockStatus?.blocked)}
-                />
-              );
-            })()}
-
-            <AnimatePresence initial={false}>
-              {formError && (
-                <motion.p
-                  key={formError}
-                  role="alert"
-                  aria-live="assertive"
-                  initial={{ opacity: 0, y: -6, height: 0 }}
-                  animate={{ opacity: 1, y: 0, height: "auto" }}
-                  exit={{ opacity: 0, y: -6, height: 0 }}
-                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex items-start gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-xs font-medium text-destructive"
-                >
-                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                  <span>{formError}</span>
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <motion.button
-              type="submit"
-              whileTap={{ scale: 0.985 }}
-              disabled={
-                loading ||
-                !isValidCpf(cpf) ||
-                !/^\d{6}$/.test(password) ||
-                (mode === "login" && !!blockStatus?.blocked) ||
-                (mode === "signup" &&
-                  (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
-              }
-              className="group relative mt-2 inline-flex h-[54px] w-full items-center justify-center gap-2 overflow-hidden rounded-2xl text-[16px] font-black tracking-tight text-[#0B1E3A] transition-[filter,box-shadow,transform] duration-200 hover:brightness-[1.06] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
-              style={{
-                background: "linear-gradient(180deg, #F5DE95 0%, #E8C25A 45%, #D4AF37 100%)",
-                boxShadow: `0 18px 34px -14px var(--brand-glow), inset 0 1px 0 rgba(255,255,255,0.45)`,
-                fontFamily: PC_DISPLAY,
-              }}
-            >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-white/25 transition-all duration-700 group-hover:left-[130%]"
-              />
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Validando…
-                </>
-              ) : (
-                <>
-                  {mode === "login" ? "Acessar plataforma" : "Criar conta grátis"}
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-                </>
-              )}
-            </motion.button>
-
-
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 pt-1.5 text-[11.5px] text-muted-foreground">
-              <button
-                type="button"
-                onClick={() => setMode(mode === "login" ? "signup" : "login")}
-                className="font-semibold text-foreground/80 underline-offset-4 transition hover:text-foreground hover:underline"
-              >
-                {mode === "login" ? "Não tem conta? Criar agora" : "Já tenho conta — entrar"}
-              </button>
-              <span aria-hidden className="hidden h-3 w-px bg-border sm:block" />
-              <Link
-                to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold text-[var(--brand-primary)] underline-offset-4 transition hover:underline"
-              >
-                <Ticket className="h-3.5 w-3.5" />
-                Esqueci meu PIN / tenho um código
-              </Link>
-            </div>
-          </form>
-
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
-            <p>
-              Ao continuar, você concorda com nossos{" "}
-              {/* @ts-ignore */}<Link to="/privacidade" className="underline hover:text-foreground">Termos</Link> e{" "}
-              <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
-            </p>
-            <span aria-hidden className="hidden h-3 w-px bg-border sm:block" />
-            <Link
-              to="/admin-login"
-              aria-label="Acesso interno da equipe"
-              title="Acesso interno"
-              rel="nofollow"
-              className="group inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-muted-foreground/60 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Lock className="h-3 w-3" strokeWidth={2.2} />
-              <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300 group-hover:max-w-[110px] group-hover:opacity-100 group-focus-visible:max-w-[110px] group-focus-visible:opacity-100">
-                Acesso interno
-              </span>
+        {/* Lado Direito - Formulários */}
+        <div className="relative flex flex-1 flex-col overflow-hidden">
+          
+          {/* Header Mobile / Back Link */}
+          <div className="flex items-center justify-between p-6 lg:p-8 shrink-0">
+            <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors">
+              <ChevronLeft className="w-6 h-6" />
             </Link>
+            <div className="flex items-center gap-1.5 lg:hidden">
+              <img src="/logo-mark.png?v=5" alt="Logo" className="w-7 h-7" />
+              <span className="text-lg font-bold tracking-tight text-slate-900 font-display">PreçoCerto</span>
+            </div>
+            <div className="w-6 h-6" /> {/* Spacer */}
           </div>
 
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-
-
-function EditorialPanel({ region }: { region: SelectedRegion | null }) {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
-    queryKey: ["login-panel-metrics", region?.city ?? null, region?.neighborhood ?? null],
-    queryFn: () =>
-      getLoginPanelMetrics({
-        data: {
-          city: region?.city ?? null,
-          neighborhood: region?.neighborhood ?? null,
-        },
-      }),
-    staleTime: 30 * 60 * 1000, // 30min
-    gcTime: 60 * 60 * 1000,
-    retry: 1,
-  });
-
-  const fmtBRL = (n: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      maximumFractionDigits: 0,
-    }).format(Math.max(0, n));
-
-  const h = data?.headline;
-
-  // Barômetro criativo — variação semanal por categoria (derivada da variação média real).
-  const base = data?.avgSpreadPct ?? 0;
-  const barometer = [
-    { label: "Grãos & básicos", pct: base * 1.35, tone: "emerald" as const, group: "graos" as const },
-    { label: "Carnes & frios", pct: base * 1.75, tone: "amber" as const, group: "carnes" as const },
-    { label: "Higiene & limpeza", pct: base * 1.1, tone: "sky" as const, group: "higiene" as const },
-    { label: "Bebidas & mercearia", pct: base * 0.85, tone: "violet" as const, group: "bebidas" as const },
-  ];
-  const [radarTarget, setRadarTarget] = useState<{
-    group: "graos" | "carnes" | "higiene" | "bebidas";
-    label: string;
-    pct: number;
-  } | null>(null);
-  const sortedBarometer = [...barometer].sort((a, b) => b.pct - a.pct);
-  const hottest = sortedBarometer[0];
-  const maxPct = Math.max(...barometer.map((b) => b.pct), 0.001);
-
-  const toneRing: Record<typeof barometer[number]["tone"], string> = {
-    emerald: "from-emerald-400/80 to-emerald-500/10",
-    amber: "from-amber-300/80 to-amber-500/10",
-    sky: "from-sky-300/80 to-sky-500/10",
-    violet: "from-violet-300/80 to-violet-500/10",
-  };
-  const toneText: Record<typeof barometer[number]["tone"], string> = {
-    emerald: "text-emerald-300",
-    amber: "text-amber-300",
-    sky: "text-sky-300",
-    violet: "text-violet-300",
-  };
-  const toneBar: Record<typeof barometer[number]["tone"], string> = {
-    emerald: "from-emerald-400 to-emerald-500/40",
-    amber: "from-amber-300 to-amber-500/40",
-    sky: "from-sky-300 to-sky-500/40",
-    violet: "from-violet-300 to-violet-500/40",
-  };
-
-  // Re-run animations when region changes so bars/counters grow on city select.
-  const animKey = `${region?.city ?? "default"}-${data ? "ready" : "loading"}`;
-
-  return (
-    <div className="my-10">
-      <div className="max-w-2xl">
-        <p className="mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.28em] text-emerald-300/90">
-          <span className="h-px w-8 bg-emerald-300/70" />
-          {h?.eyebrow ?? "Radar de preços · Edição da semana"}
-          {isFetching && !isLoading && (
-            <Loader2 className="ml-1 h-3 w-3 animate-spin text-emerald-300/60" />
-          )}
-        </p>
-
-        {/* Headline — single-line, impactful. */}
-        <h2
-          className="truncate font-display text-[30px] font-bold leading-[1.05] tracking-tight text-white xl:text-[36px]"
-          title={h ? `${h.title} ${h.highlight} ${h.suffix}` : undefined}
-        >
-          {isLoading ? (
-            <span className="inline-block h-[1em] w-[85%] animate-pulse rounded bg-white/10 align-middle" />
-          ) : isError ? (
-            <span className="text-white/85">Sem dados do barômetro no momento.</span>
-          ) : h ? (
-            <>
-              {h.title}{" "}
-              <span className="bg-gradient-to-r from-emerald-300 to-emerald-500 bg-clip-text text-transparent">
-                {h.highlight.replace(/ /g, "\u00A0")}
-              </span>{" "}
-              {h.suffix}
-            </>
-          ) : null}
-        </h2>
-
-        {/* Error state with retry */}
-        {isError && (
-          <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-[12px] text-amber-100">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <div className="flex-1">
-              <p className="font-semibold">Opa! Não conseguimos ver os preços agora.</p>
-              <button
-                type="button"
-                onClick={() => refetch()}
-                className="mt-1 text-[11px] font-semibold text-white underline underline-offset-2 hover:text-emerald-200"
-              >
-                Tentar de novo
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Barômetro — hero card + grid de indicadores com animação */}
-        <div className="mt-8 space-y-3">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 backdrop-blur-md">
-            <div
-              aria-hidden
-              className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-emerald-400/20 blur-3xl"
-            />
-            <div className="relative flex items-end justify-between gap-6">
-              <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/80">
-                  Maior diferença da semana
-                </p>
-                <p className="mt-2 font-display text-[22px] font-semibold leading-tight text-white">
-                  {isLoading ? (
-                    <span className="inline-block h-5 w-40 animate-pulse rounded bg-white/10" />
-                  ) : (
-                    hottest.label
-                  )}
-                </p>
-                <p className="mt-1 text-[12px] text-white/85">
-                  de economia entre os comércios monitorados
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="font-display text-[44px] font-bold leading-none tabular-nums text-emerald-300">
-                  {isLoading ? (
-                    <span className="inline-block h-10 w-20 animate-pulse rounded bg-white/10" />
-                  ) : data ? (
-                    <>
-                      <AnimatedNumber key={animKey} value={hottest.pct} decimals={1} />
-                      <span className="ml-0.5 text-[22px] text-emerald-300/80">%</span>
-                    </>
-                  ) : (
-                    "—"
-                  )}
-                </p>
-                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-                  de economia na semana
-                </p>
-              </div>
-            </div>
-            <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-[11px] text-white/80">O que você pode guardar no bolso</span>
-              <span className="font-display text-[18px] font-bold tabular-nums text-white">
-                {isLoading ? (
-                  <span className="inline-block h-4 w-24 animate-pulse rounded bg-white/10" />
-                ) : data ? (
-                  `${fmtBRL(data.monthlySavings)}/mês`
-                ) : (
-                  "—"
-                )}
-              </span>
-            </div>
-          </div>
-
-          <motion.div
-            layout
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
-          >
-            <AnimatePresence initial={false}>
-              {sortedBarometer.map((b, idx) => (
-                <motion.button
-                  type="button"
-                  layout
-                  key={b.label}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={() =>
-                    setRadarTarget({ group: b.group, label: b.label, pct: b.pct })
-                  }
-                  aria-label={`Ver produtos em destaque de ${b.label}`}
-                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-left backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-emerald-300/30 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/60"
+          <div className="flex-1 flex flex-col justify-center px-8 lg:px-12 pb-12 overflow-y-auto no-scrollbar">
+            <AnimatePresence mode="wait">
+              {mode === "login" ? (
+                <motion.div
+                  key="login"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-8"
                 >
-                  <div
-                    aria-hidden
-                    className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${toneRing[b.tone]}`}
-                  />
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80">
-                      {b.label}
+                  <div className="space-y-2">
+                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                      Bem-vindo <span className="text-[var(--brand-primary)]">de volta</span>
+                    </h1>
+                    <p className="text-sm text-slate-500 font-medium">
+                      Acesse sua conta para continuar economizando.
                     </p>
-                    <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-white/85">
-                      #{idx + 1}
-                    </span>
                   </div>
-                  <p
-                    className={`mt-2 font-display text-[24px] font-bold tabular-nums ${toneText[b.tone]}`}
-                  >
-                    {isLoading ? (
-                      <span className="inline-block h-6 w-14 animate-pulse rounded bg-white/10" />
-                    ) : data ? (
-                      <>
-                        <AnimatedNumber key={animKey} value={b.pct} decimals={1} />
-                        <span className="ml-0.5 text-[13px] opacity-80">%</span>
-                      </>
-                    ) : (
-                      "—"
-                    )}
-                  </p>
-                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/5">
-                    <AnimatePresence mode="wait">
-                      {data && !isLoading && (
-                        <motion.div
-                          key={animKey}
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${Math.min(100, (b.pct / maxPct) * 100)}%` }}
-                          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                          className={`h-full rounded-full bg-gradient-to-r ${toneBar[b.tone]}`}
+
+                  <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); }}>
+                    <AuthInput
+                      label="CPF"
+                      icon={Hash}
+                      value={maskCpf(cpf)}
+                      onChange={(e) => setCpf(stripCpf(e.target.value))}
+                      placeholder="000.000.000-00"
+                      inputMode="numeric"
+                      success={isValidCpf(cpf)}
+                    />
+
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between px-1">
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">PIN de 6 dígitos</label>
+                        <Link to="/resgatar" className="text-[11px] font-bold text-[var(--brand-primary)] uppercase tracking-widest hover:underline">Esqueci meu PIN</Link>
+                      </div>
+                      <PinInput 
+                        value={password}
+                        onChange={(v) => {
+                          setPassword(v);
+                          if (v.length === 6 && isValidCpf(cpf)) {
+                            handleSubmit();
+                          }
+                        }}
+                        error={!!formError}
+                        disabled={loading || success}
+                      />
+                    </div>
+
+                    <div className="pt-2">
+                      <AuthButton 
+                        loading={loading}
+                        success={success}
+                        onClick={handleSubmit}
+                        disabled={!isValidCpf(cpf) || password.length !== 6}
+                      >
+                        Entrar na conta
+                      </AuthButton>
+                    </div>
+
+                    <div className="text-center pt-4">
+                      <p className="text-xs font-medium text-slate-500">
+                        Não tem uma conta?{" "}
+                        <button
+                          type="button"
+                          onClick={() => setMode("signup")}
+                          className="text-[var(--brand-primary)] font-bold hover:underline"
+                        >
+                          Começar agora
+                        </button>
+                      </p>
+                    </div>
+                  </form>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="signup"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-8"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      {[1, 2, 3].map((step) => (
+                        <div 
+                          key={step} 
+                          className={`h-1 flex-1 rounded-full transition-all duration-500 ${step <= signupStep ? "bg-[var(--brand-primary)]" : "bg-slate-100"}`} 
                         />
+                      ))}
+                    </div>
+                    <div>
+                      <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                        {signupStep === 1 ? "Dados pessoais" : signupStep === 2 ? "Contato e local" : "Segurança"}
+                      </h1>
+                      <p className="text-sm text-slate-500 font-medium">
+                        {signupStep === 1 ? "Comece informando quem é você." : signupStep === 2 ? "Como podemos falar com você?" : "Crie seu código de acesso."}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="min-h-[280px]">
+                    <AnimatePresence mode="wait">
+                      {signupStep === 1 && (
+                        <motion.div
+                          key="step1"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="space-y-6"
+                        >
+                          <AuthInput
+                            label="Nome completo"
+                            icon={User}
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            placeholder="Seu nome e sobrenome"
+                            success={fullName.trim().split(" ").length >= 2}
+                          />
+                          <AuthInput
+                            label="CPF"
+                            icon={Hash}
+                            value={maskCpf(cpf)}
+                            onChange={(e) => setCpf(stripCpf(e.target.value))}
+                            placeholder="000.000.000-00"
+                            inputMode="numeric"
+                            success={isValidCpf(cpf)}
+                          />
+                        </motion.div>
+                      )}
+
+                      {signupStep === 2 && (
+                        <motion.div
+                          key="step2"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="space-y-6"
+                        >
+                          <AuthInput
+                            label="Celular"
+                            icon={Phone}
+                            value={maskPhone(phone)}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="(00) 00000-0000"
+                            inputMode="tel"
+                            success={phone.replace(/\D/g, "").length >= 10}
+                          />
+                          <div className="grid grid-cols-2 gap-4">
+                            <AuthInput
+                              label="Cidade"
+                              icon={MapPin}
+                              value={address.city}
+                              onChange={(e) => setAddress({ ...address, city: e.target.value })}
+                              placeholder="Sua cidade"
+                              success={!!address.city}
+                            />
+                            <AuthInput
+                              label="CEP (opcional)"
+                              value={maskCep(address.zip)}
+                              onChange={(e) => setAddress({ ...address, zip: e.target.value })}
+                              onBlur={handleCepBlur}
+                              placeholder="00000-000"
+                              inputMode="numeric"
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {signupStep === 3 && (
+                        <motion.div
+                          key="step3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="space-y-8"
+                        >
+                          <div className="space-y-4">
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400 px-1">Crie seu PIN de 6 dígitos</label>
+                            <PinInput 
+                              value={password}
+                              onChange={(v) => {
+                                setPassword(v);
+                                if (v.length === 6) {
+                                  // Auto-submit after small delay
+                                  setTimeout(() => handleSubmit(), 400);
+                                }
+                              }}
+                              error={!!formError}
+                              disabled={loading || success}
+                            />
+                          </div>
+                          
+                          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
+                            <div className="flex items-center gap-3">
+                              <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                              <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Acesso Seguro Protegido</span>
+                            </div>
+                            <p className="text-[10px] text-slate-400 leading-relaxed">
+                              Seus dados são protegidos por criptografia de ponta a ponta e estão em conformidade com a LGPD.
+                            </p>
+                          </div>
+                        </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-white/75 transition group-hover:text-emerald-300">
-                    Ver produtos <ArrowRight className="h-3 w-3" />
-                  </span>
-                </motion.button>
-              ))}
-            </AnimatePresence>
-          </motion.div>
 
+                  <div className="flex flex-col gap-4 pt-4">
+                    {signupStep < 3 ? (
+                      <AuthButton 
+                        onClick={nextStep}
+                        icon={ArrowRight}
+                        disabled={
+                          (signupStep === 1 && (fullName.trim().split(" ").length < 2 || !isValidCpf(cpf))) ||
+                          (signupStep === 2 && (phone.replace(/\D/g, "").length < 10 || !address.city))
+                        }
+                      >
+                        Continuar
+                      </AuthButton>
+                    ) : (
+                      <AuthButton 
+                        loading={loading}
+                        success={success}
+                        onClick={handleSubmit}
+                        disabled={password.length !== 6}
+                      >
+                        Finalizar cadastro
+                      </AuthButton>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                      {signupStep > 1 && (
+                        <button
+                          type="button"
+                          onClick={prevStep}
+                          className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors"
+                        >
+                          Voltar
+                        </button>
+                      ) || <div />}
+                      <button
+                        type="button"
+                        onClick={() => setMode("login")}
+                        className="text-xs font-bold text-slate-500 hover:text-[var(--brand-primary)] transition-colors"
+                      >
+                        Já tenho conta
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Footer Legal */}
+          <div className="p-8 lg:p-12 shrink-0 border-t border-slate-50">
+            <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest leading-relaxed">
+              Copyright © {new Date().getFullYear()} PreçoCerto · <Link to="/privacidade" className="hover:text-slate-600 transition-colors underline underline-offset-2">Termos</Link> · <Link to="/privacidade" className="hover:text-slate-600 transition-colors underline underline-offset-2">Privacidade</Link>
+            </p>
+          </div>
         </div>
       </div>
-
-      <RadarCategorySheet
-        open={!!radarTarget}
-        onOpenChange={(v) => !v && setRadarTarget(null)}
-        target={radarTarget}
-        city={region?.city ?? null}
-      />
     </div>
   );
 }
-
-/** Counter that eases from 0 → value using Framer Motion. */
-function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: number }) {
-  const mv = useMotionValue(0);
-  const rounded = useTransform(mv, (n) => n.toFixed(decimals));
-  useEffect(() => {
-    const controls = animate(mv, value, {
-      duration: 1.1,
-      ease: [0.22, 1, 0.36, 1],
-    });
-    return () => controls.stop();
-  }, [mv, value]);
-  return <motion.span>{rounded}</motion.span>;
-}
-
-/** Compact tab switch between login and signup. */
-function TabSwitch({
-  mode,
-  onChange,
-}: {
-  mode: "login" | "signup";
-  onChange: (m: "login" | "signup") => void;
-}) {
-  const tabs: Array<{ key: "login" | "signup"; label: string }> = [
-    { key: "login", label: "Entrar" },
-    { key: "signup", label: "Criar conta" },
-  ];
-  return (
-    <div
-      role="tablist"
-      aria-label="Login ou cadastro"
-      className="mt-5 grid grid-cols-2 gap-1 rounded-2xl border border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--bg-base)_55%,transparent)] p-1.5 shadow-[inset_0_1px_2px_rgba(0,0,0,0.25)]"
-    >
-      {tabs.map((t) => {
-        const active = mode === t.key;
-        return (
-          <button
-            key={t.key}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => onChange(t.key)}
-            className={
-              "relative h-10 rounded-xl text-[13px] font-bold tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/50 " +
-              (active ? "text-[#0B1E3A]" : "text-muted-foreground hover:text-foreground")
-            }
-          >
-            {active && (
-              <motion.span
-                layoutId="login-tab-pill"
-                transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                className="absolute inset-0 rounded-xl"
-                style={{
-                  background:
-                    "linear-gradient(180deg, #F2D98B 0%, var(--brand-primary) 100%)",
-                  boxShadow: "0 6px 16px -8px var(--brand-glow)",
-                }}
-              />
-            )}
-            <span className="relative">{t.label}</span>
-          </button>
-        );
-      })}
-    </div>
-
-  );
-}
-
-
-type FieldStatus = "idle" | "success" | "error";
-
-function Field({
-  label,
-  type = "text",
-  placeholder,
-  icon: Icon,
-  value,
-  onChange,
-  required,
-  minLength,
-  inputMode,
-  onBlur,
-  status = "idle",
-  hint,
-}: {
-  label: string;
-  type?: string;
-  placeholder?: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  value?: string;
-  onChange?: (v: string) => void;
-  required?: boolean;
-  minLength?: number;
-  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
-  onBlur?: () => void;
-  status?: FieldStatus;
-  hint?: string | null;
-}) {
-  // Uses semantic tokens so the inputs are legible in both light and dark themes.
-  const borderCls =
-    status === "success"
-      ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/20"
-      : status === "error"
-        ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/20"
-        : "border-input hover:border-[var(--brand-primary)]/50 focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/20";
-  const hintCls =
-    status === "success"
-      ? "text-emerald-600 dark:text-emerald-400"
-      : status === "error"
-        ? "text-rose-600 dark:text-rose-400"
-        : "text-muted-foreground";
-  return (
-    <label className="group block">
-      <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors group-focus-within:text-[var(--brand-primary)]">
-        {label}
-      </span>
-
-      <div className="relative">
-        {Icon && (
-          <Icon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 transition-colors group-focus-within:text-[var(--brand-primary)]" />
-        )}
-        <input
-          type={type}
-          placeholder={placeholder}
-          value={value ?? ""}
-          onChange={(e) => onChange?.(e.target.value)}
-          onBlur={onBlur}
-          required={required}
-          minLength={minLength}
-          inputMode={inputMode}
-          aria-invalid={status === "error" || undefined}
-          className={
-            "h-10 w-full rounded-xl bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-foreground text-[14px] font-semibold tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
-            borderCls +
-            " border " +
-            (Icon ? "pl-10 " : "pl-3.5 ") +
-            (status !== "idle" ? "pr-9" : "pr-3")
-          }
-        />
-        <AnimatePresence initial={false}>
-          {status !== "idle" && (
-            <motion.span
-              key={status}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.18 }}
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
-            >
-              {status === "success" ? (
-                <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              ) : (
-                <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
-              )}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <AnimatePresence initial={false}>
-        {hint && (
-          <motion.p
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.18 }}
-            className={`overflow-hidden pl-0.5 pt-1 text-[11px] font-medium ${hintCls}`}
-            aria-live="polite"
-          >
-            {hint}
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </label>
-  );
-}
-
-
-/** 6-digit PIN input with individual boxes; syncs to a single string value. */
-function PinField({
-  value,
-  onChange,
-  hasError,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  hasError?: boolean;
-}) {
-  const refs = useRef<Array<HTMLInputElement | null>>([]);
-  const digits = value.padEnd(6, " ").slice(0, 6).split("");
-
-  function setAt(i: number, d: string) {
-    const clean = d.replace(/\D/g, "").slice(-1);
-    const next = value.split("");
-    next[i] = clean;
-    // trim trailing empties
-    const merged = next.slice(0, 6).join("").slice(0, 6);
-    onChange(merged);
-    if (clean && i < 5) refs.current[i + 1]?.focus();
-  }
-
-  function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Backspace" && !digits[i].trim() && i > 0) {
-      refs.current[i - 1]?.focus();
-    } else if (e.key === "ArrowLeft" && i > 0) {
-      refs.current[i - 1]?.focus();
-    } else if (e.key === "ArrowRight" && i < 5) {
-      refs.current[i + 1]?.focus();
-    }
-  }
-
-  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-    if (!pasted) return;
-    e.preventDefault();
-    onChange(pasted);
-    const focusIdx = Math.min(pasted.length, 5);
-    refs.current[focusIdx]?.focus();
-  }
-
-  return (
-    <div className="space-y-2">
-      <div className="flex items-end justify-between">
-        <label className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          PIN de 6 dígitos
-        </label>
-        <span className="text-[10.5px] text-muted-foreground/70">só números</span>
-      </div>
-      <motion.div
-        animate={hasError ? { x: [0, -6, 6, -4, 4, 0] } : { x: 0 }}
-        transition={{ duration: 0.35 }}
-        className="grid grid-cols-6 gap-2"
-      >
-        {digits.map((d, i) => (
-          <input
-            key={i}
-            ref={(el) => {
-              refs.current[i] = el;
-            }}
-            type="password"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={1}
-            value={d.trim()}
-            onChange={(e) => setAt(i, e.target.value)}
-            onKeyDown={(e) => handleKey(i, e)}
-            onPaste={handlePaste}
-            aria-label={`Dígito ${i + 1} do PIN`}
-          className="h-[52px] w-full rounded-xl border-2 bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-center text-xl font-bold text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] outline-none transition-all duration-200"
-            style={{
-              borderColor: hasError
-                ? "#dc2626"
-                : d.trim()
-                  ? "var(--brand-primary)"
-                  : "var(--border)",
-              fontFamily: PC_DISPLAY,
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = "var(--brand-primary)";
-              e.currentTarget.style.boxShadow = `0 0 0 4px color-mix(in oklab, var(--brand-primary) 22%, transparent)`;
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.boxShadow = "none";
-              e.currentTarget.style.borderColor = hasError
-                ? "#dc2626"
-                : d.trim()
-                  ? "var(--brand-primary)"
-                  : "var(--border)";
-            }}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
