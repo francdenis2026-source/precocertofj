@@ -310,18 +310,7 @@ function HomePage() {
                     el.addEventListener('click', captureClick, true);
                   }
                 };
-
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-              }}
-                      clickEvent.stopPropagation();
-                      clickEvent.preventDefault();
-                      el.removeEventListener('click', captureClick, true);
-                    };
-                    el.addEventListener('click', captureClick, true);
-                  }
-                };
-
+                
                 document.addEventListener('mousemove', onMouseMove);
                 document.addEventListener('mouseup', onMouseUp);
               }}
