@@ -105,12 +105,20 @@ function DashboardPage() {
           title="Meu Painel"
           description="Acompanhe seus produtos, histórico e notificações em um só lugar."
           actions={
-            <Button asChild size="sm" variant="outline">
-              <Link to="/app/estabelecimentos">
-                <Store className="mr-2 h-4 w-4" />
-                Rede de Mercados
-              </Link>
-            </Button>
+            <div className="flex gap-2">
+              <Button asChild size="sm" variant="outline">
+                <Link to="/app/insights">
+                  <TrendingDown className="mr-2 h-4 w-4" />
+                  Insights
+                </Link>
+              </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link to="/app/estabelecimentos">
+                  <Store className="mr-2 h-4 w-4" />
+                  Rede de Mercados
+                </Link>
+              </Button>
+            </div>
           }
         />
 
