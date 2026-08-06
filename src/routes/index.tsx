@@ -215,16 +215,45 @@ function HomePage() {
 
           {/* Categories Horizontal Navigation */}
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="section-title mb-0">Navegar por Categoria</h2>
-              <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
-                <span className="w-8 h-[1px] bg-[var(--border-subtle)]"></span>
-                Arraste para explorar
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+              <div className="flex flex-col gap-1">
+                <h2 className="section-title mb-0">Navegar por Categoria</h2>
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
+                  <span className="w-6 h-[1px] bg-[var(--border-subtle)]"></span>
+                  Explore nosso catálogo
+                </div>
+              </div>
+
+              {/* Fast Filter/Search for categories */}
+              <div className="relative group/search w-full sm:w-80">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)] group-focus-within/search:text-[var(--brand-primary)] transition-colors" />
+                <input 
+                  type="text"
+                  placeholder="Filtrar categorias ou itens..."
+                  onChange={(e) => {
+                    const term = e.target.value.toLowerCase();
+                    const container = document.getElementById('category-scroll-container');
+                    if (!container) return;
+                    const items = container.querySelectorAll('[data-category-item]');
+                    items.forEach((item: any) => {
+                      const label = item.getAttribute('data-label')?.toLowerCase() || '';
+                      if (label.includes(term) || term === '') {
+                        item.style.display = 'flex';
+                        item.style.opacity = '1';
+                      } else {
+                        item.style.display = 'none';
+                        item.style.opacity = '0';
+                      }
+                    });
+                  }}
+                  className="w-full h-11 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 text-xs font-medium outline-none focus:border-[var(--brand-primary)]/50 focus:ring-4 focus:ring-[var(--brand-primary)]/5 transition-all"
+                />
               </div>
             </div>
             
             <div 
-              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
+              id="category-scroll-container"
+              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none touch-pan-x"
               onMouseDown={(e) => {
                 const el = e.currentTarget;
                 el.classList.add('grabbing');
