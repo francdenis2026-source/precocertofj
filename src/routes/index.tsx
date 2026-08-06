@@ -208,11 +208,11 @@ function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.75) contrast(1.15) saturate(1.05) blur(4px)"
+            filter: "brightness(0.78) contrast(1.12) saturate(1.05) blur(2px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-[var(--bg-base)]/60 to-[var(--bg-base)]" />
-        <div className="absolute inset-0 bg-[var(--bg-base)]/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/30 via-[var(--bg-base)]/50 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-[var(--bg-base)]/25" />
       </div>
 
       <div className="relative z-10 flex flex-col">
