@@ -335,6 +335,7 @@ function StorePage() {
                 </div>) : store.logoUrl ? (<img src={store.logoUrl} alt={store.name} className="h-16 w-16 shrink-0 rounded-2xl border-2 border-background bg-background object-contain shadow-md" loading="lazy" decoding="async" width={64} height={64}/>) : (<span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl border-2 border-background bg-primary/10 text-primary shadow-md">
                   <StoreIcon className="h-7 w-7" strokeWidth={1.75}/>
                 </span>)}
+
               <div className="min-w-0 flex-1 pb-1">
                 <h1 className="truncate font-display text-[19px] font-bold leading-tight text-foreground">
                   {store.name}
