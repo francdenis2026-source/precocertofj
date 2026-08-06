@@ -258,20 +258,20 @@ function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 mb-6 backdrop-blur-md hover:scale-105 transition-transform cursor-default"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-surface)]/80 border border-[var(--border-subtle)] mb-6 shadow-sm backdrop-blur-md hover:scale-105 transition-all duration-300 cursor-default"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-secondary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Economia em Tempo Real <span className="text-[var(--brand-primary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="font-display text-[32px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-4 max-w-4xl text-[var(--text-primary)]"
+              className="font-display text-[32px] sm:text-[64px] font-black tracking-tight leading-[0.95] mb-6 max-w-4xl text-[var(--text-primary)]"
             >
               Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </motion.h1>
