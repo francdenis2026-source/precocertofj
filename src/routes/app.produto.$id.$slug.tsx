@@ -11,7 +11,9 @@ import {
   MapPin,
   Tag,
   ChevronRight,
-  History as HistoryIcon
+  History as HistoryIcon,
+  BrainCircuit,
+  Lightbulb
 } from "lucide-react";
 import { 
   getPublicProductDetail, 
@@ -19,11 +21,13 @@ import {
   type PricePoint,
   type CrossStoreOffer
 } from "@/lib/stores-public.functions";
+import { getPriceInsights } from "@/lib/ai-insights.functions";
 import { Price } from "@/components/ds/Price";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/layout";
 import { queryOptions } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 
 const productQuery = (storeId: string, slug: string) =>
   queryOptions({
@@ -149,6 +153,17 @@ function ProductDetailDashboard() {
             </div>
           </SectionCard>
 
+          {/* AI Insights Section */}
+          <AIInsightsSection 
+            productId={id} 
+            slug={slug} 
+            productName={product.productName}
+            currentPrice={product.price}
+            history={history}
+            minPrice={product.minPrice}
+            avgPrice={product.avgPrice}
+          />
+
           {/* History */}
           <SectionCard title={<div className="flex items-center gap-2"><HistoryIcon className="h-4 w-4" /> Histórico de Preço</div>}>
             <div className="pt-4">
@@ -272,6 +287,82 @@ function Sparkline({ points }: { points: PricePoint[] }) {
     </div>
   );
 }
+
+function AIInsightsSection({ 
+  productId, 
+  slug, 
+  productName, 
+  currentPrice, 
+  history, 
+  minPrice, 
+  avgPrice 
+}: { 
+  productId: string; 
+  slug: string; 
+  productName: string;
+  currentPrice: number;
+  history: PricePoint[];
+  minPrice?: number;
+  avgPrice?: number;
+}) {
+  const getInsights = useServerFn(getPriceInsights);
+  const { data, isLoading } = useQuery({
+    queryKey: ["ai-insights", productId, slug],
+    queryFn: () => getInsights({ data: { id: productId, slug, productName, currentPrice, history, minPrice, avgPrice } }),
+    staleTime: 60 * 60_000,
+  });
+
+  if (isLoading) {
+    return (
+      <SectionCard title={<div className="flex items-center gap-2"><BrainCircuit className="h-4 w-4 text-primary" /> Analisando com IA...</div>}>
+        <div className="space-y-3 py-2">
+          <div className="h-4 w-full bg-muted animate-pulse rounded" />
+          <div className="h-4 w-3/4 bg-muted animate-pulse rounded" />
+        </div>
+      </SectionCard>
+    );
+  }
+
+  if (!data) return null;
+
+  return (
+    <SectionCard 
+      title={
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-2">
+            <BrainCircuit className="h-4 w-4 text-primary" /> 
+            Insights da IA
+          </div>
+          <span className={cn(
+            "text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full",
+            data.trend === "Queda" ? "bg-green-100 text-green-700" : 
+            data.trend === "Alta" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"
+          )}>
+            Tendência: {data.trend}
+          </span>
+        </div>
+      }
+      className="border-primary/20 bg-primary/[0.02]"
+    >
+      <div className="space-y-4 pt-2">
+        <div className="flex gap-3">
+          <div className="mt-1 h-5 w-5 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+            <Lightbulb className="h-3 w-3 text-primary" />
+          </div>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {data.insight}
+          </p>
+        </div>
+        <div className="rounded-xl bg-primary/5 p-4 border border-primary/10">
+          <p className="text-sm font-bold text-primary mb-1">Recomendação:</p>
+          <p className="text-sm font-medium">{data.recommendation}</p>
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
+const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");
 
 const fmtRelative = (iso: string) => {
   const diff = Date.now() - new Date(iso).getTime();

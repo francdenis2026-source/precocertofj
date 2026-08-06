@@ -72,6 +72,7 @@ export type PriceSearchResult = {
     price: number;
     when: string;
     productName: string | null;
+    distance?: number | null;
   } | null;
   markets: PriceSearchMarket[];
   groups: ProductGroup[];

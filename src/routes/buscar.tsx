@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
@@ -696,7 +697,9 @@ function SearchPage() {
               </section>
 
               <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
-                <SearchDiscovery onPickQuery={pickQuery} />
+                <Suspense fallback={<SearchDiscoverySkeleton />}>
+                  <SearchDiscovery onPickQuery={pickQuery} />
+                </Suspense>
               </div>
             </>
           )}
@@ -886,6 +889,19 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
         aria-label="Preço máximo"
         className={inputBase}
       />
+    </div>
+  );
+}
+
+function SearchDiscoverySkeleton() {
+  return (
+    <div className="flex h-full min-h-0 flex-col gap-1.5 animate-in fade-in duration-500">
+      <Skeleton className="h-[120px] w-full rounded-xl" />
+      <div className="grid min-h-0 flex-1 gap-1.5 lg:grid-cols-2">
+        <Skeleton className="h-full w-full rounded-xl" />
+        <Skeleton className="h-full w-full rounded-xl" />
+      </div>
+      <Skeleton className="h-[140px] w-full rounded-xl" />
     </div>
   );
 }

@@ -46,6 +46,7 @@ import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
 import { LogoPreviewList } from "@/components/admin/LogoPreviewList";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Carousel,
   CarouselContent,
@@ -343,6 +344,7 @@ function HomePage() {
           </motion.section>
 
           {/* How It Works Section - More Compact */}
+          <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
           <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex items-center gap-4 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
               <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-50 flex items-center justify-center text-[var(--brand-primary)]">
@@ -374,6 +376,7 @@ function HomePage() {
               </div>
             </div>
           </section>
+          </Suspense>
 
           {/* Grid Category Navigation */}
           <section className="mb-12">
@@ -382,6 +385,7 @@ function HomePage() {
               <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver catálogo completo</Link>
             </div>
             
+            <Suspense fallback={<div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">{Array.from({length: 7}).map((_, i) => <Skeleton key={i} className="h-32 w-full rounded-[32px]" />)}</div>}>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
@@ -400,6 +404,7 @@ function HomePage() {
                 </Link>
               ))}
             </div>
+            </Suspense>
           </section>
 
           {/* CTA Banner */}
@@ -422,7 +427,9 @@ function HomePage() {
 
           {/* New Sections for Recent and Trending Products */}
           <div className="mb-12">
-            <RecentProductsCarousel />
+            <Suspense fallback={<Skeleton className="h-[200px] w-full rounded-3xl" />}>
+              <RecentProductsCarousel />
+            </Suspense>
           </div>
 
           {/* Live Prices Table */}
@@ -600,7 +607,9 @@ function HomePage() {
           </section>
 
           {/* Registered Stores Carousel */}
-          <RegisteredStoresCarousel />
+          <Suspense fallback={<Skeleton className="h-[150px] w-full rounded-3xl mb-12" />}>
+            <RegisteredStoresCarousel />
+          </Suspense>
         </main>
       </div>
 
