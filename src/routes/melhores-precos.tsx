@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
-import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X } from "lucide-react";
+import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X, Download, Save, BellRing, FileDown } from "lucide-react";
 import { toast } from "sonner";
 import { formatRelative } from "@/components/product/TrustIndicator";
 import { shortenStoreName } from "@/lib/store-name";

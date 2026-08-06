@@ -1741,6 +1741,35 @@ export type Database = {
         }
         Relationships: []
       }
+      price_drop_monitors: {
+        Row: {
+          catalog_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          catalog_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          catalog_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_drop_monitors_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "product_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       price_history: {
         Row: {
           attachment: Json | null

@@ -134,3 +134,34 @@ export const deleteAlert = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const toggleCartAlert = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { catalogId: string; active: boolean }) => input)
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    if (data.active) {
+      const { error } = await supabase.from("price_drop_monitors" as any).insert({
+        user_id: userId,
+        catalog_id: data.catalogId,
+      });
+      if (error && error.code !== "23505") throw new Error(error.message);
+    } else {
+      const { error } = await supabase.from("price_drop_monitors" as any).delete().eq("user_id", userId).eq("catalog_id", data.catalogId);
+      if (error) throw new Error(error.message);
+    }
+    return { success: true };
+  });
+
+export const getStoreAlertsStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { catalogIds: string[] }) => input)
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: monitors } = await supabase
+      .from("price_drop_monitors" as any)
+      .select("catalog_id")
+      .eq("user_id", userId)
+      .in("catalog_id", data.catalogIds);
+    return (monitors ?? []).map((m: any) => m.catalog_id as string);
+  });

@@ -4,12 +4,17 @@ import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { saveComparisonCart, exportComparisonData } from "@/lib/comparison-actions.functions";
+import { toggleCartAlert, getStoreAlertsStatus } from "@/lib/notifications.functions";
+import { exportStoreQuotePdf } from "@/lib/store-quote-pdf";
+import { Button } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/ProductImage";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import { shortenStoreName } from "@/lib/store-name";
@@ -71,6 +76,12 @@ import {
   Share2,
   ArrowLeft,
   BellRing,
+  Download,
+  Save,
+  Filter,
+  MapPin,
+  Clock,
+  FileDown
 } from "lucide-react";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
@@ -289,6 +300,14 @@ function ComparadorPage() {
   };
 
   const queryClient = useQueryClient();
+  const { session } = useSession();
+  const [isSaving, setIsSaving] = useState(false);
+  const [filterAvailability, setFilterAvailability] = useState<"all" | "in_stock">("all");
+  const [sortBy, setSortBy] = useState<"price" | "availability">("price");
+
+  const saveCartFn = useServerFn(saveComparisonCart);
+  const toggleAlertFn = useServerFn(toggleCartAlert);
+
   usePricesRealtime(() => {
     void queryClient.invalidateQueries({ queryKey: ["price-comparisons-all"] });
   });
@@ -296,9 +315,6 @@ function ComparadorPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["price-comparisons-all"],
     queryFn: async (): Promise<Comparison[]> => {
-      // PostgREST aplica um teto padrão de 1.000 linhas por resposta.
-      // Como `get_price_comparisons` pode devolver > 1.000 produtos,
-      // paginamos explicitamente com `.range()` até esgotar o retorno.
       const PAGE = 1000;
       const acc: Comparison[] = [];
       for (let offset = 0; ; offset += PAGE) {
@@ -332,9 +348,6 @@ function ComparadorPage() {
       .sort((a, b) => b.count - a.count);
   }, [allRows]);
 
-  // Cache local (por sessão) das linhas derivadas por chave de consulta.
-  // Evita reprocessar `filterAndSortComparisonRows` quando o usuário alterna
-  // entre filtros já vistos (categoria, ordenação, texto).
   const derivedCacheRef = useRef<Map<string, Comparison[]>>(new Map());
   const rows: Comparison[] = useMemo(() => {
     const key = `${allRows.length}|${q}|${cat}|${sortKey}|${confFilter}`;
@@ -349,12 +362,137 @@ function ComparadorPage() {
     return next;
   }, [allRows, q, cat, sortKey, confFilter]);
 
-  usePerceivedPerfTelemetry({
-    route: "/comparador",
-    isLoading,
-    isReady: !isLoading && !error && rows.length > 0,
-    count: rows.length,
+  const { data: activeAlerts = [] } = useQuery({
+    queryKey: ["cart-alerts", rows.map(r => r.product_key)],
+    queryFn: () => getStoreAlertsStatus({ data: { catalogIds: rows.map(r => r.product_key) } }),
+    enabled: !!session && rows.length > 0
   });
+
+  const handleToggleAlert = async (catalogId: string) => {
+    if (!session) {
+      toast.error("Entre para ativar alertas");
+      return;
+    }
+    const isActive = activeAlerts.includes(catalogId);
+    try {
+      await toggleAlertFn({ data: { catalogId, active: !isActive } });
+      queryClient.invalidateQueries({ queryKey: ["cart-alerts"] });
+      toast.success(isActive ? "Alerta removido" : "Alerta de queda de preço ativado!");
+    } catch (err) {
+      toast.error("Erro ao configurar alerta");
+    }
+  };
+
+  const selectedRows = useMemo(
+    () => selected.map((k) => rows.find((r) => r.product_key === k)).filter(Boolean) as Comparison[],
+    [selected, rows],
+  );
+
+  const rankingsForExport = useMemo(() => {
+    if (selectedRows.length === 0) return [];
+    const marketMap = new Map<string, { storeId: string; storeName: string; total: number; matchCount: number; prices: Record<string, number> }>();
+    
+    selectedRows.forEach(r => {
+      (r.stores || []).forEach(s => {
+        const key = s.store_id || s.store_name;
+        if (!marketMap.has(key)) {
+          marketMap.set(key, { storeId: s.store_id || "none", storeName: s.store_name, total: 0, matchCount: 0, prices: {} });
+        }
+        const rank = marketMap.get(key)!;
+        rank.total += Number(s.price);
+        rank.matchCount++;
+        rank.prices[r.product_key] = Number(s.price);
+      });
+    });
+    
+    return Array.from(marketMap.values())
+      .sort((a, b) => b.matchCount - a.matchCount || a.total - b.total);
+  }, [selectedRows]);
+
+  const handleSaveCart = async () => {
+    if (!session) {
+      toast.error("Entre para salvar seu carrinho");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await saveCartFn({
+        data: {
+          name: `Comparativo ${new Date().toLocaleDateString("pt-BR")}`,
+          items: selectedRows.map(r => ({ catalogId: r.product_key, quantity: 1 }))
+        }
+      });
+      toast.success("Carrinho salvo com sucesso!");
+    } catch (err) {
+      toast.error("Erro ao salvar carrinho");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleExport = (format: "csv" | "pdf") => {
+    if (selectedRows.length === 0) {
+      toast.error("Selecione produtos para exportar");
+      return;
+    }
+
+    if (format === "pdf") {
+      const topStore = rankingsForExport[0];
+      if (!topStore) return;
+      
+      exportStoreQuotePdf({
+        storeName: topStore.storeName,
+        cart: selectedRows.map(r => {
+          const price = topStore.prices[r.product_key] || 0;
+          return {
+            slug: r.product_key,
+            productName: r.display_name,
+            price: price,
+            quantity: 1
+          };
+        }),
+        comparison: rankingsForExport.map(rank => ({
+          storeId: rank.storeId,
+          storeName: rank.storeName,
+          total: rank.total,
+          matchedCount: rank.matchCount,
+          totalCount: selectedRows.length,
+          isReference: rank.storeName === topStore.storeName
+        }))
+      });
+    } else {
+      toast.promise(
+        exportComparisonData({
+          data: {
+            format: "csv",
+            items: selectedRows.map(r => ({
+              name: r.display_name,
+              prices: Object.fromEntries(
+                rankingsForExport.map(rank => [rank.storeName, rank.prices[r.product_key] || 0])
+              )
+            })),
+            stores: rankingsForExport.map(r => r.storeName)
+          }
+        }).then(res => {
+          if (res.content) {
+            const blob = new Blob([res.content], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = res.filename || "comparativo.csv";
+            a.click();
+          }
+        }),
+        {
+          loading: "Gerando CSV...",
+          success: "CSV baixado!",
+          error: "Erro ao exportar"
+        }
+      );
+    }
+  };
+
+
 
 
   /**
@@ -773,6 +911,50 @@ function ComparadorPage() {
       </div>
 
 
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/40 pt-4">
+        <QuickFilterBar<string>
+          label="Disponibilidade"
+          options={[
+            { value: "all", label: "Todos" },
+            { value: "in_stock", label: "Em estoque", hint: "Apenas itens disponíveis no momento" }
+          ]}
+          value={filterAvailability}
+          onChange={(val) => setFilterAvailability(val as any || "all")}
+        />
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSaveCart}
+            disabled={isSaving || selected.length === 0}
+            className="h-8 rounded-full border-border bg-background px-3 text-[11px] font-bold uppercase tracking-widest transition hover:border-primary/50"
+          >
+            {isSaving ? (
+              "Salvando..."
+            ) : (
+              <>
+                <Save className="mr-1.5 h-3.5 w-3.5" /> Salvar Carrinho
+              </>
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExport("csv")}
+            className="h-8 rounded-full border-border bg-background px-3 text-[11px] font-bold uppercase tracking-widest transition hover:border-primary/50"
+          >
+            <Download className="mr-1.5 h-3.5 w-3.5" /> CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleExport("pdf")}
+            className="h-8 rounded-full border-border bg-background px-3 text-[11px] font-bold uppercase tracking-widest transition hover:border-primary/50"
+          >
+            <FileDown className="mr-1.5 h-3.5 w-3.5" /> PDF
+          </Button>
+        </div>
+      </div>
     </>
   );
 
@@ -981,6 +1163,8 @@ function ComparadorPage() {
                     row={row}
                     index={idx}
                     imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
+                    activeAlerts={activeAlerts}
+                    handleToggleAlert={handleToggleAlert}
                     selected={selected.includes(row.product_key)}
                     canSelect={selected.length < MAX_SEL || selected.includes(row.product_key)}
                     onToggleSelect={() => toggleSelect(row.product_key)}
@@ -993,6 +1177,8 @@ function ComparadorPage() {
                 rows={visibleRows}
                 sortKey={sortKey}
                 onSortChange={setSortKey}
+                activeAlerts={activeAlerts}
+                handleToggleAlert={handleToggleAlert}
                 selected={selected}
                 canSelectMore={selected.length < MAX_SEL}
                 onToggleSelect={toggleSelect}
@@ -1202,6 +1388,8 @@ function ComparisonTable({
   rows,
   sortKey,
   onSortChange,
+  activeAlerts,
+  handleToggleAlert,
   selected,
   canSelectMore,
   onToggleSelect,
@@ -1210,6 +1398,8 @@ function ComparisonTable({
   rows: Comparison[];
   sortKey: SortKey;
   onSortChange: (k: SortKey) => void;
+  activeAlerts: string[];
+  handleToggleAlert: (catalogId: string) => void;
   selected: string[];
   canSelectMore: boolean;
   onToggleSelect: (key: string) => void;
@@ -1264,6 +1454,8 @@ function ComparisonTable({
                 key={row.product_key}
                 row={row}
                 index={idx}
+                activeAlerts={activeAlerts}
+                handleToggleAlert={handleToggleAlert}
                 selected={selected.includes(row.product_key)}
                 canSelect={canSelectMore || selected.includes(row.product_key)}
                 onToggleSelect={() => onToggleSelect(row.product_key)}
@@ -1280,6 +1472,8 @@ function ComparisonTable({
 function ComparisonTableRow({
   row,
   index,
+  activeAlerts,
+  handleToggleAlert,
   selected,
   canSelect,
   onToggleSelect,
@@ -1287,6 +1481,8 @@ function ComparisonTableRow({
 }: {
   row: Comparison;
   index: number;
+  activeAlerts: string[];
+  handleToggleAlert: (catalogId: string) => void;
   selected: boolean;
   canSelect: boolean;
   onToggleSelect: () => void;
@@ -1338,6 +1534,22 @@ function ComparisonTableRow({
             {row.category}
           </p>
         )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleToggleAlert(row.product_key);
+          }}
+          className={cn(
+            "mt-2 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm transition-all",
+            activeAlerts.includes(row.product_key)
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border bg-background/90 text-muted-foreground hover:text-primary"
+          )}
+          title={activeAlerts.includes(row.product_key) ? "Remover alerta" : "Ativar alerta de preço"}
+        >
+          <BellRing className="h-3.5 w-3.5" strokeWidth={2.5} />
+        </button>
       </td>
       <td className="pc-best-result pc-best-result--compact px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]" aria-label="Menor preço do produto">
         <Price as="p" value={Number(row.min_price)} size="lg" tone="best" />
@@ -1440,6 +1652,8 @@ function ProductCardBase({
   row,
   index,
   imageOverride,
+  activeAlerts,
+  handleToggleAlert,
   selected,
   canSelect,
   onToggleSelect,
@@ -1448,6 +1662,8 @@ function ProductCardBase({
   row: Comparison;
   index: number;
   imageOverride?: string;
+  activeAlerts: string[];
+  handleToggleAlert: (catalogId: string) => void;
   selected: boolean;
   canSelect: boolean;
   onToggleSelect: () => void;
@@ -1536,6 +1752,22 @@ function ProductCardBase({
           <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[11px] italic text-foreground backdrop-blur">
             <StoreIcon className="h-2.5 w-2.5 text-accent" /> {row.store_count}
           </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleAlert(row.product_key);
+            }}
+            className={cn(
+              "absolute left-1.5 bottom-1.5 flex h-7 w-7 items-center justify-center rounded-full border shadow-sm transition-all",
+              activeAlerts.includes(row.product_key)
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-background/90 text-muted-foreground hover:text-primary"
+            )}
+            title={activeAlerts.includes(row.product_key) ? "Remover alerta" : "Ativar alerta de preço"}
+          >
+            <BellRing className="h-3.5 w-3.5" strokeWidth={2.5} />
+          </button>
         </div>
 
         {/* Header — alturas fixas para alinhamento */}
