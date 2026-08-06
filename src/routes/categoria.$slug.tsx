@@ -45,11 +45,22 @@ function CategoryPage() {
   const brands = useMemo(() => {
     const b = new Set<string>();
     products.forEach((p: any) => {
-      // Mock brand extraction if not present
       const brand = p.name.split(" ")[0];
       b.add(brand);
     });
     return Array.from(b).slice(0, 8);
+  }, [products]);
+
+  const units = useMemo(() => {
+    const u = new Set<string>();
+    // Simular extração de unidades baseada em nomes de produtos se não houver campo explícito
+    products.forEach((p: any) => {
+      if (p.name.includes("1kg")) u.add("1kg");
+      if (p.name.includes("500g")) u.add("500g");
+      if (p.name.includes("1L")) u.add("1L");
+      if (p.name.includes("2L")) u.add("2L");
+    });
+    return Array.from(u);
   }, [products]);
 
   const filteredProducts = useMemo(() => {
@@ -57,11 +68,21 @@ function CategoryPage() {
     if (activeBrand) {
       list = list.filter(p => p.name.startsWith(activeBrand));
     }
+    if (activeUnit) {
+      list = list.filter(p => p.name.toLowerCase().includes(activeUnit.toLowerCase()));
+    }
     if (activePriceRange) {
       list = list.filter(p => p.price >= activePriceRange[0] && p.price <= activePriceRange[1]);
     }
+
+    if (sortOrder === "price_asc") {
+      list.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === "price_desc") {
+      list.sort((a, b) => b.price - a.price);
+    }
+    
     return list;
-  }, [products, activeBrand, activePriceRange]);
+  }, [products, activeBrand, activeUnit, activePriceRange, sortOrder]);
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] pb-24">
@@ -114,6 +135,29 @@ function CategoryPage() {
                 </div>
               </div>
 
+              {/* Units */}
+              {units.length > 0 && (
+                <div className="space-y-4 mb-8">
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Unidade</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {units.map(unit => (
+                      <button
+                        key={unit}
+                        onClick={() => setActiveUnit(activeUnit === unit ? null : unit)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all border",
+                          activeUnit === unit 
+                            ? "bg-[var(--brand-primary)] border-[var(--brand-primary)] text-black" 
+                            : "bg-white/5 border-white/10 text-[var(--text-secondary)] hover:bg-white/10"
+                        )}
+                      >
+                        {unit}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Price Range */}
               <div className="space-y-4">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Faixa de Preço</h3>
@@ -155,6 +199,30 @@ function CategoryPage() {
 
           {/* Product List */}
           <div className="lg:col-span-9">
+            {/* Sorting */}
+            <div className="flex justify-end mb-6">
+              <div className="flex bg-[var(--bg-surface)] p-1 rounded-xl border border-[var(--border-subtle)]">
+                <button 
+                  onClick={() => setSortOrder("relevance")}
+                  className={cn(
+                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                    sortOrder === "relevance" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
+                  )}
+                >
+                  Relevância
+                </button>
+                <button 
+                  onClick={() => setSortOrder("price_asc")}
+                  className={cn(
+                    "px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                    sortOrder === "price_asc" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
+                  )}
+                >
+                  Menor Preço
+                </button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <div 
