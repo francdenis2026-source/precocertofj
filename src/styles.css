@@ -20,9 +20,9 @@
   --pc-brand-white: #FFFFFF;  /* Branco Puro */
   
   /* Primary Palette - Light Mode */
-  --pc-bg-base: #F8FAFC;       /* Slate 50 ultra suave */
+  --pc-bg-base: #F1F4F9;       /* Slate-ish light blue, mais suave */
   --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F1F5F9;
+  --pc-bg-surface-elevated: #E2E8F0;
   
   --pc-brand-primary: var(--pc-brand-gold);
   --pc-brand-secondary: var(--pc-brand-navy);
@@ -49,11 +49,11 @@
 
   /* Radius & Transitions */
   --pc-radius: 12px;
-  --pc-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --pc-shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
-  --pc-shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.12);
+  --pc-shadow-sm: 0 1px 3px rgba(11, 30, 58, 0.05);
+  --pc-shadow-md: 0 8px 24px -4px rgba(11, 30, 58, 0.08);
+  --pc-shadow-lg: 0 20px 48px -12px rgba(11, 30, 58, 0.12);
   
-  --dur-base: 200ms;
+  --dur-base: 250ms;
   --ease-out-smooth: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -125,7 +125,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 @utility glass-card {
-  @apply rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-md transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-lg;
+  @apply rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-md shadow-md transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-lg;
 }
 
 @utility badge-gold {

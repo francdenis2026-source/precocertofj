@@ -437,18 +437,36 @@ function HomePage() {
             </Suspense>
           </section>
 
-          {/* CTA Banner */}
+          {/* CTA Banner - Redesenhado Premium */}
           <section className="mb-16">
-            <div className="relative rounded-[32px] sm:rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] p-6 sm:p-12 overflow-hidden shadow-2xl">
-              <div className="absolute top-0 right-0 h-full w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-10 mix-blend-overlay pointer-events-none" />
-              <div className="relative z-10 max-w-xl">
-                <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 leading-tight">Viu um preço novo?</h2>
-                <p className="text-lg text-white/80 mb-8 leading-relaxed">Ajude outros moradores de Feijó a economizar registrando o preço que você acabou de encontrar no mercado.</p>
+            <div className="relative group overflow-hidden rounded-[40px] border border-[var(--brand-primary)]/20 bg-[var(--brand-secondary)] p-8 sm:p-14 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute top-0 right-0 h-full w-full sm:w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-[0.15] mix-blend-overlay pointer-events-none transition-transform duration-700 group-hover:scale-105" />
+              
+              <div className="relative z-10 max-w-2xl">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-[0.2em] mb-6"
+                >
+                  <Sparkles className="h-3 w-3" /> Colaboração Local
+                </motion.div>
+                
+                <h2 className="font-display text-4xl sm:text-5xl font-black text-white mb-6 leading-[1.1] tracking-tight">
+                  Viu um preço <span className="text-[var(--brand-primary)] underline decoration-wavy decoration-[var(--brand-primary)]/30 underline-offset-8">diferente</span>?
+                </h2>
+                
+                <p className="text-lg sm:text-xl text-white/70 mb-10 leading-relaxed font-body">
+                  Sua colaboração fortalece a rede de economia em Feijó. Registre ofertas em tempo real e ajude a comunidade.
+                </p>
+                
                 <Button 
                   onClick={() => navigate({ to: "/registrar" })}
-                  className="bg-white text-[var(--brand-primary)] hover:bg-white/90 font-black h-14 px-8 rounded-2xl shadow-xl transition-all active:scale-95 text-lg"
+                  className="bg-[var(--brand-primary)] text-[var(--brand-secondary)] hover:brightness-110 active:scale-95 font-black h-16 px-10 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all text-lg group"
                 >
-                  Registrar Preço Agora
+                  Registrar Agora
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
