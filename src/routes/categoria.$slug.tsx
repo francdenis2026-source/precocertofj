@@ -126,6 +126,19 @@ function CategoryPage() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const def = categoryBySlug(slug);
 
+  const setSearch = useCallback(
+    (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
+      navigate({
+        to: "/categoria/$slug",
+        params: { slug },
+        search: { ...search, ...patch },
+        replace: opts?.replace ?? false,
+        resetScroll: false,
+      });
+    },
+    [navigate, slug, search],
+  );
+
   useEffect(() => {
     if (search.sort === "near" && !userLocation) {
       navigator.geolocation.getCurrentPosition(
@@ -145,19 +158,6 @@ function CategoryPage() {
   const view: "list" | "grid" | "near" = ["grid", "near"].includes(search.view) ? (search.view as any) : "list";
   const perPage = [30, 60, 120].includes(search.per) ? search.per : 30;
   const page = Math.max(1, search.page);
-
-  const setSearch = useCallback(
-    (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
-      navigate({
-        to: "/categoria/$slug",
-        params: { slug },
-        search: { ...search, ...patch },
-        replace: opts?.replace ?? false,
-        resetScroll: false,
-      });
-    },
-    [navigate, slug, search],
-  );
 
 
   // Campo de busca: digitação local + sincronização debounced na URL (sem poluir o histórico)
