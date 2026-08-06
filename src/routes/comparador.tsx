@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
-import { Plus, Check, Save, Download, FileDown, BellRing, Store as StoreIcon, Trophy, ArrowRight, Lock, X, Search, SlidersHorizontal, Info, ChevronDown } from "lucide-react";
+import { Plus, Check, Save, Download, FileDown, BellRing, Store as StoreIcon, Trophy, ArrowRight, Lock, X, Search, SlidersHorizontal, Info, ChevronDown, PackageSearch, Scale, LayoutGrid, Rows3, Share2, ArrowLeft, Filter, MapPin, Clock } from "lucide-react";
 import { Nav } from "@/components/brand/Nav";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
@@ -61,29 +61,6 @@ import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { applyButcherFilter } from "@/lib/butcher-filter";
 import { useButcherIds } from "@/hooks/useButcherIds";
-import {
-  Search,
-  Store as StoreIcon,
-  Trophy,
-  ArrowRight,
-  PackageSearch,
-  Check,
-  X,
-  Scale,
-  LayoutGrid,
-  Rows3,
-  SlidersHorizontal,
-  Lock,
-  Share2,
-  ArrowLeft,
-  BellRing,
-  Download,
-  Save,
-  Filter,
-  MapPin,
-  Clock,
-  FileDown
-} from "lucide-react";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
