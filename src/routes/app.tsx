@@ -179,7 +179,7 @@ function DashboardPage() {
                 icon={Star} 
                 title="Sem favoritos" 
                 message="Marque o coração nos produtos para acompanhar os preços aqui." 
-                action={<Button asChild variant="outline" size="sm"><Link to="/app/produtos">Buscar produtos</Link></Button>}
+                action={<Button asChild variant="outline" size="sm"><Link to="/precos">Buscar produtos</Link></Button>}
               />
             ) : (
               <ul className="divide-y divide-border">
