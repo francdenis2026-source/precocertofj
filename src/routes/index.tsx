@@ -79,10 +79,12 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-[var(--brand-primary)]/30">
-      {/* Background Gradient */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--brand-glow)] blur-[120px] rounded-full opacity-40" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[var(--brand-glow)] blur-[120px] rounded-full opacity-20" />
+      {/* Background Gradient - Pure Radial, No Texture */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[var(--bg-base)]">
+        <div 
+          className="absolute top-[-20%] left-[10%] w-[80%] h-[60%] rounded-full opacity-[0.08] blur-[120px]" 
+          style={{ background: 'radial-gradient(circle, var(--brand-primary) 0%, transparent 70%)' }}
+        />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -97,17 +99,17 @@ function HomePage() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center text-center mb-24"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500">Ao vivo em Feijó</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
             </div>
             
-            <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl">
+            <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl text-white">
               Inteligência real para <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[var(--brand-primary)]">economizar em cada compra</span>
+              economizar em cada compra
             </h1>
 
             <form onSubmit={submitSearch} className="group relative w-full max-w-2xl flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10">
@@ -135,7 +137,7 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group flex flex-col items-center justify-center min-w-[120px] aspect-square rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] snap-start"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/10 transition-all duration-300 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/10 transition-all duration-300 mb-3">
                     <Icon className="h-6 w-6" />
                   </div>
                   <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] group-hover:text-white transition-colors">{label}</span>
@@ -172,7 +174,7 @@ function HomePage() {
                       className="flex items-center justify-between p-5 hover:bg-[var(--bg-surface-elevated)] transition-colors group"
                     >
                       <div className="flex flex-col min-w-0 pr-4">
-                        <h3 className="text-base font-medium text-white truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h3>
+                        <h3 className="text-sm sm:text-base font-medium text-white truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h3>
                         <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
                           {p.marketName || "Mercado parceiro"} • {new Date(p.when).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                         </p>
@@ -217,7 +219,7 @@ function HomePage() {
                     {loaderData.economy?.avgSavingsPct ? `${loaderData.economy.avgSavingsPct}%` : "—"}
                   </div>
                 </div>
-                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-white text-black hover:bg-white/90 font-bold rounded-xl h-12">
+                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_8px_20px_-4px_var(--brand-glow)]">
                   Acessar Aplicativo
                 </Button>
               </div>

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import Autoplay from "embla-carousel-autoplay";
+
 import { Sparkles, Clock3, ArrowRight, TrendingDown } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -125,14 +125,16 @@ export function RecentProductsCarousel() {
   return (
     <motion.section
       aria-label="Produtos recém-cadastrados"
-      className="mt-4"
+      className="mt-4 relative"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
+      <div className="absolute top-0 right-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-base)] to-transparent z-20 pointer-events-none hidden md:block" />
+
       <header className="mb-2.5 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--brand-primary)]">
+          <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--text-tertiary)]">
             <Sparkles className="h-3 w-3" strokeWidth={2.4} aria-hidden />
             Novidades no catálogo
           </p>
@@ -141,21 +143,19 @@ export function RecentProductsCarousel() {
           </h2>
         </div>
         <Link
-          to="/melhores-precos"
-          className="hidden shrink-0 text-[11.5px] font-bold text-[var(--brand-primary)] hover:underline md:inline"
+          to="/buscar"
+          className="hidden shrink-0 text-[11.5px] font-bold text-[var(--text-secondary)] hover:text-[var(--brand-primary)] hover:underline md:inline transition-colors"
         >
-
           Ver catálogo completo →
         </Link>
       </header>
 
       <Carousel
         setApi={setApi}
-        opts={{ align: "start", loop: true, dragFree: true }}
-        plugins={[Autoplay({ delay: 3800, stopOnInteraction: true, stopOnMouseEnter: true })]}
+        opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true }}
         className="group/carousel relative"
       >
-        <CarouselContent className="-ml-2.5">
+        <CarouselContent className="-ml-4">
           {products.map((p) => {
             const cmp = priceByName.get(norm(p.displayName));
             const slug = cmp?.catalog_slug ?? p.id;
@@ -167,10 +167,10 @@ export function RecentProductsCarousel() {
             const store = cmp?.cheapest_store ? shortenStoreName(cmp.cheapest_store) : null;
 
             return (
-              <CarouselItem
-                key={p.id}
-                className="basis-[85%] pl-4 sm:basis-[45%] md:basis-[30%] lg:basis-[25%]"
-              >
+                <CarouselItem
+                  key={p.id}
+                  className="basis-[75%] pl-4 sm:basis-[45%] md:basis-[33%] lg:basis-[25%] xl:basis-[20%] snap-start"
+                >
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug }}
@@ -212,7 +212,7 @@ export function RecentProductsCarousel() {
                   <div className="relative z-10 mt-5 space-y-3">
                     <div>
                       {p.brand && (
-                        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--brand-primary)]/60 mb-1">
+                        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] mb-1">
                           {p.brand}
                         </p>
                       )}
