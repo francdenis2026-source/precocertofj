@@ -212,16 +212,7 @@ function HomePage() {
       <SiteHeader variant="overlay" showThemeToggle />
       
       {/* Backdrop for focused search */}
-      <AnimatePresence>
-        {isSearchFocused && !isScrolled && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[105] bg-black/40 backdrop-blur-[2px] pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
+      {/* Backdrop for focused search - Removed fixed backdrop to prevent focus issues */}
       
       {/* Realistic Supermarket Background Hero */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -296,7 +287,8 @@ function HomePage() {
                 onSubmit={submitSearch} 
                 className={cn(
                   "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]"
+                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]",
+                  isSearchFocused && !isScrolled && "ring-offset-4 ring-offset-black/20"
                 )}
               >
                 <Search className={cn(
@@ -307,10 +299,8 @@ function HomePage() {
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
-                  onBlur={(e) => {
-                    const related = e.relatedTarget as HTMLElement;
-                    if (related?.closest('#home-search-suggestions')) return;
-                    setIsSearchFocused(false);
+                  onBlur={() => {
+                    setTimeout(() => setIsSearchFocused(false), 200);
                   }}
                   placeholder="O que você quer comprar mais barato hoje?" 
                   className={cn(
