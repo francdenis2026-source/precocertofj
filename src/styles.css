@@ -16,12 +16,12 @@
  */
 :root {
   /* Colors - Dark Mode (Default) */
-  --pc-deep-navy: #05070A;
-  --pc-navy-surface: #0A0D14;
-  --pc-navy-surface-elevated: #101520;
+  --pc-deep-navy: #0A0F1A;
+  --pc-navy-surface: #121826;
+  --pc-navy-surface-elevated: #1A2234;
   --pc-gold-primary: #FFD700;
-  --pc-gold-dark: #B8860B;
-  --pc-gold-glow: rgba(255, 215, 0, 0.25);
+  --pc-gold-dark: #C5A000;
+  --pc-gold-glow: rgba(255, 215, 0, 0.15);
   
   /* Semantic Tokens for Components */
   --pc-price-fg: var(--text-primary);

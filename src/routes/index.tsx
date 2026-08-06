@@ -205,10 +205,10 @@ function HomePage() {
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 0.5, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute inset-0 bg-cover bg-center brightness-[0.6] saturate-[1.2]" 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0 bg-cover bg-center brightness-[0.4] saturate-[1.1]" 
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/95 to-[var(--bg-base)] transition-colors duration-300" />
@@ -259,8 +259,8 @@ function HomePage() {
             </div>
 
             
-            <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
-              Inteligência Real para Economizar
+            <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
+              Preço Inteligente, Economia Garantida.
             </h1>
 
             <div className="relative w-full max-w-2xl">
@@ -301,127 +301,40 @@ function HomePage() {
             </div>
           </motion.section>
 
-          {/* Categories Horizontal Navigation */}
-          <section className="mb-16">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
-              <div className="flex flex-col gap-1">
-                <h2 className="section-title mb-0">Navegar por Categoria</h2>
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
-                  <span className="w-6 h-[1px] bg-[var(--border-subtle)]"></span>
-                  Explore nosso catálogo
-                </div>
-              </div>
-
-              {/* Fast Filter/Search for categories */}
-              <div className="relative group/search w-full sm:w-80">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)] group-focus-within/search:text-[var(--brand-primary)] transition-colors" />
-                <input 
-                  type="text"
-                  placeholder="Filtrar categorias ou itens..."
-                  onChange={(e) => {
-                    const term = e.target.value.toLowerCase();
-                    const container = document.getElementById('category-scroll-container');
-                    if (!container) return;
-                    const items = container.querySelectorAll('[data-category-item]');
-                    items.forEach((item: any) => {
-                      const label = item.getAttribute('data-label')?.toLowerCase() || '';
-                      if (label.includes(term) || term === '') {
-                        item.style.display = 'flex';
-                        item.style.opacity = '1';
-                      } else {
-                        item.style.display = 'none';
-                        item.style.opacity = '0';
-                      }
-                    });
-                  }}
-                  className="w-full h-11 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 text-xs font-medium outline-none focus:border-[var(--brand-primary)]/50 focus:ring-4 focus:ring-[var(--brand-primary)]/5 transition-all"
-                />
-              </div>
+          {/* Compact Category Navigation */}
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Categorias</h2>
+              <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver todas</Link>
             </div>
             
-            <Carousel
-              opts={{ align: "start", loop: false, dragFree: true, skipSnaps: true, containScroll: "trimSnaps" }}
-              className="group/carousel relative"
-            >
-              <CarouselContent 
-                id="category-scroll-container"
-                className="-ml-4 pb-6 select-none"
-              >
-                {CATEGORIES.map(({ slug, label, Icon, color }) => (
-                  <CarouselItem 
-                    key={slug} 
-                    className="pl-4 basis-[45%] sm:basis-[30%] md:basis-[22%] lg:basis-[18%] xl:basis-[15%] snap-start"
-                  >
-                    <Link 
-                      to="/categoria/$slug" 
-                      params={{ slug: slug as any }}
-                      data-category-item
-                      data-label={label}
-                      className="group/card relative flex flex-col items-center justify-end h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg-base)]"
-                    >
-                      {/* Category Ambient Glow */}
-                      <div className="absolute inset-0 z-0">
-                        <div 
-                          className="absolute inset-0 opacity-5 group-hover/card:opacity-15 transition-opacity duration-700" 
-                          style={{ 
-                            background: `radial-gradient(circle at 50% 40%, ${color} 0%, transparent 70%)`,
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent transition-colors duration-300" />
-                      </div>
-
-                      <div className="relative z-10 w-full p-6 flex flex-col items-center">
-                        <div className="relative mb-4">
-                          {/* Icon Container with Glassmorphism */}
-                          <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] dark:bg-white/[0.03] border border-white/10 dark:border-white/10 backdrop-blur-xl text-[var(--text-primary)] group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-white dark:group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
-                            <Icon className="h-7 w-7 transition-transform duration-500 group-hover/card:rotate-6" />
-                          </div>
-                          <div 
-                            className="absolute -inset-2 blur-2xl opacity-0 group-hover/card:opacity-20 transition-opacity duration-500 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
-                        </div>
-                        
-                        <div className="flex flex-col items-center gap-1.5">
-                          <span className="text-sm font-bold tracking-tight text-[var(--text-primary)] group-hover/card:text-[var(--brand-primary)] transition-colors">
-                            {label}
-                          </span>
-                          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-[var(--brand-primary)]/70 transition-colors">
-                            Explorar
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  </CarouselItem>
-                ))}
-                
-                <CarouselItem 
-                  key="all-categories" 
-                  className="pl-4 basis-[45%] sm:basis-[30%] md:basis-[22%] lg:basis-[18%] xl:basis-[15%] snap-start"
+            <div className="grid grid-cols-4 sm:flex sm:flex-wrap justify-center gap-3 sm:gap-4">
+              {CATEGORIES.map(({ slug, label, Icon, color }) => (
+                <Link 
+                  key={slug} 
+                  to="/categoria/$slug" 
+                  params={{ slug: slug as any }}
+                  className="group flex flex-col items-center gap-2 sm:w-20"
                 >
-                  <Link 
-                    to="/buscar" 
-                    className="group/card relative flex flex-col items-center justify-center h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
-                      <PlusCircle className="h-6 w-6" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-white transition-colors">Todas</span>
-                  </Link>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious className="left-[-20px] h-10 w-10 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white dark:hover:text-black transition-all shadow-xl z-20" />
-              <CarouselNext className="right-[-20px] h-10 w-10 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white dark:hover:text-black transition-all shadow-xl z-20" />
-            </Carousel>
+                  <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors" />
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity" style={{ backgroundColor: color }} />
+                  </div>
+                  <span className="text-[10px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full text-center px-1">
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </section>
 
           {/* New Sections for Recent and Trending Products */}
-          <div className="mb-16">
+          <div className="mb-12">
             <RecentProductsCarousel />
           </div>
 
           {/* Live Prices Table */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
             <div className="lg:col-span-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
@@ -462,7 +375,7 @@ function HomePage() {
                 </div>
               </div>
 
-              <div className="rounded-[32px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
+              <div className="rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
@@ -541,7 +454,7 @@ function HomePage() {
 
             {/* Platform Stats Column */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="p-8 rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
+              <div className="p-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-primary)] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-white/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
                 
                 <div className="relative z-10">
@@ -577,7 +490,7 @@ function HomePage() {
               </div>
 
               {/* Trending Searches */}
-              <div className="p-8 rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
+              <div className="p-6 rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/50 backdrop-blur-xl">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Buscas em Alta</h3>
                 <div className="flex flex-wrap gap-2">
                   {['Arroz 5kg', 'Óleo Soy', 'Leite Integral', 'Açúcar', 'Café', 'Sabão em pó'].map(term => (
