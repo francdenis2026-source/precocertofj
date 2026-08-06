@@ -127,7 +127,7 @@ function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-white/40 mx-1">·</span> Acre</span>
             </motion.div>
             
             <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-white">
@@ -318,14 +318,18 @@ function HomePage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-3">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="h-10 w-10 rounded-full border-2 border-[var(--bg-base)] bg-[var(--bg-surface-elevated)] overflow-hidden">
-                        <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="" className="h-full w-full object-cover grayscale opacity-80" />
-                      </div>
-                    ))}
+                    <div className="flex items-center justify-center h-10 w-10 rounded-full border-2 border-[var(--bg-base)] bg-[var(--brand-primary)] text-black">
+                      <Store className="h-5 w-5" />
+                    </div>
+                    <div className="flex items-center justify-center h-10 w-10 rounded-full border-2 border-[var(--bg-base)] bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)]">
+                      <TrendingDown className="h-5 w-5" />
+                    </div>
+                    <div className="flex items-center justify-center h-10 w-10 rounded-full border-2 border-[var(--bg-base)] bg-[var(--pc-navy-surface)] text-white">
+                      <ShoppingCart className="h-5 w-5" />
+                    </div>
                   </div>
                   <div className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
-                    +15 Mercados
+                    Rede Certificada
                   </div>
                 </div>
               </div>
