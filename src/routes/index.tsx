@@ -110,7 +110,7 @@ function HomePage() {
 
     if (sort === "price") {
       list.sort((a, b) => a.price - b.price);
-    } else {
+    } else if (sort === "recent") {
       list.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
     }
     
