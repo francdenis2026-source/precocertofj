@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
@@ -162,6 +163,7 @@ export function PriceSearchBar({
   const isVisitor = !user;
   const quota = useTeaserQuota(3);
   const [quotaBlocked, setQuotaBlocked] = useState(false);
+  const [historyPaused, setHistoryPaused] = useState(false);
 
   const [query, setQuery] = useState(normalizeInput(initialQuery));
   const [rawResult, setResult] = useState<PriceSearchResult | null>(null);
@@ -384,7 +386,9 @@ export function PriceSearchBar({
     // lista de sugestões, não grava histórico e não debita cota do visitante.
     if (!opts?.silent) {
       setShowSuggest(false);
-      setHistory(pushSearchHistory(q));
+      if (!historyPaused) {
+        setHistory(pushSearchHistory(q));
+      }
     }
     // A busca em si é grátis — só bloqueamos quando o visitante já esgotou
     // a cota em outras ações (ex.: abrir detalhes de produtos). Isso evita
@@ -803,11 +807,40 @@ export function PriceSearchBar({
                 <p className="border-t border-border px-3 py-1.5 text-[11px] font-medium text-muted-foreground bg-muted/20">
                   <Link to="/auth" className="text-brand-gold hover:underline">Entre</Link> para salvar suas buscas. Histórico persistente é exclusivo para <span className="text-brand-gold font-bold">Planos Premium</span>.
                 </p>
-              ) : !isPremium ? (
-                <p className="border-t border-border px-3 py-1.5 text-[11px] font-medium text-muted-foreground bg-amber-500/5">
-                  Seu histórico é temporário. Assine o <span className="text-amber-500 font-bold">Plano Premium</span> para salvar para sempre.
-                </p>
-              ) : null}
+              ) : (
+                <div className="flex items-center justify-between border-t border-border px-3 py-1.5 bg-muted/5">
+                  <p className="text-[11px] font-medium text-muted-foreground">
+                    {!isPremium ? (
+                      <>Seu histórico é temporário. <span className="text-amber-500 font-bold">Premium</span> salva para sempre.</>
+                    ) : (
+                      <span className="text-brand-gold font-bold flex items-center gap-1"><Crown className="h-2.5 w-2.5" /> Histórico Premium Ativo</span>
+                    )}
+                  </p>
+                  
+                  {isPremium && (
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          clearSearchHistory();
+                          setHistory([]);
+                        }}
+                        className="text-[10px] font-bold uppercase tracking-wider text-red-500/80 hover:text-red-500 transition-colors"
+                      >
+                        Limpar
+                      </button>
+                      <button 
+                        onClick={() => setHistoryPaused(!historyPaused)}
+                        className={cn(
+                          "text-[10px] font-bold uppercase tracking-wider transition-colors",
+                          historyPaused ? "text-brand-gold" : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {historyPaused ? "Retomar" : "Pausar"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </AnchoredDropdown>
 
