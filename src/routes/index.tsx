@@ -308,13 +308,13 @@ function HomePage() {
               <Link to="/buscar" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline">Ver todas</Link>
             </div>
             
-            <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 sm:gap-4">
+            <div className="grid grid-cols-4 sm:flex sm:flex-wrap justify-center gap-3 sm:gap-4">
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
-                  className="group flex flex-col items-center gap-2"
+                  className="group flex flex-col items-center gap-2 sm:w-20"
                 >
                   <div className="relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:-translate-y-1 shadow-sm">
                     <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors" />
