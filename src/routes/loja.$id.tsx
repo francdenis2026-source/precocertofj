@@ -41,6 +41,7 @@ import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreSkeleton } from "@/components/loja/StoreSkeleton";
 import { Price } from "@/components/ds/Price";
 import { ShareButton } from "@/components/ds/ShareButton";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 
 const storeCatalogQuery = (id: string) =>
   queryOptions({
@@ -407,7 +408,11 @@ function StorePage() {
           <div className="px-4 pb-4">
             {/* Logo overlaps the banner */}
             <div className="-mt-8 flex items-end gap-3">
-              {store.logoUrl ? (
+              {store.name.includes("Contamigos") ? (
+                <div className="flex h-16 shrink-0 items-center rounded-2xl border-2 border-background bg-background px-2 shadow-md">
+                  <ContamigosLogo size="sm" />
+                </div>
+              ) : store.logoUrl ? (
                 <img
                   src={store.logoUrl}
                   alt={store.name}
@@ -422,6 +427,7 @@ function StorePage() {
                   <StoreIcon className="h-7 w-7" strokeWidth={1.75} />
                 </span>
               )}
+
               <div className="min-w-0 flex-1 pb-1">
                 <h1 className="truncate font-display text-[19px] font-bold leading-tight text-foreground">
                   {store.name}

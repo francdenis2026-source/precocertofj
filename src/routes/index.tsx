@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
 import {
