@@ -51,7 +51,7 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
         )}
       </div>
 
-      <div className="space-y-8 bg-card/40 backdrop-blur-md border border-border/50 rounded-[32px] p-6 shadow-sm">
+      <div className="space-y-8 bg-white dark:bg-card/40 backdrop-blur-md border border-border rounded-[32px] p-6 shadow-sm">
 
         {sections.map((section) => (
           <div key={section.id} className="space-y-3">

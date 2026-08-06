@@ -26,9 +26,9 @@
   --pc-brand-navy-deep: #050E1B;
   
   /* Primary Palette - Light Mode Premium */
-  --pc-bg-base: #F8FAFC;       /* Slate-ish light blue, extremamente limpo */
+  --pc-bg-base: #F1F5F9;       /* Slate-100 para contraste com o branco puro das superfícies */
   --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F1F5F9;
+  --pc-bg-surface-elevated: #F8FAFC;
   
   --pc-brand-primary: var(--pc-brand-gold);
   --pc-brand-secondary: var(--pc-brand-navy);
@@ -122,7 +122,7 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px; /* Aumentado para melhor legibilidade */
   line-height: 1.6;
   letter-spacing: -0.01em;
 }

@@ -11,7 +11,7 @@ export function PremiumOfferCard({ group, isBest }: { group: ProductGroup; isBes
   const marketLogo = useSignedLogoUrl(bestPrice.marketLogoUrl);
 
   return (
-    <article className="group relative flex flex-col h-full bg-card/40 backdrop-blur-md border border-border/50 rounded-[42px] overflow-hidden hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] hover:border-primary/40 hover:-translate-y-1.5 transition-all duration-500 ease-[0.22,1,0.36,1]">
+    <article className="group relative flex flex-col h-full bg-white dark:bg-card/40 backdrop-blur-md border border-border rounded-[42px] overflow-hidden hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] hover:border-primary hover:-translate-y-1.5 transition-all duration-500 ease-[0.22,1,0.36,1]">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       
       {isBest && (
