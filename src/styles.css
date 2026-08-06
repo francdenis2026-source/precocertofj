@@ -15,19 +15,13 @@
   to { transform: translateX(100%); }
 }
 
-/**
- * Design Tokens - Identidade Visual Varejão Contamigos (Midnight Executive)
- * --------------------------------
- */
 :root {
-  /* Cores Core - Evolução Gold & Navy (Midnight Executive) */
-  --pc-brand-gold: #D4AF37;   /* Dourado Metálico Base */
-  --pc-brand-gold-glow: #FFD700; /* Ouro Brilhante */
-  --pc-brand-navy: #0B1E3A;   /* Azul Marinho Varejão */
+  --pc-brand-gold: #D4AF37;
+  --pc-brand-gold-glow: #FFD700;
+  --pc-brand-navy: #0B1E3A;
   --pc-brand-navy-deep: #050E1B;
   
-  /* Primary Palette - Light Mode Premium */
-  --pc-bg-base: #F1F5F9;       /* Slate-100 para contraste com o branco puro das superfícies */
+  --pc-bg-base: #F1F5F9;
   --pc-bg-surface: #FFFFFF;
   --pc-bg-surface-elevated: #F8FAFC;
   
@@ -37,11 +31,10 @@
   
   --pc-brand-glow: rgba(212, 175, 55, 0.15);
   --pc-border-subtle: rgba(11, 30, 58, 0.06);
-  --pc-text-primary: #0F172A;   /* Slate 900 */
-  --pc-text-secondary: #475569; /* Slate 600 */
-  --pc-text-tertiary: #94A3B8;  /* Slate 400 */
+  --pc-text-primary: #0F172A;
+  --pc-text-secondary: #475569;
+  --pc-text-tertiary: #94A3B8;
   
-  /* Layout Tokens */
   --pc-radius-lg: 24px;
   --pc-radius-md: 16px;
   --pc-radius-sm: 8px;
@@ -50,7 +43,6 @@
   --pc-shadow-md: 0 12px 32px -4px rgba(11, 30, 58, 0.08);
   --pc-shadow-lg: 0 32px 64px -16px rgba(11, 30, 58, 0.14);
   
-  /* Semantic Tokens */
   --bg-base: var(--pc-bg-base);
   --bg-surface: var(--pc-bg-surface);
   --bg-surface-elevated: var(--pc-bg-surface-elevated);
@@ -70,7 +62,6 @@
 }
 
 :root[data-theme='dark'] {
-  /* Ultra Deep Navy Layering */
   --pc-bg-base: #050E1B;
   --pc-bg-surface: #0B1E3A;
   --pc-bg-surface-elevated: #112A4F;
@@ -123,7 +114,7 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 16px; /* Aumentado para melhor legibilidade */
+  font-size: 16px;
   line-height: 1.6;
   letter-spacing: -0.01em;
 }
@@ -157,7 +148,6 @@ h1, h2, h3, h4, .font-display {
   }
 }
 
-/* Animations */
 @keyframes pc-fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
