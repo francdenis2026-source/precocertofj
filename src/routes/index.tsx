@@ -255,9 +255,14 @@ function HomePage() {
             </div>
 
             
-            <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
-              Sua Inteligência Real para Economizar todos os dias em Feijó
+            <h1 className="font-display text-[42px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-8 max-w-3xl text-[var(--text-primary)]">
+              Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
             </h1>
+            
+            <p className="text-lg sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed">
+              Descubra os melhores preços em Feijó com uma interface moderna, rápida e intuitiva. 
+              Conectamos você às melhores ofertas da cidade.
+            </p>
 
             <div className="relative w-full max-w-2xl">
               <form 
