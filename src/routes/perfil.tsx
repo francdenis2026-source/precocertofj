@@ -15,6 +15,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getMyAccount, updateMyCpf, updateMyProfile, updateMyAvatar } from "@/lib/account.functions";
 import { getMyProfileStats } from "@/lib/profile-stats.functions";
 import { SubscriptionStatusCard } from "@/components/account/SubscriptionStatusCard";
+import { PreferencesPanel } from "@/components/account/PreferencesPanel";
 import { CollaboratorStatusCard } from "@/components/collab/CollaboratorStatusCard";
 import { listMyPriceReports } from "@/lib/stores-public.functions";
 import { listMyStoreQuotes, deleteStoreQuote } from "@/lib/store-quotes.functions";
@@ -233,7 +234,7 @@ function Perfil() {
         <PageHeader
           breadcrumbs={[{ label: "Início", to: "/app" }, { label: "Meu perfil" }]}
           title="Meu perfil"
-          description="Atualize sua foto, dados pessoais e endereço de entrega."
+          description="Atualize sua foto, dados pessoais, endereço e preferências de acompanhamento de preços."
         />
         <div className="grid gap-3 pb-4 md:grid-cols-[1fr_2fr]">
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
