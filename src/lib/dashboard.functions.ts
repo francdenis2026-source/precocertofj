@@ -25,10 +25,10 @@ export const getAppDashboard = createServerFn({ method: "GET" })
     ]);
 
     const [stats, scans, favorites, alerts] = await Promise.all([
-      getMyProfileStats({ data: undefined }),
-      listMyScans({ data: undefined }),
-      listFavoriteItems({ data: undefined }),
-      listPriceAlerts({ data: undefined }),
+      getMyProfileStats.fetcher(undefined, context),
+      listMyScans.fetcher(undefined, context),
+      listFavoriteItems.fetcher(undefined, context),
+      listPriceAlerts.fetcher(undefined, context),
     ]);
 
     return {
