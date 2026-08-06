@@ -57,6 +57,7 @@ const SORT_VALUES = new Set([
   "kind",
   "spread",
   "savings",
+  "market",
 ]);
 type UrlSort =
   | "relevance"
@@ -66,7 +67,8 @@ type UrlSort =
   | "recent"
   | "kind"
   | "spread"
-  | "savings";
+  | "savings"
+  | "market";
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
