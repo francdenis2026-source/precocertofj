@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TesteBuscaRouteImport } from './routes/teste-busca'
 import { Route as TendenciasRouteImport } from './routes/tendencias'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
@@ -124,6 +125,11 @@ import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes
 import { Route as ApiPublicHooksDrainCatalogImagesRouteImport } from './routes/api/public/hooks/drain-catalog-images'
 import { Route as ApiPublicHooksCollabInboundRouteImport } from './routes/api/public/hooks/collab-inbound'
 
+const TesteBuscaRoute = TesteBuscaRouteImport.update({
+  id: '/teste-busca',
+  path: '/teste-busca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TendenciasRoute = TendenciasRouteImport.update({
   id: '/tendencias',
   path: '/tendencias',
@@ -746,6 +752,7 @@ export interface FileRoutesByFullPath {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tendencias': typeof TendenciasRoute
+  '/teste-busca': typeof TesteBuscaRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -862,6 +869,7 @@ export interface FileRoutesByTo {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tendencias': typeof TendenciasRoute
+  '/teste-busca': typeof TesteBuscaRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -979,6 +987,7 @@ export interface FileRoutesById {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tendencias': typeof TendenciasRoute
+  '/teste-busca': typeof TesteBuscaRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin_/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
@@ -1097,6 +1106,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/tendencias'
+    | '/teste-busca'
     | '/admin/gestao'
     | '/admin/acessos-temporarios'
     | '/admin/analytics'
@@ -1213,6 +1223,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/tendencias'
+    | '/teste-busca'
     | '/admin/gestao'
     | '/admin/acessos-temporarios'
     | '/admin/analytics'
@@ -1329,6 +1340,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/tendencias'
+    | '/teste-busca'
     | '/admin/gestao'
     | '/admin_/acessos-temporarios'
     | '/admin_/analytics'
@@ -1446,6 +1458,7 @@ export interface RootRouteChildren {
   SemPermissaoRoute: typeof SemPermissaoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TendenciasRoute: typeof TendenciasRoute
+  TesteBuscaRoute: typeof TesteBuscaRoute
   AdminAcessosTemporariosRoute: typeof AdminAcessosTemporariosRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
@@ -1510,6 +1523,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/teste-busca': {
+      id: '/teste-busca'
+      path: '/teste-busca'
+      fullPath: '/teste-busca'
+      preLoaderRoute: typeof TesteBuscaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tendencias': {
       id: '/tendencias'
       path: '/tendencias'
@@ -2431,6 +2451,7 @@ const rootRouteChildren: RootRouteChildren = {
   SemPermissaoRoute: SemPermissaoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TendenciasRoute: TendenciasRoute,
+  TesteBuscaRoute: TesteBuscaRoute,
   AdminAcessosTemporariosRoute: AdminAcessosTemporariosRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
@@ -2497,3 +2518,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
