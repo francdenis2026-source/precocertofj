@@ -440,8 +440,8 @@ function StorePage() {
                 </p>
               </div>
             </div>
-
-            {store.address && (
+          </div>
+        </header>
               <p className="mt-2 line-clamp-2 text-[11px] text-muted-foreground">
                 {store.address}
               </p>
