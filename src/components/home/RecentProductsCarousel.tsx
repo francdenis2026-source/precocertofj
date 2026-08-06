@@ -206,7 +206,7 @@ export function RecentProductsCarousel() {
                   <header className="relative z-10 flex items-center justify-between mb-4">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
                       <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
-                      {timeAgo(p.createdAt)}
+                      {formatDate(p.createdAt)}
                     </span>
                     {savings >= 5 && (
                       <span className="rounded-full bg-[var(--success)]/10 border border-[var(--success)]/20 px-2.5 py-1 text-[10px] font-bold text-[var(--success)] flex items-center gap-1 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
