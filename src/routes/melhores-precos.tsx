@@ -1049,7 +1049,19 @@ function formatFreshness(iso: string | null | undefined): { label: string; days:
   return { label, days, stale };
 }
 
-function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: number; imageOverride?: string }) {
+function ComparisonCard({
+  row,
+  rank,
+  imageOverride,
+  isSelected,
+  onToggle,
+}: {
+  row: Comparison;
+  rank: number;
+  imageOverride?: string;
+  isSelected?: boolean;
+  onToggle?: () => void;
+}) {
   const size = formatSize(row.size_value, row.size_unit);
   const stores = Array.isArray(row.stores) ? row.stores : [];
   const catLabel = CATEGORY_LABELS[row.category] ?? row.category;
@@ -1068,7 +1080,20 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
   const cardFreshness = formatFreshness(latestIso);
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className={cn("relative flex h-full flex-col", isSelected && "ring-2 ring-primary ring-offset-2 rounded-xl")}>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={cn(
+          "absolute right-2 top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all shadow-sm",
+          isSelected
+            ? "border-primary bg-primary text-primary-foreground"
+            : "border-muted-foreground/30 bg-background/80 text-transparent hover:border-primary/50",
+        )}
+        aria-label={isSelected ? "Remover da comparação" : "Adicionar à comparação"}
+      >
+        <Scale className="h-3.5 w-3.5" strokeWidth={3} />
+      </button>
     <Link
       to="/produto-publico/$slug"
       params={{ slug: detailSlug }}
