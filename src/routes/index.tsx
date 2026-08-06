@@ -17,6 +17,15 @@ import {
   ArrowRight,
   TrendingDown
 } from "lucide-react";
+import { 
+  GroceryIcon, 
+  BakeryIcon, 
+  MeatIcon, 
+  FruitIcon, 
+  DrinkIcon, 
+  CleaningIcon, 
+  HygieneIcon 
+} from "@/components/icons/CategoryIcons";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Button } from "@/components/ui/button";
