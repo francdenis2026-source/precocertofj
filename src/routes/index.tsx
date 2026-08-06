@@ -149,11 +149,10 @@ function HomePage() {
   }, [sort, userLocation]);
 
   useEffect(() => {
-    // Removido scroll automático ao focar para evitar travamentos e manter posição
-    if (isSearchFocused && searchAnchorRef.current) {
-      // Logic for fixed position could be handled via CSS or state if needed
+    if (isSearchFocused && searchAnchorRef.current && !isScrolled) {
+      searchAnchorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [isSearchFocused]);
+  }, [isSearchFocused, isScrolled]);
 
   useEffect(() => {
     const handler = (e: any) => setSelectedProduct(e.detail);
@@ -212,17 +211,7 @@ function HomePage() {
       <SiteHeader variant="overlay" showThemeToggle />
       
       {/* Backdrop for focused search */}
-      <AnimatePresence>
-        {isSearchFocused && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[1px]"
-            onClick={() => setIsSearchFocused(false)}
-          />
-        )}
-      </AnimatePresence>
+      {/* Backdrop for focused search - Removed fixed backdrop to prevent focus issues */}
       
       {/* Realistic Supermarket Background Hero */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -234,7 +223,7 @@ function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(2px)"
+            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(0px)"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
@@ -287,17 +276,18 @@ function HomePage() {
             </motion.p>
 
             <div className={cn(
-              "w-full max-w-xl transition-all duration-300",
+              "w-full max-w-xl transition-all duration-300 relative z-[110]",
               isScrolled 
-                ? "fixed top-0 left-0 right-0 z-[110] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
-                : "relative z-[110] mb-12"
+                ? "fixed top-0 left-0 right-0 z-[120] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
+                : "mb-12"
             )}>
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
                   "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]"
+                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]",
+                  isSearchFocused && !isScrolled && "ring-offset-4 ring-offset-black/20"
                 )}
               >
                 <Search className={cn(
@@ -308,7 +298,9 @@ function HomePage() {
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  onBlur={() => {
+                    setTimeout(() => setIsSearchFocused(false), 200);
+                  }}
                   placeholder="O que você quer comprar mais barato hoje?" 
                   className={cn(
                     "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
@@ -335,7 +327,7 @@ function HomePage() {
                 isLoggedOut={!user}
                 onBlocked={() => {}}
                 className={cn(
-                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[101]"
+                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[130]"
                 )}
               />
             </div>
