@@ -137,7 +137,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
         <div className="mt-auto pt-6 border-t border-white/5 flex items-end justify-between">
           <div>
             <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] mb-1">Total da Cesta</p>
-            <Price value={basket.total} size="2xl" className="font-black" />
+            <Price value={basket.total} size="xl" className="font-black" />
           </div>
           
           <Button asChild size="icon" className="h-12 w-12 rounded-2xl bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-[var(--pc-brand-navy)] shadow-xl shadow-[var(--brand-primary)]/20">
