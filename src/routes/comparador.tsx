@@ -1294,7 +1294,7 @@ function ComparadorPage() {
                                   {isBest ? (
                                     <span className="font-bold text-savings">MELHOR</span>
                                   ) : (
-                                    <span className="text-muted-foreground">+{formatBRL(diff)}</span>
+                                    <span className="text-muted-foreground">+<Price value={diff} /></span>
                                   )}
                                 </td>
                               </tr>
