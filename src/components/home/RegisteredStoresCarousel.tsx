@@ -45,7 +45,7 @@ export function RegisteredStoresCarousel() {
               key={store.id}
               to="/loja/$id"
               params={{ id: store.id }}
-              search={{ q: "" }}
+              search={{ q: "", from: "" }}
               className="group flex flex-col items-center gap-2 shrink-0 snap-start"
             >
               <div className={cn(
@@ -89,7 +89,7 @@ export function RegisteredStoresCarousel() {
               key={`${store.id}-${i}`}
               to="/loja/$id"
               params={{ id: store.id }}
-              search={{ q: "" }}
+              search={{ q: "", from: "" }}
               onClick={(e) => {
                 if (isDrag) {
                   e.preventDefault();
