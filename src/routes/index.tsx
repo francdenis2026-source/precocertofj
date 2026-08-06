@@ -264,6 +264,24 @@ function HomePage() {
               Conectamos você às melhores ofertas da cidade.
             </p>
 
+            <div className="flex flex-wrap justify-center gap-4 mb-10">
+              <Button 
+                onClick={() => navigate({ to: "/registrar" })}
+                className="bg-[var(--brand-primary)] text-white hover:brightness-110 font-black h-14 px-8 rounded-2xl shadow-xl transition-all active:scale-95 text-lg flex items-center gap-2"
+              >
+                <PlusCircle className="h-5 w-5" />
+                Registrar Preço
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => navigate({ to: "/app" })}
+                className="bg-transparent border-2 border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-[var(--brand-primary)] font-black h-14 px-8 rounded-2xl transition-all active:scale-95 text-lg"
+              >
+                Status do Sistema
+              </Button>
+            </div>
+
+
             <div className="relative w-full max-w-2xl">
               <form 
                 ref={searchAnchorRef}
