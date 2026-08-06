@@ -115,6 +115,7 @@ import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/cat
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
 import { Route as EstabelecimentoSlugCategoriaCategoryRouteImport } from './routes/estabelecimento.$slug.categoria.$category'
+import { Route as AppProdutoIdSlugRouteImport } from './routes/app.produto.$id.$slug'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago/webhook'
 import { Route as ApiPublicHooksRetryActivationEmailsRouteImport } from './routes/api/public/hooks/retry-activation-emails'
 import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes/api/public/hooks/refresh-catalog-images'
@@ -652,6 +653,11 @@ const EstabelecimentoSlugCategoriaCategoryRoute =
     path: '/categoria/$category',
     getParentRoute: () => EstabelecimentoSlugRoute,
   } as any)
+const AppProdutoIdSlugRoute = AppProdutoIdSlugRouteImport.update({
+  id: '/produto/$id/$slug',
+  path: '/produto/$id/$slug',
+  getParentRoute: () => AppRoute,
+} as any)
 const ApiPublicMercadopagoWebhookRoute =
   ApiPublicMercadopagoWebhookRouteImport.update({
     id: '/api/public/mercadopago/webhook',
@@ -688,7 +694,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/alertas': typeof AlertasRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
@@ -793,6 +799,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/app/produto/$id/$slug': typeof AppProdutoIdSlugRoute
   '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -801,7 +808,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/alertas': typeof AlertasRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
@@ -906,6 +913,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/app/produto/$id/$slug': typeof AppProdutoIdSlugRoute
   '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -915,7 +923,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/admin-login': typeof AdminLoginRoute
   '/alertas': typeof AlertasRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
@@ -1020,6 +1028,7 @@ export interface FileRoutesById {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/app/produto/$id/$slug': typeof AppProdutoIdSlugRoute
   '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -1135,6 +1144,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/app/produto/$id/$slug'
     | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -1248,6 +1258,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/app/produto/$id/$slug'
     | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   id:
@@ -1361,6 +1372,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/app/produto/$id/$slug'
     | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   fileRoutesById: FileRoutesById
@@ -1370,7 +1382,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   AlertasRoute: typeof AlertasRoute
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   AssinarRoute: typeof AssinarRoute
   AssinaturaRoute: typeof AssinaturaRoute
   AuthRoute: typeof AuthRoute
@@ -2216,6 +2228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EstabelecimentoSlugCategoriaCategoryRouteImport
       parentRoute: typeof EstabelecimentoSlugRoute
     }
+    '/app/produto/$id/$slug': {
+      id: '/app/produto/$id/$slug'
+      path: '/produto/$id/$slug'
+      fullPath: '/app/produto/$id/$slug'
+      preLoaderRoute: typeof AppProdutoIdSlugRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/api/public/mercadopago/webhook': {
       id: '/api/public/mercadopago/webhook'
       path: '/api/public/mercadopago/webhook'
@@ -2263,6 +2282,16 @@ const AdminRouteChildren: AdminRouteChildren = {
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AppRouteChildren {
+  AppProdutoIdSlugRoute: typeof AppProdutoIdSlugRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppProdutoIdSlugRoute: AppProdutoIdSlugRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface HistoricoRouteChildren {
   HistoricoIdRoute: typeof HistoricoIdRoute
@@ -2320,7 +2349,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   AlertasRoute: AlertasRoute,
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   AssinarRoute: AssinarRoute,
   AssinaturaRoute: AssinaturaRoute,
   AuthRoute: AuthRoute,
