@@ -207,7 +207,7 @@ function HomePage() {
             
             <h1 className="font-display text-[40px] sm:text-[56px] font-bold tracking-[-0.04em] leading-[1.05] mb-6 max-w-4xl text-[var(--text-primary)]">
               Inteligência real para <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] via-[#FFA500] to-[var(--brand-primary)] bg-[length:200%_auto] animate-gradient-x">economizar</span> em cada compra
             </h1>
 
             <div className="relative w-full max-w-2xl">

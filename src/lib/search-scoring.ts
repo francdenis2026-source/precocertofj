@@ -95,14 +95,14 @@ export function scoreProductName(
     const word = nameWordsList[idx];
     return word && word === normalize(token) ? acc + 1 : acc;
   }, 0);
-  const exactQueryBonus = queryNorm && nameNorm === queryNorm ? 6 : 0;
+  const exactQueryBonus = queryNorm && nameNorm === queryNorm ? 12 : 0;
   const phraseBonus =
     queryNorm && exactQueryBonus === 0 && new RegExp(`(^|[^a-z0-9])${queryNorm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z0-9]|$)`).test(nameNorm)
-      ? 2.5
+      ? 5.0
       : 0;
   const startsWithBonus =
     queryNorm && exactQueryBonus === 0 && phraseBonus === 0 && nameNorm.startsWith(queryNorm)
-      ? 1.4
+      ? 2.8
       : 0;
   const densityBonus = nameWords > 0 ? Math.min(1, total / nameWords) : 0;
   const extra = Math.max(0, nameWords - total - 3);
@@ -111,10 +111,10 @@ export function scoreProductName(
     exactQueryBonus +
     phraseBonus +
     startsWithBonus +
-    3.2 * (exact / total) +
-    0.9 * (prefix / total) +
-    2.2 * (brandHit / total) +
-    0.7 * (leadingTokenHits / total) +
+    3.5 * (exact / total) +
+    1.2 * (prefix / total) +
+    2.5 * (brandHit / total) +
+    1.0 * (leadingTokenHits / total) +
     0.6 * allInName +
     0.4 * densityBonus -
     penalty;
