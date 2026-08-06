@@ -179,7 +179,7 @@ function DashboardPage() {
                 icon={Star} 
                 title="Sem favoritos" 
                 message="Marque o coração nos produtos para acompanhar os preços aqui." 
-                action={<Button asChild variant="outline" size="sm"><Link to="/app/produtos">Buscar produtos</Link></Button>}
+                action={<Button asChild variant="outline" size="sm"><Link to="/precos">Buscar produtos</Link></Button>}
               />
             ) : (
               <ul className="divide-y divide-border">
@@ -279,6 +279,7 @@ function DashboardPage() {
                 icon={History} 
                 title="Nenhum registro" 
                 message="Busque ou registre um produto para ele aparecer aqui." 
+                action={<Button asChild variant="outline" size="sm"><Link to="/precos">Começar busca</Link></Button>}
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -310,7 +311,7 @@ function DashboardPage() {
           <p className="text-sm text-muted-foreground mb-6 uppercase tracking-widest font-bold">O que você deseja fazer agora?</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild className="rounded-full h-12 px-8 font-bold">
-              <Link to="/app/produtos">
+              <Link to="/precos">
                 <Search className="mr-2 h-4 w-4" />
                 Achar Menor Preço
               </Link>

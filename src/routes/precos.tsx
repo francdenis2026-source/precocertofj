@@ -1,449 +1,209 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Price } from "@/components/ds/Price";
+import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
+import { Suspense, useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { AppShell } from "@/components/brand/AppShell";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { ArrowDownRight, ArrowUpRight, LineChart as LineChartIcon, Minus, PackageSearch, Search as SearchIcon } from "lucide-react";
-import {
-  listPricedProducts,
-  getProductPriceSeries,
-  type PricedProduct,
-  type PricePoint,
-} from "@/lib/price-history.functions";
-import { ProductImage } from "@/components/product/ProductImage";
-import { useMyRoles } from "@/hooks/useMyRoles";
-import { Spinner, ErrorState } from "@/components/feedback";
-import { EmptyState } from "@/components/layout";
-
+import { Button } from "@/components/ui/button";
+import { 
+  Search, 
+  ChevronRight, 
+  Package, 
+  AlertCircle, 
+  Loader2,
+  TrendingDown,
+  Info
+} from "lucide-react";
+import { searchProductPrice } from "@/lib/price-search.functions";
+import { Price } from "@/components/ds/Price";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ds/Badge";
 
 export const Route = createFileRoute("/precos")({
   head: () => ({
     meta: [
-      { title: "Histórico de preços — PreçoCerto" },
-      {
-        name: "description",
-        content:
-          "Acompanhe a evolução dos preços dos produtos dos supermercados parceiros e veja a variação em relação à leitura anterior.",
-      },
-      { property: "og:title", content: "Histórico de preços — PreçoCerto" },
-      {
-        property: "og:description",
-        content: "Gráfico de preços por produto e variação em relação à leitura anterior.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { title: "Consulta de Preços — PreçoCerto" },
+      { name: "description", content: "Consulte os preços de produtos em todos os mercados de Feijó." },
     ],
   }),
-  component: PrecosPage,
+  component: PriceLookupPage,
 });
 
-const fmtBRL = (v: number) => `R$ ${v.toFixed(2).replace(".", ",")}`;
-const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
-const fmtDateTime = (iso: string) =>
-  new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
-
-function VariationBadge({ pct }: { pct: number | null }) {
-  if (pct == null)
-    return (
-      <Badge variant="outline" className="gap-1 text-muted-foreground">
-        <Minus className="h-3 w-3" /> 1ª leitura
-      </Badge>
-    );
-  if (Math.abs(pct) < 0.01)
-    return (
-      <Badge variant="outline" className="gap-1">
-        <Minus className="h-3 w-3" /> estável
-      </Badge>
-    );
-  const up = pct > 0;
-  return (
-    <Badge
-      variant="outline"
-      className={
-        up
-          ? "gap-1 border-destructive/40 bg-destructive/10 text-destructive"
-          : "gap-1 border-savings/40 bg-savings/10 text-savings"
-      }
-    >
-      {up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-      {up ? "+" : ""}
-      {pct.toFixed(1).replace(".", ",")}%
-    </Badge>
-  );
-}
-
-function PrecosPage() {
-  const { isAdmin } = useMyRoles();
-
-  const fetchList = useServerFn(listPricedProducts);
-  const fetchSeries = useServerFn(getProductPriceSeries);
-  const [list, setList] = useState<PricedProduct[] | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [series, setSeries] = useState<PricePoint[] | null>(null);
-  const [loadingSeries, setLoadingSeries] = useState(false);
+function PriceLookupPage() {
   const [query, setQuery] = useState("");
-  const [err, setErr] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const runSearch = useServerFn(searchProductPrice);
 
-  useEffect(() => {
-    fetchList()
-      .then((rows) => {
-        setList(rows);
-        if (rows[0] && !selected) setSelected(rows[0].productName);
-      })
-      .catch((e: unknown) => setErr(e instanceof Error ? e.message : String(e)));
-  }, [fetchList, selected]);
+  const { data: result, isLoading, isError, error } = useQuery({
+    queryKey: ["price-consultation", searchTerm],
+    queryFn: () => runSearch({ data: { query: searchTerm } }),
+    enabled: searchTerm.length >= 2,
+  });
 
-  useEffect(() => {
-    if (!selected) return;
-    setLoadingSeries(true);
-    fetchSeries({ data: { productName: selected } })
-      .then(setSeries)
-      .catch((e: unknown) => setErr(e instanceof Error ? e.message : String(e)))
-      .finally(() => setLoadingSeries(false));
-  }, [selected, fetchSeries]);
-
-  const filtered = useMemo(() => {
-    if (!list) return null;
-    const q = query.trim().toLowerCase();
-    if (!q) return list;
-    return list.filter((p) => p.productName.toLowerCase().includes(q));
-  }, [list, query]);
-
-  const chartData = useMemo(
-    () =>
-      (series ?? []).map((p) => ({
-        date: fmtDate(p.date),
-        price: Number(p.price.toFixed(2)),
-        marketName: p.marketName,
-      })),
-    [series],
-  );
-
-  const stats = useMemo(() => {
-    if (!series || series.length === 0) return null;
-    const prices = series.map((p) => p.price);
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    const first = prices[0];
-    const last = prices[prices.length - 1];
-    const varTotal = first > 0 ? ((last - first) / first) * 100 : null;
-    return { min, max, first, last, varTotal, count: series.length };
-  }, [series]);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim().length >= 2) {
+      setSearchTerm(query.trim());
+    }
+  };
 
   return (
     <AppShell>
-      <section className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
-        <header className="mb-6 flex items-center gap-3">
-          <div className="rounded-lg bg-primary/10 p-2 text-primary">
-            <LineChartIcon className="h-5 w-5" aria-hidden />
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-              Histórico de preços
-            </h1>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              Cada cupom fiscal registrado alimenta a série. Compare leituras e veja a variação.
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pb-20">
+        <PageHeader
+          title="Consulta de Preços"
+          description="Pesquise produtos para ver os valores praticados nos estabelecimentos de nossa Feijó."
+        />
+
+        <div className="mb-8 max-w-2xl">
+          <form onSubmit={handleSearch} className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/5 rounded-2xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
+            <div className="relative flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Nome do produto ou marca..."
+                  className="pl-10 h-12 rounded-xl border-border/60 bg-card/50 backdrop-blur-sm focus-visible:ring-primary/20"
+                />
+              </div>
+              <Button type="submit" className="h-12 px-6 rounded-xl font-bold gap-2">
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                Consultar
+              </Button>
+            </div>
+            <p className="mt-2 text-[10px] text-muted-foreground font-bold uppercase tracking-widest px-1">
+              Dica: Tente "Arroz 5kg", "Óleo" ou "Café"
             </p>
-          </div>
-        </header>
-
-        {err && (
-          <ErrorState
-            className="mb-4"
-            title="Erro ao carregar histórico"
-            message={err}
-            onRetry={() => {
-              setErr(null);
-              fetchList()
-                .then((rows) => {
-                  setList(rows);
-                  if (rows[0] && !selected) setSelected(rows[0].productName);
-                })
-                .catch((e: unknown) => setErr(e instanceof Error ? e.message : String(e)));
-            }}
-          />
-        )}
-
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-          {/* Lista de produtos */}
-          <Card className="max-h-[70vh] overflow-hidden">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Produtos monitorados</CardTitle>
-              <CardDescription>
-                {list ? `${list.length} produto${list.length === 1 ? "" : "s"}` : "Carregando…"}
-              </CardDescription>
-              <Input
-                placeholder="Buscar produto…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="mt-2"
-              />
-            </CardHeader>
-            <CardContent className="p-0">
-              <ul className="max-h-[52vh] overflow-y-auto divide-y">
-                {list === null && (
-                  <li className="p-4 text-center text-muted-foreground">
-                    <Spinner size="sm" label="Carregando produtos" />
-                  </li>
-                )}
-                {filtered && filtered.length === 0 && (
-                  <li className="p-4">
-                    <EmptyState
-                      icon={SearchIcon}
-                      title="Nenhum produto encontrado"
-                      description={query ? `Nenhum item para "${query}".` : "Ainda não há produtos monitorados."}
-                    />
-                  </li>
-                )}
-                {filtered?.map((p) => {
-                  const active = selected === p.productName;
-                  return (
-                    <li key={p.productName}>
-                      <button
-                        type="button"
-                        onClick={() => setSelected(p.productName)}
-                        aria-pressed={active}
-                        className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset ${
-                          active ? "bg-primary/10" : "hover:bg-muted/50"
-                        }`}
-                      >
-                        <ProductImage
-                          src={p.imageUrl}
-                          alt={p.displayName}
-                          width={56}
-                          height={56}
-                          fallbackLabel={p.displayName}
-                          className="h-14 w-14 flex-none rounded-md border bg-muted"
-                        />
-                        <div className="min-w-0 flex-1 space-y-1">
-                          <span className="line-clamp-2 text-sm font-medium">{p.displayName}</span>
-                          <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                            <span className="font-mono"><Price value={p.lastPrice} size="sm" /></span>
-                            <VariationBadge pct={p.variationPct} />
-                          </div>
-                          <span className="block text-[12.5px] text-muted-foreground">
-                            {p.readings} leitura{p.readings === 1 ? "" : "s"} · última {fmtDate(p.lastDate)}
-                          </span>
-                        </div>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Detalhe / gráfico */}
-          <div className="space-y-4">
-            {!selected && (
-              <EmptyState
-                icon={list && list.length === 0 ? PackageSearch : LineChartIcon}
-                title={
-                  list && list.length === 0
-                    ? "Nenhum cupom registrado ainda"
-                    : "Selecione um produto"
-                }
-                description={
-                  list && list.length === 0
-                    ? "Cadastre um cupom fiscal em Admin > Registrar cupom fiscal para começar a monitorar."
-                    : "Escolha um item na lista ao lado para ver o histórico de preços."
-                }
-              />
-            )}
-
-            {selected && (
-              <>
-                {(() => {
-                  const current = list?.find((p) => p.productName === selected);
-                  return (
-                    <Card>
-                      <CardHeader className="flex flex-row items-start gap-4 space-y-0">
-                        <ProductImage
-                          src={current?.imageUrl}
-                          alt={current?.displayName ?? selected}
-                          width={96}
-                          height={96}
-                          sizes="96px"
-                          fit="contain"
-                          fallbackLabel={current?.displayName ?? selected}
-                          className="h-24 w-24 flex-none rounded-lg border bg-muted"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <CardTitle className="text-lg">{current?.displayName ?? selected}</CardTitle>
-                          <CardDescription>
-                            {current?.brand ? `${current.brand} · ` : ""}
-                            {stats
-                              ? `${stats.count} leitura${stats.count === 1 ? "" : "s"} · mín. ${fmtBRL(stats.min)} · máx. ${fmtBRL(stats.max)}`
-                              : "Carregando série…"}
-                          </CardDescription>
-                        </div>
-                      </CardHeader>
-                  <CardContent>
-                    {loadingSeries && (
-                      <div className="flex h-64 items-center justify-center text-muted-foreground">
-                        <Spinner size="md" label="Carregando série de preços" />
-                      </div>
-                    )}
-                    {!loadingSeries && chartData.length > 0 && (
-                      <div className="h-72 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={chartData} margin={{ top: 12, right: 24, left: 0, bottom: 0 }}>
-                            <defs>
-                              <linearGradient id="signalStroke" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0%" stopColor="var(--color-primary)" />
-                                <stop offset="100%" stopColor="var(--color-savings)" />
-                              </linearGradient>
-                              <linearGradient id="signalFill" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.35} />
-                                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="var(--color-border)"
-                              opacity={0.6}
-                            />
-                            <XAxis
-                              dataKey="date"
-                              tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
-                              stroke="var(--color-border)"
-                            />
-                            <YAxis
-                              tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
-                              stroke="var(--color-border)"
-                              tickFormatter={(v: number) => `R$${v.toFixed(2)}`}
-                              domain={[
-                                (dataMin: number) => Math.max(0, dataMin * 0.9),
-                                (dataMax: number) => dataMax * 1.1,
-                              ]}
-                            />
-                            <Tooltip
-                              formatter={(v: any) => [fmtBRL(Number(v)), "Preço"] as any}
-                              labelFormatter={(l) => `Data: ${l}`}
-                              cursor={{ stroke: "var(--color-primary)", strokeOpacity: 0.35, strokeWidth: 1 }}
-                              contentStyle={{
-                                background: "var(--color-card)",
-                                border: "1px solid var(--color-border)",
-                                borderRadius: 10,
-                                fontSize: 12,
-                                color: "var(--color-foreground)",
-                                boxShadow:
-                                  "0 10px 30px -12px color-mix(in oklab, var(--color-primary) 45%, transparent)",
-                              }}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="price"
-                              stroke="url(#signalStroke)"
-                              strokeWidth={2.5}
-                              fill="url(#signalFill)"
-                              dot={{ r: 3, fill: "var(--color-primary)", stroke: "var(--color-background)", strokeWidth: 1 }}
-                              activeDot={{ r: 6, fill: "var(--color-savings)", stroke: "var(--color-primary)", strokeWidth: 2 }}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
-                    )}
-                    {!loadingSeries && chartData.length === 0 && (
-                      <p className="py-4 text-center text-sm text-muted-foreground">
-                        Sem leituras registradas.
-                      </p>
-                    )}
-                    {stats && stats.varTotal != null && stats.count > 1 && (
-                      <p className="mt-3 text-xs text-muted-foreground">
-                        Variação total (1ª → última leitura):{" "}
-                        <span
-                          className={
-                            stats.varTotal > 0.01
-                              ? "font-mono font-bold text-destructive"
-                              : stats.varTotal < -0.01
-                                ? "font-mono font-bold text-savings"
-                                : "font-mono"
-                          }
-                        >
-                          {stats.varTotal > 0 ? "+" : ""}
-                          {stats.varTotal.toFixed(2).replace(".", ",")}%
-                        </span>
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-                  );
-                })()}
-
-                {series && series.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-base">Leituras</CardTitle>
-                      <CardDescription>
-                        Cada linha representa um cupom fiscal registrado. Variação = comparação com a leitura anterior.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead className="border-b bg-muted/40 text-xs uppercase text-muted-foreground">
-                            <tr>
-                              <th className="px-4 py-2 text-left">Data</th>
-                              <th className="px-4 py-2 text-left">Mercado</th>
-                              <th className="px-4 py-2 text-right">Preço</th>
-                              <th className="px-4 py-2 text-right">Variação</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {series.map((p, idx) => {
-                              const prev = idx > 0 ? series[idx - 1].price : null;
-                              const pct = prev && prev > 0 ? ((p.price - prev) / prev) * 100 : null;
-                              return (
-                                <tr key={`${p.date}-${idx}`} className="border-b last:border-0">
-                                  <td className="px-4 py-2 font-mono text-xs">{fmtDateTime(p.date)}</td>
-                                  <td className="px-4 py-2">{p.marketName ?? "—"}</td>
-                                  <td className="px-4 py-2 text-right font-mono"><Price value={p.price} size="sm" /></td>
-                                  <td className="px-4 py-2 text-right">
-                                    <VariationBadge pct={pct} />
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
-            )}
-
-            {isAdmin && (
-              <p className="text-xs text-muted-foreground">
-                Precisa registrar um novo cupom?{" "}
-                <Link to="/admin/promocoes" search={{ tab: "cupons" } as never} className="underline">
-                  Cupom individual
-                </Link>{" "}
-                ou{" "}
-                <Link to="/admin/promocoes" search={{ tab: "cupons-lote" } as never} className="underline">
-                  em lote
-                </Link>
-                .
-              </p>
-            )}
-
-          </div>
+          </form>
         </div>
-      </section>
+
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center py-20 text-center space-y-4"
+            >
+              <Loader2 className="h-10 w-10 animate-spin text-primary/40" />
+              <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Buscando as melhores ofertas...</p>
+            </motion.div>
+          ) : isError ? (
+            <motion.div
+              key="error"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-3xl border border-destructive/20 bg-destructive/5 p-8 text-center"
+            >
+              <AlertCircle className="mx-auto h-10 w-10 text-destructive/60 mb-4" />
+              <h3 className="text-lg font-black text-foreground mb-2">Erro ao buscar preços</h3>
+              <p className="text-sm text-muted-foreground">{(error as Error)?.message || "Ocorreu um problema na conexão. Tente novamente."}</p>
+            </motion.div>
+          ) : searchTerm && (!result?.groups || result.groups.length === 0) ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-3xl border border-border/60 bg-card/30 p-12 text-center"
+            >
+              <Package className="mx-auto h-12 w-12 text-muted-foreground/40 mb-4" />
+              <h3 className="text-lg font-black text-foreground mb-2">Nenhum produto encontrado</h3>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                Não encontramos "<strong>{searchTerm}</strong>" no momento. Tente um termo mais simples ou verifique a grafia.
+              </p>
+            </motion.div>
+          ) : result?.groups ? (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                  <TrendingDown className="h-3 w-3" /> {result.samples} ofertas encontradas
+                </h2>
+              </div>
+
+              <div className="grid gap-4">
+                {result.groups.map((group, idx) => (
+                  <motion.div
+                    key={group.productName}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="group overflow-hidden rounded-[24px] border border-border/60 bg-white dark:bg-card/40 hover:border-primary/40 transition-all hover:shadow-xl hover:shadow-primary/5"
+                  >
+                    <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-[1fr,auto] gap-6 items-center">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                           <Badge variant="primary" size="sm" className="font-black text-[9px] uppercase tracking-widest bg-primary/10 text-primary border-none">
+                             {group.samples} {group.samples === 1 ? 'Oferta' : 'Ofertas'}
+                           </Badge>
+                           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                             Visto em {new Date(group.lastSeen).toLocaleDateString('pt-BR')}
+                           </span>
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-black text-foreground leading-none group-hover:text-primary transition-colors">
+                          {group.productName}
+                        </h3>
+                      </div>
+
+                      <div className="flex items-center gap-8 bg-muted/20 p-4 rounded-2xl border border-border/40">
+                         <div className="text-center md:text-right">
+                           <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">A partir de</p>
+                           <Price value={group.min} size="lg" tone="best" />
+                         </div>
+                         <div className="w-px h-10 bg-border/40 hidden md:block" />
+                         <div className="text-center md:text-right hidden sm:block">
+                           <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Média</p>
+                           <Price value={group.avg} size="md" />
+                         </div>
+                         <Button asChild size="icon" variant="ghost" className="rounded-full hover:bg-primary hover:text-primary-foreground transition-all">
+                           <ChevronRight className="h-5 w-5" />
+                         </Button>
+                      </div>
+                    </div>
+
+                    <div className="bg-muted/10 border-t border-border/20 px-6 py-3 flex flex-wrap gap-4">
+                       {group.prices.slice(0, 3).map((p, pIdx) => (
+                         <div key={pIdx} className="flex items-center gap-2 text-[11px] font-bold">
+                           <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                           <span className="text-foreground">{p.marketName}</span>
+                           <Price value={p.price} size="sm" className="opacity-80" />
+                         </div>
+                       ))}
+                       {group.prices.length > 3 && (
+                         <span className="text-[11px] font-bold text-muted-foreground italic">
+                           + {group.prices.length - 3} outros estabelecimentos
+                         </span>
+                       )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+             <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-12 flex flex-col items-center justify-center text-center opacity-60"
+            >
+              <div className="w-20 h-20 rounded-full bg-muted/20 flex items-center justify-center mb-6">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">Pesquise para começar</h3>
+              <p className="text-sm text-muted-foreground max-w-xs">Digite o nome do produto no campo acima para ver a comparação de preços.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </AppShell>
   );
 }
