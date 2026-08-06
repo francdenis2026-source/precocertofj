@@ -273,15 +273,17 @@ function HomePage() {
             </p>
 
             <div className={cn(
-              "w-full max-w-xl transition-all duration-500",
-              isSearchFocused || isScrolled ? "fixed top-3 left-1/2 -translate-x-1/2 z-[100] scale-[0.98] px-4" : "relative mb-12"
+              "w-full max-w-xl transition-all duration-300",
+              (isSearchFocused || isScrolled) 
+                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)]/80 backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-sm" 
+                : "relative mb-12"
             )}>
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-lg transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5",
-                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] bg-[var(--bg-surface)]/90 backdrop-blur-xl border-[var(--brand-primary)]/20"
+                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-lg transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto",
+                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-xl shadow-none border-[var(--brand-primary)]/20 max-w-lg"
                 )}
               >
                 <Search className={cn(
@@ -318,6 +320,9 @@ function HomePage() {
                 anchorRef={searchAnchorRef as any}
                 isLoggedOut={!user}
                 onBlocked={() => {}}
+                className={cn(
+                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[101]"
+                )}
               />
             </div>
 

@@ -38,6 +38,7 @@ type Props = {
    * que cortavam o dropdown posicionado de forma absoluta.
    */
   anchorRef: React.RefObject<HTMLElement | null>;
+  className?: string;
 };
 
 const BRL = (n: number) =>
@@ -61,7 +62,7 @@ const optionId = (i: number) => `${LISTBOX_ID}-opt-${i}`;
  * - Visitantes com cota esgotada veem os nomes borrados + CTA.
  */
 export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandle, Props>(
-  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose, anchorRef }, ref) {
+  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose, anchorRef, className }, ref) {
     const navigate = useNavigate();
     const runSuggest = useServerFn(suggestProducts);
     const runSearch = useServerFn(searchProductPrice);
@@ -302,7 +303,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[110] flex flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
+            className={cn("fixed z-[110] flex flex-col overflow-hidden rounded-[16px] border border-[var(--border-subtle)] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]", className)}
             style={{
               left: rect.left,
               top: rect.top,
