@@ -719,13 +719,13 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
           <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-[12px] text-amber-100">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold">Não conseguimos calcular o barômetro agora.</p>
+              <p className="font-semibold">Opa! Não conseguimos ver os preços agora.</p>
               <button
                 type="button"
                 onClick={() => refetch()}
                 className="mt-1 text-[11px] font-semibold text-white underline underline-offset-2 hover:text-emerald-200"
               >
-                Tentar novamente
+                Tentar de novo
               </button>
             </div>
           </div>
@@ -741,7 +741,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
             <div className="relative flex items-end justify-between gap-6">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/80">
-                  Maior oscilação da semana
+                  Maior diferença da semana
                 </p>
                 <p className="mt-2 font-display text-[22px] font-semibold leading-tight text-white">
                   {isLoading ? (
@@ -751,7 +751,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                   )}
                 </p>
                 <p className="mt-1 text-[12px] text-white/85">
-                  variação registrada entre mercados monitorados
+                  de economia entre os comércios monitorados
                 </p>
               </div>
               <div className="text-right">
@@ -774,7 +774,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
               </div>
             </div>
             <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-[11px] text-white/80">Economia estimada por família</span>
+              <span className="text-[11px] text-white/80">O que você pode guardar no bolso</span>
               <span className="font-display text-[18px] font-bold tabular-nums text-white">
                 {isLoading ? (
                   <span className="inline-block h-4 w-24 animate-pulse rounded bg-white/10" />
