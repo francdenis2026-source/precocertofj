@@ -348,7 +348,7 @@ export function AppSidebar() {
               />
             </span>
             <span className="pcsb-brandtext group-data-[collapsible=icon]:hidden">
-              <span className="pcsb-wordmark">
+              <span className="font-display pcsb-wordmark font-bold tracking-tight">
                 {isAdminArea ? (
                   "Console"
                 ) : (
