@@ -411,6 +411,7 @@ function LoginPage() {
                           exit={{ opacity: 0, y: -10 }}
                           className="space-y-6"
                         >
+                          <div className="space-y-6">
                             <AuthInput
                               label="Celular"
                               icon={Phone}
@@ -429,7 +430,7 @@ function LoginPage() {
                               success={!!birthDate}
                             />
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
+                          <div className="grid grid-cols-2 gap-4 mt-6">
                             <AuthInput
                               label="Cidade"
                               icon={MapPin}
