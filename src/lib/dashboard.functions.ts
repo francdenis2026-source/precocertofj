@@ -1,24 +1,29 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { getMyProfileStats, type ProfileStats } from "./profile-stats.functions";
-import { listFavoriteItems, type FavoriteItem } from "./favorites.functions";
-import { listMyScans, type MyScan } from "./scans-history.functions";
-import { listPriceAlerts, type PriceAlert } from "./notifications.functions";
 
 export type AppDashboardData = {
-  stats: ProfileStats;
-  recentScans: MyScan[];
-  trackedItems: FavoriteItem[];
-  recentAlerts: PriceAlert[];
+  stats: {
+    favoritesCount: number;
+    contributionsCount: number;
+    totalSavings: number;
+    potentialSavings: number;
+  };
+  recentScans: any[];
+  trackedItems: any[];
+  recentAlerts: any[];
 };
 
 export const getAppDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<AppDashboardData> => {
-    // We aggregate data from multiple existing functions for the dashboard view.
-    // In a production environment, we'd optimize this into a single query if performance is an issue,
-    // but for now, reusing existing functions ensures consistency.
-    
+    // Importación dinámica de helpers de servidor para evitar fugas al cliente
+    const [{ getMyProfileStats }, { listMyScans }, { listFavoriteItems }, { listPriceAlerts }] = await Promise.all([
+      import("./profile-stats.functions"),
+      import("./scans-history.functions"),
+      import("./favorites.functions"),
+      import("./notifications.functions"),
+    ]);
+
     const [stats, scans, favorites, alerts] = await Promise.all([
       getMyProfileStats({ data: undefined }),
       listMyScans({ data: undefined }),
