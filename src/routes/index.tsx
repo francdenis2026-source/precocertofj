@@ -403,9 +403,6 @@ function HomePage() {
                 <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Com a rede.</p>
               </div>
             </motion.div>
-                <p className="text-[12px] text-[var(--text-tertiary)]">Ajude a comunidade.</p>
-              </div>
-            </motion.div>
           </section>
           </Suspense>
 
