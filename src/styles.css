@@ -58,17 +58,18 @@
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #05080F;
-  --pc-bg-surface: #0B1220;
-  --pc-bg-surface-elevated: #161F30;
-  --pc-brand-primary: #FFD700;
-  --pc-brand-secondary: #F1F5F9;
-  --pc-brand-accent: #818CF8;
-  --pc-brand-glow: rgba(255, 215, 0, 0.15);
-  --pc-border-subtle: rgba(255, 255, 255, 0.06);
-  --pc-text-primary: #F1F5F9;
-  --pc-text-secondary: #94A3B8;
-  --pc-text-tertiary: #64748B;
+  /* Deep Navy — melhor contraste com o dourado do que o preto puro */
+  --pc-bg-base: #0A182C;
+  --pc-bg-surface: #10233F;
+  --pc-bg-surface-elevated: #17304F;
+  --pc-brand-primary: #E8C25A;
+  --pc-brand-secondary: #F8FAFC;
+  --pc-brand-accent: #7C8CF8;
+  --pc-brand-glow: rgba(232, 194, 90, 0.18);
+  --pc-border-subtle: rgba(232, 194, 90, 0.14);
+  --pc-text-primary: #F3F6FB;
+  --pc-text-secondary: #A9BAD2;
+  --pc-text-tertiary: #7086A3;
 }
 
 @theme {
