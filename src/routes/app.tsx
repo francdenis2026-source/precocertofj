@@ -6,6 +6,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
+import { QuickStoreCompare } from "@/components/app/QuickStoreCompare";
 
 import { DashboardSearch } from "@/components/app/DashboardSearch";
 import { StoresColumn } from "@/components/app/StoresColumn";
