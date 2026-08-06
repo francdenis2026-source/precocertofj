@@ -17,7 +17,7 @@ export function MetricRailSkeleton({ count = 4 }: { count?: number }) {
       aria-busy="true"
       className="grid grid-cols-1 divide-y divide-border/60 min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0"
     >
-      <span className="sr-only">Carregando métricas do painel</span>
+      <span className="sr-only">Estamos atualizando suas métricas...</span>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="flex items-center justify-between gap-3 px-3.5 py-2.5 md:px-4">
           <div className="flex min-w-0 items-center gap-2">
@@ -37,7 +37,7 @@ export function MetricRailSkeleton({ count = 4 }: { count?: number }) {
 export function PanelBlockSkeleton({
   rows = 5,
   className,
-  label = "Carregando",
+  label = "Estamos processando...",
 }: {
   rows?: number;
   className?: string;
@@ -77,7 +77,7 @@ export function ListDetailSkeleton() {
       aria-busy="true"
       className="space-y-3 rounded-2xl border border-border bg-card p-3.5 sm:p-4"
     >
-      <span className="sr-only">Carregando lista</span>
+      <span className="sr-only">Organizando seus itens...</span>
       <div className="flex items-center justify-between gap-3">
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-8 w-24 rounded-lg" />
