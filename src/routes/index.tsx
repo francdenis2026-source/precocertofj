@@ -313,21 +313,26 @@ function HomePage() {
                 <tbody className="divide-y divide-[var(--border-subtle)]">
                   {filteredProducts.map((p, i) => (
                     <motion.tr
-                      key={p.id}
+                      key={`${p.name}-${p.when}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      onClick={() => setSelectedProduct(p)}
+                      onClick={() => setSelectedProduct({ 
+                        name: p.name, 
+                        minPrice: p.price, 
+                        cheapestStore: p.marketName,
+                        updatedAt: p.when
+                      })}
                       className="group cursor-pointer hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
                     >
                       <td className="px-6 py-5">
                          <div className="flex items-center gap-3">
-                           <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-hidden">
-                             {p.imageUrl && <img src={p.imageUrl} alt="" className="h-full w-full object-cover" />}
+                           <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-hidden flex items-center justify-center">
+                             <span className="text-xs font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
                            </div>
                            <div>
                              <p className="text-[14px] font-bold text-[var(--text-primary)] leading-tight group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</p>
-                             <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mt-0.5">{p.brand ?? "Genérico"}</p>
+                             <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mt-0.5">Catálogo</p>
                            </div>
                          </div>
                       </td>
