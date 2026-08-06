@@ -261,7 +261,7 @@ function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-secondary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
             </motion.div>
             
             <motion.h1 
@@ -307,7 +307,7 @@ function HomePage() {
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                   placeholder="O que você deseja economizar hoje?" 
                   className={cn(
-                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
+                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
                     (isSearchFocused || isScrolled) && "text-[13px] px-3"
                   )} 
                 />
@@ -341,7 +341,7 @@ function HomePage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/registrar" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
                 <PlusCircle className="h-3.5 w-3.5" />
                 Registrar
@@ -350,7 +350,7 @@ function HomePage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/app" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
                 <ArrowRight className="h-3.5 w-3.5" />
                 Painel
@@ -370,9 +370,9 @@ function HomePage() {
               <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
                 <Search className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Pesquise</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Tempo real.</p>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Tempo real.</p>
               </div>
             </motion.div>
             
@@ -384,9 +384,9 @@ function HomePage() {
               <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
                 <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Compare</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Economize 40%.</p>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Economize 40%.</p>
               </div>
             </motion.div>
             
@@ -398,9 +398,9 @@ function HomePage() {
               <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
                 <PlusCircle className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Colabore</h3>
-                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Com a rede.</p>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-secondary)]">Com a rede.</p>
               </div>
             </motion.div>
           </section>
@@ -472,7 +472,7 @@ function HomePage() {
                       onClick={() => setSort("recent")}
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "recent" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                        sort === "recent" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                       )}
                     >
                       <Clock className="h-3 w-3" />
@@ -482,7 +482,7 @@ function HomePage() {
                       onClick={() => setSort("price")}
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "price" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                        sort === "price" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                       )}
                     >
                       <TrendingDown className="h-3 w-3" />
@@ -492,7 +492,7 @@ function HomePage() {
                       onClick={() => setSort("near")}
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all",
-                        sort === "near" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                        sort === "near" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                       )}
                     >
                       <MapPin className="h-3 w-3" />
@@ -511,7 +511,7 @@ function HomePage() {
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Mercado</th>
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Preço</th>
                         <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Variação</th>
-                        <th className="px-6 py-5"></th>
+                        <th className="px-6 py-5" aria-hidden="true"><span className="sr-only">Ações</span></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--border-subtle)]">
@@ -560,7 +560,7 @@ function HomePage() {
                             )}
                           </td>
                           <td className="px-6 py-5 text-right">
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" aria-label={`Ver detalhes de ${product.name}`}>
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>
