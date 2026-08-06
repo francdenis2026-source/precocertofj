@@ -17,6 +17,7 @@ import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { useHotkeys } from "@/hooks/use-hotkeys";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
