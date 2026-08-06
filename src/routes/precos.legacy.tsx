@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ds/Badge";
 
-export const Route = createFileRoute("/precos")({
+export const Route = createFileRoute("/precos/legacy")({
   head: () => ({
     meta: [
       { title: "Consulta de Preços — PreçoCerto" },
