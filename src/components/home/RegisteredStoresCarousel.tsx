@@ -51,8 +51,8 @@ export function RegisteredStoresCarousel() {
             className="group flex flex-col items-center gap-2 shrink-0"
           >
             <div className={cn(
-              "h-16 w-16 flex items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-base)] p-2 transition-all duration-300",
-              "group-hover:border-[var(--brand-primary)]/50 group-hover:scale-110"
+              "h-16 w-16 flex items-center justify-center rounded-xl border border-white/10 bg-white shadow-[0_8px_16px_-6px_rgba(0,0,0,0.5)] p-2.5 transition-all duration-300",
+              "group-hover:border-[var(--brand-primary)] group-hover:scale-105 group-hover:-translate-y-1"
             )}>
               <StoreLogoThumb 
                 src={store.logoUrl} 
