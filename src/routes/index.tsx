@@ -228,16 +228,15 @@ function HomePage() {
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.25 }}
+          animate={{ opacity: 0.35 }}
           transition={{ duration: 1.5 }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
-            backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.7) contrast(1.2) saturate(0.8)"
+            backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
+            filter: "brightness(0.6) contrast(1.2) saturate(0.9)"
           }}
         />
-        {/* Adjusted gradient to eliminate unwanted white areas and improve contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/30 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
