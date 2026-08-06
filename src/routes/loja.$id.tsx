@@ -603,7 +603,7 @@ function StorePage() {
 
         {/* Featured */}
         {featured.length > 0 && !q && cat === "all" && (
-          <section aria-label="Destaques" className="mt-4">
+          <section aria-label="Destaques" className="no-print mt-4">
             <div className="mb-2 flex items-baseline justify-between">
               <h2 className="font-display text-[13px] font-semibold text-foreground">
                 Melhores desta mercado
