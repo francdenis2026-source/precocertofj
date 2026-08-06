@@ -119,6 +119,7 @@ const appGroups: readonly NavGroup[] = [
       { to: "/app/insights", label: "Insights", icon: TrendingDown, shortcut: "9", hint: "Economia e rotas inteligentes" },
       { to: "/historico", label: "Histórico", icon: History, hint: "Suas buscas e consultas" },
       { to: "/perfil", label: "Perfil", icon: User, shortcut: "0", hint: "Dados e preferências" },
+      { to: "/app/notas", label: "Minhas Notas", icon: FileText, hint: "Status das notas enviadas" },
     ],
   },
   {
