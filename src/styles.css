@@ -29,7 +29,7 @@
   
   /* Semantic Tokens */
   --bg-base: var(--pc-bg-base);
-  --bg-surface: var(--pc-pc-bg-surface);
+  --bg-surface: var(--pc-bg-surface);
   --bg-surface-elevated: var(--pc-bg-surface-elevated);
   --border-subtle: var(--pc-border-subtle);
   --brand-primary: var(--pc-brand-primary);
