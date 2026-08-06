@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, useLoaderData, Link } from "@tanstack/react-router";
-import { Suspense, useState, useMemo } from "react";
+import { Suspense, useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, 
   ChevronRight, 
@@ -15,7 +15,11 @@ import {
   Smile, 
   PlusCircle, 
   ArrowRight,
-  TrendingDown
+  TrendingDown,
+  ShoppingCart,
+  Filter,
+  ArrowDownWideNarrow,
+  Clock
 } from "lucide-react";
 import { 
   GroceryIcon, 
@@ -37,6 +41,7 @@ import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
+import { ProductQuickView } from "@/components/product/ProductQuickView";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -72,14 +77,35 @@ function HomePage() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
   const [q, setQ] = useState("");
+  const [sort, setSort] = useState<"price" | "recent">("recent");
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  
   const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
   
   const recentProductsFn = useServerFn(getRecentProducts);
-  const { data: recentProducts } = useQuery({
+  const { data: rawRecentProducts } = useQuery({
     queryKey: ["home-live-prices"],
-    queryFn: () => recentProductsFn({ data: { limit: 6 } }),
+    queryFn: () => recentProductsFn({ data: { limit: 12 } }),
     staleTime: 60_000,
   });
+
+  const filteredProducts = useMemo(() => {
+    if (!rawRecentProducts) return [];
+    let list = [...rawRecentProducts];
+    
+    if (q.trim()) {
+      const term = q.toLowerCase();
+      list = list.filter(p => p.name.toLowerCase().includes(term));
+    }
+
+    if (sort === "price") {
+      list.sort((a, b) => a.price - b.price);
+    } else {
+      list.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
+    }
+    
+    return list.slice(0, 6);
+  }, [rawRecentProducts, q, sort]);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,45 +249,89 @@ function HomePage() {
           {/* Live Prices Table */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
             <div className="lg:col-span-8">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
-                <Link to="/buscar" className="text-[12px] font-bold text-[var(--brand-primary)] hover:underline flex items-center gap-1">
-                  Ver tudo <ArrowRight className="h-3 w-3" />
-                </Link>
+                
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-[var(--bg-surface)] p-1 rounded-lg border border-[var(--border-subtle)]">
+                    <button 
+                      onClick={() => setSort("recent")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase transition-all",
+                        sort === "recent" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
+                      )}
+                    >
+                      <Clock className="h-3 w-3" /> Recentes
+                    </button>
+                    <button 
+                      onClick={() => setSort("price")}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase transition-all",
+                        sort === "price" ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-white"
+                      )}
+                    >
+                      <ArrowDownWideNarrow className="h-3 w-3" /> Menor Preço
+                    </button>
+                  </div>
+                  <Link to="/buscar" className="hidden sm:flex text-[12px] font-bold text-[var(--brand-primary)] hover:underline items-center gap-1 ml-2">
+                    Ver tudo <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
               </div>
+
               <div className="glass-card overflow-hidden">
                 <div className="divide-y divide-[var(--border-subtle)]">
-                  {recentProducts?.map((p, idx) => (
-                    <Link 
-                      key={`${p.slug}-${idx}`} 
-                      to="/produto-publico/$slug" 
-                      params={{ slug: p.slug }}
-                      className="flex items-center justify-between p-5 hover:bg-[var(--bg-surface-elevated)] transition-colors group"
-                    >
-                      <div className="flex flex-col min-w-0 pr-4">
-                        <h3 className="text-sm sm:text-base font-medium text-white truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h3>
-                        <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
-                          {p.marketName || "Mercado parceiro"} • {new Date(p.when).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-end shrink-0">
-                        <Price 
-                          value={p.price} 
-                          size="xl" 
-                          className="font-bold tracking-tight"
-                        />
-                        {p.dropPct && (
-                          <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--success)] mt-0.5">
-                            <TrendingDown className="h-2.5 w-2.5" />
-                            -{p.dropPct}%
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
-                  {(!recentProducts || recentProducts.length === 0) && (
+                  <AnimatePresence mode="popLayout">
+                    {filteredProducts.map((p, idx) => (
+                      <motion.div
+                        layout
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        key={`${p.slug}-${idx}`}
+                        onClick={() => setSelectedProduct({
+                          name: p.name,
+                          unit: null,
+                          minPrice: p.price,
+                          maxPrice: null,
+                          cheapestStore: p.marketName,
+                          storeCount: p.stores,
+                          updatedAt: p.when
+                        })}
+                        className="flex items-center justify-between p-5 hover:bg-[var(--bg-surface-elevated)] transition-colors group cursor-pointer"
+                      >
+                        <div className="flex flex-col min-w-0 pr-4">
+                          <h3 className="text-sm sm:text-base font-medium text-white truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h3>
+                          <p className="text-[12px] text-[var(--text-secondary)] mt-0.5 truncate">
+                            {p.marketName || "Mercado parceiro"} • {new Date(p.when).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end shrink-0">
+                          <Price 
+                            value={p.price} 
+                            size="xl" 
+                            className="font-bold tracking-tight"
+                          />
+                          {p.dropPct && (
+                            <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--success)] mt-0.5">
+                              <TrendingDown className="h-2.5 w-2.5" />
+                              -{p.dropPct}%
+                            </span>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  
+                  {(!rawRecentProducts || rawRecentProducts.length === 0) && (
                     <div className="p-8 text-center text-[var(--text-tertiary)] italic">
                       Carregando ofertas recentes...
+                    </div>
+                  )}
+                  {rawRecentProducts && filteredProducts.length === 0 && (
+                    <div className="p-8 text-center text-[var(--text-tertiary)]">
+                      Nenhum produto encontrado para sua busca.
                     </div>
                   )}
                 </div>
@@ -342,6 +412,11 @@ function HomePage() {
 
         </main>
       </div>
+
+      <ProductQuickView 
+        product={selectedProduct} 
+        onClose={() => setSelectedProduct(null)} 
+      />
     </div>
   );
 }
