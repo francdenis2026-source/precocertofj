@@ -16,6 +16,7 @@ import {
   Home,
   ShoppingCart,
   Bell,
+  TrendingDown,
   User,
   Shield,
   BarChart3,
