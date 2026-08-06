@@ -366,7 +366,7 @@ function HomePage() {
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
           <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             <motion.div 
-              whileHover={{ y: -6, shadow: "var(--pc-shadow-lg)" }}
+              whileHover={{ y: -6 }}
               className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300"
             >
               <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] shadow-inner">
