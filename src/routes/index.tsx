@@ -281,11 +281,14 @@ function HomePage() {
             </div>
 
 
-            <div className="relative w-full max-w-2xl">
+            <div className={cn(
+              "w-full max-w-2xl transition-all duration-500",
+              isSearchFocused ? "fixed top-4 left-1/2 -translate-x-1/2 z-[100] scale-95" : "relative"
+            )}>
               <form 
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
-                className="group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
+                className="group relative w-full flex items-center h-[64px] sm:h-[76px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
               >
                 <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
                 <input 
