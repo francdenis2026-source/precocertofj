@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { findCatalogImageForProduct, signStorageImageUrl } from "@/lib/product-image-utils";
+import { slugifyText } from "@/lib/text-normalize";
 
 export type ScanStatus = "capturado" | "revisado" | "salvo";
 
@@ -28,15 +29,17 @@ export const listMyScans = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("scans")
       .select(
-        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at",
+        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at, establishment_id",
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(200);
     if (error) throw new Error(error.message);
-    const scans = (data ?? []).map((r) => ({
+    const scans = (data ?? []).map((r: any) => ({
       id: r.id,
       productName: r.product_name,
+      productSlug: slugifyText(r.product_name || "produto"),
+      establishmentId: r.establishment_id || null,
       priceCaptured: r.price_captured !== null ? Number(r.price_captured) : null,
       averagePrice: r.average_price !== null ? Number(r.average_price) : null,
       diffPct: r.diff_pct !== null ? Number(r.diff_pct) : null,
@@ -85,7 +88,7 @@ export const getMyScan = createServerFn({ method: "POST" })
     const { data: row, error } = await context.supabase
       .from("scans")
       .select(
-        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at, user_id",
+        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at, user_id, establishment_id",
       )
       .eq("id", data.id)
       .eq("user_id", context.userId)
@@ -421,16 +424,18 @@ export const listMyScansPage = createServerFn({ method: "POST" })
     const { data: rows, error, count } = await context.supabase
       .from("scans")
       .select(
-        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at",
+        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at, establishment_id",
         { count: "exact" },
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
       .range(from, to);
     if (error) throw new Error(error.message);
-    const items = (rows ?? []).map((r) => ({
+    const items = (rows ?? []).map((r: any) => ({
       id: r.id,
       productName: r.product_name,
+      productSlug: slugifyText(r.product_name || "produto"),
+      establishmentId: r.establishment_id || null,
       priceCaptured: r.price_captured !== null ? Number(r.price_captured) : null,
       averagePrice: r.average_price !== null ? Number(r.average_price) : null,
       diffPct: r.diff_pct !== null ? Number(r.diff_pct) : null,

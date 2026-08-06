@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { signStorageImageUrl } from "@/lib/product-image-utils";
+import { slugifyText } from "@/lib/text-normalize";
 
 /* ============================ TYPES ============================ */
 
@@ -213,6 +214,7 @@ export const listFavoriteItems = createServerFn({ method: "GET" })
       return {
         id: r.id,
         catalogId: r.catalog_id,
+        catalogSlug: slugifyText(c?.display_name || "produto"),
         displayName: c?.display_name ?? "(produto removido)",
         brand: c?.brand ?? null,
         defaultUnit: c?.default_unit ?? null,
@@ -228,6 +230,7 @@ export const listFavoriteItems = createServerFn({ method: "GET" })
         currentPriceAt: quote.current ? quote.current.at : null,
         previousPrice: quote.previous ? Number(quote.previous.price.toFixed(2)) : null,
         previousPriceAt: quote.previous ? quote.previous.at : null,
+        lastEstablishmentId: r.preferred_establishment_id ?? null,
       };
     });
   });

@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { slugifyText } from "@/lib/text-normalize";
 
 export type NotificationPrefs = {
   inApp: boolean;
@@ -89,16 +90,18 @@ export const listPriceAlerts = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("price_alerts")
       .select(
-        "id, kind, catalog_id, market_name, display_name, prev_price, new_price, diff_pct, read_at, created_at",
+        "id, kind, catalog_id, market_name, display_name, prev_price, new_price, diff_pct, read_at, created_at, establishment_id",
       )
       .eq("user_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(50);
     if (error) throw new Error(error.message);
-    return (data ?? []).map((r) => ({
+    return (data ?? []).map((r: any) => ({
       id: r.id,
       kind: r.kind as PriceAlert["kind"],
       catalogId: r.catalog_id,
+      productSlug: slugifyText(r.display_name || "produto"),
+      establishmentId: r.establishment_id || null,
       marketName: r.market_name,
       displayName: r.display_name,
       prevPrice: r.prev_price !== null ? Number(r.prev_price) : null,
