@@ -344,9 +344,10 @@ function LoginPage() {
           </div>
 
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
-            {mode === "login" ? "Área do assinante" : "Comece grátis"}
+          <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
+            {mode === "login" ? "Acesso Exclusivo" : "Novo Assinante"}
           </p>
+
           <h1
             className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
             style={{ fontFamily: PC_DISPLAY }}
