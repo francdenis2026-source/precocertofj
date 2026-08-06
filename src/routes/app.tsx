@@ -323,6 +323,20 @@ function AppHomeContent() {
         open={drawerOpen}
         onOpenChange={handleDrawerOpenChange}
       />
+
+      {comparisonOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-lg">
+            <QuickStoreCompare
+              storeAId="5c71b8fb-4fe2-4f65-8bd0-80726d92a243"
+              storeAName="Doce Dia"
+              storeBId="eb1e6277-db89-4e94-950e-d14540ce71c6"
+              storeBName="Pague Pouco"
+              onClose={() => setComparisonOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
