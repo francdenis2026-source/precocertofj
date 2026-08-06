@@ -213,68 +213,100 @@ function HomePage() {
             </form>
           </motion.section>
 
-          {/* Categories Grid */}
+          {/* Categories Horizontal Navigation */}
           <section className="mb-16">
-            <h2 className="section-title">Navegar por Categoria</h2>
-            <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
-                 onMouseDown={(e) => {
-                   const el = e.currentTarget;
-                   const startX = e.pageX - el.offsetLeft;
-                   const scrollLeft = el.scrollLeft;
-                   const onMouseMove = (e: MouseEvent) => {
-                     const x = e.pageX - el.offsetLeft;
-                     const walk = (x - startX) * 2;
-                     el.scrollLeft = scrollLeft - walk;
-                   };
-                   const onMouseUp = () => {
-                     document.removeEventListener('mousemove', onMouseMove);
-                     document.removeEventListener('mouseup', onMouseUp);
-                   };
-                   document.addEventListener('mousemove', onMouseMove);
-                   document.addEventListener('mouseup', onMouseUp);
-                 }}>
-              {CATEGORIES.map(({ slug, label, Icon, SVG, color }) => (
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="section-title mb-0">Navegar por Categoria</h2>
+              <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
+                <span className="w-8 h-[1px] bg-[var(--border-subtle)]"></span>
+                Arraste para explorar
+              </div>
+            </div>
+            
+            <div 
+              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
+              onMouseDown={(e) => {
+                const el = e.currentTarget;
+                el.classList.add('grabbing');
+                const startX = e.pageX - el.offsetLeft;
+                const scrollLeft = el.scrollLeft;
+                let isDragging = false;
+
+                const onMouseMove = (e: MouseEvent) => {
+                  e.preventDefault();
+                  const x = e.pageX - el.offsetLeft;
+                  const walk = (x - startX) * 2;
+                  if (Math.abs(walk) > 5) isDragging = true;
+                  el.scrollLeft = scrollLeft - walk;
+                };
+
+                const onMouseUp = (e: MouseEvent) => {
+                  el.classList.remove('grabbing');
+                  document.removeEventListener('mousemove', onMouseMove);
+                  document.removeEventListener('mouseup', onMouseUp);
+                  
+                  if (isDragging) {
+                    // Prevent click if we were dragging
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                };
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+              }}
+            >
+              {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
-                  className="group relative flex flex-col items-center justify-end min-w-[140px] h-[160px] rounded-[20px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
+                  onClick={(e) => {
+                    if (e.currentTarget.parentElement?.classList.contains('grabbing')) {
+                      e.preventDefault();
+                    }
+                  }}
+                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] snap-start"
                 >
+                  {/* Category Ambient Glow */}
                   <div className="absolute inset-0 z-0">
                     <div 
-                      className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500" 
+                      className="absolute inset-0 opacity-5 group-hover/card:opacity-15 transition-opacity duration-700" 
                       style={{ 
-                        background: `radial-gradient(circle at center, ${color} 0%, transparent 70%)`,
+                        background: `radial-gradient(circle at 50% 40%, ${color} 0%, transparent 70%)`,
                       }}
                     />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] mix-blend-overlay" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/80 to-transparent" />
                   </div>
-                  <div className="relative z-10 w-full p-4 flex flex-col items-center">
-                    <div className="relative mb-3">
+
+                  <div className="relative z-10 w-full p-6 flex flex-col items-center">
+                    <div className="relative mb-4">
+                      {/* Icon Container with Glassmorphism */}
+                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl text-white group-hover/card:scale-110 group-hover/card:bg-[var(--brand-primary)] group-hover/card:text-black group-hover/card:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
+                        <Icon className="h-7 w-7 transition-transform duration-500 group-hover/card:rotate-6" />
+                      </div>
                       <div 
-                        className="absolute inset-0 blur-xl opacity-10 group-hover:opacity-30 transition-opacity duration-500"
+                        className="absolute -inset-2 blur-2xl opacity-0 group-hover/card:opacity-20 transition-opacity duration-500 rounded-full"
                         style={{ backgroundColor: color }}
                       />
-                      <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl text-white group-hover:scale-110 group-hover:bg-[var(--brand-primary)] group-hover:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
-                        <Icon className="h-6 w-6 transition-transform duration-500 group-hover:rotate-3" />
-                      </div>
                     </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 group-hover:text-white transition-colors">{label}</span>
-                      <div className="h-0.5 w-0 bg-[var(--brand-primary)] group-hover:w-full transition-all duration-500 rounded-full" />
+                    
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-white/70 group-hover/card:text-white transition-colors">{label}</span>
+                      <div className="h-[2px] w-0 bg-[var(--brand-primary)] group-hover/card:w-8 transition-all duration-500 rounded-full" />
                     </div>
                   </div>
                 </Link>
               ))}
+              
               <Link 
                 to="/buscar" 
-                className="group relative flex flex-col items-center justify-center min-w-[140px] h-[160px] rounded-[20px] border border-dashed border-[var(--border-subtle)] transition-all hover:border-[var(--text-tertiary)] snap-start overflow-hidden"
+                className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] snap-start"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-white transition-all mb-2">
-                  <PlusCircle className="h-5 w-5" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
+                  <PlusCircle className="h-6 w-6" />
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] group-hover:text-white transition-colors">Todas</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-white transition-colors">Todas</span>
               </Link>
             </div>
           </section>
