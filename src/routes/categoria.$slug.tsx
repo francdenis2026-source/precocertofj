@@ -702,7 +702,7 @@ function CategoryPage() {
               {view === "grid" ? (
                 // Grade densa: 2 colunas já no mobile — cards de 1 coluna
                 // ficavam exageradamente grandes e exigiam muita rolagem.
-                <ul className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-2 lg:grid-cols-4">
+                <ul id="cat-prod-results" ref={listContainerRef} onKeyDown={handleKeyDown} tabIndex={0} className="mt-2 grid grid-cols-2 gap-1.5 outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/20 rounded-xl sm:grid-cols-3 sm:gap-2 lg:grid-cols-4">
 
                   {visible.map((p, idx) => {
                     const isTop = idx === 0 && safePage === 1;
@@ -712,8 +712,9 @@ function CategoryPage() {
                         type="button"
                         onClick={() => openQuickView(p.name)}
                         className={cn(
-                          "flex h-full w-full items-start gap-2 p-2 text-left",
+                          "flex h-full w-full items-start gap-2 p-2 text-left transition-all",
                           isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                          activeIdx === idx && "ring-2 ring-brand-gold bg-surface-elevated z-10"
                         )}
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
@@ -741,7 +742,7 @@ function CategoryPage() {
                 </ul>
 
               ) : (
-              <ul className="mt-2 space-y-1.5">
+              <ul id="cat-prod-results" ref={listContainerRef} onKeyDown={handleKeyDown} tabIndex={0} className="mt-2 space-y-1.5 outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/20 rounded-xl">
                 {visible.map((p, idx) => {
                   const isTop = idx === 0 && safePage === 1;
                   return (
@@ -751,8 +752,9 @@ function CategoryPage() {
                       onClick={() => openQuickView(p.name)}
                       aria-label={`Ver detalhes de ${p.name}`}
                       className={cn(
-                        "flex w-full items-center gap-2.5 px-2.5 py-2 text-left",
+                        "flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-all",
                         isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                        activeIdx === idx && "ring-2 ring-brand-gold bg-surface-elevated z-10"
                       )}
                     >
                       <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
