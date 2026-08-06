@@ -27,8 +27,10 @@ export type InsightsData = {
 export const getInsightsData = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<InsightsData> => {
-    const personal = await getPersonalEconomy({ context });
-    const regional = await getRegionalEconomy({ context });
+    // Calling internal handler logic by passing context directly
+    // Using as any to bypass the fetcher options type which is meant for client calls
+    const personal = await (getPersonalEconomy as any)._serverFn({ context, data: undefined });
+    const regional = await (getRegionalEconomy as any)._serverFn({ context, data: undefined });
 
     // Suggest a route based on regional best prices
     const stores = new Map<string, PurchaseRoute>();

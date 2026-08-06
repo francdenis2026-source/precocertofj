@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Price } from "@/components/ds/Price";
 import { ListRowsSkeleton } from "@/components/feedback";
 
-export const Route = createFileRoute("/app/insights")({
+export const Route = createFileRoute("/app/insights/")({
   head: () => ({
     meta: [
       { title: "Insights & Economia — PreçoCerto" },
