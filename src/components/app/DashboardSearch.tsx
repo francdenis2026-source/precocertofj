@@ -38,6 +38,7 @@ const SORTS: { id: SortKey; label: string; shortLabel: string }[] = [
 export function DashboardSearch() {
   const fetchOptions = useServerFn(getCatalogFilterOptions);
   const searchFn = useServerFn(searchCatalogAdvanced);
+  const queryClient = useQueryClient();
 
   const [input, setInput] = useState("");
   const [term, setTerm] = useState("");
