@@ -2930,6 +2930,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          contact_channel: string
+          created_at: string
+          favorite_categories: string[]
+          monthly_budget: number | null
+          notify_news: boolean
+          notify_price_drop: boolean
+          notify_weekly_digest: boolean
+          preferred_store_ids: string[]
+          search_radius_km: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_channel?: string
+          created_at?: string
+          favorite_categories?: string[]
+          monthly_budget?: number | null
+          notify_news?: boolean
+          notify_price_drop?: boolean
+          notify_weekly_digest?: boolean
+          preferred_store_ids?: string[]
+          search_radius_km?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact_channel?: string
+          created_at?: string
+          favorite_categories?: string[]
+          monthly_budget?: number | null
+          notify_news?: boolean
+          notify_price_drop?: boolean
+          notify_weekly_digest?: boolean
+          preferred_store_ids?: string[]
+          search_radius_km?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
