@@ -61,20 +61,20 @@ export function SearchHeroSection({ query }: { query: string }) {
              </div>
           </header>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Melhor preço</p>
-               <Price value={bestPrice} size="xl" tone="best" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+             <div className="space-y-2 bg-primary/5 rounded-3xl p-5 border border-primary/10 transition-transform group-hover/hero:scale-[1.02]">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Melhor preço</p>
+               <Price value={bestPrice} size="xl" tone="best" className="text-4xl" />
              </div>
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Preço médio</p>
-               <Price value={avgPrice} size="xl" />
+             <div className="space-y-2 bg-muted/20 rounded-3xl p-5 border border-border/40 transition-transform group-hover/hero:scale-[1.02] delay-75">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">Preço médio</p>
+               <Price value={avgPrice} size="xl" className="text-4xl" />
              </div>
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Economia máx.</p>
+             <div className="space-y-2 bg-savings/5 rounded-3xl p-5 border border-savings/10 transition-transform group-hover/hero:scale-[1.02] delay-150">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-savings/60">Economia máx.</p>
                <div className="flex items-baseline gap-2">
-                 <Price value={potentialSavings} size="xl" tone="savings" />
-                 <span className="text-sm font-bold text-savings">({savingsPct}%)</span>
+                 <Price value={potentialSavings} size="xl" tone="savings" className="text-4xl" />
+                 <span className="text-sm font-black text-savings">({savingsPct}%)</span>
                </div>
              </div>
           </div>

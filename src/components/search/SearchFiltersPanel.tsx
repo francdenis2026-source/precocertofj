@@ -32,24 +32,27 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
 
   return (
     <aside className={cn(
-      "space-y-6 md:block",
+      "space-y-8 md:block lg:sticky lg:top-32",
       !isOpen && "hidden md:block"
     )}>
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-          <SlidersHorizontal className="h-4 w-4" /> Filtros Avançados
-        </h2>
+      <div className="flex items-center justify-between px-2">
+        <div className="space-y-1">
+          <h2 className="text-sm font-black uppercase tracking-[0.2em] text-foreground flex items-center gap-2">
+            <SlidersHorizontal className="h-4 w-4 text-primary" /> Filtros
+          </h2>
+        </div>
         {activeFilters.length > 0 && (
           <button 
             onClick={() => setActiveFilters([])}
-            className="text-[10px] font-bold text-destructive hover:underline uppercase tracking-wider"
+            className="text-[10px] font-bold text-destructive hover:brightness-125 uppercase tracking-wider transition-all"
           >
-            Limpar
+            Limpar tudo
           </button>
         )}
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-8 bg-card/40 backdrop-blur-md border border-border/50 rounded-[32px] p-6 shadow-sm">
+
         {sections.map((section) => (
           <div key={section.id} className="space-y-3">
              <h3 className="text-xs font-bold text-foreground flex items-center justify-between">
