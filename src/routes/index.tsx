@@ -213,12 +213,12 @@ function HomePage() {
       
       {/* Backdrop for focused search */}
       <AnimatePresence>
-        {isSearchFocused && (
+        {isSearchFocused && !isScrolled && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] bg-black/40 backdrop-blur-[1px]"
+            className="fixed inset-0 z-[105] bg-black/40 backdrop-blur-[2px]"
             onClick={() => setIsSearchFocused(false)}
           />
         )}
@@ -287,10 +287,10 @@ function HomePage() {
             </motion.p>
 
             <div className={cn(
-              "w-full max-w-xl transition-all duration-300",
+              "w-full max-w-xl transition-all duration-300 relative z-[110]",
               isScrolled 
-                ? "fixed top-0 left-0 right-0 z-[110] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
-                : "relative z-[110] mb-12"
+                ? "fixed top-0 left-0 right-0 z-[120] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
+                : "mb-12"
             )}>
               <form 
                 ref={searchAnchorRef}
@@ -308,7 +308,13 @@ function HomePage() {
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  onBlur={(e) => {
+                    // Evitar fechar se o foco for para as sugestões
+                    if (e.relatedTarget instanceof HTMLElement && e.relatedTarget.closest('#home-search-suggestions')) {
+                      return;
+                    }
+                    setTimeout(() => setIsSearchFocused(false), 200);
+                  }}
                   placeholder="O que você quer comprar mais barato hoje?" 
                   className={cn(
                     "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
@@ -335,7 +341,7 @@ function HomePage() {
                 isLoggedOut={!user}
                 onBlocked={() => {}}
                 className={cn(
-                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[101]"
+                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[130]"
                 )}
               />
             </div>
