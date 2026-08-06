@@ -11,10 +11,10 @@
   --bg-base: #05070A;
   --bg-surface: #0E121F;
   --bg-surface-elevated: #161C2E;
-  --border-subtle: rgba(255, 215, 0, 0.08);
+  --border-subtle: rgba(255, 215, 0, 0.1);
   
   --brand-primary: #FFD700;
-  --brand-glow: rgba(255, 215, 0, 0.2);
+  --brand-glow: rgba(255, 215, 0, 0.25);
   
   --success: #10B981;
   --danger: #EF4444;
