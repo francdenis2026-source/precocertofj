@@ -195,48 +195,65 @@ function CategoryPage() {
     [nicheStoreNames],
   );
 
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s: any) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a: any, b: any) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
+
   const products = useMemo(() => {
     let list = data?.products ?? [];
     const term = norm(q.trim());
-    if (term) list = list.filter((p) => norm(p.name).includes(term));
-    if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
+    if (term) list = list.filter((p: any) => norm(p.name).includes(term));
+    if (storeFilter) list = list.filter((p: any) => p.storeNames.includes(storeFilter));
 
     // Hortifrúti: subgrupos (frutas, verduras, legumes, tubérculos, temperos, cogumelos)
     if (slug === "hortifruti" && search.sub) {
-      list = list.filter((p) => hortifrutiSubgroup(p.name) === search.sub);
+      list = list.filter((p: any) => hortifrutiSubgroup(p.name) === search.sub);
     }
 
     if (slug === "acougues") {
       // Anexa a proteína classificada e reordena para cortes primeiro
       const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
-      const enriched = list.map((p) => {
+      const enriched = list.map((p: any) => {
         const prot = classifyProtein(p);
         const bucket = prot ?? "outros";
         return { p, prot, bucket };
       });
-      const filtered = enriched.filter((x) => {
+      const filtered = enriched.filter((x: any) => {
         if (search.so_cortes && x.bucket === "outros") return false;
         if (search.corte && x.bucket !== search.corte) return false;
         return true;
       });
-      filtered.sort((a, b) => {
+      filtered.sort((a: any, b: any) => {
         const oa = ORDER[a.bucket] ?? 9;
         const ob = ORDER[b.bucket] ?? 9;
         if (oa !== ob) return oa - ob;
         return a.p.minPrice - b.p.minPrice;
       });
-      return filtered.map((x) => x.p);
+      return filtered.map((x: any) => x.p);
     }
     if (view === "near" && userLocation) {
       const getDist = (p: any) => {
-        const store = displayStores.find(s => p.storeNames.includes(s.name));
+        const store = displayStores.find((s: any) => p.storeNames.includes(s.name));
         if (!store?.lat || !store?.lng) return 999999;
         return Math.sqrt(
           Math.pow(store.lat - userLocation.lat, 2) + 
           Math.pow(store.lng - userLocation.lng, 2)
         );
       };
-      list = [...list].sort((a, b) => getDist(a) - getDist(b));
+      list = [...list].sort((a: any, b: any) => getDist(a) - getDist(b));
     }
 
     return list;
@@ -276,26 +293,9 @@ function CategoryPage() {
 
   /** Menor preço encontrado no recorte atual — métrica mais útil que a contagem de coletas. */
   const cheapestPrice = useMemo(() => {
-    const values = products.map((p) => p.minPrice).filter((v) => Number.isFinite(v) && v > 0);
+    const values = products.map((p: any) => p.minPrice).filter((v: any) => Number.isFinite(v) && v > 0);
     return values.length ? Math.min(...values) : null;
   }, [products]);
-
-  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
-  const displayStores = useMemo(() => {
-    const list = data?.stores ?? [];
-    if (!filtersActive) return list;
-    return [...list]
-      .map((s) => {
-        const f = savings.byStore.get(s.id);
-        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
-      })
-      .sort(
-        (a, b) =>
-          Number(b.isNicheStore) - Number(a.isNicheStore) ||
-          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
-          b.productCount - a.productCount,
-      );
-  }, [data, savings, filtersActive]);
 
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
@@ -467,7 +467,7 @@ function CategoryPage() {
             <EmptyCard text="Nenhum estabelecimento desta categoria cadastrado ainda." />
           ) : (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {displayStores.map((s) => (
+              {(displayStores as any[]).map((s: any) => (
                 <li key={s.id}>
                   <Link
                     to="/estabelecimento/$slug"
@@ -561,7 +561,7 @@ function CategoryPage() {
               />
             </div>
             <ViewToggle
-              view={view}
+              view={view as any}
               onChange={(v) => setSearch({ view: v, page: 1 })}
             />
           </div>
