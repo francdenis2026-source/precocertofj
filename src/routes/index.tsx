@@ -92,6 +92,7 @@ function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -193,7 +194,7 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
-      <SiteHeader variant="overlay" showThemeToggle />
+      <SiteHeader variant="overlay" showThemeToggle forceCompact={isSearchFocused} />
       
       {/* Backdrop for focused search */}
       {/* Backdrop for focused search - Removed fixed backdrop to prevent focus issues */}
@@ -262,7 +263,7 @@ function HomePage() {
             </motion.p>
 
             <div className="w-full mb-12">
-              <SmartSearchBar />
+              <SmartSearchBar onFocusChange={setIsSearchFocused} />
             </div>
 
             <div className="flex flex-wrap justify-center gap-3 mb-2">

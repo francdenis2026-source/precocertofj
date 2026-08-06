@@ -25,7 +25,7 @@ const BRL = (n: number) => n.toLocaleString("pt-BR", { style: "currency", curren
  * de retângulo e sem backdrop fixo. Era essa combinação que roubava o foco do
  * campo e travava a digitação.
  */
-export function SmartSearchBar({ compact = false }: { compact?: boolean }) {
+export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: boolean; onFocusChange?: (focused: boolean) => void }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const runSuggest = useServerFn(suggestProducts);
@@ -55,7 +55,10 @@ export function SmartSearchBar({ compact = false }: { compact?: boolean }) {
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+      if (!wrapRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+        onFocusChange?.(false);
+      }
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -132,6 +135,7 @@ export function SmartSearchBar({ compact = false }: { compact?: boolean }) {
       const v = value.trim();
       if (!v) return;
       setOpen(false);
+      onFocusChange?.(false);
       inputRef.current?.blur();
       navigate({ to: "/buscar", search: { q: v } as any });
     },
@@ -152,6 +156,7 @@ export function SmartSearchBar({ compact = false }: { compact?: boolean }) {
     } else if (e.key === "Escape") {
       e.preventDefault();
       setOpen(false);
+      onFocusChange?.(false);
     } else if (e.key === "Enter" && active >= 0) {
       e.preventDefault();
       go(items[active].displayName);
@@ -187,8 +192,12 @@ export function SmartSearchBar({ compact = false }: { compact?: boolean }) {
           onChange={(e) => {
             setQ(e.target.value);
             setOpen(true);
+            onFocusChange?.(true);
           }}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            setOpen(true);
+            onFocusChange?.(true);
+          }}
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
