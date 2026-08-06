@@ -220,8 +220,8 @@ function HomePage() {
                 <input 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  onFocus={() => { console.log("Input focused"); setIsSearchFocused(true); }}
+                  onBlur={() => { console.log("Input blurred"); setTimeout(() => setIsSearchFocused(false), 200); }}
                   placeholder="Busque por arroz, feijão, leite..." 
                   className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
                 />
