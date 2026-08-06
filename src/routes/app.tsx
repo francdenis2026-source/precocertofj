@@ -141,14 +141,14 @@ function AppHomeContent() {
           data-testid="panel-band"
           className="overflow-hidden rounded-[16px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 shadow-2xl backdrop-blur-xl"
         >
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#5848d6] px-3 py-2 text-white md:px-4 md:py-2.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--border-subtle)] bg-gradient-to-r from-[var(--brand-primary)] to-[#B8860B] px-3 py-2 text-black md:px-4 md:py-2.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-white/10 blur-3xl"
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
-              <p className={cn(tc.eyebrow, "hidden shrink-0 text-white/60 sm:block")}>Meu painel</p>
-              <h1 className="font-display truncate whitespace-nowrap text-[16px] font-bold leading-tight tracking-[-0.02em] text-white md:text-[18px]">
+              <p className={cn(tc.eyebrow, "hidden shrink-0 text-black/60 sm:block")}>Meu painel</p>
+              <h1 className="font-display truncate whitespace-nowrap text-[16px] font-bold leading-tight tracking-[-0.02em] text-black md:text-[18px]">
                 Olá, {firstName}
               </h1>
             </div>
@@ -163,14 +163,14 @@ function AppHomeContent() {
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-white/30 bg-white/10 px-3 text-[12.5px] font-medium text-white transition hover:bg-white/20"
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-black/30 bg-black/10 px-3 text-[12.5px] font-medium text-black transition hover:bg-black/20"
               >
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-white px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-white/90"
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-black px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-black/90"
               >
                 Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>

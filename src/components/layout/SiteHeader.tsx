@@ -87,7 +87,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // Nav: hover/active sempre em gold (brand) — legível em light e dark, sem tons cyan.
   const navClass = "relative text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)] [&.active]:text-[var(--brand-primary)] after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[var(--brand-primary)] after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
   const accountClass = "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] transition-colors hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]";
-  const loginClass = "bg-[var(--brand-primary)] text-white shadow-[0_15px_30px_-5px_var(--brand-glow)] transition-all duration-300 hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98]";
+  const loginClass = "bg-[var(--brand-primary)] text-black shadow-[0_15px_30px_-5px_var(--brand-glow)] transition-all duration-300 hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98]";
 
 
 
@@ -316,7 +316,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <Link
               to="/login"
               className={cn(
-                "font-display inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-bold text-white shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
+                "font-display inline-flex items-center rounded-lg bg-[var(--brand-primary)] px-6 py-3 text-[15px] font-bold text-black shadow-[0_20px_40px_-10px_var(--brand-glow)] transition-all hover:scale-[1.05] hover:bg-[var(--brand-primary)]/90 active:scale-[0.98] outline-none",
               )}
             >
               Entrar
