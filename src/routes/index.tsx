@@ -228,15 +228,16 @@ function HomePage() {
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.15 }}
+          animate={{ opacity: 0.25 }}
           transition={{ duration: 1.5 }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.8) contrast(1.1)"
+            filter: "brightness(0.7) contrast(1.2) saturate(0.8)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/60 to-[var(--bg-base)]" />
+        {/* Adjusted gradient to eliminate unwanted white areas and improve contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -287,8 +288,8 @@ function HomePage() {
 
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
-              (isSearchFocused || isScrolled) 
-                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)] border-b border-[var(--border-subtle)] shadow-lg" 
+              isScrolled 
+                ? "fixed top-0 left-0 right-0 z-[100] px-4 py-3 bg-[var(--bg-base)]/95 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-lg" 
                 : "relative mb-12"
             )}>
               <form 
@@ -296,12 +297,12 @@ function HomePage() {
                 onSubmit={submitSearch} 
                 className={cn(
                   "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] focus-within:border-[var(--brand-primary)] focus-within:ring-8 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-xl hover:border-[var(--brand-secondary)]/20",
-                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-lg shadow-none border-[var(--brand-primary)]/40 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]"
+                  isScrolled && "h-[46px] sm:h-[50px] rounded-lg shadow-sm border-[var(--brand-primary)]/20 max-w-lg scale-[0.98] bg-[var(--bg-surface-elevated)]"
                 )}
               >
                 <Search className={cn(
                   "ml-4 h-4.5 w-4.5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] group-focus-within:scale-110 transition-all duration-300",
-                  (isSearchFocused || isScrolled) && "h-4 w-4 ml-3"
+                  isScrolled && "h-4 w-4 ml-3"
                 )} />
                 <input 
                   value={q} 
@@ -311,14 +312,14 @@ function HomePage() {
                   placeholder="O que você deseja economizar hoje?" 
                   className={cn(
                     "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
-                    (isSearchFocused || isScrolled) && "text-[13px] px-3"
+                    isScrolled && "text-[13px] px-3"
                   )} 
                 />
                 <Button 
                   type="submit" 
                   className={cn(
                     "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
-                    (isSearchFocused || isScrolled) && "h-[36px] sm:h-[42px] px-6 text-[10px]"
+                    isScrolled && "h-[36px] sm:h-[42px] px-6 text-[10px]"
                   )}
                 >
                   Buscar
