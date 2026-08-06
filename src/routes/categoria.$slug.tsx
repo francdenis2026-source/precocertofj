@@ -28,6 +28,7 @@ import {
   Apple,
   Wine,
   BookOpen,
+  MapPin,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -760,12 +761,13 @@ function ViewToggle({
   view,
   onChange,
 }: {
-  view: "list" | "grid";
-  onChange: (v: "list" | "grid") => void;
+  view: "list" | "grid" | "near";
+  onChange: (v: "list" | "grid" | "near") => void;
 }) {
   const options = [
     { id: "list", label: "Lista", Icon: List },
     { id: "grid", label: "Grade", Icon: LayoutGrid },
+    { id: "near", label: "Perto", Icon: MapPin },
   ] as const;
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
 
