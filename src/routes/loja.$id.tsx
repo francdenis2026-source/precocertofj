@@ -852,7 +852,8 @@ function ProductRow({
         <Link
           to="/loja/$id/produto/$slug"
           params={{ id: storeId, slug: p.slug }}
-          search={{ q: "" }}
+          search={{ q: "", from: `/loja/${storeId}` }}
+
 
           className="flex min-w-0 flex-1 flex-col justify-center"
         >
@@ -940,7 +941,8 @@ function FeaturedCard({
       <Link
         to="/loja/$id/produto/$slug"
         params={{ id: storeId, slug: p.slug }}
-        search={{ q: "" }}
+        search={{ q: "", from: `/loja/${storeId}` }}
+
 
         className="grid h-[92px] w-full shrink-0 place-items-center overflow-hidden bg-gradient-to-br from-primary/10 via-surface to-accent/10"
       >
@@ -968,6 +970,8 @@ function FeaturedCard({
         <Link
           to="/loja/$id/produto/$slug"
           params={{ id: storeId, slug: p.slug }}
+          search={{ q: "", from: `/loja/${storeId}` }}
+
           className="line-clamp-2 min-h-[2.2em] text-[11px] font-semibold leading-tight text-foreground hover:text-primary"
         >
           {p.productName}
