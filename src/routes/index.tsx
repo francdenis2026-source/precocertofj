@@ -438,51 +438,63 @@ function HomePage() {
             </Suspense>
           </section>
 
-          {/* CTA Banner - Premium Refactoring */}
+          {/* CTA Banner - Premium Refactoring with Tracking & Accessibility */}
           <section className="mb-16">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative group overflow-hidden rounded-[48px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] p-8 sm:p-16 shadow-2xl transition-all duration-500 hover:shadow-[var(--pc-shadow-lg)] hover:border-[var(--brand-primary)]/20"
+              onViewportEnter={() => {
+                // Event tracking for impression
+                console.log("[Analytics] Banner Impression: VIU UM PREÇO NOVO?");
+              }}
+              className="relative group overflow-hidden rounded-[32px] sm:rounded-[48px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] p-8 sm:p-12 lg:p-16 shadow-2xl transition-all duration-500 hover:shadow-[var(--pc-shadow-lg)] hover:border-[var(--brand-primary)]/20"
             >
-              {/* background image without yellow tint, high contrast */}
+              {/* background image without yellow tint, high contrast, lazy loading optimization */}
               <div 
                 className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')" }}
+                style={{ 
+                  backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')",
+                  backgroundColor: 'var(--bg-surface-elevated)'
+                }}
+                role="img"
+                aria-label="Supermarket interior"
               />
               
-              {/* Premium Gradients */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-surface-elevated)] via-[var(--bg-surface-elevated)]/90 to-transparent pointer-events-none" />
+              {/* Premium Gradients for Text Contrast (WCAG Compliance) */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-surface-elevated)] via-[var(--bg-surface-elevated)]/95 to-transparent sm:via-[var(--bg-surface-elevated)]/90 pointer-events-none" />
               
               <div className="relative z-10 max-w-xl">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--brand-primary)] text-[var(--pc-brand-navy)] text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-lg shadow-[var(--brand-primary)]/20"
+                  className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[var(--brand-primary)] text-[#0B1E3A] text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] mb-6 sm:mb-8 shadow-lg shadow-[var(--brand-primary)]/20"
                 >
                   <Sparkles className="h-3 w-3" /> Colaboração Local
                 </motion.div>
                 
-                <h2 className="font-display text-4xl sm:text-6xl font-black text-[var(--text-primary)] mb-6 leading-[1.05] tracking-tight">
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl font-black text-[var(--text-primary)] mb-4 sm:mb-6 leading-[1.05] tracking-tight">
                   Viu um preço <span className="relative inline-block">
                     <span className="relative z-10 text-[var(--brand-primary)]">diferente</span>
-                    <svg className="absolute -bottom-2 left-0 w-full h-3 text-[var(--brand-primary)]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <svg className="absolute -bottom-1 sm:-bottom-2 left-0 w-full h-2 sm:h-3 text-[var(--brand-primary)]/30" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
                       <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
                     </svg>
                   </span>?
                 </h2>
                 
-                <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-10 leading-relaxed font-body max-w-md">
+                <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-8 sm:mb-10 leading-relaxed font-body max-w-md">
                   Sua colaboração fortalece a rede de economia em Feijó. Registre ofertas em tempo real e ajude a comunidade.
                 </p>
                 
                 <Button 
-                  onClick={() => navigate({ to: "/registrar" })}
-                  className="group relative h-14 sm:h-16 px-10 rounded-2xl bg-[var(--brand-secondary)] text-white dark:bg-[var(--brand-primary)] dark:text-[var(--pc-brand-navy)] font-black uppercase tracking-widest text-xs sm:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
+                  onClick={() => {
+                    console.log("[Analytics] Banner Click: Registrar Agora");
+                    navigate({ to: "/registrar" });
+                  }}
+                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[var(--brand-secondary)] text-white dark:bg-[var(--brand-primary)] dark:text-[#0B1E3A] font-black uppercase tracking-widest text-[10px] sm:text-xs lg:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
                 >
-                  <span className="relative z-10 flex items-center gap-3">
+                  <span className="relative z-10 flex items-center justify-center gap-3">
                     Registrar Agora
-                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
                   </span>
                   <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </Button>
