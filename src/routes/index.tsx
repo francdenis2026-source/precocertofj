@@ -19,7 +19,8 @@ import {
   ShoppingCart,
   Filter,
   ArrowDownWideNarrow,
-  Clock
+  Clock,
+  MapPin
 } from "lucide-react";
 import { 
   GroceryIcon, 
