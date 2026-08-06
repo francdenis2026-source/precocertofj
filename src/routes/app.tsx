@@ -165,7 +165,7 @@ function StoreCatalog({ storeId }: { storeId: string }) {
             <div className="bg-[var(--bg-base)]/50 p-4 rounded-2xl border border-[var(--border-subtle)] text-right min-w-[200px]">
               <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Última Atualização</div>
               <div className="text-sm font-bold">
-                {data.products[0] ? format(new Date(data.products[0].lastDate), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR }) : 'Nenhuma'}
+                {data.products[0] ? format(new Date(data.products[0].lastDate), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : 'Nenhuma'}
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ function StoreCatalog({ storeId }: { storeId: string }) {
                     {product.productName}
                   </h4>
                   <div className="text-[10px] text-[var(--text-tertiary)] font-medium">
-                    {format(new Date(product.lastDate), "dd/MM/yyyy HH:mm")}
+                    {format(new Date(product.lastDate), "dd/MM/yyyy")}
                   </div>
                 </div>
                 <div className="text-right">
