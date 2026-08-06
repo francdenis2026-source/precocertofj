@@ -9,6 +9,7 @@ import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucid
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "@/lib/analytics-events";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   suggestProducts,
