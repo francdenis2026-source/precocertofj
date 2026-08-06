@@ -29,7 +29,7 @@ const ItemSchema = z.object({
 
 export const analyzeBulkItems = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { items: unknown; establishmentId: string }) => ({
+  .validator((input: { items: unknown; establishmentId: string }) => ({
     items: z.array(ItemSchema).min(1).max(500).parse(input.items),
     establishmentId: z.string().uuid().parse(input.establishmentId),
   }))
@@ -66,7 +66,7 @@ export const analyzeBulkItems = createServerFn({ method: "POST" })
 
 export const bulkInsertScans = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { items: unknown; establishmentId: string }) => ({
+  .validator((input: { items: unknown; establishmentId: string }) => ({
     items: z.array(ItemSchema).min(1).max(500).parse(input.items),
     establishmentId: z.string().uuid().parse(input.establishmentId),
   }))

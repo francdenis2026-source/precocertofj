@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 export const getPriceInsights = createServerFn({ method: "POST" })
-  .inputValidator((input) => z.object({
+  .validator((input) => z.object({
     id: z.string(),
     slug: z.string(),
     productName: z.string(),

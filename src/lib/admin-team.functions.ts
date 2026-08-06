@@ -64,7 +64,7 @@ export type AdminAuditPage = {
 
 export const listAdminAuditLog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: {
+  .validator((input?: {
     action?: string;
     days?: number;
     limit?: number;
@@ -205,7 +205,7 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
 
 export const logAdminAccess = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { area?: string }) => ({
+  .validator((input?: { area?: string }) => ({
     area: String(input?.area ?? "console").slice(0, 80),
   }))
   .handler(async ({ data, context }) => {
@@ -271,7 +271,7 @@ export const listAdminMembers = createServerFn({ method: "GET" })
 
 export const inviteAdminMember = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { email: string; role: "admin" | "moderator" }) => {
+  .validator((input: { email: string; role: "admin" | "moderator" }) => {
     const email = String(input?.email ?? "").trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) throw new Error("E-mail inválido");
     const role = input?.role === "moderator" ? "moderator" : "admin";
@@ -315,7 +315,7 @@ export const inviteAdminMember = createServerFn({ method: "POST" })
 
 export const removeAdminMember = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { userId: string; deleteAccount?: boolean }) => {
+  .validator((input: { userId: string; deleteAccount?: boolean }) => {
     if (!input?.userId) throw new Error("userId obrigatório");
     return { userId: String(input.userId), deleteAccount: Boolean(input.deleteAccount) };
   })
@@ -365,7 +365,7 @@ export const removeAdminMember = createServerFn({ method: "POST" })
 
 export const setMemberRole = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { userId: string; role: "admin" | "moderator"; enabled: boolean }) => {
+  .validator((input: { userId: string; role: "admin" | "moderator"; enabled: boolean }) => {
     if (!input?.userId) throw new Error("userId obrigatório");
     return {
       userId: String(input.userId),

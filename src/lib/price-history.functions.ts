@@ -162,7 +162,7 @@ export const listPricedProducts = createServerFn({ method: "GET" }).handler(
 );
 
 export const getProductPriceSeries = createServerFn({ method: "GET" })
-  .inputValidator((input: { productName: string }) => {
+  .validator((input: { productName: string }) => {
     if (!input.productName?.trim()) throw new Error("productName obrigatório");
     return input;
   })

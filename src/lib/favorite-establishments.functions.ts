@@ -14,7 +14,7 @@ export const listFavoriteEstablishments = createServerFn({ method: "GET" })
 
 export const toggleFavoriteEstablishment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { establishmentId: string }) => {
+  .validator((input: { establishmentId: string }) => {
     if (!input || typeof input.establishmentId !== "string") {
       throw new Error("establishmentId is required");
     }

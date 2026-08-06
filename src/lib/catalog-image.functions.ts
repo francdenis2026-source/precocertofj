@@ -70,7 +70,7 @@ export const listMissingImages = createServerFn({ method: "GET" })
 
 export const generateCatalogImage = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -86,7 +86,7 @@ export const generateCatalogImage = createServerFn({ method: "POST" })
  */
 export const searchWebImageForCatalog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -190,7 +190,7 @@ export const generateAllMissingImages = createServerFn({ method: "POST" })
  */
 export const markImageSearch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; found: boolean }) => {
+  .validator((input: { id: string; found: boolean }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -291,7 +291,7 @@ export const markAllMissingAsUnmatched = createServerFn({ method: "POST" })
  */
 export const listRecentImageChanges = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input: { limit?: number } | undefined) => input ?? {})
+  .validator((input: { limit?: number } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<RecentImageChange[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const limit = Math.min(Math.max(data.limit ?? 30, 1), 100);
@@ -427,7 +427,7 @@ export type CatalogImageHistoryEntry = {
  */
 export const suggestWebImagesForCatalog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; count?: number }) => {
+  .validator((input: { id: string; count?: number }) => {
     if (!input.id) throw new Error("id obrigatório");
     return { id: input.id, count: Math.max(2, Math.min(input.count ?? 6, 8)) };
   })
@@ -441,7 +441,7 @@ export const suggestWebImagesForCatalog = createServerFn({ method: "POST" })
  */
 export const applyCatalogImageUrl = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; imageUrl: string }) => {
+  .validator((input: { id: string; imageUrl: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     if (!input.imageUrl) throw new Error("imageUrl obrigatório");
     return input;
@@ -457,7 +457,7 @@ export const applyCatalogImageUrl = createServerFn({ method: "POST" })
  */
 export const listCatalogImageHistory = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { catalogId: string; limit?: number }) => {
+  .validator((input: { catalogId: string; limit?: number }) => {
     if (!input.catalogId) throw new Error("catalogId obrigatório");
     return { catalogId: input.catalogId, limit: Math.min(Math.max(input.limit ?? 20, 1), 100) };
   })
@@ -557,7 +557,7 @@ const BulkWebSchema = z.object({
 
 export const enqueueBulkWebImageUpdate = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => BulkWebSchema.parse(input ?? {}))
+  .validator((input: unknown) => BulkWebSchema.parse(input ?? {}))
   .handler(async ({ data, context }): Promise<{ enqueued: number }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const isForce = data.scope === "refresh";
@@ -638,7 +638,7 @@ async function loadMatchThreshold(fallback: number): Promise<number> {
  */
 export const scrapeWebImagesForCatalog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -688,7 +688,7 @@ export const getImageMatchThreshold = createServerFn({ method: "GET" })
 
 export const setImageMatchThreshold = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { threshold: number }) => {
+  .validator((input: { threshold: number }) => {
     const t = Number(input?.threshold);
     if (!Number.isFinite(t) || t < 0 || t > 1) {
       throw new Error("threshold deve estar entre 0 e 1");
@@ -729,7 +729,7 @@ export const setImageMatchThreshold = createServerFn({ method: "POST" })
  */
 export const scrapeAllMissingImages = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { limit?: number; threshold?: number } | undefined) => ({
+  .validator((input: { limit?: number; threshold?: number } | undefined) => ({
     limit: Math.min(Math.max(input?.limit ?? 150, 1), 500),
     threshold:
       typeof input?.threshold === "number" && input.threshold >= 0 && input.threshold <= 1

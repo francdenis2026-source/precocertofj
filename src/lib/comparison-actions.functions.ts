@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const saveComparisonCart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({
+  .validator(z.object({
     name: z.string().min(1).max(100),
     items: z.array(z.object({
       catalogId: z.string(),
@@ -44,7 +44,7 @@ export const saveComparisonCart = createServerFn({ method: "POST" })
 
 export const exportComparisonData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({
+  .validator(z.object({
     format: z.enum(["csv", "pdf"]),
     items: z.array(z.object({
       name: z.string(),

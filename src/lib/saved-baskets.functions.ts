@@ -46,7 +46,7 @@ export const listSavedBaskets = createServerFn({ method: "GET" })
 
 export const getSavedBasket = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data.id) }))
+  .validator((data: { id: string }) => ({ id: String(data.id) }))
   .handler(async ({ data, context }): Promise<SavedBasketDetail | null> => {
     const { data: row, error } = await context.supabase
       .from("saved_baskets")
@@ -69,7 +69,7 @@ export const getSavedBasket = createServerFn({ method: "GET" })
 
 export const saveBasket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { name: string; mode: "compare" | "budget"; filters: unknown; snapshot: unknown; share?: boolean }) => {
+  .validator((data: { name: string; mode: "compare" | "budget"; filters: unknown; snapshot: unknown; share?: boolean }) => {
     if (!data.name || typeof data.name !== "string" || data.name.trim().length < 2) {
       throw new Error("Nome inválido");
     }
@@ -108,7 +108,7 @@ export const saveBasket = createServerFn({ method: "POST" })
 
 export const deleteSavedBasket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data.id) }))
+  .validator((data: { id: string }) => ({ id: String(data.id) }))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("saved_baskets").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -117,7 +117,7 @@ export const deleteSavedBasket = createServerFn({ method: "POST" })
 
 export const toggleBasketShare = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; enable: boolean }) => ({ id: String(data.id), enable: !!data.enable }))
+  .validator((data: { id: string; enable: boolean }) => ({ id: String(data.id), enable: !!data.enable }))
   .handler(async ({ data, context }): Promise<{ shareToken: string | null }> => {
     const token = data.enable ? randomToken() : null;
     const { error } = await context.supabase
@@ -150,7 +150,7 @@ export const getDraftBasket = createServerFn({ method: "GET" })
 
 export const saveDraftBasket = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { quantities: Record<string, number> }) => ({
+  .validator((data: { quantities: Record<string, number> }) => ({
     quantities: (data.quantities ?? {}) as Record<string, number>,
   }))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
@@ -194,7 +194,7 @@ export const clearDraftBasket = createServerFn({ method: "POST" })
   });
 
 export const getSharedBasket = createServerFn({ method: "GET" })
-  .inputValidator((data: { token: string }) => ({ token: String(data.token) }))
+  .validator((data: { token: string }) => ({ token: String(data.token) }))
   .handler(async ({ data }): Promise<SavedBasketDetail | null> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const client = supabaseAdmin as unknown as {

@@ -9,7 +9,7 @@ import type { ImportResult } from "./image-import.server";
  */
 export const enqueueImageRefresh = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { force?: boolean; olderThanDays?: number } | undefined) => ({
+  .validator((input: { force?: boolean; olderThanDays?: number } | undefined) => ({
     force: !!input?.force,
     olderThanDays: Math.max(0, Math.min(365, Math.floor(input?.olderThanDays ?? 0))),
   }))
@@ -32,7 +32,7 @@ export const enqueueImageRefresh = createServerFn({ method: "POST" })
  */
 export const forceRefreshCatalogImage = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -81,7 +81,7 @@ export const forceRefreshCatalogImage = createServerFn({ method: "POST" })
  */
 export const importImagesZip = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { zipBase64: string }) => {
+  .validator((input: { zipBase64: string }) => {
     if (!input.zipBase64 || typeof input.zipBase64 !== "string") {
       throw new Error("zipBase64 obrigatório");
     }

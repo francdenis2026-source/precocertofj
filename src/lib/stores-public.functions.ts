@@ -579,7 +579,7 @@ function tallyWins(scans: ScanRowRank[], keep: (name: string) => boolean): Map<s
 
 
 export const getCheapestStoresRanking = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     (input: { category?: string | null; type?: string | null } | undefined) => input ?? {},
   )
   .handler(async ({ data }): Promise<CheapestRankingResponse> => {
@@ -942,7 +942,7 @@ function hubOrder(slug: string | null): number {
 }
 
 export const getPublicStoreCatalog = createServerFn({ method: "GET" })
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id?.trim()) throw new Error("id obrigatório");
     return input;
   })
@@ -1023,7 +1023,7 @@ export type StoreTopProductWithHistory = {
 };
 
 export const getStoreTopProductsHistory = createServerFn({ method: "GET" })
-  .inputValidator((input: { id: string; limit?: number; days?: number }) => {
+  .validator((input: { id: string; limit?: number; days?: number }) => {
     if (!input.id?.trim()) throw new Error("id obrigatório");
     return {
       id: input.id,
@@ -1085,7 +1085,7 @@ export const getStoreTopProductsHistory = createServerFn({ method: "GET" })
 
 
 export const getPublicProductDetail = createServerFn({ method: "GET" })
-  .inputValidator((input: { storeId: string; slug: string }) => {
+  .validator((input: { storeId: string; slug: string }) => {
     if (!input.storeId?.trim() || !input.slug?.trim()) throw new Error("params obrigatórios");
     return input;
   })
@@ -1161,7 +1161,7 @@ export type CrossStoreOffer = {
 };
 
 export const getCrossStoreComparison = createServerFn({ method: "GET" })
-  .inputValidator((input: { storeId: string; slug: string }) => {
+  .validator((input: { storeId: string; slug: string }) => {
     if (!input.storeId?.trim() || !input.slug?.trim()) throw new Error("params obrigatórios");
     return input;
   })
@@ -1334,7 +1334,7 @@ export type MyPriceReport = {
 
 export const submitPriceReport = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: PriceReportInput) => {
+  .validator((input: PriceReportInput) => {
     if (!input.establishmentId?.trim()) throw new Error("Mercado obrigatória");
     if (!input.productName?.trim()) throw new Error("Produto obrigatório");
     if (!["incorrect", "outdated", "wrong_product", "other"].includes(input.reason))
@@ -1463,7 +1463,7 @@ async function fetchEstabNames(ids: string[]): Promise<Map<string, string>> {
 
 export const listMyPriceReports = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { productSlug?: string | null; establishmentId?: string | null } = {}) => input)
+  .validator((input: { productSlug?: string | null; establishmentId?: string | null } = {}) => input)
   .handler(async ({ data, context }): Promise<MyPriceReport[]> => {
     const supabase = context.supabase as unknown as {
       from: (t: string) => {
@@ -1490,7 +1490,7 @@ export type AdminPriceReport = MyPriceReport & { userId: string | null; userEmai
 
 export const listAdminPriceReports = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input: { status?: string | null } = {}) => input)
+  .validator((input: { status?: string | null } = {}) => input)
   .handler(async ({ data }): Promise<AdminPriceReport[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     type Q = {
@@ -1534,7 +1534,7 @@ export type ReviewPriceReportInput = {
 
 export const reviewPriceReport = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: ReviewPriceReportInput) => {
+  .validator((input: ReviewPriceReportInput) => {
     if (!input.id?.trim()) throw new Error("id obrigatório");
     if (!["pending", "reviewed", "resolved", "rejected"].includes(input.status))
       throw new Error("status inválido");
@@ -1565,7 +1565,7 @@ export const reviewPriceReport = createServerFn({ method: "POST" })
 
 export const getReportEvidenceSignedUrl = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { path: string }) => {
+  .validator((input: { path: string }) => {
     if (!input.path?.trim()) throw new Error("path obrigatório");
     return input;
   })
@@ -1600,7 +1600,7 @@ export type EvidenceCleanupResult = {
  */
 export const cleanupExpiredEvidence = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { olderThanDays?: number } = {}) => ({
+  .validator((input: { olderThanDays?: number } = {}) => ({
     olderThanDays: Math.max(1, Math.min(365, Math.floor(input.olderThanDays ?? 30))),
   }))
   .handler(async ({ data }): Promise<EvidenceCleanupResult> => {
@@ -1673,7 +1673,7 @@ export type CartCompareStore = {
 };
 
 export const compareStoreCart = createServerFn({ method: "POST" })
-  .inputValidator((input: CartCompareInput) => {
+  .validator((input: CartCompareInput) => {
     if (!input?.storeId?.trim()) throw new Error("storeId obrigatório");
     const items = Array.isArray(input.items) ? input.items : [];
     const cleaned = items
@@ -1872,7 +1872,7 @@ export type CatalogPriceRank = {
  * possuem oferta em mais de um mercado.
  */
 export const getStoreCatalogPriceRanking = createServerFn({ method: "GET" })
-  .inputValidator((input: { storeId: string }) => {
+  .validator((input: { storeId: string }) => {
     if (!input?.storeId?.trim()) throw new Error("storeId obrigatório");
     return input;
   })

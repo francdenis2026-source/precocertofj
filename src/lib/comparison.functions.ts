@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 export const getStoreComparisonStats = createServerFn({ method: "GET" })
-  .inputValidator(z.object({
+  .validator(z.object({
     storeAId: z.string(),
     storeBId: z.string(),
   }))

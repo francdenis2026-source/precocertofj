@@ -64,7 +64,7 @@ const searchSchema = z.object({
 
 export const adminSearchScans = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => searchSchema.parse(input))
+  .validator((input: unknown) => searchSchema.parse(input))
   .handler(async ({ data, context }): Promise<AdminScanRow[]> => {
     let q = context.supabase
       .from("scans")
@@ -95,7 +95,7 @@ const updateSchema = z.object({
 
 export const updateScanPrice = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => updateSchema.parse(input))
+  .validator((input: unknown) => updateSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { data: before, error: e1 } = await context.supabase
       .from("scans")
@@ -134,7 +134,7 @@ const deleteSchema = z.object({
 
 export const deleteScanAdmin = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => deleteSchema.parse(input))
+  .validator((input: unknown) => deleteSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { data: before, error: e1 } = await context.supabase
       .from("scans")
@@ -170,7 +170,7 @@ const verifySchema = z.object({
 
 export const verifyScanAdmin = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => verifySchema.parse(input))
+  .validator((input: unknown) => verifySchema.parse(input))
   .handler(async ({ data, context }) => {
     const nowIso = new Date().toISOString();
     const { error } = await context.supabase
@@ -214,7 +214,7 @@ const invalidateSchema = z.discriminatedUnion("scope", [
 
 export const invalidateCacheAdmin = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => invalidateSchema.parse(input))
+  .validator((input: unknown) => invalidateSchema.parse(input))
   .handler(async ({ data, context }) => {
     const start = Date.now();
 
@@ -292,7 +292,7 @@ const listAuditSchema = z.object({
 
 export const listAuditLog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => listAuditSchema.parse(input))
+  .validator((input: unknown) => listAuditSchema.parse(input))
   .handler(async ({ data, context }): Promise<AuditEntry[]> => {
     let q = context.supabase
       .from("admin_audit_log")

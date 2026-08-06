@@ -66,7 +66,7 @@ export const getImageSearchSettings = createServerFn({ method: "GET" })
 
 export const saveImageSearchSettings = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: ImageSearchSettings) => {
+  .validator((input: ImageSearchSettings) => {
     if (!Array.isArray(input.preferredDomains)) throw new Error("preferredDomains inválido");
     return {
       preferredDomains: input.preferredDomains

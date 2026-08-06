@@ -39,7 +39,7 @@ function makeClient() {
 }
 
 export const getPublicPriceHistory = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     (input: { establishmentId: string; productName: string; limit?: number }) => {
       if (!input.establishmentId?.trim()) throw new Error("establishmentId obrigatório");
       if (!input.productName?.trim()) throw new Error("productName obrigatório");

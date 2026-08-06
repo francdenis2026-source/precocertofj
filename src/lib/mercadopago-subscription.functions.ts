@@ -19,7 +19,7 @@ type MpPreferenceResponse = {
 
 export const createSubscriptionCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data?: { planId?: string | null } | null) => ({
+  .validator((data?: { planId?: string | null } | null) => ({
     planId: data?.planId ? String(data.planId) : null,
   }))
   .handler(async ({ context, data }): Promise<{ url: string; preferenceId: string }> => {

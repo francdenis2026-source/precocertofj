@@ -37,7 +37,7 @@ export const getMyThemePreference = createServerFn({ method: "GET" })
 
 export const updateMyThemePreference = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { theme: ThemePreference }) => {
+  .validator((input: { theme: ThemePreference }) => {
     const theme = normalize(input?.theme);
     return { theme };
   })

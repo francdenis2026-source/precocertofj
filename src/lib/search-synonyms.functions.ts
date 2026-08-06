@@ -56,7 +56,7 @@ export const listAllSynonymGroups = createServerFn({ method: "GET" })
 
 export const upsertSynonymGroup = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: {
+  .validator((input: {
     id?: string;
     canonical: string;
     synonyms: string[];
@@ -102,7 +102,7 @@ export const upsertSynonymGroup = createServerFn({ method: "POST" })
 
 export const deleteSynonymGroup = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("ID obrigatório");
     return { id: input.id };
   })

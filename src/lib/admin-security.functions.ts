@@ -14,7 +14,7 @@ import { z } from "zod";
 // ---------------------------------------------------------------------------
 export const adminBlockIp = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         ip: z.string().trim().min(3).max(64),
@@ -59,7 +59,7 @@ export const adminBlockIp = createServerFn({ method: "POST" })
 
 export const adminUnblockIp = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((data: unknown) => z.object({ ip: z.string().trim().min(3) }).parse(data))
+  .validator((data: unknown) => z.object({ ip: z.string().trim().min(3) }).parse(data))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
@@ -151,7 +151,7 @@ export const getMyOnboardingStatus = createServerFn({ method: "GET" })
 
 export const completeMyOnboarding = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         fullName: z.string().trim().min(3, "Informe seu nome completo").max(120),

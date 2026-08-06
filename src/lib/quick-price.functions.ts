@@ -26,7 +26,7 @@ const deaccent = (v: string) =>
     .trim();
 
 export const quickSuggestProducts = createServerFn({ method: "POST" })
-  .inputValidator((input: { q?: string; barcode?: string } | undefined) => ({
+  .validator((input: { q?: string; barcode?: string } | undefined) => ({
     q: (input?.q ?? "").trim().slice(0, 80),
     barcode: (input?.barcode ?? "").replace(/\D/g, "").slice(0, 20),
   }))
@@ -108,7 +108,7 @@ export type QuickRegisterResult = {
 };
 
 export const quickRegisterPrice = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: {
       establishmentId: string;
       productName: string;

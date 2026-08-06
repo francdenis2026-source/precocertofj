@@ -89,7 +89,7 @@ export type PriceSearchResult = {
 };
 
 export const searchProductPrice = createServerFn({ method: "POST" })
-  .inputValidator((input: { query: string; mode?: SearchMode; pureOnly?: boolean; fresh?: boolean }) => {
+  .validator((input: { query: string; mode?: SearchMode; pureOnly?: boolean; fresh?: boolean }) => {
     const q = (input?.query ?? "").trim();
     if (q.length < 2) throw new Error("Digite ao menos 2 caracteres");
     if (q.length > 80) throw new Error("Busca muito longa");

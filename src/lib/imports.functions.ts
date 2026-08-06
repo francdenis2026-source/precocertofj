@@ -46,7 +46,7 @@ export const listImportBatches = createServerFn({ method: "GET" })
 
 export const listImportItems = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input: { batch_id: string }) => {
+  .validator((input: { batch_id: string }) => {
     if (!input?.batch_id) throw new Error("batch_id obrigatório");
     return input;
   })
@@ -64,7 +64,7 @@ export const listImportItems = createServerFn({ method: "GET" })
 /** Backfill: cria um lote a partir de scans recentes de um mercado. */
 export const backfillBatchFromScans = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: {
+  .validator((input: {
     market_name: string;
     hours: number;
     source?: string;
@@ -139,7 +139,7 @@ export const backfillBatchFromScans = createServerFn({ method: "POST" })
 
 export const deleteImportBatch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return input;
   })

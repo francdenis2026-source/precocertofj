@@ -298,7 +298,7 @@ function summarizeActions(actions: AssistantAction[]): string {
 
 export const askBasketAssistant = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { messages: AssistantMessage[] }) => {
+  .validator((data: { messages: AssistantMessage[] }) => {
     if (!Array.isArray(data?.messages) || data.messages.length === 0) {
       throw new Error("Mensagens inválidas");
     }
@@ -519,11 +519,11 @@ export const estimateAssistantCost = createServerFn({ method: "GET" })
 
 // Convenience helpers (kept for backwards compat)
 export const previewBudgetBasket = createServerFn({ method: "POST" })
-  .inputValidator((data: { budget: number }) => data)
+  .validator((data: { budget: number }) => data)
   .handler(async ({ data }) => buildBudgetBasket({ data }));
 
 export const previewComparison = createServerFn({ method: "POST" })
-  .inputValidator((data: {
+  .validator((data: {
     radiusKm?: number | null;
     city?: string | null;
     originLat?: number | null;
@@ -538,7 +538,7 @@ export const previewComparison = createServerFn({ method: "POST" })
  */
 export const explainBasketSavings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (data: {
       quantities: Partial<Record<EssentialKey, number>>;
       city?: string | null;

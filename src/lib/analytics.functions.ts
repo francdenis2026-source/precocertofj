@@ -10,7 +10,7 @@ import type { Database } from "@/integrations/supabase/types";
  * Nunca aceita PII: apenas nome do evento, rota, session_id opaco e meta curto.
  */
 export const logAnalyticsEvent = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: {
       event_name: string;
       route?: string | null;
@@ -63,7 +63,7 @@ export const logAnalyticsEvent = createServerFn({ method: "POST" })
 /** Métricas admin: dia a dia. */
 export const getVisitorDailyMetrics = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { days?: number }) => input ?? {})
+  .validator((input: { days?: number }) => input ?? {})
   .handler(async ({ data, context }) => {
     const days = Math.min(Math.max(data.days ?? 14, 1), 90);
     const { data: rows, error } = await context.supabase.rpc(
@@ -77,7 +77,7 @@ export const getVisitorDailyMetrics = createServerFn({ method: "GET" })
 /** Métricas admin: taxa de clique em "desbloquear" por rota. */
 export const getUnlockRateByRoute = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { days?: number }) => input ?? {})
+  .validator((input: { days?: number }) => input ?? {})
   .handler(async ({ data, context }) => {
     const days = Math.min(Math.max(data.days ?? 14, 1), 90);
     const { data: rows, error } = await context.supabase.rpc(

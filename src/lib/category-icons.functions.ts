@@ -46,7 +46,7 @@ export type CategoryAppearanceBatchItem = z.infer<typeof batchItemSchema>;
  */
 export const saveCategoryAppearanceBatch = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((raw: unknown) => batchSchema.parse(raw))
+  .validator((raw: unknown) => batchSchema.parse(raw))
   .handler(async ({ data, context }): Promise<{ saved: number; removed: number }> => {
     const { supabase, userId } = context as {
       supabase: import("@supabase/supabase-js").SupabaseClient;
@@ -100,7 +100,7 @@ const upsertSchema = z.object({
 
 export const upsertCategoryIcon = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((raw: unknown) => upsertSchema.parse(raw))
+  .validator((raw: unknown) => upsertSchema.parse(raw))
   .handler(async ({ data, context }): Promise<CategoryIconOverride> => {
     const { supabase, userId } = context as {
       supabase: import("@supabase/supabase-js").SupabaseClient;
@@ -126,7 +126,7 @@ export const upsertCategoryIcon = createServerFn({ method: "POST" })
 
 export const deleteCategoryIcon = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((raw: unknown) => z.object({ slug: z.string().min(1) }).parse(raw))
+  .validator((raw: unknown) => z.object({ slug: z.string().min(1) }).parse(raw))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     const { supabase } = context as { supabase: import("@supabase/supabase-js").SupabaseClient };
     const { error } = await supabase

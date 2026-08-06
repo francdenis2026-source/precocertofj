@@ -105,7 +105,7 @@ const normalize = (s: string): string =>
 
 export const searchCatalog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { query: string }) => {
+  .validator((input: { query: string }) => {
     const q = (input?.query ?? "").trim();
     if (q.length < 2) throw new Error("Digite ao menos 2 caracteres");
     return { query: q.slice(0, 80) };
@@ -191,7 +191,7 @@ export const listMyShoppingLists = createServerFn({ method: "GET" })
 
 export const createShoppingList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { name: string }) => {
+  .validator((input: { name: string }) => {
     const name = (input?.name ?? "").trim().slice(0, 80);
     if (!name) throw new Error("Informe um nome");
     return { name };
@@ -209,7 +209,7 @@ export const createShoppingList = createServerFn({ method: "POST" })
 
 export const renameShoppingList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; name: string }) => {
+  .validator((input: { id: string; name: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     const name = (input.name ?? "").trim().slice(0, 80);
     if (!name) throw new Error("Informe um nome");
@@ -228,7 +228,7 @@ export const renameShoppingList = createServerFn({ method: "POST" })
 
 export const deleteShoppingList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return { id: input.id };
   })
@@ -245,7 +245,7 @@ export const deleteShoppingList = createServerFn({ method: "POST" })
 
 export const getShoppingList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return { id: input.id };
   })
@@ -334,7 +334,7 @@ export const getShoppingList = createServerFn({ method: "POST" })
 
 export const addListItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { listId: string; catalogId: string; quantity?: number }) => {
+  .validator((input: { listId: string; catalogId: string; quantity?: number }) => {
     if (!input?.listId || !input?.catalogId) throw new Error("dados incompletos");
     const q = Number(input.quantity ?? 1);
     return {
@@ -386,7 +386,7 @@ export const addListItem = createServerFn({ method: "POST" })
 
 export const addAdhocListItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     listId: string;
     displayName: string;
     quantity?: number;
@@ -436,7 +436,7 @@ export const addAdhocListItem = createServerFn({ method: "POST" })
 
 export const markItemPurchased = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; purchased: boolean; price?: number | null }) => {
+  .validator((input: { id: string; purchased: boolean; price?: number | null }) => {
     if (!input?.id) throw new Error("id obrigatório");
     let price: number | null = null;
     if (input.price !== undefined && input.price !== null) {
@@ -462,7 +462,7 @@ export const markItemPurchased = createServerFn({ method: "POST" })
 
 export const updateListItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     id: string;
     quantity?: number;
     checked?: boolean;
@@ -520,7 +520,7 @@ export const updateListItem = createServerFn({ method: "POST" })
 
 export const removeListItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return { id: input.id };
   })
@@ -538,7 +538,7 @@ export const removeListItem = createServerFn({ method: "POST" })
 
 export const computeBestPrices = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { listId: string }) => {
+  .validator((input: { listId: string }) => {
     if (!input?.listId) throw new Error("listId obrigatório");
     return { listId: input.listId };
   })

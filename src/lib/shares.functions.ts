@@ -25,7 +25,7 @@ export type SharedComparison = {
 /** Auth: create a public share link (30 days). */
 export const createShareLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: {
       imageUrl: string | null;
       marketName: string | null;
@@ -64,7 +64,7 @@ export type SharedComparisonResult =
  *  distinguish "expired" vs "not found" for a friendly UI message. No PII
  *  columns are ever returned (only safe fields projected below). */
 export const getSharedComparison = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })

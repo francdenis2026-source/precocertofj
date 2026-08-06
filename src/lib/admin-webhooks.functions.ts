@@ -30,7 +30,7 @@ export const listWebhookEvents = createServerFn({ method: "GET" })
 
 export const reprocessWebhookEvent = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input?.id) throw new Error("id obrigatório");
     return input;
   })

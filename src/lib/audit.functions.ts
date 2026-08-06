@@ -15,7 +15,7 @@ export type AuditEntry = {
 
 export const listAuditForEntity = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { entityType: "shopping_item" | "finance_tx"; entityId: string }) => ({
+  .validator((data: { entityType: "shopping_item" | "finance_tx"; entityId: string }) => ({
     entityType: data.entityType === "finance_tx" ? ("finance_tx" as const) : ("shopping_item" as const),
     entityId: String(data.entityId),
   }))
@@ -41,7 +41,7 @@ export const listAuditForEntity = createServerFn({ method: "POST" })
 
 export const listRecentAudit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data?: { entityType?: "shopping_item" | "finance_tx"; limit?: number }) => ({
+  .validator((data?: { entityType?: "shopping_item" | "finance_tx"; limit?: number }) => ({
     entityType:
       data?.entityType === "finance_tx"
         ? ("finance_tx" as const)

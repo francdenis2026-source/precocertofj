@@ -96,7 +96,7 @@ function escapeHtml(s: string): string {
 
 export const issueActivationCode = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator(
+  .validator(
     (input: {
       email: string;
       name: string;
@@ -201,7 +201,7 @@ export const issueActivationCode = createServerFn({ method: "POST" })
   });
 
 export const verifyActivationCode = createServerFn({ method: "POST" })
-  .inputValidator((input: { email: string; code: string }) => {
+  .validator((input: { email: string; code: string }) => {
     if (!input.email || !input.code) throw new Error("E-mail e código são obrigatórios");
     return input;
   })

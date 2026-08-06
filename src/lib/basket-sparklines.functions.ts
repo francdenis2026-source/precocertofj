@@ -7,7 +7,7 @@ import { ESSENTIALS, type EssentialKey } from "@/lib/basket.functions";
  * observações já persistidas em `product_price_history`.
  */
 export const getBasketSparklines = createServerFn({ method: "POST" })
-  .inputValidator((input: { storeIds: string[] }) => {
+  .validator((input: { storeIds: string[] }) => {
     if (!input || !Array.isArray(input.storeIds)) {
       throw new Error("storeIds must be an array");
     }

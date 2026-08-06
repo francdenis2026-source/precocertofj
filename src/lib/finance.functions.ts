@@ -123,7 +123,7 @@ export const listCategories = createServerFn({ method: "GET" })
 
 export const upsertCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     id?: string;
     name: string;
     slug?: string;
@@ -170,7 +170,7 @@ export const upsertCategory = createServerFn({ method: "POST" })
 
 export const updateCategoryBudget = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; monthlyBudget: number | null; alertThreshold?: number | null }) => input)
+  .validator((input: { id: string; monthlyBudget: number | null; alertThreshold?: number | null }) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { error } = await supabase
@@ -187,7 +187,7 @@ export const updateCategoryBudget = createServerFn({ method: "POST" })
 
 export const deleteCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { error } = await supabase
@@ -236,7 +236,7 @@ function toTx(r: TxRow): FinanceTransaction {
 
 export const listTransactions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { month?: string; categoryId?: string; limit?: number } = {}) => input)
+  .validator((input: { month?: string; categoryId?: string; limit?: number } = {}) => input)
   .handler(async ({ data, context }): Promise<FinanceTransaction[]> => {
     const { supabase, userId } = context;
     const start = firstDayOfMonth(data.month);
@@ -257,7 +257,7 @@ export const listTransactions = createServerFn({ method: "GET" })
 
 export const upsertTransaction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     id?: string;
     categoryId: string | null;
     occurredOn: string;
@@ -304,7 +304,7 @@ export const upsertTransaction = createServerFn({ method: "POST" })
 
 export const deleteTransaction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { error } = await supabase
@@ -320,7 +320,7 @@ export const deleteTransaction = createServerFn({ method: "POST" })
 
 export const monthlySummary = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { month?: string } = {}) => input)
+  .validator((input: { month?: string } = {}) => input)
   .handler(async ({ data, context }): Promise<MonthlySummary> => {
     const { supabase, userId } = context;
     const start = firstDayOfMonth(data.month);

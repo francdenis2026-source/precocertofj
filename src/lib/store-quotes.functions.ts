@@ -41,7 +41,7 @@ function totalOf(cart: StoreQuoteCartItem[]): number {
 /** Save a quote for the signed-in user. Returns the id + share link. */
 export const saveStoreQuote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
+  .validator(
     (input: {
       storeId: string;
       storeName: string;
@@ -109,7 +109,7 @@ export const listMyStoreQuotes = createServerFn({ method: "POST" })
 /** Delete a quote I own. */
 export const deleteStoreQuote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })
@@ -124,7 +124,7 @@ export const deleteStoreQuote = createServerFn({ method: "POST" })
 
 /** Public: read a shared quote by id (only when is_public). */
 export const getPublicStoreQuote = createServerFn({ method: "POST" })
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })

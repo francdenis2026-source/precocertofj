@@ -17,7 +17,7 @@ export type EstablishmentBySlug = {
 };
 
 export const resolveEstablishmentBySlug = createServerFn({ method: "GET" })
-  .inputValidator((input: { slug: string }) => {
+  .validator((input: { slug: string }) => {
     if (!input.slug?.trim()) throw new Error("slug obrigatório");
     return { slug: input.slug.trim().toLowerCase() };
   })

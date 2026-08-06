@@ -52,7 +52,7 @@ export const getMyCollabMonthProgress = createServerFn({ method: "GET" })
  */
 export const findUserByCollabToken = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z.object({ token: z.string().min(6).max(20) }).parse(raw),
   )
   .handler(

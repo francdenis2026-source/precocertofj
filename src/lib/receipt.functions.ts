@@ -62,7 +62,7 @@ Regras:
 - Campo desconhecido = null. NUNCA invente.`;
 
 export const extractReceiptItems = createServerFn({ method: "POST" })
-  .inputValidator((input: { image: string }) => {
+  .validator((input: { image: string }) => {
     if (!input.image) throw new Error("image obrigatória");
     return input;
   })
@@ -192,7 +192,7 @@ export type SaveReceiptResult = {
 
 export const saveReceipt = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: SaveReceiptInput) => {
+  .validator((input: SaveReceiptInput) => {
     if (!input.establishmentId) throw new Error("Estabelecimento obrigatório");
     if (!Array.isArray(input.items) || input.items.length === 0)
       throw new Error("Nenhum item para salvar");

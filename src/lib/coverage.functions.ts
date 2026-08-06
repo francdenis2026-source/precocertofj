@@ -102,7 +102,7 @@ export const getCoverageOverview = createServerFn({ method: "GET" })
 
 export const getMissingProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
+  .validator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,7 +118,7 @@ export const getMissingProducts = createServerFn({ method: "POST" })
 
 export const getPresentProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
+  .validator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -50,7 +50,7 @@ function mapRow(r: Row): ProductPriceStats {
  * maintained by trigger. Public — no auth required.
  */
 export const getProductPriceStats = createServerFn({ method: "POST" })
-  .inputValidator((input: { keys: string[] }) => {
+  .validator((input: { keys: string[] }) => {
     const keys = Array.isArray(input?.keys)
       ? Array.from(new Set(input.keys.map((k) => String(k ?? "").trim()).filter(Boolean))).slice(0, 200)
       : [];
@@ -80,7 +80,7 @@ export const getProductPriceStats = createServerFn({ method: "POST" })
  * global historical min/avg/max in the fair-price badge.
  */
 export const findProductPriceStatsByQuery = createServerFn({ method: "POST" })
-  .inputValidator((input: { query: string }) => {
+  .validator((input: { query: string }) => {
     const q = String(input?.query ?? "").trim().slice(0, 80);
     return { query: q };
   })

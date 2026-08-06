@@ -83,7 +83,7 @@ export const listActivePlans = createServerFn({ method: "GET" })
 
 /** Público: busca um plano ativo por id (para tela de checkout). */
 export const getActivePlanById = createServerFn({ method: "GET" })
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data }): Promise<PlanRow | null> => {
     if (!data.id) return null;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -123,7 +123,7 @@ function slugify(input: string): string {
 
 export const upsertPlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: {
+  .validator((data: {
     id?: string;
     name: string;
     cycle: BillingCycle;
@@ -219,7 +219,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
 
 export const togglePlanActive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; active: boolean }) => ({
+  .validator((data: { id: string; active: boolean }) => ({
     id: String(data?.id ?? ""),
     active: !!data?.active,
   }))
@@ -237,7 +237,7 @@ export const togglePlanActive = createServerFn({ method: "POST" })
 
 export const deletePlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     if (!data.id) throw new Error("id obrigatório");

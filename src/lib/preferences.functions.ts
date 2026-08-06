@@ -20,7 +20,7 @@ export const getMyPreferences = createServerFn({ method: "GET" })
 
 export const updateMyPreferences = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: PreferencesInput) => normalizePreferences(input as unknown as Record<string, unknown>))
+  .validator((input: PreferencesInput) => normalizePreferences(input as unknown as Record<string, unknown>))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
     const row = {
       user_id: context.userId,

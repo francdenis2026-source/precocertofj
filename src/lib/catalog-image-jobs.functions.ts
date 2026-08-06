@@ -79,7 +79,7 @@ export const getImageJobStats = createServerFn({ method: "GET" })
 
 export const listImageJobs = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator(
+  .validator(
     (input: { status?: ImageJobStatus | "all"; limit?: number } | undefined) => input ?? {},
   )
   .handler(async ({ data }): Promise<ImageJob[]> => {
@@ -144,7 +144,7 @@ export const listImageJobs = createServerFn({ method: "GET" })
 
 export const processNextImageJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator(
+  .validator(
     (input: { mode?: "web" | "ai" | "web_then_ai" } | undefined) => ({
       mode: input?.mode ?? "web_then_ai",
     }),
@@ -276,7 +276,7 @@ export const getImageJobProviderStats = createServerFn({ method: "GET" })
 
 export const retryImageJob = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string }) => {
+  .validator((input: { id: string }) => {
     if (!input.id) throw new Error("id obrigatório");
     return input;
   })

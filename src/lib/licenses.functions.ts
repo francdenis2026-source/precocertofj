@@ -32,7 +32,7 @@ export const listLicensePlans = createServerFn({ method: "GET" })
 
 export const upsertLicensePlan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: {
+  .validator((data: {
     id?: string; name: string; slug: string; days: number;
     price_cents: number; active?: boolean; sort_order?: number; description?: string | null;
   }) => data)
@@ -62,7 +62,7 @@ export const upsertLicensePlan = createServerFn({ method: "POST" })
 /** Admin gera N códigos em lote de um plano (marcados como 'paid' — prontos para resgate). */
 export const generateLicenseCodes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { planId: string; quantity: number; expiresInDays?: number; notes?: string }) => ({
+  .validator((data: { planId: string; quantity: number; expiresInDays?: number; notes?: string }) => ({
     planId: String(data?.planId ?? ""),
     quantity: Math.max(1, Math.min(500, Math.floor(Number(data?.quantity) || 1))),
     expiresInDays: Math.max(1, Math.min(730, Math.floor(Number(data?.expiresInDays) || 180))),
@@ -87,7 +87,7 @@ export const generateLicenseCodes = createServerFn({ method: "POST" })
 
 export const listLicenseCodes = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { status?: string; search?: string; limit?: number }) => ({
+  .validator((data: { status?: string; search?: string; limit?: number }) => ({
     status: data?.status ?? null,
     search: data?.search ? String(data.search).trim() : null,
     limit: Math.min(500, Math.max(10, Math.floor(Number(data?.limit) || 100))),
@@ -109,7 +109,7 @@ export const listLicenseCodes = createServerFn({ method: "POST" })
 
 export const revokeLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -122,7 +122,7 @@ export const revokeLicenseCode = createServerFn({ method: "POST" })
 /** Admin: reativa código revogado (volta para 'paid') e opcionalmente estende validade. */
 export const reactivateLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; addDays?: number }) => ({
+  .validator((data: { id: string; addDays?: number }) => ({
     id: String(data?.id ?? ""),
     addDays: Math.max(0, Math.min(730, Math.floor(Number(data?.addDays) || 0))),
   }))
@@ -153,7 +153,7 @@ export const reactivateLicenseCode = createServerFn({ method: "POST" })
 /** Admin: deleta permanentemente código que ainda não foi resgatado. */
 export const deleteLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -175,7 +175,7 @@ export const deleteLicenseCode = createServerFn({ method: "POST" })
 /** Admin: altera data de expiração de um código. */
 export const updateLicenseCodeExpiry = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; expiresAt: string }) => ({
+  .validator((data: { id: string; expiresAt: string }) => ({
     id: String(data?.id ?? ""),
     expiresAt: String(data?.expiresAt ?? ""),
   }))
@@ -204,7 +204,7 @@ export const updateLicenseCodeExpiry = createServerFn({ method: "POST" })
 /** Admin: reemite código — revoga o antigo (se não resgatado) e cria um novo com mesmo plano. Notifica o comprador. */
 export const reissueLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string; expiresInDays?: number; notifyBuyer?: boolean }) => ({
+  .validator((data: { id: string; expiresInDays?: number; notifyBuyer?: boolean }) => ({
     id: String(data?.id ?? ""),
     expiresInDays: Math.max(1, Math.min(730, Math.floor(Number(data?.expiresInDays) || 180))),
     notifyBuyer: data?.notifyBuyer !== false,
@@ -290,7 +290,7 @@ export const listMyLicenses = createServerFn({ method: "GET" })
 /** Usuário: solicita reenvio do próprio código (cria notificação in-app e alerta admin). */
 export const requestMyLicenseResend = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { licenseId: string }) => ({ licenseId: String(data?.licenseId ?? "") }))
+  .validator((data: { licenseId: string }) => ({ licenseId: String(data?.licenseId ?? "") }))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: lic, error } = await supabaseAdmin
@@ -338,7 +338,7 @@ const REFUND_WINDOW_DAYS = 7;
 
 export const previewLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { code: string }) => ({ code: String(data?.code ?? "").toUpperCase().trim() }))
+  .validator((data: { code: string }) => ({ code: String(data?.code ?? "").toUpperCase().trim() }))
   .handler(async ({ data }): Promise<LicensePreview> => {
     const empty: LicensePreview = {
       found: false, status: null, statusLabel: "—",
@@ -404,7 +404,7 @@ export type PublicLicenseCheck = {
 };
 
 export const checkLicenseCodePublic = createServerFn({ method: "POST" })
-  .inputValidator((data: { code: string }) => ({
+  .validator((data: { code: string }) => ({
     code: String(data?.code ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").trim(),
   }))
   .handler(async ({ data }): Promise<PublicLicenseCheck> => {
@@ -447,7 +447,7 @@ export const checkLicenseCodePublic = createServerFn({ method: "POST" })
 /** Cliente resgata código de licença. */
 export const redeemMyLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { code: string }) => ({ code: String(data?.code ?? "").toUpperCase().trim() }))
+  .validator((data: { code: string }) => ({ code: String(data?.code ?? "").toUpperCase().trim() }))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: res, error } = await supabaseAdmin
@@ -465,7 +465,7 @@ export const redeemMyLicenseCode = createServerFn({ method: "POST" })
 /** Listar contas cadastradas (admin). */
 export const listAccounts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { search?: string; limit?: number }) => ({
+  .validator((data: { search?: string; limit?: number }) => ({
     search: data?.search ? String(data.search).trim() : null,
     limit: Math.min(500, Math.max(10, Math.floor(Number(data?.limit) || 100))),
   }))
@@ -489,7 +489,7 @@ export const listAccounts = createServerFn({ method: "POST" })
 /** Reset de PIN — gera novo PIN de 6 dígitos e retorna ao admin (pode enviar ao cliente por outros meios). */
 export const adminResetUserPin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string }) => ({ userId: String(data?.userId ?? "") }))
+  .validator((data: { userId: string }) => ({ userId: String(data?.userId ?? "") }))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -507,7 +507,7 @@ export const adminResetUserPin = createServerFn({ method: "POST" })
 /** Ajuste manual de paid_until (extensão gratuita ou correção). */
 export const adminExtendUserAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; addDays: number; reason?: string }) => ({
+  .validator((data: { userId: string; addDays: number; reason?: string }) => ({
     userId: String(data?.userId ?? ""),
     addDays: Math.max(-3650, Math.min(3650, Math.floor(Number(data?.addDays) || 0))),
     reason: data?.reason ? String(data.reason).slice(0, 300) : null,
@@ -537,7 +537,7 @@ export const adminExtendUserAccess = createServerFn({ method: "POST" })
 /** Últimos eventos de login (auditoria). */
 export const listLoginEvents = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { limit?: number; onlyFailed?: boolean }) => ({
+  .validator((data: { limit?: number; onlyFailed?: boolean }) => ({
     limit: Math.min(500, Math.max(10, Math.floor(Number(data?.limit) || 100))),
     onlyFailed: !!data?.onlyFailed,
   }))
@@ -585,7 +585,7 @@ export const getAdminMetrics = createServerFn({ method: "GET" })
  */
 export const createLicensePurchase = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { planId: string }) => ({ planId: String(data?.planId ?? "") }))
+  .validator((data: { planId: string }) => ({ planId: String(data?.planId ?? "") }))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { getMpCredentials } = await import("@/lib/mp-credentials.server");

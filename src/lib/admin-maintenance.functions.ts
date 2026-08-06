@@ -35,7 +35,7 @@ export type ClearLogsResult = {
  */
 export const clearAdminLogs = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { scopes: LogScope[]; olderThan?: string | null }) => {
+  .validator((input: { scopes: LogScope[]; olderThan?: string | null }) => {
     if (!Array.isArray(input?.scopes) || input.scopes.length === 0) {
       throw new Error("Selecione pelo menos um escopo para limpar.");
     }

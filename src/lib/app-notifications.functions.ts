@@ -14,7 +14,7 @@ export type AppNotification = {
 
 export const listMyAppNotifications = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         onlyUnread: z.boolean().default(false),
@@ -37,7 +37,7 @@ export const listMyAppNotifications = createServerFn({ method: "GET" })
 
 export const markAppNotificationRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z.object({ id: z.string().uuid().optional(), all: z.boolean().default(false) }).parse(raw),
   )
   .handler(async ({ data, context }) => {

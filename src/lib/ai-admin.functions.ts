@@ -67,7 +67,7 @@ export const getAiAdminConfig = createServerFn({ method: "GET" })
 /** Atualiza as regras globais de IA (cota padrão, acesso, avisos). */
 export const updateAiSettings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: {
+  .validator((data: {
     defaultQuota?: number;
     requireActivePlan?: boolean;
     allowTrial?: boolean;
@@ -95,7 +95,7 @@ export const updateAiSettings = createServerFn({ method: "POST" })
 /** Define a cota mensal de perguntas à IA de um plano. */
 export const setPlanAiQuota = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { planId: string; quota: number }) => {
+  .validator((data: { planId: string; quota: number }) => {
     if (!data?.planId) throw new Error("planId obrigatório");
     return { planId: data.planId, quota: Math.max(0, Math.round(Number(data.quota) || 0)) };
   })
@@ -111,7 +111,7 @@ export const setPlanAiQuota = createServerFn({ method: "POST" })
 /** Sobrescreve a cota do mês de um usuário específico. */
 export const setUserAiQuota = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { userId: string; quota: number }) => {
+  .validator((data: { userId: string; quota: number }) => {
     if (!data?.userId) throw new Error("userId obrigatório");
     return { userId: data.userId, quota: Math.max(0, Math.round(Number(data.quota) || 0)) };
   })

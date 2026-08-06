@@ -65,7 +65,7 @@ const ListInputSchema = z.object({
 
 export const listPriceHistory = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => ListInputSchema.parse(input ?? {}))
+  .validator((input: unknown) => ListInputSchema.parse(input ?? {}))
   .handler(async ({ data, context }): Promise<PriceHistoryRow[]> => {
     let query = context.supabase
       .from("product_price_history")
@@ -97,7 +97,7 @@ const SeriesInputSchema = z.object({
 
 export const getProductHistory = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: unknown) => SeriesInputSchema.parse(input))
+  .validator((input: unknown) => SeriesInputSchema.parse(input))
   .handler(async ({ data, context }): Promise<PriceHistoryRow[]> => {
     const { data: rows, error } = await context.supabase
       .from("product_price_history")

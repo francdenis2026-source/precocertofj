@@ -29,7 +29,7 @@ type Row = {
 
 export const listCatalogAudit = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input: { catalogId?: string; limit?: number } | undefined) => input ?? {})
+  .validator((input: { catalogId?: string; limit?: number } | undefined) => input ?? {})
   .handler(async ({ data }): Promise<AuditLogEntry[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const limit = Math.min(Math.max(data.limit ?? 100, 1), 500);

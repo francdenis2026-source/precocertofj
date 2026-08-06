@@ -10,7 +10,7 @@ import { z } from "zod";
  */
 export const createCollaboratorSubmission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z
       .object({
         market_name: z.string().min(2).max(120),
@@ -63,7 +63,7 @@ export const createCollaboratorSubmission = createServerFn({ method: "POST" })
  */
 export const signCollabAttachments = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((raw: unknown) =>
+  .validator((raw: unknown) =>
     z.object({ id: z.string().uuid() }).parse(raw),
   )
   .handler(async ({ data, context }): Promise<{ path: string; url: string }[]> => {

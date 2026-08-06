@@ -37,7 +37,7 @@ export type InsertDedupeResult =
 
 export const updateLastScan = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { id: string; patch: QuickEditPatch }) => {
+  .validator((input: { id: string; patch: QuickEditPatch }) => {
     if (!input.id) throw new Error("id obrigatório");
     if (!input.patch || typeof input.patch !== "object") throw new Error("patch inválido");
     return input;
@@ -105,7 +105,7 @@ export const updateLastScan = createServerFn({ method: "POST" })
 
 export const insertScanWithDedupe = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: InsertDedupeInput) => {
+  .validator((input: InsertDedupeInput) => {
     if (!input.productName?.trim()) throw new Error("productName obrigatório");
     if (!input.establishmentId) throw new Error("establishmentId obrigatório");
     if (!(input.priceCaptured > 0)) throw new Error("priceCaptured inválido");
@@ -210,7 +210,7 @@ export type LastScanRow = {
  */
 export const getLastScanByEstablishment = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
-  .inputValidator((input: { establishmentId: string }) => {
+  .validator((input: { establishmentId: string }) => {
     if (!input.establishmentId) throw new Error("establishmentId obrigatório");
     return input;
   })

@@ -111,7 +111,7 @@ export const listUsersWithRoles = createServerFn({ method: "GET" })
 
 export const grantRole = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { userId: string; role: "admin" | "moderator" | "user" }) => {
+  .validator((input: { userId: string; role: "admin" | "moderator" | "user" }) => {
     if (!input.userId) throw new Error("userId obrigatório");
     if (!["admin", "moderator", "user"].includes(input.role))
       throw new Error("Papel inválido");
@@ -138,7 +138,7 @@ export const grantRole = createServerFn({ method: "POST" })
 
 export const revokeRole = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { userId: string; role: "admin" | "moderator" | "user" }) => {
+  .validator((input: { userId: string; role: "admin" | "moderator" | "user" }) => {
     if (!input.userId) throw new Error("userId obrigatório");
     return input;
   })

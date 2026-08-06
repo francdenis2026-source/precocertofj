@@ -13,7 +13,7 @@ export type { ProductSuggestion };
  * confirmation hint. As respostas ficam em cache curto no servidor.
  */
 export const suggestProducts = createServerFn({ method: "POST" })
-  .inputValidator((input: { query: string }) => {
+  .validator((input: { query: string }) => {
     const q = String(input?.query ?? "").trim().slice(0, 80);
     return { query: q };
   })

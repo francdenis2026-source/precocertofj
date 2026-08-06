@@ -122,7 +122,7 @@ export const listLegacyDuplicates = createServerFn({ method: "GET" })
  */
 export const consolidateBarcode = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { barcode: string; masterId: string }) => {
+  .validator((input: { barcode: string; masterId: string }) => {
     if (!input.barcode || !input.masterId) throw new Error("barcode e masterId obrigatórios");
     return input;
   })
@@ -181,7 +181,7 @@ export const consolidateBarcode = createServerFn({ method: "POST" })
  */
 export const mergeLegacyEntries = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input: { masterId: string; duplicateIds: string[] }) => {
+  .validator((input: { masterId: string; duplicateIds: string[] }) => {
     if (!input.masterId) throw new Error("masterId obrigatório");
     if (!Array.isArray(input.duplicateIds) || input.duplicateIds.length === 0)
       throw new Error("duplicateIds vazio");

@@ -69,7 +69,7 @@ export const listMyReceipts = createServerFn({ method: "GET" })
 
 export const getMyReceiptById = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id: string }) => {
+  .validator((data: { id: string }) => {
     const id = String(data?.id ?? "").trim();
     if (!id) throw new Error("id obrigatório");
     return { id };

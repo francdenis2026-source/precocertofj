@@ -36,7 +36,7 @@ export type CrossMarketHistory = {
  * Público — usa scans oficiais (user_id IS NULL, status='salvo').
  */
 export const getCrossMarketHistory = createServerFn({ method: "POST" })
-  .inputValidator((input: { productKey?: string; productName?: string }) => {
+  .validator((input: { productKey?: string; productName?: string }) => {
     if (!input.productKey && !input.productName) {
       throw new Error("Informe productKey ou productName");
     }
