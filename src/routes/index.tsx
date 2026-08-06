@@ -107,9 +107,9 @@ function HomePage() {
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
             </div>
             
-            <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl">
+            <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl text-white">
               Inteligência real para <br />
-              <span className="text-white">economizar em cada compra</span>
+              economizar em cada compra
             </h1>
 
             <form onSubmit={submitSearch} className="group relative w-full max-w-2xl flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10">
