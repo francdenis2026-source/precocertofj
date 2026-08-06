@@ -1066,7 +1066,7 @@ function Field({
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
           className={
-            "h-11 w-full rounded-xl bg-background text-foreground text-[13.5px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
+            "h-12 w-full rounded-xl bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-foreground text-[14.5px] font-semibold tracking-tight shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] transition-all duration-200 placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
             (Icon ? "pl-10 " : "pl-3.5 ") +
@@ -1182,7 +1182,7 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-12 w-full rounded-xl border bg-background text-center text-lg font-bold text-foreground outline-none transition-all duration-200"
+          className="h-[52px] w-full rounded-xl border-2 bg-[color-mix(in_oklab,var(--bg-base)_45%,transparent)] text-center text-xl font-bold text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.18)] outline-none transition-all duration-200"
             style={{
               borderColor: hasError
                 ? "#dc2626"
