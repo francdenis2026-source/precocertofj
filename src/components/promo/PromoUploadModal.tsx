@@ -15,6 +15,8 @@ import { Upload, CheckCircle2, Loader2, FileText, X } from "lucide-react";
 import { submitPromoReceipt } from "@/lib/promo.functions";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
+import { cn } from "@/lib/utils";
 
 interface PromoUploadModalProps {
   open: boolean;
@@ -119,9 +121,16 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
                       required 
                       placeholder="Ex: João da Silva"
                       value={formData.fullName}
-                      onChange={e => setFormData(d => ({ ...d, fullName: e.target.value }))}
-                      className="bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]"
+                      onChange={e => {
+                        setFormData(d => ({ ...d, fullName: e.target.value }));
+                        validateField("fullName", e.target.value);
+                      }}
+                      className={cn(
+                        "bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]",
+                        errors.fullName && "border-red-500/50"
+                      )}
                     />
+                    {errors.fullName && <p className="text-[9px] font-bold text-red-500 uppercase">{errors.fullName}</p>}
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -130,10 +139,18 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
                         id="cpf" 
                         required 
                         placeholder="000.000.000-00"
-                        value={formData.cpf}
-                        onChange={e => setFormData(d => ({ ...d, cpf: e.target.value }))}
-                        className="bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]"
+                        value={maskCpf(formData.cpf)}
+                        onChange={e => {
+                          const val = e.target.value.replace(/\D/g, "");
+                          setFormData(d => ({ ...d, cpf: val }));
+                          validateField("cpf", val);
+                        }}
+                        className={cn(
+                          "bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]",
+                          errors.cpf && "border-red-500/50"
+                        )}
                       />
+                      {errors.cpf && <p className="text-[9px] font-bold text-red-500 uppercase">{errors.cpf}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Celular</Label>
@@ -141,10 +158,18 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
                         id="phone" 
                         required 
                         placeholder="(68) 9.9999-9999"
-                        value={formData.phone}
-                        onChange={e => setFormData(d => ({ ...d, phone: e.target.value }))}
-                        className="bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]"
+                        value={maskPhone(formData.phone)}
+                        onChange={e => {
+                          const val = e.target.value.replace(/\D/g, "");
+                          setFormData(d => ({ ...d, phone: val }));
+                          validateField("phone", val);
+                        }}
+                        className={cn(
+                          "bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]",
+                          errors.phone && "border-red-500/50"
+                        )}
                       />
+                      {errors.phone && <p className="text-[9px] font-bold text-red-500 uppercase">{errors.phone}</p>}
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -155,9 +180,16 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
                       required 
                       placeholder="seu@email.com"
                       value={formData.email}
-                      onChange={e => setFormData(d => ({ ...d, email: e.target.value }))}
-                      className="bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]"
+                      onChange={e => {
+                        setFormData(d => ({ ...d, email: e.target.value }));
+                        validateField("email", e.target.value);
+                      }}
+                      className={cn(
+                        "bg-[var(--bg-base)] border-[var(--border-subtle)] focus:ring-[var(--brand-primary)]",
+                        errors.email && "border-red-500/50"
+                      )}
                     />
+                    {errors.email && <p className="text-[9px] font-bold text-red-500 uppercase">{errors.email}</p>}
                   </div>
                   
                   <div className="space-y-2">
@@ -193,7 +225,15 @@ export function PromoUploadModal({ open, onOpenChange }: PromoUploadModalProps) 
                 <DialogFooter className="pt-4">
                   <Button 
                     type="submit" 
-                    disabled={loading}
+                    disabled={
+                      loading || 
+                      !file || 
+                      !formData.fullName || 
+                      !formData.cpf || 
+                      !formData.phone || 
+                      !formData.email ||
+                      Object.values(errors).some(e => !!e)
+                    }
                     className="w-full h-12 bg-[var(--brand-primary)] text-black font-black uppercase tracking-widest text-[11px] rounded-xl hover:scale-[1.02] active:scale-95 transition-all"
                   >
                     {loading ? (
