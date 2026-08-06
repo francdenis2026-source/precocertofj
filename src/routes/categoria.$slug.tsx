@@ -86,6 +86,8 @@ const searchSchema = z.object({
   so_cortes: fallback(z.number().int().min(0).max(1), 0).default(0),
   /** Subgrupo de hortifrúti: frutas | verduras | legumes | tuberculos | temperos | cogumelos */
   sub: fallback(z.string(), "").default(""),
+  /** Ordenação: recent | price | near */
+  sort: fallback(z.enum(["recent", "price", "near"]), "recent").default("recent"),
 });
 
 
@@ -123,16 +125,16 @@ function CategoryPage() {
   const def = categoryBySlug(slug);
 
   useEffect(() => {
-    if (search.view === "near" && !userLocation) {
+    if (search.sort === "near" && !userLocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
         (err) => {
           console.error("Erro ao obter localização:", err);
-          setSearch({ view: "list" });
+          setSearch({ sort: "recent" });
         }
       );
     }
-  }, [search.view, userLocation]);
+  }, [search.sort, userLocation, setSearch]);
   const fetchHub = useServerFn(getCategoryHub);
 
   // Estado derivado da URL (compartilhável + voltar/avançar do navegador)
@@ -262,7 +264,11 @@ function CategoryPage() {
 
   const productsWithProximity = useMemo(() => {
     let list = products;
-    if (view === "near" && userLocation) {
+    
+    // Application of sorting
+    if (search.sort === "price") {
+      list = [...list].sort((a: any, b: any) => a.minPrice - b.minPrice);
+    } else if (search.sort === "near" && userLocation) {
       const getDist = (p: any) => {
         const store = displayStores.find((s: any) => p.storeNames.includes(s.name));
         if (!store?.lat || !store?.lng) return 999999;
@@ -272,9 +278,13 @@ function CategoryPage() {
         );
       };
       list = [...list].sort((a: any, b: any) => getDist(a) - getDist(b));
+    } else {
+      // Default: recent (already mostly handled by getCategoryHub but ensured here)
+      // If we had a 'when' field in CategoryHub product, we'd use it.
     }
+
     return list;
-  }, [products, view, userLocation, displayStores]);
+  }, [products, search.sort, userLocation, displayStores]);
 
   // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
   // respeita busca e loja para não anunciar filtros que resultariam em vazio).
@@ -583,10 +593,30 @@ function CategoryPage() {
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
             </div>
-            <ViewToggle
-              view={view as any}
-              onChange={(v) => setSearch({ view: v, page: 1 })}
-            />
+            <div className="flex items-center gap-2">
+              <div className="flex h-10 items-center gap-1 rounded-lg border border-border bg-card p-1">
+                {[
+                  { id: "recent", label: "Recent", Icon: Clock3 },
+                  { id: "price", label: "Preço", Icon: TrendingDown },
+                  { id: "near", label: "Perto", Icon: MapPin },
+                ].map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setSearch({ sort: s.id as any, page: 1 })}
+                    className={cn(
+                      "grid h-8 px-2 place-items-center rounded-md text-[10px] font-bold uppercase transition-colors",
+                      search.sort === s.id ? "bg-brand-gold text-brand-navy" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <ViewToggle
+                view={view as any}
+                onChange={(v) => setSearch({ view: v, page: 1 })}
+              />
+            </div>
           </div>
 
           {(data?.stores.length ?? 0) > 1 && (
