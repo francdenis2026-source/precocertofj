@@ -107,6 +107,7 @@ import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminAcessosTemporariosRouteImport } from './routes/admin_.acessos-temporarios'
 import { Route as AdminGestaoRouteImport } from './routes/admin.gestao'
+import { Route as AppInsightsIndexRouteImport } from './routes/app/insights/index'
 import { Route as AppLojaIdRouteImport } from './routes/app_.loja.$id'
 import { Route as ApiPublicVersionRouteImport } from './routes/api/public/version'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
@@ -612,6 +613,11 @@ const AdminGestaoRoute = AdminGestaoRouteImport.update({
   path: '/gestao',
   getParentRoute: () => AdminRoute,
 } as any)
+const AppInsightsIndexRoute = AppInsightsIndexRouteImport.update({
+  id: '/insights/',
+  path: '/insights/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLojaIdRoute = AppLojaIdRouteImport.update({
   id: '/app_/loja/$id',
   path: '/app/loja/$id',
@@ -794,6 +800,7 @@ export interface FileRoutesByFullPath {
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app/loja/$id': typeof AppLojaIdRoute
+  '/app/insights/': typeof AppInsightsIndexRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -908,6 +915,7 @@ export interface FileRoutesByTo {
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app/loja/$id': typeof AppLojaIdRoute
+  '/app/insights': typeof AppInsightsIndexRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1023,6 +1031,7 @@ export interface FileRoutesById {
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/version': typeof ApiPublicVersionRoute
   '/app_/loja/$id': typeof AppLojaIdRoute
+  '/app/insights/': typeof AppInsightsIndexRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1139,6 +1148,7 @@ export interface FileRouteTypes {
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app/loja/$id'
+    | '/app/insights/'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -1253,6 +1263,7 @@ export interface FileRouteTypes {
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app/loja/$id'
+    | '/app/insights'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -1367,6 +1378,7 @@ export interface FileRouteTypes {
     | '/api/public/mp-webhook'
     | '/api/public/version'
     | '/app_/loja/$id'
+    | '/app/insights/'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -2172,6 +2184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGestaoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/app/insights/': {
+      id: '/app/insights/'
+      path: '/insights'
+      fullPath: '/app/insights/'
+      preLoaderRoute: typeof AppInsightsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app_/loja/$id': {
       id: '/app_/loja/$id'
       path: '/app/loja/$id'
@@ -2284,10 +2303,12 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppRouteChildren {
+  AppInsightsIndexRoute: typeof AppInsightsIndexRoute
   AppProdutoIdSlugRoute: typeof AppProdutoIdSlugRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppInsightsIndexRoute: AppInsightsIndexRoute,
   AppProdutoIdSlugRoute: AppProdutoIdSlugRoute,
 }
 
