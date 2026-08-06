@@ -83,7 +83,7 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 
-type SortMode = "relevance" | "cheapest" | "highest" | "unit" | "recent" | "kind" | "spread" | "savings";
+type SortMode = "relevance" | "cheapest" | "highest" | "unit" | "recent" | "kind" | "spread" | "savings" | "market";
 
 const CATEGORIES = [
   { slug: "supermercados", label: "Mercados" },
@@ -214,7 +214,7 @@ export function PriceSearchBar({
     "cheapest",
     {
       validate: (v): v is SortMode =>
-        v === "relevance" || v === "cheapest" || v === "highest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
+        v === "relevance" || v === "cheapest" || v === "highest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings" || v === "market",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
@@ -1490,6 +1490,7 @@ export function PriceSearchBar({
                   unit: "Preço por unidade",
                   kind: "Tipo de mercado",
                   spread: "Maior variação",
+                  market: "Comércio (A–Z)",
                 };
                 const visibleCount = filteredOrdered.reduce(
                   (n, [, gs]) => n + gs.length,
@@ -2118,6 +2119,13 @@ function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string):
         a.price - b.price ||
         byRecency(a, b),
     );
+  else if (mode === "market")
+    arr.sort(
+      (a, b) =>
+        (a.marketName ?? "zzz").localeCompare(b.marketName ?? "zzz", "pt-BR") ||
+        a.price - b.price ||
+        byRecency(a, b),
+    );
 
   else if (mode === "spread") {
     // "Menor variação" — na lista de preços de um grupo, isso equivale a
@@ -2188,6 +2196,9 @@ function QuickFilters({
       </button>
       <button type="button" className={chip(sortMode === "highest")} onClick={() => onSort("highest")}>
         Maior preço
+      </button>
+      <button type="button" className={chip(sortMode === "market")} onClick={() => onSort("market")}>
+        Comércio (A–Z)
       </button>
       <button
         type="button"
