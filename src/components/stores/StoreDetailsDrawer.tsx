@@ -17,7 +17,9 @@ import {
   TrendingDown,
   Clock,
   Package,
+  Download,
 } from "lucide-react";
+import { exportStoreCatalog } from "@/lib/export.functions";
 import {
   getPublicStoreCatalog,
   getCheapestStoresRanking,
