@@ -13,9 +13,9 @@ import {
   Scale,
   BellPlus,
   ArrowDownWideNarrow,
-  Sparkles,
   Timer
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   LineChart,
   Line,
