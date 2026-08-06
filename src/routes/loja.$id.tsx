@@ -639,7 +639,7 @@ function StorePage() {
                 const groupByCategory = cat === "all" && q.trim() === "";
                 if (!groupByCategory) {
                   return (
-                    <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+                    <ul className="pc-print-content divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
                       {visible.map((p) => (
                         <ProductRow
                           key={p.slug}
