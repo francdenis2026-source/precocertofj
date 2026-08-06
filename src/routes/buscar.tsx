@@ -8,6 +8,7 @@ import { SearchDashboard } from "@/components/search/SearchDashboard";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { SearchResultsList } from "@/components/search/SearchResultsList";
 import { SimilarProductsSection } from "@/components/search/SimilarProductsSection";
+import { SearchMarketsSection } from "@/components/search/SearchMarketsSection";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { SearchDiscovery } from "@/components/search/SearchDiscovery";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,6 +95,7 @@ function SearchPage() {
                 <SearchFiltersPanel isOpen={filtersOpen} onToggle={() => setFiltersOpen(!filtersOpen)} />
                 <div className="space-y-12">
                   <SearchResultsList />
+                  <SearchMarketsSection />
                   <SimilarProductsSection query={search.q} />
                 </div>
               </div>
