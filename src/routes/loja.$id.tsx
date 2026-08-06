@@ -263,8 +263,34 @@ function StorePage() {
   const [page, setPage] = useState(1);
   const [cartOpen, setCartOpen] = useState(false);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [compareTargetStore, setCompareTargetStore] = useState<string | null>(null);
   const [compareResults, setCompareResults] = useState<CartCompareStore[] | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
   const cart = useStoreCart(id);
+
+  const handleExport = async (format: 'csv' | 'pdf') => {
+    setIsExporting(true);
+    try {
+      const res = await exportStoreCatalog({ data: { storeId: id, format } });
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
+      if (res.content) {
+        const blob = new Blob([res.content], { type: format === 'csv' ? 'text/csv' : 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = res.filename || `precos-${id}.${format}`;
+        a.click();
+        toast.success(`Exportação concluída com sucesso!`);
+      }
+    } catch (err) {
+      toast.error("Erro ao exportar dados.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   useEffect(() => setPage(1), [q, cat, sort]);
 
