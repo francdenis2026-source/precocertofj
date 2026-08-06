@@ -279,12 +279,12 @@ function HomePage() {
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[56px] sm:h-[64px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1.5 shadow-xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5",
-                  (isSearchFocused || isScrolled) && "h-[48px] sm:h-[52px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] bg-[var(--bg-surface)]/90 backdrop-blur-xl border-[var(--brand-primary)]/20"
+                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-lg transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5",
+                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[50px] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] bg-[var(--bg-surface)]/90 backdrop-blur-xl border-[var(--brand-primary)]/20"
                 )}
               >
                 <Search className={cn(
-                  "ml-4 h-5 w-5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors",
+                  "ml-4 h-4.5 w-4.5 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors",
                   (isSearchFocused || isScrolled) && "h-4 w-4 ml-3"
                 )} />
                 <input 
@@ -292,17 +292,17 @@ function HomePage() {
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                  placeholder="Pesquisar produtos ou mercados..." 
+                  placeholder="O que você deseja economizar hoje?" 
                   className={cn(
-                    "flex-1 bg-transparent px-4 text-base font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
-                    (isSearchFocused || isScrolled) && "text-sm px-3"
+                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
+                    (isSearchFocused || isScrolled) && "text-[13px] px-3"
                   )} 
                 />
                 <Button 
                   type="submit" 
                   className={cn(
-                    "hidden sm:flex rounded-xl bg-[var(--brand-primary)] font-bold text-white hover:brightness-110 active:scale-95 transition-all h-[44px] sm:h-[52px] px-8",
-                    (isSearchFocused || isScrolled) && "h-[36px] sm:h-[40px] px-6 text-sm"
+                    "hidden sm:flex rounded-xl bg-[var(--brand-primary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[50px] px-8 text-[11px]",
+                    (isSearchFocused || isScrolled) && "h-[34px] sm:h-[38px] px-6 text-[10px]"
                   )}
                 >
                   Buscar
