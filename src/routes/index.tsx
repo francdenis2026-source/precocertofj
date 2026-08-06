@@ -222,24 +222,24 @@ function HomePage() {
             });
           `}} />
           
-          {/* Hero Section */}
+          {/* Hero Section - Clarity & Connection Theme */}
           <motion.section 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col items-center text-center mb-16"
+            className="flex flex-col items-center text-center mb-16 pt-8"
           >
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-6 backdrop-blur-md"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 mb-8 backdrop-blur-md"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">Ao vivo em Feijó <span className="text-[var(--text-tertiary)] mx-1">·</span> Acre</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
             {/* Logo Preview Trigger (Hidden Admin Feature) */}
@@ -248,7 +248,7 @@ function HomePage() {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setShowLogoPreview(true)}
-                className="rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
+                className="rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[8px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--brand-primary)] transition-all"
               >
                 Preview Logomarcas
               </Button>
