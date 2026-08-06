@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseClient } from "@/utils/supabase";
 
 export type TrendingSearch = {
   query: string;
@@ -22,21 +22,7 @@ export const listTrendingSearches = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<TrendingSearch[]> => {
     const limit = Math.min(Math.max(data.limit ?? 24, 1), 40);
 
-    const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-    const url = process.env.SUPABASE_URL!;
-    const supa = createClient(url, key, {
-      auth: { persistSession: false },
-      global: {
-        fetch: (input, init) => {
-          const h = new Headers(init?.headers);
-          if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-            h.delete("Authorization");
-          }
-          h.set("apikey", key);
-          return fetch(input, { ...init, headers: h });
-        },
-      },
-    });
+    const supa = createSupabaseClient();
 
     const { data: rows, error } = await supa
       .from("search_trends")
