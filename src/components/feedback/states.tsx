@@ -353,7 +353,7 @@ export function ListRowsSkeleton({
       className={cn("divide-y divide-border/60", className)}
       aria-busy="true"
       aria-live="polite"
-      aria-label="Carregando lista"
+      aria-label="Estamos organizando a lista..."
     >
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className={shimmer("flex items-center gap-3 px-3 py-3")}>
@@ -382,7 +382,7 @@ export function PriceListSkeleton({
       className={cn("space-y-2", className)}
       aria-busy="true"
       aria-live="polite"
-      aria-label="Carregando preços"
+      aria-label="Atualizando os melhores preços..."
     >
       {Array.from({ length: rows }).map((_, i) => (
         <div
@@ -416,7 +416,7 @@ export function MarketCardsSkeleton({
       className={cn("grid gap-3 sm:grid-cols-2 lg:grid-cols-3", className)}
       aria-busy="true"
       aria-live="polite"
-      aria-label="Carregando estabelecimentos"
+      aria-label="Localizando estabelecimentos..."
     >
       {Array.from({ length: count }).map((_, i) => (
         <div
@@ -455,7 +455,7 @@ export function ComparisonSkeleton({
       className={cn("space-y-3", className)}
       aria-busy="true"
       aria-live="polite"
-      aria-label="Carregando comparação"
+      aria-label="Preparando comparação detalhada..."
     >
       <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0,1fr))` }}>
         {Array.from({ length: columns }).map((_, i) => (

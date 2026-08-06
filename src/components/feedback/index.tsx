@@ -26,7 +26,7 @@ const spinnerSize = {
 } as const;
 
 /** Accessible spinner. Wrap in a flex parent to control layout. */
-export function Spinner({ size = "sm", label = "Carregando", className, ...props }: SpinnerProps) {
+export function Spinner({ size = "sm", label = "Carregando...", className, ...props }: SpinnerProps) {
   return (
     <>
       <Loader2
@@ -48,7 +48,7 @@ interface PageLoaderProps {
 
 /** Centered loader for route pending states. */
 export function PageLoader({
-  label = "Carregando...",
+  label = "Estamos preparando tudo para você...",
   className,
   fullScreen = false,
 }: PageLoaderProps) {
