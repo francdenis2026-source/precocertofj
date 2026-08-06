@@ -38,7 +38,9 @@ export const Route = createFileRoute("/categoria/$slug")({
 function CategoryPage() {
   const { slug, products } = useLoaderData({ from: "/categoria/$slug" });
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
+  const [activeUnit, setActiveUnit] = useState<string | null>(null);
   const [activePriceRange, setActivePriceRange] = useState<[number, number] | null>(null);
+  const [sortOrder, setSortOrder] = useState<"relevance" | "price_asc" | "price_desc">("relevance");
 
   const brands = useMemo(() => {
     const b = new Set<string>();
