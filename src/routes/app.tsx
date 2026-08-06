@@ -123,7 +123,12 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard pc-page" ref={wheelRootRef}>
+      <div className="relative z-10 app-dashboard pc-page" ref={wheelRootRef}>
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 bg-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-[0.05] mix-blend-luminosity" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)] via-[var(--bg-base)]/90 to-[var(--bg-base)]" />
+        </div>
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as

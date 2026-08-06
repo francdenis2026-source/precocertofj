@@ -116,13 +116,18 @@ function HomePage() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center text-center mb-24"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md"
+            >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">Ao vivo em Feijó</span>
-            </div>
+            </motion.div>
             
             <h1 className="font-['Space_Grotesk'] text-[40px] sm:text-[56px] font-bold tracking-[-0.03em] leading-[1.05] mb-8 max-w-3xl text-white">
               Inteligência real para <br />
