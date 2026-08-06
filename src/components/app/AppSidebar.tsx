@@ -358,7 +358,7 @@ export function AppSidebar() {
                 )}
               </span>
               <span className="pcsb-kicker">
-                {isAdminArea ? "Painel de Controle" : "Acompanhamento Inteligente"}
+                {isAdminArea ? "Painel de Controle" : <>Acompanhamento Inteligente <span className="text-[var(--brand-primary)]">· AC</span></>}
               </span>
             </span>
           </Link>
