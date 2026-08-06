@@ -605,7 +605,9 @@ function HomePage() {
           </section>
 
           {/* Registered Stores Carousel */}
-          <RegisteredStoresCarousel />
+          <Suspense fallback={<Skeleton className="h-[150px] w-full rounded-3xl mb-12" />}>
+            <RegisteredStoresCarousel />
+          </Suspense>
         </main>
       </div>
 
