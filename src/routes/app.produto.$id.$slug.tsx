@@ -11,7 +11,9 @@ import {
   MapPin,
   Tag,
   ChevronRight,
-  History as HistoryIcon
+  History as HistoryIcon,
+  BrainCircuit,
+  Lightbulb
 } from "lucide-react";
 import { 
   getPublicProductDetail, 
@@ -19,11 +21,13 @@ import {
   type PricePoint,
   type CrossStoreOffer
 } from "@/lib/stores-public.functions";
+import { getPriceInsights } from "@/lib/ai-insights.functions";
 import { Price } from "@/components/ds/Price";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/layout";
 import { queryOptions } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 
 const productQuery = (storeId: string, slug: string) =>
   queryOptions({
