@@ -68,9 +68,9 @@ export async function performSuggest(query: string): Promise<ProductSuggestion[]
   const result: ProductSuggestion[] = filtered
     .sort(
       (a, b) =>
+        b.similarity - a.similarity ||
         b._score - a._score ||
         Number(a.isFuzzy) - Number(b.isFuzzy) ||
-        b.similarity - a.similarity ||
         a.displayName.localeCompare(b.displayName, "pt-BR"),
     )
     .slice(0, 8)
