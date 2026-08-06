@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+:root {
+  --pc-price-fg: var(--text-primary);
+  --pc-price-best: var(--brand-primary);
+  --pc-price-savings: var(--success);
+}
+
 @theme {
   --pc-primary-rgb: 255 215 0;
   --bg-base: #05070A;

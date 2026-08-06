@@ -156,7 +156,7 @@ function AppHomeContent() {
 
               {loading && (
                 <Loader2
-                  className="h-4 w-4 animate-spin text-primary-foreground/70"
+                  className="h-4 w-4 animate-spin text-black/70"
                   aria-label="Atualizando preços"
                 />
               )}
