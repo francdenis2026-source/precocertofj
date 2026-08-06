@@ -606,9 +606,9 @@ function LoginPage() {
                 </motion.p>
               )}
             </AnimatePresence>
+          </div>
 
-            </div>
-            <motion.button
+          <motion.button
               type="submit"
               whileTap={{ scale: 0.985 }}
               disabled={
@@ -660,7 +660,6 @@ function LoginPage() {
                 <Ticket className="h-3.5 w-3.5" />
                 Esqueci meu PIN / tenho um código
               </Link>
-            </div>
             </div>
           </form>
 
