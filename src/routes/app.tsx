@@ -20,7 +20,8 @@ import {
   Store,
   Tag,
   Search,
-  ShoppingCart
+  ShoppingCart,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/ProductImage";
