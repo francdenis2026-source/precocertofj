@@ -129,23 +129,45 @@ function HomePage() {
           {/* Categories Grid */}
           <section className="mb-24">
             <h2 className="section-title">Navegar por Categoria</h2>
-            <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar scroll-smooth snap-x">
-              {CATEGORIES.map(({ slug, label, Icon }) => (
+            <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
+                 onMouseDown={(e) => {
+                   const el = e.currentTarget;
+                   const startX = e.pageX - el.offsetLeft;
+                   const scrollLeft = el.scrollLeft;
+                   const onMouseMove = (e: MouseEvent) => {
+                     const x = e.pageX - el.offsetLeft;
+                     const walk = (x - startX) * 2;
+                     el.scrollLeft = scrollLeft - walk;
+                   };
+                   const onMouseUp = () => {
+                     document.removeEventListener('mousemove', onMouseMove);
+                     document.removeEventListener('mouseup', onMouseUp);
+                   };
+                   document.addEventListener('mousemove', onMouseMove);
+                   document.addEventListener('mouseup', onMouseUp);
+                 }}>
+              {CATEGORIES.map(({ slug, label, Icon, image }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
-                  className="group flex flex-col items-center justify-center min-w-[120px] aspect-square rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)] snap-start"
+                  className="group relative flex flex-col items-center justify-end min-w-[160px] h-[200px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/10 transition-all duration-300 mb-3">
-                    <Icon className="h-6 w-6" />
+                  <div className="absolute inset-0 z-0">
+                    <img src={image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-[var(--bg-surface)]/40 to-transparent" />
                   </div>
-                  <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] group-hover:text-white transition-colors">{label}</span>
+                  <div className="relative z-10 w-full p-5 flex flex-col items-center">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md text-white group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 mb-3 shadow-lg">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-colors">{label}</span>
+                  </div>
                 </Link>
               ))}
               <Link 
                 to="/buscar" 
-                className="group flex flex-col items-center justify-center min-w-[120px] aspect-square rounded-[24px] border border-dashed border-[var(--border-subtle)] transition-all hover:border-[var(--text-tertiary)] snap-start"
+                className="group relative flex flex-col items-center justify-center min-w-[160px] h-[200px] rounded-[24px] border border-dashed border-[var(--border-subtle)] transition-all hover:border-[var(--text-tertiary)] snap-start overflow-hidden"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)] group-hover:text-white transition-all mb-3">
                   <PlusCircle className="h-6 w-6" />
