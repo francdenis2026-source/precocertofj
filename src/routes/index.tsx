@@ -427,7 +427,9 @@ function HomePage() {
 
           {/* New Sections for Recent and Trending Products */}
           <div className="mb-12">
-            <RecentProductsCarousel />
+            <Suspense fallback={<Skeleton className="h-[200px] w-full rounded-3xl" />}>
+              <RecentProductsCarousel />
+            </Suspense>
           </div>
 
           {/* Live Prices Table */}
