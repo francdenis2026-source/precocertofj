@@ -821,7 +821,7 @@ function CategoryChip({
     <button
       type="button"
       onClick={onClick}
-      className={cn(
+          search={{ q: search, from: `/loja/${id}` }}
         "shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 text-[11.5px] font-semibold transition",
         active
           ? "border-primary bg-primary text-primary-foreground"
