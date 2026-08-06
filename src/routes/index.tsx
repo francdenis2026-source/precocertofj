@@ -201,17 +201,18 @@ function HomePage() {
       {/* Realistic Supermarket Background Hero */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{ 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
+          style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(0px)"
+            filter: "brightness(0.75) contrast(1.15) saturate(1.05) blur(4px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-[var(--bg-base)]/60 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-[var(--bg-base)]/30" />
       </div>
 
       <div className="relative z-10 flex flex-col">
