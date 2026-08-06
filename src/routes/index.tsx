@@ -162,15 +162,30 @@ function HomePage() {
                   params={{ slug: slug as any }}
                   className="group relative flex flex-col items-center justify-end min-w-[160px] h-[200px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all hover:border-[var(--brand-primary)]/40 snap-start"
                 >
-                  <div className="absolute inset-0 z-0 flex items-center justify-center p-12 opacity-15 group-hover:opacity-25 transition-all duration-500 group-hover:scale-90">
-                    <SVG className="w-16 h-16 sm:w-20 sm:h-20" style={{ color }} />
+                  <div className="absolute inset-0 z-0">
+                    <div 
+                      className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500" 
+                      style={{ 
+                        background: `radial-gradient(circle at center, ${color} 0%, transparent 70%)`,
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] mix-blend-overlay" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
                   </div>
-                  <div className="relative z-10 w-full p-5 flex flex-col items-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 backdrop-blur-md text-white/80 group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 mb-3 shadow-lg border border-white/10">
-                      <Icon className="h-5 w-5" />
+                  <div className="relative z-10 w-full p-6 flex flex-col items-center">
+                    <div className="relative mb-4">
+                      <div 
+                        className="absolute inset-0 blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                        style={{ backgroundColor: color }}
+                      />
+                      <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl text-white group-hover:scale-110 group-hover:bg-[var(--brand-primary)] group-hover:border-[var(--brand-primary)] transition-all duration-500 shadow-2xl">
+                        <Icon className="h-7 w-7 transition-transform duration-500 group-hover:rotate-3" />
+                      </div>
                     </div>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/90 transition-colors group-hover:text-white">{label}</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 group-hover:text-white transition-colors">{label}</span>
+                      <div className="h-0.5 w-0 bg-[var(--brand-primary)] group-hover:w-full transition-all duration-500 rounded-full" />
+                    </div>
                   </div>
                 </Link>
               ))}
