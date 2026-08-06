@@ -58,7 +58,7 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#6C5CE7" },
+  { slug: "supermercados", label: "Mercados", Icon: Store, SVG: GroceryIcon, color: "#FFD700" },
   { slug: "padarias", label: "Padarias", Icon: Coffee, SVG: BakeryIcon, color: "#FD79A8" },
   { slug: "acougues", label: "Açougues", Icon: Utensils, SVG: MeatIcon, color: "#E17055" },
   { slug: "hortifruti", label: "Hortifruti", Icon: Apple, SVG: FruitIcon, color: "#00B894" },
@@ -131,7 +131,7 @@ function HomePage() {
             
             <h1 className="font-display text-[44px] sm:text-[64px] font-bold tracking-[-0.04em] leading-[0.95] mb-8 max-w-4xl text-white">
               Inteligência real para <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#a29bfe]">economizar</span> em cada compra
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
             </h1>
 
             <form onSubmit={submitSearch} className="group relative w-full max-w-2xl flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10">
@@ -280,7 +280,7 @@ function HomePage() {
                     {loaderData.economy?.avgSavingsPct ? `${loaderData.economy.avgSavingsPct}%` : "—"}
                   </div>
                 </div>
-                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-white hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+                <Button onClick={() => navigate({ to: "/app" })} className="w-full bg-[var(--brand-primary)] text-black hover:scale-[1.02] active:scale-95 font-bold rounded-xl h-12 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
                   Acessar Aplicativo
                 </Button>
               </div>
