@@ -419,7 +419,7 @@ function HomePage() {
                 </div>
               </div>
               
-              <div class="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
+              <div className="rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-sm">
                 <RegisteredStoresCarousel />
               </div>
             </div>
