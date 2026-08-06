@@ -218,8 +218,7 @@ function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[105] bg-black/40 backdrop-blur-[2px]"
-            onClick={() => setIsSearchFocused(false)}
+            className="fixed inset-0 z-[105] bg-black/40 backdrop-blur-[2px] pointer-events-none"
           />
         )}
       </AnimatePresence>
@@ -234,7 +233,7 @@ function HomePage() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(2px)"
+            filter: "brightness(0.85) contrast(1.1) saturate(1.1) blur(0px)"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
@@ -309,11 +308,9 @@ function HomePage() {
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={(e) => {
-                    // Evitar fechar se o foco for para as sugestões
-                    if (e.relatedTarget instanceof HTMLElement && e.relatedTarget.closest('#home-search-suggestions')) {
-                      return;
-                    }
-                    setTimeout(() => setIsSearchFocused(false), 200);
+                    const related = e.relatedTarget as HTMLElement;
+                    if (related?.closest('#home-search-suggestions')) return;
+                    setIsSearchFocused(false);
                   }}
                   placeholder="O que você quer comprar mais barato hoje?" 
                   className={cn(
