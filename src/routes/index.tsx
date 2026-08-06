@@ -326,11 +326,10 @@ function HomePage() {
                       <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] group-hover/card:text-white transition-colors">Todas</span>
                     </Link>
                   </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
-              <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
-            </Carousel>
+                </CarouselContent>
+                <CarouselPrevious className="left-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
+                <CarouselNext className="right-1 hidden h-9 w-9 border-border bg-background/90 opacity-0 shadow-md backdrop-blur transition-opacity group-hover/carousel:opacity-100 md:flex" />
+              </Carousel>
           </section>
 
           {/* New Sections for Recent and Trending Products */}
