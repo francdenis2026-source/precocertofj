@@ -233,13 +233,15 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           if (e.key === "ArrowDown") {
             if (list.length === 0) return false;
             e.preventDefault();
-            setActive(cur + 1 >= list.length ? -1 : cur + 1);
+            const next = cur + 1 >= list.length ? 0 : cur + 1;
+            setActive(next);
             return true;
           }
           if (e.key === "ArrowUp") {
             if (list.length === 0) return false;
             e.preventDefault();
-            setActive(cur <= -1 ? list.length - 1 : cur - 1);
+            const prev = cur <= 0 ? list.length - 1 : cur - 1;
+            setActive(prev);
             return true;
           }
           if (e.key === "Escape") {
