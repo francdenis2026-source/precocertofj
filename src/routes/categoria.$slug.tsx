@@ -29,6 +29,8 @@ import {
   Wine,
   BookOpen,
   MapPin,
+  Clock3,
+  TrendingDown,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -596,7 +598,7 @@ function CategoryPage() {
             <div className="flex items-center gap-2">
               <div className="flex h-10 items-center gap-1 rounded-lg border border-border bg-card p-1">
                 {[
-                  { id: "recent", label: "Recent", Icon: Clock3 },
+                  { id: "recent", label: "Recentes", Icon: Clock3 },
                   { id: "price", label: "Preço", Icon: TrendingDown },
                   { id: "near", label: "Perto", Icon: MapPin },
                 ].map((s) => (
