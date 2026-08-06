@@ -20,7 +20,8 @@ import {
   Filter,
   ArrowDownWideNarrow,
   Clock,
-  MapPin
+    MapPin,
+    Sparkles
 } from "lucide-react";
 import { 
   GroceryIcon, 
