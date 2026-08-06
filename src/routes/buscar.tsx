@@ -12,6 +12,7 @@ import { SearchMarketsSection } from "@/components/search/SearchMarketsSection";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { SearchDiscovery } from "@/components/search/SearchDiscovery";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
