@@ -73,7 +73,7 @@ export function Logo({
                 aria-hidden="true"
                 className="inline-block h-[2px] w-4 rounded-full bg-brand-gold"
               />
-              Feijó <span className="text-gold-ink">•</span> Acre
+              Feijó <span className="text-gold-ink">•</span> <span className="text-gold-ink">Acre</span>
             </span>
           )}
         </span>
