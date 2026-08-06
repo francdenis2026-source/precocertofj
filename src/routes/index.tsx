@@ -222,6 +222,7 @@ function HomePage() {
                    const startX = e.pageX - el.offsetLeft;
                    const scrollLeft = el.scrollLeft;
                    const onMouseMove = (e: MouseEvent) => {
+                     e.preventDefault();
                      const x = e.pageX - el.offsetLeft;
                      const walk = (x - startX) * 2;
                      el.scrollLeft = scrollLeft - walk;
