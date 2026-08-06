@@ -260,15 +260,7 @@ function HomePage() {
 
             
             <h1 className="font-display text-[32px] sm:text-[40px] font-bold tracking-tight leading-[1.1] mb-6 max-w-2xl text-[var(--text-primary)]">
-              Antes de realizar qualquer ação, entenda o contexto e instrução recente do usuário, comando mais recente enviado por ele: Inclua filtros e ordenação na página de detalhes para eu alternar entre menor preço, maior economia e intervalo de datas do histórico.
-
-Adicione uma lista organizada de estabelecimentos com preço atual, unidade e data do último registro na página de detalhes do produto. 
-
-Implemente um gráfico de variação de preços ao longo do tempo com base no histórico de registros do produto. 
-
-Crie uma página de detalhes do produto para mostrar preços por estabelecimento, permitindo comparar rapidamente as opções disponíveis. 
-
-Adicionar opções de ordenação e comparação para eu escolher entre menor preço, maior proximidade e menor variação, comparando preços lado a lado.
+              Sua Inteligência Real para Economizar todos os dias em Feijó
             </h1>
 
             <div className="relative w-full max-w-2xl">
