@@ -46,7 +46,6 @@ export function ContamigosLogo({
         className
       )} 
       initial={false}
-      {...props}
     >
       {/* Ícone Estilizado: Uma cesta/sacola formada por linhas geométricas */}
       <div className={cn(
