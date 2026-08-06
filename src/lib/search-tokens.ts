@@ -36,7 +36,9 @@ function compactSizes(text: string): string {
 /** NFD → remove diacríticos → lower → cola tamanhos → colapsa whitespace. */
 export function normalize(text: string): string {
   if (!text) return "";
-  const base = text
+  // Resolve Ç/ç antes de tirar acentos para garantir consistência
+  const step1 = text.replace(/ç/g, 'c').replace(/Ç/g, 'C');
+  const base = step1
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();

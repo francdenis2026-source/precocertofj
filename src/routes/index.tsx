@@ -86,6 +86,8 @@ function HomePage() {
   const { user, loading: sessionLoading } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchAnchorRef = useMemo(() => ({ current: null as HTMLElement | null }), []);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -207,18 +209,35 @@ function HomePage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFA500]">economizar</span> em cada compra
             </h1>
 
-            <form onSubmit={submitSearch} className="group relative w-full max-w-2xl flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10">
-              <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
-              <input 
-                value={q} 
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Busque por arroz, feijão, leite..." 
-                className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
+            <div className="relative w-full max-w-2xl">
+              <form 
+                ref={(el) => { (searchAnchorRef as any).current = el; }}
+                onSubmit={submitSearch} 
+                className="group relative w-full flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
+              >
+                <Search className="ml-5 h-6 w-6 text-[var(--text-tertiary)] group-focus-within:text-[var(--brand-primary)] transition-colors" />
+                <input 
+                  value={q} 
+                  onChange={(e) => setQ(e.target.value)}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  placeholder="Busque por arroz, feijão, leite..." 
+                  className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
+                />
+                <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
+                  Buscar
+                </Button>
+              </form>
+
+              <HomeSearchSuggestions 
+                query={q}
+                open={isSearchFocused}
+                onClose={() => setIsSearchFocused(false)}
+                anchorRef={searchAnchorRef as any}
+                isLoggedOut={!user}
+                onBlocked={() => {}}
               />
-              <Button type="submit" className="hidden sm:flex rounded-full px-10 bg-[var(--brand-primary)] h-[52px] sm:h-[56px] font-bold text-white dark:text-black hover:scale-[1.02] active:scale-95 transition-all shadow-[0_12px_24px_-8px_var(--brand-glow)]">
-                Buscar
-              </Button>
-            </form>
+            </div>
           </motion.section>
 
           {/* Categories Horizontal Navigation */}
