@@ -226,7 +226,7 @@ function CategoryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <div 
-                  key={product.catalog_slug || product.id}
+                  key={product.catalogSlug || product.id}
                   className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl overflow-hidden hover:border-[var(--brand-primary)] transition-all duration-300"
                 >
                   <div className="p-5">
@@ -247,7 +247,7 @@ function CategoryPage() {
                     <div className="space-y-3 pt-4 border-t border-white/5">
                       <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)]">
                         <Store className="h-3 w-3" />
-                        <span className="font-bold text-[var(--text-secondary)]">{product.cheapest_store}</span>
+                        <span className="font-bold text-[var(--text-secondary)]">{product.cheapestStore}</span>
                       </div>
                       <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)]">
                         <MapPin className="h-3 w-3" />
@@ -255,7 +255,7 @@ function CategoryPage() {
                       </div>
                       <div className="flex items-center gap-2 text-[10px] text-[var(--text-tertiary)]">
                         <Clock className="h-3 w-3" />
-                        <span>Atualizado {new Date(product.last_seen_at || "").toLocaleDateString("pt-BR")}</span>
+                        <span>Atualizado {new Date(product.lastSeenAt || "").toLocaleDateString("pt-BR")}</span>
                       </div>
                     </div>
                   </div>
