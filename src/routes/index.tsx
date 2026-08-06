@@ -215,16 +215,45 @@ function HomePage() {
 
           {/* Categories Horizontal Navigation */}
           <section className="mb-16">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="section-title mb-0">Navegar por Categoria</h2>
-              <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
-                <span className="w-8 h-[1px] bg-[var(--border-subtle)]"></span>
-                Arraste para explorar
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+              <div className="flex flex-col gap-1">
+                <h2 className="section-title mb-0">Navegar por Categoria</h2>
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
+                  <span className="w-6 h-[1px] bg-[var(--border-subtle)]"></span>
+                  Explore nosso catálogo
+                </div>
+              </div>
+
+              {/* Fast Filter/Search for categories */}
+              <div className="relative group/search w-full sm:w-80">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)] group-focus-within/search:text-[var(--brand-primary)] transition-colors" />
+                <input 
+                  type="text"
+                  placeholder="Filtrar categorias ou itens..."
+                  onChange={(e) => {
+                    const term = e.target.value.toLowerCase();
+                    const container = document.getElementById('category-scroll-container');
+                    if (!container) return;
+                    const items = container.querySelectorAll('[data-category-item]');
+                    items.forEach((item: any) => {
+                      const label = item.getAttribute('data-label')?.toLowerCase() || '';
+                      if (label.includes(term) || term === '') {
+                        item.style.display = 'flex';
+                        item.style.opacity = '1';
+                      } else {
+                        item.style.display = 'none';
+                        item.style.opacity = '0';
+                      }
+                    });
+                  }}
+                  className="w-full h-11 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl pl-11 pr-4 text-xs font-medium outline-none focus:border-[var(--brand-primary)]/50 focus:ring-4 focus:ring-[var(--brand-primary)]/5 transition-all"
+                />
               </div>
             </div>
             
             <div 
-              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none"
+              id="category-scroll-container"
+              className="group relative flex overflow-x-auto pb-6 gap-5 no-scrollbar scroll-smooth snap-x cursor-grab active:cursor-grabbing select-none touch-pan-x"
               onMouseDown={(e) => {
                 const el = e.currentTarget;
                 el.classList.add('grabbing');
@@ -255,18 +284,34 @@ function HomePage() {
                 document.addEventListener('mousemove', onMouseMove);
                 document.addEventListener('mouseup', onMouseUp);
               }}
+              onKeyDown={(e) => {
+                const el = e.currentTarget;
+                if (e.key === 'ArrowRight') {
+                  el.scrollBy({ left: 200, behavior: 'smooth' });
+                } else if (e.key === 'ArrowLeft') {
+                  el.scrollBy({ left: -200, behavior: 'smooth' });
+                }
+              }}
             >
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
                   key={slug} 
                   to="/categoria/$slug" 
                   params={{ slug: slug as any }}
+                  data-category-item
+                  data-label={label}
                   onClick={(e) => {
                     if (e.currentTarget.parentElement?.classList.contains('grabbing')) {
                       e.preventDefault();
                     }
                   }}
-                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] snap-start"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      navigate({ to: "/categoria/$slug", params: { slug: slug as any } });
+                    }
+                  }}
+                  className="group/card relative flex flex-col items-center justify-end min-w-[160px] h-[180px] rounded-[24px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:-translate-y-1 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start"
                 >
                   {/* Category Ambient Glow */}
                   <div className="absolute inset-0 z-0">
@@ -301,7 +346,7 @@ function HomePage() {
               
               <Link 
                 to="/buscar" 
-                className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] snap-start"
+                className="group/card relative flex flex-col items-center justify-center min-w-[160px] h-[180px] rounded-[24px] border border-dashed border-[var(--border-subtle)] bg-white/[0.01] transition-all duration-500 hover:border-[var(--brand-primary)]/40 hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] snap-start"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 text-[var(--text-tertiary)] group-hover/card:text-white group-hover/card:border-[var(--brand-primary)]/30 transition-all mb-3">
                   <PlusCircle className="h-6 w-6" />
