@@ -44,15 +44,12 @@ type Comparison = {
 const norm = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
 
-function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const d = Math.floor(diff / 86_400_000);
-  if (d <= 0) return "hoje";
-  if (d === 1) return "ontem";
-  if (d < 7) return `há ${d}d`;
-  if (d < 30) return `há ${Math.floor(d / 7)}sem`;
-  if (d < 365) return `há ${Math.floor(d / 30)}m`;
-  return `há ${Math.floor(d / 365)}a`;
+function formatDate(iso: string): string {
+  const date = new Date(iso);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 export function RecentProductsCarousel() {
@@ -209,7 +206,7 @@ export function RecentProductsCarousel() {
                   <header className="relative z-10 flex items-center justify-between mb-4">
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--bg-surface-elevated)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)] backdrop-blur-sm">
                       <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
-                      {timeAgo(p.createdAt)}
+                      {formatDate(p.createdAt)}
                     </span>
                     {savings >= 5 && (
                       <span className="rounded-full bg-[var(--success)]/10 border border-[var(--success)]/20 px-2.5 py-1 text-[10px] font-bold text-[var(--success)] flex items-center gap-1 shadow-[0_0_15px_rgba(34,197,94,0.1)]">

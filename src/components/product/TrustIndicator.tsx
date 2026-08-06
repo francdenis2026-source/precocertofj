@@ -58,15 +58,11 @@ export function formatShortDate(iso: string | Date | null | undefined): string {
   if (!iso) return "—";
   const d = iso instanceof Date ? iso : new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  const now = new Date();
-  const startOfDay = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
-  const diffDays = Math.floor((startOfDay(now) - startOfDay(d)) / 86_400_000);
-  if (diffDays === 0) return "hoje";
-  if (diffDays === 1) return "ontem";
-  if (diffDays > 1 && diffDays <= 6) return `há ${diffDays} dias`;
-  if (diffDays > 6 && diffDays <= 30)
-    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
+  return d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
 }
 
 /** Data absoluta longa para uso em `title`/tooltip de acessibilidade. */
