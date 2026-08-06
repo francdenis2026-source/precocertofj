@@ -261,7 +261,7 @@ function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)]"></span>
               </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-secondary)] mx-1" aria-hidden="true">·</span> Feijó, AC</span>
             </motion.div>
             
             <motion.h1 
@@ -307,7 +307,7 @@ function HomePage() {
                   onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                   placeholder="O que você deseja economizar hoje?" 
                   className={cn(
-                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
+                    "flex-1 bg-transparent px-4 text-sm font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]",
                     (isSearchFocused || isScrolled) && "text-[13px] px-3"
                   )} 
                 />
@@ -341,7 +341,7 @@ function HomePage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/registrar" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
                 <PlusCircle className="h-3.5 w-3.5" />
                 Registrar
@@ -350,7 +350,7 @@ function HomePage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate({ to: "/app" })}
-                className="text-[var(--text-secondary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
+                className="text-[var(--text-primary)] hover:text-[var(--brand-primary)] font-black text-[10px] uppercase tracking-wider flex items-center gap-1.5 h-8"
               >
                 <ArrowRight className="h-3.5 w-3.5" />
                 Painel
