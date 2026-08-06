@@ -28,34 +28,34 @@ type Preset = {
 
 const PRESETS: Record<AuthHeroVariant, Preset> = {
   login: {
-    badge: { icon: ShieldCheck, label: "Área do assinante" },
+    badge: { icon: ShieldCheck, label: "Área de quem já assina" },
     title: "O preço certo,",
     highlight: "aqui em Feijó.",
-    subtitle: "Entre com seu CPF e PIN para acompanhar, em tempo real, os preços praticados nos mercados de Feijó.",
+    subtitle: "Entre com seu CPF e PIN para ver agora os preços de todos os mercados parceiros da nossa Feijó.",
     perks: [
-      "Comparativo entre mercados parceiros de Feijó",
-      "Alertas de queda de preço nos mercados parceiros",
-      "Base auditada por notas fiscais reais",
+      "Veja quem tem o menor preço na nossa Feijó",
+      "A gente te avisa quando o preço baixar",
+      "Preços de verdade direto das notas fiscais",
     ],
     trust: {
       icon: ShieldCheck,
       title: "Preços conferidos por nota fiscal",
-      caption: "Rede colaborativa · atualizada todo dia",
+      caption: "Todo mundo ajudando · preços novos todo dia",
     },
     brandIcon: ShoppingCart,
-    offer: { label: "Oferta ativa", title: "30 dias grátis", caption: "Envie sua nota e libere o painel completo." },
+    offer: { label: "Presente pra você", title: "30 dias grátis", caption: "Mande sua 1ª nota e use tudo de graça por um mês." },
     photo: true,
     photoSrc: loginPhotoAsset.url,
   },
   signup: {
-    badge: { icon: UserPlus, label: "Cadastro gratuito" },
+    badge: { icon: UserPlus, label: "Fazer cadastro" },
     title: "Compare preços",
     highlight: "de verdade.",
-    subtitle: "Crie sua conta com CPF e PIN em menos de 1 minuto e comece a comparar os mercados parceiros de Feijó.",
+    subtitle: "Crie sua conta rapidinho com CPF e PIN e comece a ver onde os preços estão mais baixos na nossa Feijó.",
     perks: [
-      "Comparativo em tempo real entre mercados parceiros",
-      "Alertas de queda de preço nos mercados parceiros",
-      "Bônus: 30 dias grátis ao enviar sua primeira nota",
+      "Compare os preços dos mercados em tempo real",
+      "Receba avisos no celular quando o preço baixar",
+      "Ganhe 30 dias grátis enviando sua primeira nota",
     ],
     trust: {
       icon: ShieldCheck,
@@ -70,11 +70,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     badge: { icon: Ticket, label: "Ativação de licença" },
     title: "Libere seu acesso",
     highlight: "em segundos.",
-    subtitle: "Informe o código PC-XXXX-XXXX-XXXX que você recebeu por e-mail. A ativação é imediata e vinculada ao seu CPF.",
+    subtitle: "Escreva o código PC-XXXX que você recebeu. A liberação é na hora e fica guardada no seu CPF.",
     perks: [
-      "Ativação imediata após validar o código",
-      "Acumule códigos e estenda sua assinatura sem perder dias",
-      "Suporte prioritário para assinantes ativos",
+      "Uso liberado na mesma hora",
+      "Seus dias de acesso ficam garantidos no seu CPF",
+      "Estamos aqui para te ajudar se precisar",
     ],
     trust: {
       icon: Sparkles,
