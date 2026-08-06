@@ -231,13 +231,13 @@ function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.9) contrast(1.1) saturate(1.1)"
+            filter: "brightness(0.8) contrast(1.1) saturate(1.1) blur(12px)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
