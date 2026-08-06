@@ -265,8 +265,6 @@ export function RecentProductsCarousel() {
               </CarouselItem>
             );
           })}
-            );
-          })}
         </CarouselContent>
 
         <CarouselPrevious className="left-[-20px] h-10 w-10 border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white dark:hover:text-black transition-all shadow-xl z-20" />
