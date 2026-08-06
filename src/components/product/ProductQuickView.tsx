@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Price } from "@/components/ds/Price";
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { 
@@ -11,7 +11,10 @@ import {
   TrendingDown,
   History,
   Scale,
-  BellPlus
+  BellPlus,
+  ArrowDownWideNarrow,
+  Sparkles,
+  Timer
 } from "lucide-react";
 import {
   LineChart,
