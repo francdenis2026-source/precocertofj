@@ -121,28 +121,28 @@ export function RecentProductsCarousel() {
   return (
     <motion.section
       aria-label="Produtos recém-cadastrados"
-      className="mt-4 relative"
-      initial={{ opacity: 0, y: 12 }}
+      className="mt-2 relative"
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="absolute top-0 right-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-base)]/80 to-transparent z-20 pointer-events-none hidden md:block" />
 
-      <header className="mb-2.5 flex items-end justify-between gap-3">
+      <header className="mb-2 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--text-tertiary)]">
+          <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
             <Sparkles className="h-3 w-3" strokeWidth={2.4} aria-hidden />
-            Novidades no catálogo
+            Catálogo Vivo
           </p>
-          <h2 className="mt-0.5 text-[17px] font-bold tracking-tight text-foreground md:text-[19px]">
-            Produtos recém-cadastrados
+          <h2 className="mt-0.5 text-[15px] font-black tracking-tight text-[var(--text-primary)] md:text-[17px]">
+            Novidades Recentes
           </h2>
         </div>
         <Link
           to="/buscar"
-          className="hidden shrink-0 text-[11.5px] font-bold text-[var(--text-secondary)] hover:text-[var(--brand-primary)] hover:underline md:inline transition-colors"
+          className="hidden shrink-0 text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)] hover:underline md:inline transition-colors"
         >
-          Ver catálogo completo →
+          Ver tudo →
         </Link>
       </header>
 
