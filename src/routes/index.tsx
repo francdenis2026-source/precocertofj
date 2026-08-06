@@ -264,13 +264,23 @@ function HomePage() {
               <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Economia em Tempo Real <span className="text-[var(--text-tertiary)] mx-1">·</span> Feijó, AC</span>
             </motion.div>
             
-            <h1 className="font-display text-[32px] sm:text-[48px] font-black tracking-tight leading-[1.1] mb-4 max-w-3xl text-[var(--text-primary)]">
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="font-display text-[32px] sm:text-[56px] font-black tracking-tight leading-[1.05] mb-4 max-w-4xl text-[var(--text-primary)]"
+            >
               Clareza e Conexão para sua <span className="text-[var(--brand-primary)]">Economia Real</span>
-            </h1>
+            </motion.h1>
             
-            <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-8 max-w-2xl leading-relaxed font-body">
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-base sm:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed font-body"
+            >
               Compare preços em tempo real com a inteligência do PreçoCerto. A melhor tecnologia para o seu bolso.
-            </p>
+            </motion.p>
 
             <div className={cn(
               "w-full max-w-xl transition-all duration-300",
@@ -282,8 +292,8 @@ function HomePage() {
                 ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className={cn(
-                  "group relative w-full flex items-center h-[52px] sm:h-[60px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-lg hover:border-[var(--brand-secondary)]/20",
-                  (isSearchFocused || isScrolled) && "h-[42px] sm:h-[46px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg"
+                  "group relative w-full flex items-center h-[52px] sm:h-[64px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-1 shadow-md transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/5 mx-auto hover:shadow-lg hover:border-[var(--brand-secondary)]/20",
+                  (isSearchFocused || isScrolled) && "h-[46px] sm:h-[52px] rounded-lg shadow-none border-[var(--brand-primary)]/20 max-w-lg"
                 )}
               >
                 <Search className={cn(
@@ -304,8 +314,8 @@ function HomePage() {
                 <Button 
                   type="submit" 
                   className={cn(
-                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[50px] px-8 text-[11px] shadow-sm hover:shadow-md",
-                    (isSearchFocused || isScrolled) && "h-[34px] sm:h-[38px] px-6 text-[10px]"
+                    "hidden sm:flex rounded-lg bg-[var(--brand-secondary)] font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all h-[42px] sm:h-[54px] px-8 text-[11px] shadow-sm hover:shadow-md",
+                    (isSearchFocused || isScrolled) && "h-[36px] sm:h-[42px] px-6 text-[10px]"
                   )}
                 >
                   Buscar
@@ -351,43 +361,46 @@ function HomePage() {
 
           {/* How It Works Section - More Compact */}
           <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12"><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /><Skeleton className="h-20 w-full rounded-2xl" /></div>}>
-          <section className="mb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <section className="mb-12 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
             <motion.div 
               whileHover={{ y: -4, scale: 1.02 }}
-              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+              whileTap={{ scale: 0.98 }}
+              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
-                <Search className="h-6 w-6" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
+                <Search className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">1. Pesquise</h3>
-                <p className="text-[12px] text-[var(--text-tertiary)]">Produtos em tempo real.</p>
+                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Pesquise</h3>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Tempo real.</p>
               </div>
             </motion.div>
             
             <motion.div 
               whileHover={{ y: -4, scale: 1.02 }}
-              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+              whileTap={{ scale: 0.98 }}
+              className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
-                <TrendingDown className="h-6 w-6" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-secondary)]/10 flex items-center justify-center text-[var(--brand-secondary)]">
+                <TrendingDown className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">2. Compare</h3>
-                <p className="text-[12px] text-[var(--text-tertiary)]">Economize até 40%.</p>
+                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Compare</h3>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Economize 40%.</p>
               </div>
             </motion.div>
             
             <motion.div 
               whileHover={{ y: -4, scale: 1.02 }}
-              className="flex items-center gap-4 p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
+              whileTap={{ scale: 0.98 }}
+              className="col-span-2 md:col-span-1 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-all"
             >
-              <div className="h-12 w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
-                <PlusCircle className="h-6 w-6" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-lg bg-[var(--brand-accent)]/10 flex items-center justify-center text-[var(--brand-accent)]">
+                <PlusCircle className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-[var(--brand-secondary)]">3. Colabore</h3>
-                <p className="text-[12px] text-[var(--text-tertiary)]">Ajude a comunidade.</p>
+                <h3 className="text-[13px] sm:text-sm font-bold text-[var(--brand-secondary)]">Colabore</h3>
+                <p className="text-[11px] sm:text-[12px] text-[var(--text-tertiary)]">Com a rede.</p>
               </div>
             </motion.div>
           </section>
@@ -424,7 +437,7 @@ function HomePage() {
 
           {/* CTA Banner */}
           <section className="mb-16">
-            <div className="relative rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-indigo-700 p-8 sm:p-12 overflow-hidden shadow-2xl">
+            <div className="relative rounded-[32px] sm:rounded-[40px] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-secondary)] p-6 sm:p-12 overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 h-full w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-10 mix-blend-overlay pointer-events-none" />
               <div className="relative z-10 max-w-xl">
                 <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 leading-tight">Viu um preço novo?</h2>

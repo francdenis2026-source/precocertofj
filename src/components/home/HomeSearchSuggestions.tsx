@@ -9,6 +9,7 @@ import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucid
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "@/lib/analytics-events";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   suggestProducts,
@@ -315,24 +316,47 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           >
 
         {loading && items.length === 0 ? (
-          <div className="flex items-center gap-2 px-3 py-2.5 text-[12.5px] text-slate-500">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            Procurando “{q}”…
+          <div className="p-4 space-y-3">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-3/4 rounded" />
+                  <Skeleton className="h-3 w-1/2 rounded" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : err ? (
-          <div className="px-3 py-2.5 text-[12.5px] text-rose-600">{err}</div>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="px-4 py-6 text-center"
+          >
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-500 mb-3">
+              <Search className="h-5 w-5" />
+            </div>
+            <p className="text-[13px] font-medium text-slate-900 mb-1">Ops! Algo deu errado</p>
+            <p className="text-[12px] text-slate-500">{err}</p>
+          </motion.div>
         ) : items.length === 0 ? (
-          <button
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-slate-700"
+            className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-slate-50"
           >
-            <Search className="h-4 w-4 text-primary" />
-            Nenhum produto com esse nome — ver todos os resultados para “<strong>{q}</strong>”
-            <ArrowRight className="ml-auto h-4 w-4 text-primary" />
-
-          </button>
+            <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)]">
+              <Search className="h-5 w-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[14px] font-bold text-slate-900 truncate">Ver tudo para “{q}”</p>
+              <p className="text-[12px] text-slate-500">Nenhum resultado exato encontrado ainda.</p>
+            </div>
+            <ArrowRight className="h-5 w-5 text-slate-300" />
+          </motion.button>
         ) : (
           <ul
             ref={listRef}
