@@ -7,6 +7,7 @@ import { signStorageImageUrl } from "@/lib/product-image-utils";
 export type FavoriteItem = {
   id: string;
   catalogId: string;
+  catalogSlug: string;
   displayName: string;
   brand: string | null;
   defaultUnit: string | null;
@@ -20,6 +21,7 @@ export type FavoriteItem = {
   currentPriceAt: string | null;
   previousPrice: number | null;
   previousPriceAt: string | null;
+  lastEstablishmentId: string | null;
 };
 
 

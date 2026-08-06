@@ -7,6 +7,8 @@ export type ScanStatus = "capturado" | "revisado" | "salvo";
 export type MyScan = {
   id: string;
   productName: string | null;
+  productSlug: string | null;
+  establishmentId: string | null;
   priceCaptured: number | null;
   averagePrice: number | null;
   diffPct: number | null;

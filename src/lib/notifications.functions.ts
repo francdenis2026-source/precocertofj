@@ -72,6 +72,8 @@ export type PriceAlert = {
   id: string;
   kind: "item_price_drop" | "item_target_hit" | "market_price_drop";
   catalogId: string | null;
+  productSlug: string | null;
+  establishmentId: string | null;
   marketName: string | null;
   displayName: string | null;
   prevPrice: number | null;
