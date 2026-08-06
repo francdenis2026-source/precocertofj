@@ -77,8 +77,8 @@
   --text-secondary: var(--text-secondary);
   --text-tertiary: var(--text-tertiary);
 
-  --font-display: "Outfit", "Space Grotesk", sans-serif;
-  --font-body: "DM Sans", "Inter", sans-serif;
+  --font-display: "Outfit", "Space Grotesk", sans-serif !important;
+  --font-body: "DM Sans", "Inter", sans-serif !important;
 }
 
 html {
