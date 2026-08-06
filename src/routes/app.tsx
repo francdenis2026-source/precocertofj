@@ -125,6 +125,43 @@ function DashboardPage() {
         <StatGrid stats={stats} className="mb-8" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Nova Seção de Insights Rápidos */}
+          <SectionCard 
+            title="Insights & Economia" 
+            description="Como você está economizando este mês."
+            className="lg:col-span-2 pc-animate-fade-in"
+            action={
+              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider">
+                <Link to="/app/insights">Ver Insights Detalhados <ChevronRight className="ml-1 h-3 w-3" /></Link>
+              </Button>
+            }
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-1">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Eficiência</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-black">84%</span>
+                  <span className="text-xs font-bold text-green-500">+5% vs mês ant.</span>
+                </div>
+                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full" style={{ width: '84%' }} />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Rota Sugerida</p>
+                <p className="text-sm font-bold truncate">Rota Econômica: Atacadão + Farmácia</p>
+                <p className="text-[10px] font-bold text-primary flex items-center gap-1">
+                  <TrendingDown className="h-3 w-3" /> Economia de R$ 42,90
+                </p>
+              </div>
+              <div className="flex items-center justify-end">
+                <Button asChild variant="outline" size="sm" className="w-full md:w-auto font-black text-[10px] uppercase">
+                  <Link to="/app/insights">Calcular Rota <Zap className="ml-2 h-3.5 w-3.5 fill-primary text-primary" /></Link>
+                </Button>
+              </div>
+            </div>
+          </SectionCard>
+
           {/* Tracked Products */}
           <SectionCard 
             title="Favoritos monitorados" 
