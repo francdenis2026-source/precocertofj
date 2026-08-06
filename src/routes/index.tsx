@@ -88,6 +88,7 @@ function HomePage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [q, setQ] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchSuggestionsRef = useRef<any>(null);
   const searchAnchorRef = useRef<HTMLFormElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
@@ -221,7 +222,7 @@ function HomePage() {
 
             <div className="relative w-full max-w-2xl">
               <form 
-                ref={(el) => { (searchAnchorRef as any).current = el; }}
+                ref={searchAnchorRef}
                 onSubmit={submitSearch} 
                 className="group relative w-full flex items-center h-[64px] sm:h-[72px] rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 shadow-2xl transition-all duration-300 focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10"
               >
@@ -231,6 +232,12 @@ function HomePage() {
                   onChange={(e) => setQ(e.target.value)}
                   onFocus={() => { console.log("Input focused"); setIsSearchFocused(true); }}
                   onBlur={() => { console.log("Input blurred"); setTimeout(() => setIsSearchFocused(false), 200); }}
+                  onKeyDown={(e) => {
+                    if (searchSuggestionsRef.current?.handleKeyDown(e)) {
+                      // Se a sugestão consumiu o evento, não faz nada
+                      return;
+                    }
+                  }}
                   placeholder="Busque por arroz, feijão, leite..." 
                   className="flex-1 bg-transparent px-5 text-lg font-medium outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]" 
                 />
@@ -240,6 +247,7 @@ function HomePage() {
               </form>
 
               <HomeSearchSuggestions 
+                ref={searchSuggestionsRef}
                 query={q}
                 open={isSearchFocused}
                 onClose={() => setIsSearchFocused(false)}

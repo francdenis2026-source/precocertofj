@@ -153,6 +153,7 @@ export function RadarCategorySheet({
                               <Link
                                 to="/loja/$id"
                                 params={{ id: p.cheapestEstablishmentId }}
+                                search={{ q: "", from: "" }}
                                 onClick={() => onOpenChange(false)}
                                 className="inline-flex items-center gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-300 hover:text-emerald-200"
                               >

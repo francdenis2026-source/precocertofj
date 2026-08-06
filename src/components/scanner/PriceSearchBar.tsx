@@ -1901,7 +1901,7 @@ export function PriceSearchBar({
                             <Link
                               to="/loja/$id"
                               params={{ id: m.establishmentId }}
-                              search={query ? { q: query } : {}}
+                              search={{ q: query || "", from: "" }}
                               className={`${rowClass} transition hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
                               aria-label={`Ver produtos de ${m.marketName}${query ? ` — filtrando por “${query}”` : ""}`}
                             >
@@ -3009,6 +3009,7 @@ function ProductGroupCard({
                       <Link
                         to="/loja/$id"
                         params={{ id: p.establishmentId }}
+                        search={{ q: "", from: "" }}
                         className="rounded-full border border-border bg-background px-2 py-0.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         Ver mercado

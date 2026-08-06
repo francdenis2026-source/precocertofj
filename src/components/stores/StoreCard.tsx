@@ -153,6 +153,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
       <Link
         to="/loja/$id"
         params={{ id: store.id }}
+        search={{ q: "", from: "" }}
         aria-label={`Ver preços de ${store.name}`}
         style={{
           borderTop: "1px solid transparent",

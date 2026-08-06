@@ -838,7 +838,7 @@ function CompareMode({
                       <Link
                         to="/loja/$id"
                         params={{ id: s.establishmentId }}
-                        search={{ q: "" }}
+                        search={{ q: "", from: "" }}
                         className="block truncate font-display text-[14px] font-semibold tracking-tight text-foreground hover:text-primary hover:underline"
                       >
                         {s.establishmentName}
@@ -2207,10 +2207,10 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                         </button>
                       </div>
                       <div className="shrink-0 text-right">
-                        <Link
-                          to="/loja/$id"
-                          params={{ id: it.establishmentId }}
-                          search={{ q: "" }}
+                          <Link
+                            to="/loja/$id"
+                            params={{ id: it.establishmentId }}
+                            search={{ q: "", from: "" }}
                           className="block font-display text-[14px] font-semibold tabular-nums text-primary hover:underline"
                           title="Ver na mercado"
                         >
@@ -3028,6 +3028,7 @@ function ManualMode({
                       <Link
                         to="/loja/$id"
                         params={{ id: s.establishmentId }}
+                        search={{ q: "", from: "" }}
                         className="truncate font-display text-[13px] font-semibold text-foreground hover:text-primary hover:underline"
                       >
                         {s.establishmentName}
@@ -3082,6 +3083,7 @@ function ManualMode({
                       <Link
                         to="/loja/$id"
                         params={{ id: s.establishmentId }}
+                        search={{ q: "", from: "" }}
                         className="truncate font-display text-[13px] font-semibold text-foreground hover:text-primary hover:underline"
                       >
                         {s.establishmentName}
@@ -3398,6 +3400,7 @@ function EssentialPricesDialog({
                         <Link
                           to="/loja/$id"
                           params={{ id: r.establishmentId }}
+                          search={{ q: "", from: "" }}
                           className="truncate font-display text-[13px] font-semibold text-foreground hover:text-primary hover:underline"
                         >
                           {r.establishmentName}
@@ -4283,7 +4286,7 @@ function BasketDetailDialog({
                           <Link
                             to="/loja/$id"
                             params={{ id: r.establishmentId }}
-                            search={{ q: "" }}
+                            search={{ q: "", from: "" }}
                             className="hover:text-primary hover:underline"
                           >
                             {r.establishmentName}
