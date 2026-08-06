@@ -284,6 +284,14 @@ function HomePage() {
                 document.addEventListener('mousemove', onMouseMove);
                 document.addEventListener('mouseup', onMouseUp);
               }}
+              onKeyDown={(e) => {
+                const el = e.currentTarget;
+                if (e.key === 'ArrowRight') {
+                  el.scrollBy({ left: 200, behavior: 'smooth' });
+                } else if (e.key === 'ArrowLeft') {
+                  el.scrollBy({ left: -200, behavior: 'smooth' });
+                }
+              }}
             >
               {CATEGORIES.map(({ slug, label, Icon, color }) => (
                 <Link 
