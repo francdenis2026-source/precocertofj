@@ -320,6 +320,9 @@ function HomePage() {
                 anchorRef={searchAnchorRef as any}
                 isLoggedOut={!user}
                 onBlocked={() => {}}
+                className={cn(
+                  (isSearchFocused || isScrolled) && "fixed top-[54px] sm:top-[60px] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg z-[101]"
+                )}
               />
             </div>
 
