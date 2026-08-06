@@ -249,7 +249,11 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               className="hidden sm:inline-flex"
             />
           )}
-          {showThemeToggle && <ThemeToggle size="sm" tone={isOverlay ? "dark" : "light"} />}
+          {showThemeToggle && (
+            <div className="ml-1 sm:ml-2">
+              <ThemeToggle size="sm" />
+            </div>
+          )}
           {loading ? (
             <div className={dsx("h-9 w-24 animate-pulse rounded-lg", isOverlay ? "bg-on-media-surface" : "bg-muted")} />
           ) : session ? (

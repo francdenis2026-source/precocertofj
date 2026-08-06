@@ -24,6 +24,16 @@
   --pc-shadow-gold: 0 12px 24px -8px var(--brand-glow);
 }
 
+:root[data-theme='light'] {
+  --pc-deep-navy: #F8F9FA;
+  --pc-navy-surface: #FFFFFF;
+  --pc-navy-surface-elevated: #F1F3F5;
+  --pc-gold-primary: #B8860B; /* Darker gold for better contrast on light */
+  --pc-gold-dark: #8B6914;
+  --pc-gold-glow: rgba(184, 134, 11, 0.15);
+  --pc-border-gold: rgba(184, 134, 11, 0.2);
+}
+
 @theme {
   --pc-primary-rgb: 255 215 0;
   --bg-base: var(--pc-deep-navy);
@@ -41,6 +51,12 @@
   --text-primary: #FFFFFF;
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
+
+  @variant light {
+    --text-primary: #1A1A1A;
+    --text-secondary: #4A5568;
+    --text-tertiary: #718096;
+  }
 
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
