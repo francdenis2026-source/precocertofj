@@ -1316,6 +1316,25 @@ function CompareDrawer({
 
   return (
     <Drawer onClose={onClose} title="Comparar cesta entre mercados">
+      <div className="mb-4 flex gap-2">
+        <button
+          onClick={async () => {
+            const res = await exportStoreCatalog({ data: { storeId, format: 'csv' } });
+            if (res.content) {
+              const blob = new Blob([res.content], { type: 'text/csv' });
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = res.filename || 'export.csv';
+              a.click();
+            }
+          }}
+          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Exportar Catálogo CSV
+        </button>
+      </div>
       {loading && (
         <div className="flex items-center justify-center gap-2 py-10 text-[12.5px] text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Calculando…
