@@ -85,5 +85,3 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
     </button>
   );
 };
-
-import { AnimatePresence } from "framer-motion";

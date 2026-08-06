@@ -59,7 +59,7 @@ export const PinInput: React.FC<PinInputProps> = ({
       {Array.from({ length }).map((_, i) => (
         <div key={i} className="relative flex-1 aspect-square max-w-[56px]">
           <input
-            ref={(el) => (inputs.current[i] = el)}
+            ref={(el) => { inputs.current[i] = el; }}
             type="text"
             inputMode="numeric"
             pattern="\d*"
