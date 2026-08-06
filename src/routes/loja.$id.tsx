@@ -410,7 +410,7 @@ function StorePage() {
             <div className="-mt-8 flex items-end gap-3">
               {store.name.includes("Contamigos") ? (
                 <div className="h-16 shrink-0 rounded-2xl border-2 border-background bg-background px-2 flex items-center shadow-md">
-                  <ContamigosLogo size="sm" />
+                   <ContamigosLogo size="sm" />
                 </div>
               ) : store.logoUrl ? (
                 <img
@@ -427,7 +427,6 @@ function StorePage() {
                   <StoreIcon className="h-7 w-7" strokeWidth={1.75} />
                 </span>
               )}
-            </div>
               <div className="min-w-0 flex-1 pb-1">
                 <h1 className="truncate font-display text-[19px] font-bold leading-tight text-foreground">
                   {store.name}
