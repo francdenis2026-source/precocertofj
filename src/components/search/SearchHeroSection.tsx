@@ -27,41 +27,54 @@ export function SearchHeroSection({ query }: { query: string }) {
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 md:p-8 shadow-elev-2">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr,350px] gap-8">
-        <div className="space-y-6">
-          <header className="space-y-2">
-             <div className="flex flex-wrap items-center gap-2">
-               <Badge variant="primary" size="sm" className="uppercase tracking-widest font-bold">
+    <section className="relative overflow-hidden rounded-[40px] border border-border/50 bg-card/80 backdrop-blur-xl p-8 md:p-12 shadow-[0_24px_64px_rgba(0,0,0,0.06)] group/hero">
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-12 relative z-10">
+        <div className="space-y-8">
+          <header className="space-y-4">
+             <div className="flex flex-wrap items-center gap-3">
+               <Badge variant="primary" size="sm" className="uppercase tracking-[0.2em] font-black px-4 py-1 rounded-full shadow-lg shadow-primary/20">
                  Melhor resultado
                </Badge>
-               <span className="text-xs text-muted-foreground flex items-center gap-1">
+               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1.5">
                  <Clock className="h-3 w-3" /> Atualizado há 2 horas
                </span>
              </div>
-             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-               {topGroup.productName}
-             </h1>
-             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-               <span>Marca: <strong className="text-foreground">Parmalat</strong></span>
-               <span>Categoria: <strong className="text-foreground">Laticínios</strong></span>
+             
+             <div className="space-y-1">
+               <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground leading-[0.95] lg:max-w-[12ch]">
+                 {topGroup.productName}
+               </h1>
+             </div>
+
+             <div className="flex items-center gap-6 text-sm">
+               <div className="flex flex-col">
+                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Marca</span>
+                 <strong className="text-foreground text-lg">Parmalat</strong>
+               </div>
+               <div className="w-px h-8 bg-border/60" />
+               <div className="flex flex-col">
+                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Categoria</span>
+                 <strong className="text-foreground text-lg">Laticínios</strong>
+               </div>
              </div>
           </header>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Melhor preço</p>
-               <Price value={bestPrice} size="xl" tone="best" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+             <div className="space-y-2 bg-primary/5 rounded-3xl p-5 border border-primary/10 transition-transform group-hover/hero:scale-[1.02]">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Melhor preço</p>
+               <Price value={bestPrice} size="xl" tone="best" className="text-4xl" />
              </div>
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Preço médio</p>
-               <Price value={avgPrice} size="xl" />
+             <div className="space-y-2 bg-muted/20 rounded-3xl p-5 border border-border/40 transition-transform group-hover/hero:scale-[1.02] delay-75">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">Preço médio</p>
+               <Price value={avgPrice} size="xl" className="text-4xl" />
              </div>
-             <div className="space-y-1">
-               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Economia máx.</p>
+             <div className="space-y-2 bg-savings/5 rounded-3xl p-5 border border-savings/10 transition-transform group-hover/hero:scale-[1.02] delay-150">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-savings/60">Economia máx.</p>
                <div className="flex items-baseline gap-2">
-                 <Price value={potentialSavings} size="xl" tone="savings" />
-                 <span className="text-sm font-bold text-savings">({savingsPct}%)</span>
+                 <Price value={potentialSavings} size="xl" tone="savings" className="text-4xl" />
+                 <span className="text-sm font-black text-savings">({savingsPct}%)</span>
                </div>
              </div>
           </div>

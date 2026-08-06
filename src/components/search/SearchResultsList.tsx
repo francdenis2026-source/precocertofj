@@ -35,19 +35,26 @@ export function SearchResultsList() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
-            {result.samples} ofertas encontradas
-          </h2>
-          <select className="bg-transparent text-xs font-bold border-none focus:ring-0 cursor-pointer">
-            <option>Menor Preço</option>
-            <option>Maior Preço</option>
-            <option>Mais Relevante</option>
-          </select>
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black tracking-tight text-foreground">
+              Resultados
+            </h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+              {result.samples} ofertas em tempo real
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <select className="bg-card/50 backdrop-blur-md border border-border/60 rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer">
+              <option>Menor Preço</option>
+              <option>Maior Preço</option>
+              <option>Mais Relevante</option>
+            </select>
+          </div>
        </div>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {result.groups.map((group, i) => (
               <motion.div

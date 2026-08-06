@@ -11,34 +11,36 @@ export function PremiumOfferCard({ group, isBest }: { group: ProductGroup; isBes
   const marketLogo = useSignedLogoUrl(bestPrice.marketLogoUrl);
 
   return (
-    <article className="group relative flex flex-col h-full bg-card border border-border/60 rounded-[32px] overflow-hidden hover:shadow-elev-3 hover:border-primary/30 transition-all duration-300">
+    <article className="group relative flex flex-col h-full bg-card/40 backdrop-blur-md border border-border/50 rounded-[42px] overflow-hidden hover:shadow-[0_32px_64px_rgba(0,0,0,0.1)] hover:border-primary/40 hover:-translate-y-1.5 transition-all duration-500 ease-[0.22,1,0.36,1]">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
       {isBest && (
-        <div className="absolute top-4 left-4 z-10">
-          <Badge variant="savings" size="sm" className="uppercase tracking-widest font-black shadow-lg">
+        <div className="absolute top-6 left-6 z-10">
+          <Badge variant="savings" size="sm" className="uppercase tracking-[0.2em] font-black shadow-2xl shadow-savings/20 px-4 py-1.5">
             Melhor Preço
           </Badge>
         </div>
       )}
       
-      <div className="relative aspect-square bg-muted/20 p-8 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="relative aspect-[4/3] p-10 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-muted/10" />
         <ProductImage 
           name={group.productName} 
           alt={group.productName}
           size="lg" 
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
+          className="w-full h-full object-contain group-hover:scale-110 group-hover:rotate-2 transition-transform duration-700 ease-out z-10 drop-shadow-2xl" 
         />
       </div>
 
-      <div className="flex-1 p-6 flex flex-col space-y-4">
-        <header className="space-y-1">
+      <div className="flex-1 p-8 flex flex-col space-y-6 relative z-10">
+        <header className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Parmalat</span>
-            <button className="text-muted-foreground hover:text-primary transition-colors">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">Parmalat</span>
+            <button className="text-muted-foreground/40 hover:text-primary transition-colors">
               <Star className="h-4 w-4" />
             </button>
           </div>
-          <h3 className="font-bold text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+          <h3 className="font-bold text-lg text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors">
             {group.productName}
           </h3>
         </header>
