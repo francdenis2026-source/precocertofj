@@ -41,7 +41,7 @@ export const AuthSidebar: React.FC = () => {
       label: "Economia gerada",
       value: metrics ? `R$ ${(metrics.monthlySavings * 12).toLocaleString("pt-BR")}` : "...",
       icon: PiggyBank,
-      color: "text-gold-500",
+      color: "text-[var(--brand-primary)]",
     },
   ];
 
