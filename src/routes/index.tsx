@@ -283,7 +283,7 @@ function HomePage() {
 
             <div className={cn(
               "w-full max-w-2xl transition-all duration-500",
-              isSearchFocused ? "fixed top-4 left-1/2 -translate-x-1/2 z-[100] scale-95" : "relative"
+              isSearchFocused ? "fixed top-8 left-1/2 -translate-x-1/2 z-[100] scale-[1.02]" : "relative"
             )}>
               <form 
                 ref={searchAnchorRef}
