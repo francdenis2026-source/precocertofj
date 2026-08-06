@@ -1,0 +1,1 @@
+GRANT DELETE ON public.scans TO service_role;
