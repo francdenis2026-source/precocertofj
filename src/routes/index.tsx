@@ -229,15 +229,15 @@ function HomePage() {
         <div className="absolute inset-0 bg-[var(--bg-base)]" />
         <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.35 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-            filter: "brightness(0.6) contrast(1.2) saturate(0.9)"
+            filter: "brightness(0.9) contrast(1.1) saturate(1.1)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/30 to-[var(--bg-base)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/20 to-[var(--bg-base)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -438,39 +438,63 @@ function HomePage() {
             </Suspense>
           </section>
 
-          {/* CTA Banner - Redesenhado Premium */}
+          {/* CTA Banner - Premium Refactoring */}
           <section className="mb-16">
-            <div className="relative group overflow-hidden rounded-[40px] border border-[var(--brand-primary)]/20 bg-[var(--brand-secondary)] p-8 sm:p-14 shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute top-0 right-0 h-full w-full sm:w-1/2 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-[0.15] mix-blend-overlay pointer-events-none transition-transform duration-700 group-hover:scale-105" />
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="relative group overflow-hidden rounded-[48px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] p-8 sm:p-16 shadow-2xl transition-all duration-500 hover:shadow-[var(--pc-shadow-lg)] hover:border-[var(--brand-primary)]/20"
+            >
+              {/* background image without yellow tint, high contrast */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out pointer-events-none"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200')" }}
+              />
               
-              <div className="relative z-10 max-w-2xl">
+              {/* Premium Gradients */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-surface-elevated)] via-[var(--bg-surface-elevated)]/90 to-transparent pointer-events-none" />
+              
+              <div className="relative z-10 max-w-xl">
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-[0.2em] mb-6"
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--brand-primary)] text-[var(--pc-brand-navy)] text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-lg shadow-[var(--brand-primary)]/20"
                 >
                   <Sparkles className="h-3 w-3" /> Colaboração Local
                 </motion.div>
                 
-                <h2 className="font-display text-4xl sm:text-5xl font-black text-white mb-6 leading-[1.1] tracking-tight">
-                  Viu um preço <span className="text-[var(--brand-primary)] underline decoration-wavy decoration-[var(--brand-primary)]/30 underline-offset-8">diferente</span>?
+                <h2 className="font-display text-4xl sm:text-6xl font-black text-[var(--text-primary)] mb-6 leading-[1.05] tracking-tight">
+                  Viu um preço <span className="relative inline-block">
+                    <span className="relative z-10 text-[var(--brand-primary)]">diferente</span>
+                    <svg className="absolute -bottom-2 left-0 w-full h-3 text-[var(--brand-primary)]/30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <path d="M0 5 Q 25 0, 50 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
+                    </svg>
+                  </span>?
                 </h2>
                 
-                <p className="text-lg sm:text-xl text-white/70 mb-10 leading-relaxed font-body">
+                <p className="text-base sm:text-lg text-[var(--text-secondary)] mb-10 leading-relaxed font-body max-w-md">
                   Sua colaboração fortalece a rede de economia em Feijó. Registre ofertas em tempo real e ajude a comunidade.
                 </p>
                 
                 <Button 
                   onClick={() => navigate({ to: "/registrar" })}
-                  className="bg-[var(--brand-primary)] text-[var(--brand-secondary)] hover:brightness-110 active:scale-95 font-black h-16 px-10 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all text-lg group"
+                  className="group relative h-14 sm:h-16 px-10 rounded-2xl bg-[var(--brand-secondary)] text-white dark:bg-[var(--brand-primary)] dark:text-[var(--pc-brand-navy)] font-black uppercase tracking-widest text-xs sm:text-sm overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl active:scale-95"
                 >
-                  Registrar Agora
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  <span className="relative z-10 flex items-center gap-3">
+                    Registrar Agora
+                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                  <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </Button>
               </div>
-            </div>
+              
+              {/* Decorative side element */}
+              <div className="hidden lg:block absolute right-16 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity duration-700 pointer-events-none">
+                <div className="relative h-64 w-64 rounded-full border-2 border-[var(--brand-primary)] animate-[spin_20s_linear_infinite]">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-[var(--brand-primary)] shadow-[0_0_15px_var(--brand-primary)]" />
+                </div>
+              </div>
+            </motion.div>
           </section>
 
 
