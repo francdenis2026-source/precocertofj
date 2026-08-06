@@ -33,7 +33,7 @@ export function QuickStoreCompare({
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Scale className="h-5 w-5 text-primary" />
-          <h3 className={tc.h3}>Comparação Direta</h3>
+          <h3 className={cn(tc.panelTitle, "text-primary")}>Comparação Direta</h3>
         </div>
         <button onClick={onClose} className="rounded-full p-1 hover:bg-muted">
           <X className="h-4 w-4" />
