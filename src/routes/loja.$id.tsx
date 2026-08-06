@@ -859,7 +859,9 @@ function ProductRow({
           </div>
           <Price as="p" value={p.price} size="md" className="mt-0.5" />
         </Link>
-        <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
+        <div className="no-print">
+          <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
+        </div>
       </div>
     </li>
   );
