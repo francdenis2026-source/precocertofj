@@ -126,7 +126,7 @@ export function RecentProductsCarousel() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <div className="absolute top-0 right-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-base)] to-transparent z-20 pointer-events-none hidden md:block" />
+      <div className="absolute top-0 right-0 bottom-0 w-24 bg-gradient-to-l from-[var(--bg-base)]/80 to-transparent z-20 pointer-events-none hidden md:block" />
 
       <header className="mb-2.5 flex items-end justify-between gap-3">
         <div className="min-w-0">
