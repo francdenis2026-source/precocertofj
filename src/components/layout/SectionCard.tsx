@@ -23,7 +23,7 @@ export function SectionCard({
   return (
     <Tag
       className={cn(
-        "rounded-xl border border-border/60 bg-card text-card-foreground shadow-sm",
+        "rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--pc-shadow-sm)]",
         className,
       )}
     >

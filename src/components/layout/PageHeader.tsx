@@ -26,7 +26,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "z-10 -mx-4 mb-6 border-b border-border/60 bg-background/85 px-4 pb-5 pt-4 backdrop-blur md:-mx-6 md:px-6",
+        "z-10 -mx-4 mb-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 px-4 pb-6 pt-5 backdrop-blur-md md:-mx-6 md:px-6",
         sticky && "lg:sticky lg:top-0",
         className,
       )}
@@ -56,7 +56,7 @@ export function PageHeader({
       )}
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-[clamp(1.5rem,2.5vw,2rem)] font-semibold tracking-tight text-foreground">
+          <h1 className="truncate font-display text-[clamp(1.5rem,2.5vw,2.5rem)] font-black tracking-tight text-[var(--text-primary)] leading-tight">
             {title}
           </h1>
           {description && (

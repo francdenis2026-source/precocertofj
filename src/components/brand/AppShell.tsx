@@ -35,8 +35,8 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
         <SidebarInset
           className={
             isAdminScope
-              ? "h-dvh min-h-0 min-w-0 overflow-hidden bg-background"
-              : "h-dvh min-h-0 min-w-0 overflow-hidden bg-background"
+              ? "h-dvh min-h-0 min-w-0 overflow-hidden bg-[var(--bg-base)]"
+              : "h-dvh min-h-0 min-w-0 overflow-hidden bg-[var(--bg-base)]"
           }
         >
           {!isAdminScope && (

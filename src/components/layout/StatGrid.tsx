@@ -12,11 +12,11 @@ export type Stat = {
 };
 
 const toneMap: Record<NonNullable<Stat["tone"]>, string> = {
-  default: "border-border/60 bg-card",
-  primary: "border-primary/25 bg-primary/5",
-  success: "border-emerald-500/25 bg-emerald-500/5",
-  warning: "border-amber-500/25 bg-amber-500/5",
-  danger: "border-destructive/25 bg-destructive/5",
+  default: "border-[var(--border-subtle)] bg-[var(--bg-surface)]",
+  primary: "border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/5",
+  success: "border-emerald-500/20 bg-emerald-500/5",
+  warning: "border-amber-500/20 bg-amber-500/5",
+  danger: "border-destructive/20 bg-destructive/5",
 };
 
 export function StatGrid({ stats, className }: { stats: Stat[]; className?: string }) {
@@ -34,17 +34,17 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
           <div
             key={i}
             className={cn(
-              "rounded-xl border p-4 shadow-sm transition-shadow hover:shadow-md",
+              "rounded-[var(--pc-radius)] border p-5 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] hover:shadow-[var(--pc-shadow-md)] hover:-translate-y-0.5",
               toneMap[s.tone ?? "default"],
             )}
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
-                {s.label}
-              </span>
+                <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
+                  {s.label}
+                </span>
               {Icon && <Icon className="h-4 w-4 text-muted-foreground" aria-hidden />}
             </div>
-            <div className="mt-2 text-[clamp(1.4rem,2vw,1.75rem)] font-semibold leading-tight text-foreground">
+            <div className="mt-2 font-display text-[clamp(1.5rem,2.2vw,2rem)] font-black leading-none tracking-tight text-[var(--text-primary)]">
               {s.value}
             </div>
             {(s.delta || s.hint) && (
