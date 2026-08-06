@@ -61,11 +61,12 @@ const emptyAddress: Address = {
   state: "",
 };
 
-// Redesign tokens — alinhados à nova identidade (Midnight Navy + Electric Indigo).
-const PC_BRAND = "#6C5CE7";
-const PC_SURFACE = "#12121F";
-const PC_DISPLAY = "'Space Grotesk', system-ui, sans-serif";
-const PC_BODY = "'Inter', system-ui, sans-serif";
+// Redesign tokens — alinhados à nova identidade (Midnight Navy + Gold).
+const PC_BRAND = "var(--brand-primary)";
+const PC_SURFACE = "var(--bg-surface)";
+const PC_DISPLAY = "var(--font-display)";
+const PC_BODY = "var(--font-body)";
+
 
 
 function LoginPage() {
