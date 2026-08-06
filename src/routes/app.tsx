@@ -148,7 +148,7 @@ function AppHomeContent() {
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
               <p className={cn(tc.eyebrow, "hidden shrink-0 text-white/60 sm:block")}>Meu painel</p>
-              <h1 className="truncate whitespace-nowrap text-[14px] font-semibold leading-tight tracking-[-0.01em] text-primary-foreground md:text-[15.5px]">
+              <h1 className="font-display truncate whitespace-nowrap text-[16px] font-bold leading-tight tracking-[-0.02em] text-white md:text-[18px]">
                 Olá, {firstName}
               </h1>
             </div>
