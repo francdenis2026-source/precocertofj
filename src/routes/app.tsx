@@ -170,6 +170,13 @@ function AppHomeContent() {
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
+              <button
+                onClick={() => setComparisonOpen(true)}
+                className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-black/30 bg-black/10 px-3 text-[12.5px] font-medium text-black transition hover:bg-black/20"
+              >
+                <TrendingDown className="h-4 w-4" aria-hidden />
+                <span className="hidden md:inline">Comparar Lojas</span>
+              </button>
               <Link
                 to="/lista/nova"
                 className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-black px-3.5 text-[12.5px] font-semibold text-[var(--brand-primary)] transition hover:bg-black/90"
