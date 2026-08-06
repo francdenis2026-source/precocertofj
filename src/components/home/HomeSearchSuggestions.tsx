@@ -331,16 +331,19 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
+            role="alert"
+            aria-live="polite"
             className="px-6 py-10 text-center"
           >
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-rose-500/10 text-rose-500">
-              <Search className="h-7 w-7" />
+              <Search className="h-7 w-7" aria-hidden="true" />
             </div>
             <p className="mb-2 text-base font-bold text-[var(--text-primary)]">Ops! Não conseguimos buscar agora</p>
             <p className="mb-6 text-sm text-[var(--text-secondary)]">Ocorreu um erro ao carregar as sugestões. Pode ser sua conexão ou uma instabilidade momentânea.</p>
             <button 
               onClick={() => window.location.reload()}
-              className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all shadow-md"
+              autoFocus
+              className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all shadow-md focus-visible:ring-4 focus-visible:ring-[var(--brand-primary)]/20 outline-none"
             >
               Tentar Novamente
             </button>
@@ -349,19 +352,22 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            role="status"
+            aria-live="polite"
             className="flex flex-col items-center justify-center px-6 py-10 text-center"
           >
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
-              <Search className="h-7 w-7" />
+              <Search className="h-7 w-7" aria-hidden="true" />
             </div>
             <p className="mb-2 text-base font-bold text-[var(--text-primary)]">“{q}” não encontrado</p>
             <p className="mb-6 text-sm text-[var(--text-secondary)]">Não encontramos resultados exatos para este termo em nosso catálogo atual.</p>
             <button
               onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
-              className="inline-flex items-center gap-2 rounded-lg border border-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/5 active:scale-95 transition-all"
+              autoFocus
+              className="inline-flex items-center gap-2 rounded-lg border border-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/5 active:scale-95 transition-all focus-visible:ring-4 focus-visible:ring-[var(--brand-primary)]/20 outline-none"
             >
               Fazer busca global
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </motion.div>
         ) : (
@@ -373,7 +379,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           >
             {items.map((s, i) => (
-              <li key={s.id}>
+              <li key={s.id} role="none">
                 <button
                   type="button"
                   id={optionId(i)}
@@ -383,7 +389,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   onMouseEnter={() => setActive(i)}
                   onClick={() => handlePick(s)}
                   className={
-                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2.5 text-left transition-all duration-300 ease-out " +
+                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2.5 text-left transition-all duration-300 ease-out outline-none focus-visible:bg-[var(--brand-primary)]/10 " +
                     (active === i
                       ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/8 text-[var(--text-primary)] translate-x-1"
                       : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]")
@@ -391,9 +397,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                 >
                   <span
                     className={
-                      "grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg border " +
+                      "grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg border transition-all duration-300 " +
                       (active === i
-                        ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/15 shadow-[0_0_10px_rgba(108,92,231,0.2)]"
+                        ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/15 shadow-[0_0_10px_rgba(108,92,231,0.2)] scale-105"
                         : s.imageUrl
                           ? "border-[var(--border-subtle)] bg-[var(--bg-base)]"
                           : "border-[var(--brand-primary)]/30 bg-[var(--bg-base)]")
@@ -403,14 +409,15 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       <img
                         src={s.imageUrl}
                         alt=""
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-500"
                         loading="lazy"
+                        aria-hidden="true"
                       />
                     ) : (
                       <span
-                        aria-hidden
+                        aria-hidden="true"
                         className={
-                          "text-[12px] font-black uppercase leading-none tracking-tight " +
+                          "text-[12px] font-black uppercase leading-none tracking-tight transition-colors " +
                           (active === i ? "text-[var(--text-primary)]" : "text-[var(--brand-primary)]")
                         }
                       >
@@ -422,8 +429,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   <span className="min-w-0 flex-1">
                     <span
                       className={
-                        "block truncate text-[15px] font-medium leading-tight " +
-                        (active === i ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]") +
+                        "block truncate text-[15px] font-medium leading-tight transition-colors " +
+                        (active === i ? "text-[var(--text-primary)] font-bold" : "text-[var(--text-secondary)]") +
                         (blocked ? "select-none blur-sm" : "")
                       }
                     >
