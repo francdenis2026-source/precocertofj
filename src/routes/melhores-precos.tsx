@@ -499,8 +499,7 @@ function MelhoresPrecosPage() {
                 <PrecoCertoMark variant="inline" as="em">mais barato</PrecoCertoMark>
               </h1>
               <p className={dsx(tc.sectionNote, "mt-0.5 line-clamp-2 max-w-2xl")}>
-                Comparamos itens de mesmo tamanho e unidade (ml, g, un). A economia é medida
-                contra a média dos mercados que vendem o item.
+                Comparamos itens de mesmo tamanho e unidade. Selecione até {MAX_SEL} itens para comparar o custo total entre estabelecimentos.
               </p>
             </div>
 
