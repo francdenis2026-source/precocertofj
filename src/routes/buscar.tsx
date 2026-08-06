@@ -892,3 +892,16 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
     </div>
   );
 }
+
+function SearchDiscoverySkeleton() {
+  return (
+    <div className="flex h-full min-h-0 flex-col gap-1.5 animate-in fade-in duration-500">
+      <Skeleton className="h-[120px] w-full rounded-xl" />
+      <div className="grid min-h-0 flex-1 gap-1.5 lg:grid-cols-2">
+        <Skeleton className="h-full w-full rounded-xl" />
+        <Skeleton className="h-full w-full rounded-xl" />
+      </div>
+      <Skeleton className="h-[140px] w-full rounded-xl" />
+    </div>
+  );
+}
