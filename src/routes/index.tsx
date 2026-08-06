@@ -218,7 +218,7 @@ function HomePage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
             <div className="lg:col-span-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="section-title mb-0">Preços ao Vivo</h2>
+                <h2 className="section-title font-display font-bold text-white mb-0">Preços ao Vivo</h2>
                 <Link to="/buscar" className="text-[12px] font-bold text-[var(--brand-primary)] hover:underline flex items-center gap-1">
                   Ver tudo <ArrowRight className="h-3 w-3" />
                 </Link>
@@ -264,7 +264,7 @@ function HomePage() {
 
             {/* Sidebar / Stats */}
             <div className="lg:col-span-4 space-y-6">
-              <h2 className="section-title">Transparência</h2>
+              <h2 className="section-title font-display font-bold text-white">Transparência</h2>
               <div className="glass-card p-6 flex flex-col gap-6">
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-1">Mercados Auditados</div>
@@ -302,7 +302,7 @@ function HomePage() {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                 <div className="max-w-xl">
                   <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-3">Rede de Parcerias</h2>
-                  <h3 className="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
+                  <h3 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
                     Comércios Parceiros
                   </h3>
                   <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
