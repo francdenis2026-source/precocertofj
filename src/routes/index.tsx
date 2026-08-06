@@ -36,6 +36,7 @@ import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
+import { RecentProductsCarousel } from "@/components/home/RecentProductsCarousel";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
