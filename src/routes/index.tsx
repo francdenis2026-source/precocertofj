@@ -25,7 +25,7 @@ import { getEconomyStat, getRecentProducts } from "@/lib/products-public.functio
 import { listTrendingSearches } from "@/lib/search-trends.functions";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
-import { formatBRL } from "@/components/ds";
+import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 
 export const Route = createFileRoute("/")({
@@ -180,9 +180,11 @@ function HomePage() {
                         </p>
                       </div>
                       <div className="flex flex-col items-end shrink-0">
-                        <span className="text-xl font-bold tracking-tight text-white tabular-nums">
-                          {formatBRL(p.price)}
-                        </span>
+                        <Price 
+                          value={p.price} 
+                          size="xl" 
+                          className="font-bold tracking-tight"
+                        />
                         {p.dropPct && (
                           <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--success)] mt-0.5">
                             <TrendingDown className="h-2.5 w-2.5" />
