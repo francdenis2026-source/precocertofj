@@ -260,24 +260,24 @@ function AdminPage() {
   return (
     <AppShell scope="admin">
       {/* ---------- Cabeçalho executivo compacto ---------- */}
-      <header className="sticky top-0 z-20 border-b border-border/60 bg-background/94 backdrop-blur">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 md:px-5">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
-              <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className={tc.eyebrow}>Console administrativo</p>
-              <h1 className={cn(tc.h1, "mt-0.5 truncate font-sans font-semibold")}>
-                Gestão do PreçoCerto
+      <header className="sticky top-0 z-20 border-b border-border/40 bg-[var(--bg-surface)]/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 py-3 md:px-8">
+          <div className="flex items-center gap-4">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 shadow-inner">
+              <ShieldCheck className="h-5 w-5" strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Gestão Estratégica</p>
+              <h1 className="font-display text-2xl font-black tracking-tight text-[var(--text-primary)] leading-none mt-1">
+                Console Central
               </h1>
             </div>
           </div>
-          <AdminChip tone="overview" size="md" className="hidden sm:inline-flex">
-            Painel unificado
-          </AdminChip>
-
-
+          <div className="flex items-center gap-2">
+            <AdminChip tone="overview" size="md" className="hidden sm:inline-flex bg-[var(--bg-surface-elevated)] border-border/40">
+              Operação Feijó
+            </AdminChip>
+          </div>
         </div>
       </header>
 
