@@ -468,6 +468,26 @@ function StorePage() {
                 </p>
               </div>
             </div>
+
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                disabled={isExporting}
+                onClick={() => handleExport('csv')}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background/60 py-2.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary disabled:opacity-50"
+              >
+                {isExporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                Exportar CSV
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background/60 py-2.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+              >
+                <FileDown className="h-3.5 w-3.5" />
+                Gerar PDF
+              </button>
+            </div>
           </div>
         </header>
 
