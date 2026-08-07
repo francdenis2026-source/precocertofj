@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Scale, X, ShoppingBarChart as BarChart, ArrowRight, Trash2 } from 'lucide-react';
+import { Scale, X, BarChart, ArrowRight, Trash2 } from 'lucide-react';
 import { useComparisonList } from '@/hooks/use-comparison-list';
 import { useNavigate } from '@tanstack/react-router';
 import { Price } from '@/components/ds/Price';
