@@ -204,10 +204,24 @@ export function SideBySideComparison({
 
   if (q.isLoading) {
     return (
-      <div className="pc-card p-20 flex flex-col items-center justify-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        <p className="text-muted-foreground font-black animate-pulse">Analisando mercados em tempo real...</p>
-      </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="pc-card p-20 flex flex-col items-center justify-center gap-6 bg-surface/80 backdrop-blur-xl rounded-[32px]"
+      >
+        <div className="relative">
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="h-16 w-16 rounded-full border-4 border-primary/20 border-t-primary" 
+          />
+          <Scale className="h-6 w-6 text-primary absolute inset-0 m-auto animate-pulse" />
+        </div>
+        <div className="text-center space-y-2">
+          <p className="text-primary font-black tracking-widest uppercase text-xs animate-pulse">Inteligência PreçoCerto</p>
+          <p className="text-muted-foreground font-medium text-sm">Analisando mercados em tempo real...</p>
+        </div>
+      </motion.div>
     );
   }
 
@@ -225,66 +239,85 @@ export function SideBySideComparison({
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
   return (
-    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px]">
+    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/80 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px] relative">
+      {/* Dynamic Background SVG Pattern */}
+      <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none overflow-hidden">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
       {/* Header */}
-      <div className="border-b border-border/40 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 p-8 shrink-0">
+      <div className="border-b border-border/40 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 p-6 md:p-8 shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-3 text-primary">
-              <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
+            <motion.div 
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="flex items-center gap-3 text-primary"
+            >
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shadow-inner">
                 <Scale className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">
+                <h3 className="text-xl md:text-2xl font-black tracking-tight uppercase leading-none">
                   {isShared ? "Comparativo Compartilhado" : "Comparador de Elite"}
                 </h3>
-                <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1">
+                <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                   Inteligência de Mercado em Tempo Real
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
           
-          <div className="flex items-center gap-3 flex-wrap justify-end">
+          <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isShared && (
-              <>
-                <Button 
-                  onClick={() => handleSave(false)}
-                  disabled={isSaving}
-                  variant="outline"
-                  className="rounded-xl px-6 h-11 border-border/40 bg-surface/50 hover:bg-primary/10 hover:border-primary/40 transition-all font-bold text-xs"
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  SALVAR
-                </Button>
-                <Button 
-                  onClick={() => handleSave(true)}
-                  disabled={isSaving}
-                  className="pc-button-primary h-11 px-6 rounded-xl shadow-lg shadow-primary/20"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  COMPARTILHAR
-                </Button>
-              </>
+              <div className="flex items-center gap-2 mr-2 border-r border-border/40 pr-4">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    onClick={() => handleSave(false)}
+                    disabled={isSaving}
+                    variant="ghost"
+                    className="rounded-xl h-10 border-border/40 hover:bg-primary/5 transition-all font-bold text-[10px] tracking-widest uppercase"
+                  >
+                    <Save className="h-3.5 w-3.5 mr-2" />
+                    SALVAR
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    onClick={() => handleSave(true)}
+                    disabled={isSaving}
+                    className="pc-button-primary h-10 px-6 rounded-xl shadow-lg shadow-primary/20 text-[10px] tracking-widest uppercase"
+                  >
+                    <Share2 className="h-3.5 w-3.5 mr-2" />
+                    COMPARTILHAR
+                  </Button>
+                </motion.div>
+              </div>
             )}
-            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1.5 border border-border/10">
+            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1 border border-border/10">
               <button 
                 onClick={handleExportCSV}
-                title="Exportar CSV"
                 className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <Download className="h-4 w-4" />
               </button>
               <button 
                 onClick={handleExportPDF}
-                title="Exportar PDF"
                 className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <FileText className="h-4 w-4" />
               </button>
             </div>
             {onClose && (
-              <button onClick={onClose} className="rounded-full p-2.5 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
+              <button onClick={onClose} className="rounded-full p-2 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
                 <XCircle className="h-5 w-5" />
               </button>
             )}
@@ -348,42 +381,62 @@ export function SideBySideComparison({
               <motion.div 
                 key={store.id}
                 layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className={cn(
-                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden",
-                  isCheapest ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" : "opacity-90 grayscale-[0.3] hover:grayscale-0"
+                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group",
+                  isCheapest 
+                    ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" 
+                    : "bg-surface/40 hover:bg-surface/60 opacity-90 hover:opacity-100"
                 )}
               >
                 {isCheapest && (
-                  <div className="absolute top-0 right-0 p-2">
-                    <CheckCircle2 className="h-5 w-5 text-savings" />
+                  <div className="absolute top-0 right-0 p-3">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <CheckCircle2 className="h-6 w-6 text-savings" />
+                    </motion.div>
                   </div>
                 )}
                 
-                <div className="h-14 w-14 rounded-2xl bg-muted/30 flex items-center justify-center mb-4 border border-border/40">
-                  <Store className="h-7 w-7 text-primary" />
+                <div className={cn(
+                  "h-14 w-14 rounded-2xl flex items-center justify-center mb-4 border transition-transform duration-500 group-hover:rotate-6",
+                  isCheapest ? "bg-savings/10 border-savings/20" : "bg-muted/30 border-border/40"
+                )}>
+                  <Store className={cn("h-7 w-7", isCheapest ? "text-savings" : "text-primary")} />
                 </div>
                 
-                <h4 className="font-black text-lg mb-1 truncate w-full">{store.name}</h4>
+                <h4 className="font-black text-lg mb-1 truncate w-full group-hover:text-primary transition-colors">{store.name}</h4>
                 
                 <div className="mb-4">
                   <Price value={total} size="xl" tone={isCheapest ? 'best' : 'default'} />
-                  <p className="text-[10px] uppercase tracking-widest font-black text-muted-foreground mt-1">
+                  <p className="text-[9px] uppercase tracking-[0.2em] font-black text-muted-foreground mt-1">
                     Custo Total ({data.commonCount} itens)
                   </p>
                 </div>
 
                 {savings > 0 && (
-                  <div className="text-savings font-black text-xs mb-3 flex items-center gap-1">
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-savings font-black text-xs mb-3 flex items-center gap-1 bg-savings/10 px-3 py-1 rounded-full"
+                  >
                     Economia de <Price value={savings} size="xs" tone="best" />
-                  </div>
+                  </motion.div>
                 )}
 
                 {isCheapest && data.stores.length > 1 && (
-                  <div className="pc-badge bg-savings text-white px-4 py-1.5 shadow-lg shadow-savings/20 font-black text-[10px] uppercase tracking-wider">
+                  <motion.div 
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="pc-badge bg-savings text-white px-4 py-1.5 shadow-lg shadow-savings/20 font-black text-[9px] uppercase tracking-wider"
+                  >
                     MELHOR PREÇO TOTAL
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             );
@@ -430,17 +483,17 @@ export function SideBySideComparison({
               className="overflow-hidden"
             >
               <div className="pt-6 border-t border-border/40 mt-6">
-                <div className="overflow-x-auto pb-4 custom-scrollbar">
-                  <table className="w-full border-separate border-spacing-y-2">
+                <div className="overflow-x-auto pb-4 custom-scrollbar rounded-2xl border border-border/20">
+                  <table className="w-full border-separate border-spacing-y-1.5 px-2">
                     <thead>
-                      <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-left">
-                        <th className="px-4 py-2 sticky left-0 bg-surface/90 backdrop-blur z-10">Produto</th>
+                      <tr className="text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground/60 text-left">
+                        <th className="px-6 py-3 sticky left-0 bg-surface/95 backdrop-blur z-10 first:rounded-l-xl">Produto</th>
                         {data.stores.map(s => (
-                          <th key={s.id} className="px-4 py-2 text-right">{s.name}</th>
+                          <th key={s.id} className="px-6 py-3 text-right">{s.name}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="before:block before:h-1">
                       {filteredItems.map((item: ComparisonItem, idx: number) => {
                         const isMissingAny = data.stores.some(s => !item.prices[s.id]);
                         

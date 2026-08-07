@@ -17,11 +17,16 @@
 
 :root {
   /* Modern Professional Palette: "Acre Coast" */
-  --pc-brand-gold: #D9A02F;
-  --pc-brand-gold-glow: rgba(217, 160, 47, 0.25);
-  --pc-indigo-rich: #3E4C6E;
+  --pc-brand-gold: #C5A02D; /* Refined Gold */
+  --pc-brand-gold-glow: rgba(197, 160, 45, 0.2);
+  --pc-indigo-rich: #0F172A;
+  
+  /* Comparison Surface */
+  --pc-compare-bg: #F8FAFC;
+  --pc-compare-header: #FFFFFF;
   
   /* Theme: Light Professional */
+
   --bg-base: #F0F4F8;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #F8FAFC;

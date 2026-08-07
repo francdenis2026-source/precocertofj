@@ -195,6 +195,8 @@ function formatSize(size_value: number | null, size_unit: string): string | null
 
 function ComparadorPage() {
   const { q, cat, view: viewParam, sort: sortParam, sel: selParam, conf: confParam, p: productParam } = Route.useSearch() as any;
+  const { q: _q } = Route.useSearch(); // Trigger re-render when search changes
+
   const navigate = useNavigate({ from: "/comparador" });
   const searchInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLElement>(null);
@@ -298,15 +300,17 @@ function ComparadorPage() {
       const PAGE = 1000;
       const acc: Comparison[] = [];
       for (let offset = 0; ; offset += PAGE) {
-        // Here we ensure database integration is pulling the latest correct data
-        const { data, error } = await supabase
+        // Enhanced database integration for real-time accuracy
+        const { data: rawData, error } = await supabase
           .rpc("get_price_comparisons")
           .range(offset, offset + PAGE - 1);
+        
         if (error) {
           console.error("Database integration error:", error);
           throw error;
         }
-        const batch = (data as unknown as Comparison[]) ?? [];
+        
+        const batch = (rawData as unknown as Comparison[]) ?? [];
         acc.push(...batch);
         if (batch.length < PAGE) break;
       }
