@@ -19,29 +19,30 @@
   /* Modern Professional Palette: "Acre Coast" */
   --pc-brand-gold: #C5A02D; /* Refined Gold */
   --pc-brand-gold-glow: rgba(197, 160, 45, 0.2);
-  --pc-indigo-rich: #0F172A;
+  --pc-navy-deep: #0B1E3A;
+  --pc-slate-soft: #F1F5F9;
   
   /* Comparison Surface */
   --pc-compare-bg: #F8FAFC;
   --pc-compare-header: #FFFFFF;
   
   /* Theme: Light Professional */
-
-  --bg-base: #F0F4F8;
+  --bg-base: #F8FAFC;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F8FAFC;
-  --border-subtle: #D1D5DB;
+  --bg-surface-elevated: #F1F5F9;
+  --border-subtle: #E2E8F0;
   
   /* Typography for Clarity & A11y */
-  --text-primary: #1F2937;
-  --text-secondary: #4B5563;
-  --text-tertiary: #6B7280;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-tertiary: #64748B;
   
   --brand-primary: var(--pc-brand-gold);
-  --brand-secondary: var(--pc-indigo-rich);
+  --brand-secondary: var(--pc-navy-deep);
   
-  --success: #059669;
-  --danger: #DC2626;
+  --success: #10B981;
+  --danger: #EF4444;
+  --savings: #10B981;
   
   /* Scale & Spacing */
   --radius-xl: 32px;
@@ -50,25 +51,26 @@
   --radius-sm: 8px;
   
   /* Enhanced Shadows for Depth */
-  --pc-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --pc-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --pc-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --pc-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  --pc-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.04), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  --pc-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 10px 10px -5px rgba(15, 23, 42, 0.03);
   
-  --dur-base: 0.25s;
+  --dur-base: 0.3s;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root[data-theme='dark'] {
-  --bg-base: #0F172A;
-  --bg-surface: #1E293B;
-  --bg-surface-elevated: #334155;
-  --border-subtle: #475569;
+  --bg-base: #0B0E14;
+  --bg-surface: #121826;
+  --bg-surface-elevated: #1C2533;
+  --border-subtle: #263142;
   
   --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-tertiary: #94A3B8;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
   
-  --brand-secondary: #E2E8F0;
+  --brand-secondary: #F8FAFC;
 }
 
 @theme {
@@ -114,8 +116,8 @@ h1, h2, h3, h4, h5, h6 {
   transition: all var(--dur-base) var(--ease-smooth);
   &:hover {
     transform: translateY(-4px);
-    box-shadow: var(--pc-shadow-lg);
-    border-color: rgba(212, 175, 55, 0.2);
+    box-shadow: var(--pc-shadow-xl);
+    border-color: var(--brand-primary);
   }
 }
 
@@ -125,6 +127,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   padding: 1.25rem;
   box-shadow: var(--pc-shadow-sm);
+  transition: all var(--dur-base) var(--ease-smooth);
 }
 
 @utility pc-button-primary {
@@ -134,16 +137,18 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.625rem;
   background-color: var(--brand-primary);
   color: #FFFFFF;
-  font-weight: 700;
+  font-weight: 800;
   padding: 0.875rem 1.75rem;
   border-radius: var(--radius-md);
   transition: all var(--dur-base) var(--ease-smooth);
-  font-size: 0.875rem;
-  box-shadow: 0 4px 12px rgba(197, 160, 45, 0.2);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 4px 12px var(--pc-brand-gold-glow);
   &:hover {
-    filter: brightness(1.05);
+    filter: brightness(1.1);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(197, 160, 45, 0.3);
+    box-shadow: 0 8px 20px var(--pc-brand-gold-glow);
   }
   &:active {
     transform: translateY(0);
@@ -157,13 +162,17 @@ h1, h2, h3, h4, h5, h6 {
   gap: 0.5rem;
   background-color: var(--bg-surface-elevated);
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: 800;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
   transition: all var(--dur-base) var(--ease-smooth);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border-subtle);
   &:hover {
-    background-color: var(--border-subtle);
+    background-color: var(--bg-surface);
+    border-color: var(--brand-secondary);
   }
 }
 

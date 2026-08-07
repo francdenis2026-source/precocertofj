@@ -15,7 +15,8 @@ import {
   FileText,
   Share2,
   Filter,
-  ArrowUpDown
+  ArrowUpDown,
+  Trophy
 } from "lucide-react";
 import { Price } from "@/components/ds/Price";
 import { getMultiStoreComparison, MultiComparisonResult, ComparisonItem } from "@/lib/multi-comparison.functions";
@@ -239,9 +240,9 @@ export function SideBySideComparison({
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
   return (
-    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/80 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px] relative">
+    <div className="pc-card overflow-hidden border-border/10 shadow-2xl bg-surface/95 backdrop-blur-2xl max-h-[90vh] flex flex-col rounded-[32px] relative ring-1 ring-black/[0.03]">
       {/* Dynamic Background SVG Pattern */}
-      <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 -z-10 opacity-[0.02] pointer-events-none overflow-hidden">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -253,72 +254,77 @@ export function SideBySideComparison({
       </div>
 
       {/* Header */}
-      <div className="border-b border-border/40 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 p-6 md:p-8 shrink-0">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-1">
+      <div className="border-b border-border/30 bg-gradient-to-r from-bg-surface-elevated via-transparent to-bg-surface-elevated p-6 md:p-10 shrink-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="space-y-2">
             <motion.div 
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="flex items-center gap-3 text-primary"
+              className="flex items-center gap-4 text-primary"
             >
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shadow-inner">
-                <Scale className="h-6 w-6" />
+              <div className="h-12 w-12 rounded-2xl bg-brand-primary/5 border border-brand-primary/10 flex items-center justify-center shadow-sm">
+                <Scale className="h-6 w-6 text-brand-primary" />
               </div>
               <div>
-                <h3 className="text-xl md:text-2xl font-black tracking-tight uppercase leading-none">
-                  {isShared ? "Comparativo Compartilhado" : "Comparador de Elite"}
+                <h3 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-brand-secondary">
+                  {isShared ? "Comparativo de Preços" : "Inteligência de Mercado"}
                 </h3>
-                <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+                <p className="text-[10px] text-text-tertiary font-black uppercase tracking-[0.3em] mt-2 flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                  Inteligência de Mercado em Tempo Real
+                  Dados atualizados em tempo real
                 </p>
               </div>
             </motion.div>
           </div>
           
-          <div className="flex items-center gap-2 flex-wrap justify-end">
+          <div className="flex items-center gap-3 flex-wrap justify-end">
             {!isShared && (
-              <div className="flex items-center gap-2 mr-2 border-r border-border/40 pr-4">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <div className="flex items-center gap-3 mr-4 border-r border-border/30 pr-6">
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
                     onClick={() => handleSave(false)}
                     disabled={isSaving}
                     variant="ghost"
-                    className="rounded-xl h-10 border-border/40 hover:bg-primary/5 transition-all font-bold text-[10px] tracking-widest uppercase"
+                    className="rounded-xl h-11 border-border/40 hover:bg-bg-surface-elevated transition-all font-black text-[10px] tracking-widest uppercase text-text-secondary"
                   >
-                    <Save className="h-3.5 w-3.5 mr-2" />
-                    SALVAR
+                    <Save className="h-4 w-4 mr-2" />
+                    SALVAR CONJUNTO
                   </Button>
                 </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
                     onClick={() => handleSave(true)}
                     disabled={isSaving}
-                    className="pc-button-primary h-10 px-6 rounded-xl shadow-lg shadow-primary/20 text-[10px] tracking-widest uppercase"
+                    className="pc-button-primary h-11 px-8 rounded-xl text-[10px] tracking-[0.15em] uppercase"
                   >
-                    <Share2 className="h-3.5 w-3.5 mr-2" />
+                    <Share2 className="h-4 w-4 mr-2" />
                     COMPARTILHAR
                   </Button>
                 </motion.div>
               </div>
             )}
-            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1 border border-border/10">
+            <div className="flex items-center gap-1 bg-bg-surface-elevated rounded-xl p-1.5 border border-border/20 shadow-sm">
               <button 
                 onClick={handleExportCSV}
-                className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
+                title="Exportar CSV"
+                className="p-2.5 hover:bg-bg-surface rounded-lg transition-all text-text-tertiary hover:text-brand-primary"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4.5 w-4.5" />
               </button>
               <button 
                 onClick={handleExportPDF}
-                className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
+                title="Exportar PDF"
+                className="p-2.5 hover:bg-bg-surface rounded-lg transition-all text-text-tertiary hover:text-brand-primary"
               >
-                <FileText className="h-4 w-4" />
+                <FileText className="h-4.5 w-4.5" />
               </button>
             </div>
             {onClose && (
-              <button onClick={onClose} className="rounded-full p-2 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
-                <XCircle className="h-5 w-5" />
+              <button 
+                onClick={onClose} 
+                className="rounded-full p-2.5 hover:bg-danger/5 text-text-tertiary hover:text-danger transition-all ml-3 border border-transparent hover:border-danger/10"
+              >
+                <XCircle className="h-6 w-6" />
               </button>
             )}
           </div>
@@ -385,32 +391,32 @@ export function SideBySideComparison({
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className={cn(
-                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group",
+                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group border-border/20",
                   isCheapest 
-                    ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" 
-                    : "bg-surface/40 hover:bg-surface/60 opacity-90 hover:opacity-100"
+                    ? "bg-gradient-to-br from-success/[0.04] to-transparent ring-2 ring-success/30 shadow-xl shadow-success/5" 
+                    : "bg-bg-surface hover:bg-bg-surface-elevated/40"
                 )}
               >
                 {isCheapest && (
-                  <div className="absolute top-0 right-0 p-3">
+                  <div className="absolute top-0 right-0 p-4">
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      initial={{ scale: 0, rotate: -45 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     >
-                      <CheckCircle2 className="h-6 w-6 text-savings" />
+                      <Trophy className="h-6 w-6 text-brand-primary drop-shadow-sm" />
                     </motion.div>
                   </div>
                 )}
                 
                 <div className={cn(
-                  "h-14 w-14 rounded-2xl flex items-center justify-center mb-4 border transition-transform duration-500 group-hover:rotate-6",
-                  isCheapest ? "bg-savings/10 border-savings/20" : "bg-muted/30 border-border/40"
+                  "h-16 w-16 rounded-[22px] flex items-center justify-center mb-5 border transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm",
+                  isCheapest ? "bg-success/10 border-success/20" : "bg-bg-surface-elevated border-border/40"
                 )}>
-                  <Store className={cn("h-7 w-7", isCheapest ? "text-savings" : "text-primary")} />
+                  <Store className={cn("h-8 w-8", isCheapest ? "text-success" : "text-brand-secondary")} />
                 </div>
                 
-                <h4 className="font-black text-lg mb-1 truncate w-full group-hover:text-primary transition-colors">{store.name}</h4>
+                <h4 className="font-black text-lg mb-2 truncate w-full group-hover:text-brand-secondary transition-colors tracking-tight">{store.name}</h4>
                 
                 <div className="mb-4">
                   <Price value={total} size="xl" tone={isCheapest ? 'best' : 'default'} />
