@@ -105,7 +105,7 @@ export function RecentProductsCarousel() {
 
   if (isLoading && products.length === 0) {
     return (
-      <section aria-label="Carregando produtos recém-cadastrados" className="mt-4">
+      <section aria-label="Loading recently added products" className="mt-4">
         <div className="mb-2 h-4 w-52 animate-pulse rounded-full bg-muted" />
         <div className="flex gap-3 overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -120,7 +120,7 @@ export function RecentProductsCarousel() {
 
   return (
     <motion.section
-      aria-label="Produtos recém-cadastrados"
+      aria-label="Recently added products"
       className="mt-2 relative"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -272,7 +272,7 @@ export function RecentProductsCarousel() {
       </Carousel>
 
       {snapCount > 1 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5" role="tablist" aria-label="Navegação do carrossel">
+        <div className="mt-3 flex items-center justify-center gap-1.5" role="tablist" aria-label="Carousel navigation">
           {Array.from({ length: snapCount }).map((_, i) => {
             const active = i === selected;
             return (

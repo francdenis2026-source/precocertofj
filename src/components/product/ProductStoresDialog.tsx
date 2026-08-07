@@ -50,7 +50,7 @@ export interface ProductStoresDialogProps {
 type SortKey = "price-asc" | "price-desc" | "confidence-desc" | "distance-asc";
 
 function formatBRL(n: number): string {
-  return n.toLocaleString("pt-BR", {
+  return n.toLocaleString("en-GB", {
     style: "currency",
     currency: "BRL",
     minimumFractionDigits: 2,
@@ -58,7 +58,7 @@ function formatBRL(n: number): string {
 }
 
 function storeName(s: ProductStoreEntry): string {
-  return (s.store_name ?? s.marketName ?? "Estabelecimento").trim();
+  return (s.store_name ?? s.marketName ?? "Store").trim();
 }
 
 /**
@@ -198,7 +198,7 @@ export function ProductStoresDialog({
           <DialogHeader className="space-y-1">
             <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
               <StoreIcon className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
-              Comparativo por estabelecimento
+              Comparison by store
             </p>
             <DialogTitle className="line-clamp-2 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
               {productName}
@@ -213,7 +213,7 @@ export function ProductStoresDialog({
               {(category || sizeLabel) && valid.length > 0 ? <span aria-hidden>·</span> : null}
               {valid.length > 0 ? (
                 <span>
-                  {valid.length} mercado{valid.length > 1 ? "s" : ""} com preço
+                  {valid.length} store{valid.length > 1 ? "s" : ""} with price
                 </span>
               ) : null}
             </DialogDescription>
@@ -222,7 +222,7 @@ export function ProductStoresDialog({
 
         {valid.length === 0 ? (
           <div className="px-5 pb-5 pt-2 text-center text-sm text-muted-foreground">
-            Nenhum estabelecimento cadastrou preço para este produto ainda.
+            No store has registered a price for this product yet.
           </div>
         ) : isVisitor ? (
           <VisitorLockPanel storeCount={valid.length} minPrice={stats.min} />
@@ -230,12 +230,12 @@ export function ProductStoresDialog({
           <div className="px-3 pb-4 pt-1 sm:px-5">
             {stats.min != null && stats.avg != null ? (
               <div className="mb-3 grid grid-cols-3 gap-2">
-                <StatMini label="Menor" amount={stats.min} accent="savings" />
-                <StatMini label="Médio" amount={stats.avg} />
+                <StatMini label="Lowest" amount={stats.min} accent="savings" />
+                <StatMini label="Average" amount={stats.avg} />
                 <StatMini
-                  label="Diferença"
+                  label="Difference"
                   value={spreadPct != null ? `${spreadPct.toFixed(0)}%` : "—"}
-                  hint="entre menor e maior"
+                  hint="between lowest and highest"
                 />
               </div>
             ) : null}
@@ -243,51 +243,51 @@ export function ProductStoresDialog({
             {/* Controles de ordenação + filtro */}
             <div
               role="toolbar"
-              aria-label="Ordenar e filtrar estabelecimentos"
+              aria-label="Sort and filter stores"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
               <span className="mr-1 flex items-center gap-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 <ArrowDownUp className="h-3 w-3" strokeWidth={2.2} />
-                Ordenar
+                Sort
               </span>
               <SortChip
                 active={sortKey === "price-asc"}
                 onClick={() => setSortKey("price-asc")}
-                label="Menor preço"
+                label="Lowest price"
               />
 
               <SortChip
                 active={sortKey === "price-desc"}
                 onClick={() => setSortKey("price-desc")}
-                label="Maior preço"
+                label="Highest price"
               />
               <SortChip
                 active={sortKey === "confidence-desc"}
                 onClick={() => setSortKey("confidence-desc")}
                 icon={<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />}
-                label="Maior confiança"
+                label="Highest confidence"
               />
               <SortChip
                 active={sortKey === "distance-asc"}
                 onClick={() => setSortKey("distance-asc")}
                 disabled={!hasDistance}
                 icon={<MapPin className="h-3 w-3" strokeWidth={2.2} />}
-                label={hasDistance ? "Mais perto" : "Mais perto (indisponível)"}
+                label={hasDistance ? "Nearest" : "Nearest (unavailable)"}
                 title={
                   hasDistance
-                    ? "Ordenar por proximidade"
-                    : "Ative a localização em Perfil para ver a distância"
+                    ? "Sort by proximity"
+                    : "Enable location in Profile to see distance"
                 }
               />
             </div>
 
             <div
               role="group"
-              aria-label="Filtrar por nível de confiança"
+              aria-label="Filter by confidence level"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
               <span className="mr-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Confiança
+                Confidence
               </span>
               {(["", "alta", "media", "baixa"] as const).map((level) => (
                 <FilterChip
@@ -295,7 +295,7 @@ export function ProductStoresDialog({
                   active={confFilter === level}
                   onClick={() => setConfFilter(level)}
                   label={
-                    level === "" ? "Todas" : level === "alta" ? "Alta" : level === "media" ? "Média" : "Baixa"
+                    level === "" ? "All" : level === "alta" ? "High" : level === "media" ? "Medium" : "Low"
                   }
                   tone={level || undefined}
                 />
@@ -304,14 +304,13 @@ export function ProductStoresDialog({
 
             {/* Região viva anunciando resultados após ordenação/filtro */}
             <p className="sr-only" aria-live="polite" aria-atomic="true">
-              {sorted.length} estabelecimento{sorted.length === 1 ? "" : "s"} listado
-              {sorted.length === 1 ? "" : "s"}
-              {confFilter ? ` — filtro: confiança ${confFilter}` : ""}.
+              {sorted.length} store{sorted.length === 1 ? "" : "s"} listed
+              {confFilter ? ` — filter: confidence ${confFilter}` : ""}.
             </p>
 
             {sorted.length === 0 ? (
               <p className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-4 text-center text-xs text-muted-foreground">
-                Nenhum estabelecimento nesse filtro. Ajuste os critérios acima.
+                No stores match this filter. Adjust the criteria above.
               </p>
             ) : (
               <ul className="divide-y divide-border/70 rounded-xl border border-border bg-card">
@@ -349,7 +348,7 @@ export function ProductStoresDialog({
                           <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                             {isCheapest ? (
                               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
-                                Menor preço
+                                Lowest price
                               </span>
                             ) : stats.min != null && stats.min > 0 ? (
                               <span className="inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
@@ -359,7 +358,7 @@ export function ProductStoresDialog({
                                   tone="muted"
                                   prefix="+R$"
                                 />{" "}
-                                vs. menor
+                                vs. lowest
                               </span>
                             ) : null}
                             <ConfidenceDot level={confidence} />
@@ -398,7 +397,7 @@ export function ProductStoresDialog({
                 onClick={() => onOpenChange(false)}
                 className="mt-3 flex items-center justify-between rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-primary transition hover:bg-primary/10"
               >
-                Ver ficha completa e histórico
+                See full details and history
                 <span aria-hidden>→</span>
               </Link>
             ) : null}
@@ -488,7 +487,7 @@ function ConfidenceDot({ level }: { level: "alta" | "media" | "baixa" }) {
       : level === "media"
         ? "bg-accent/15 text-accent"
         : "bg-destructive/15 text-destructive";
-  const label = level === "alta" ? "Alta confiança" : level === "media" ? "Confiança média" : "Baixa confiança";
+  const label = level === "alta" ? "High confidence" : level === "media" ? "Medium confidence" : "Low confidence";
   return (
     <span
       className={cn(
@@ -589,22 +588,22 @@ function VisitorLockPanel({
             <Lock className="h-5 w-5" strokeWidth={2} />
           </span>
           <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
-            Preços por estabelecimento
+            Prices by store
           </p>
           <h3 className="mt-1 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
-            Entre para ver quanto custa em cada mercado
+            Sign in to see the price at each store
           </h3>
           <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">
-            {storeCount} estabelecimento{storeCount > 1 ? "s" : ""} já cadastraram este produto
+            {storeCount} store{storeCount > 1 ? "s" : ""} already registered this product
             {minPrice != null ? (
               <>
-                {" "}— a partir de{" "}
+                {" "}— starting at{" "}
                 <Price value={minPrice} size="sm" />.
               </>
             ) : (
               "."
             )}{" "}
-            Crie sua conta gratuita para desbloquear a comparação completa — 30 dias sem cartão.
+            Create your free account to unlock the full comparison — 30 days, no card required.
           </p>
 
           <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
@@ -614,18 +613,18 @@ function VisitorLockPanel({
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--color-primary)_60%,transparent)] transition hover:brightness-110"
             >
               <LogIn className="h-3.5 w-3.5" strokeWidth={2.2} />
-              Entrar / Cadastrar
+              Sign in / Sign up
             </Link>
             <Link
               to="/assinar"
               className="inline-flex items-center justify-center rounded-full border border-primary/40 bg-background px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary transition hover:bg-primary/5"
             >
-              Ver planos
+              See plans
             </Link>
           </div>
           <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             <X className="mr-1 inline h-3 w-3 text-savings" strokeWidth={2.4} />
-            Sem cartão · 30 dias grátis
+            No card · 30 days free
           </p>
         </div>
       </div>

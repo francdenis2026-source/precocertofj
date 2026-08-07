@@ -4,8 +4,8 @@ import { ds, dsx } from "@/lib/ds";
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
 const LEGAL_LINKS: Array<{ to: string; label: string; aria: string }> = [
-  { to: "/privacidade", label: "Privacidade", aria: "Política de privacidade" },
-  { to: "/fale-conosco", label: "Contato", aria: "Fale conosco" },
+  { to: "/privacidade", label: "Privacy", aria: "Privacy policy" },
+  { to: "/fale-conosco", label: "Contact", aria: "Contact us" },
 ];
 
 const focusRing =
@@ -39,7 +39,7 @@ export function SiteFooter() {
       className="mt-0.5 border-t border-white/5 bg-[#020617] text-white/40"
     >
       <h2 id="site-footer-title" className="sr-only">
-        Rodapé — PreçoCerto, comparador de preços de Feijó (AC)
+        Footer — PreçoCerto, price comparison for Feijó (AC)
       </h2>
       <div
         className={dsx(
@@ -85,7 +85,7 @@ export function SiteFooter() {
             <span className="truncate text-lg font-black tracking-tighter text-white">
               Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
-            <span className="sr-only">— ir para a página inicial</span>
+            <span className="sr-only">— go to homepage</span>
           </button>
         )}
 
@@ -94,7 +94,7 @@ export function SiteFooter() {
         </p>
 
         {links.length > 0 ? (
-          <nav aria-label="Institucional" className="min-w-0">
+          <nav aria-label="Institutional" className="min-w-0">
             <ul className="flex min-w-0 items-center gap-x-0.5 -ml-2">
               {links.map((l, i) => (
                 <li key={l.to} className="inline-flex items-center">

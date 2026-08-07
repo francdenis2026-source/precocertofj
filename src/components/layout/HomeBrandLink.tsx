@@ -16,8 +16,8 @@ export function HomeBrandLink({
   return (
     <Link
       to="/"
-      aria-label="PreçoCerto — ir para a página inicial"
-      title="Ir para a página inicial"
+      aria-label="PreçoCerto — go to homepage"
+      title="Go to homepage"
       className={cn(
         "inline-flex min-w-0 items-center gap-2 rounded-md px-1 py-0.5 transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
         className,

@@ -51,12 +51,12 @@ export function MobileStickySearch() {
     >
       <form
         role="search"
-        aria-label="Buscar mercado ou produto"
+        aria-label="Search store or product"
         onSubmit={submit}
         className="mx-auto flex max-w-3xl items-center gap-2 px-3 py-2"
       >
         <label htmlFor="mobile-sticky-search" className="sr-only">
-          Buscar mercado ou produto
+          Search store or product
         </label>
         <div className="relative flex-1">
           <Search
@@ -72,7 +72,7 @@ export function MobileStickySearch() {
             inputMode="search"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Buscar mercado ou produto…"
+            placeholder="Search store or product…"
             className={cn(
               "h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-[15px] text-foreground",
               "placeholder:text-muted-foreground outline-none",
@@ -82,14 +82,14 @@ export function MobileStickySearch() {
         </div>
         <button
           type="submit"
-          aria-label="Buscar"
+          aria-label="Search"
           className={cn(
             "inline-flex h-10 min-w-11 items-center justify-center rounded-lg px-3",
             "bg-brand text-brand-foreground text-[13px] font-bold uppercase tracking-[0.08em]",
             "active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           )}
         >
-          Ir
+          Go
         </button>
       </form>
     </div>

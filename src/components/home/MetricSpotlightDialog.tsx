@@ -29,18 +29,18 @@ const currency = (n: number) =>
 const num = (n: number) => n.toLocaleString("pt-BR");
 
 function relTime(iso: string | null): string {
-  if (!iso) return "sem registros";
+  if (!iso) return "no records";
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "agora mesmo";
-  if (mins < 60) return `há ${mins} min`;
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} min ago`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `há ${hrs} h`;
+  if (hrs < 24) return `${hrs}h ago`;
   const days = Math.floor(hrs / 24);
-  if (days === 1) return "ontem";
-  if (days < 30) return `há ${days} dias`;
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days}d ago`;
   const months = Math.floor(days / 30);
-  return `há ${months} mês${months > 1 ? "es" : ""}`;
+  return `${months} month${months > 1 ? "s" : ""} ago`;
 }
 
 /** Normaliza para busca sem acento/caixa. */
@@ -70,21 +70,21 @@ const HERO_CONFIG: Record<
   }
 > = {
   markets: {
-    eyebrow: "Rede colaborativa",
-    title: "Mercados parceiros",
-    subtitle: "Estabelecimentos ativos em Feijó/AC com preços da comunidade.",
+    eyebrow: "Collaborative network",
+    title: "Partner markets",
+    subtitle: "Active establishments in Feijó/AC with community-sourced prices.",
     icon: ShieldCheck,
   },
   products: {
-    eyebrow: "Catálogo verificado",
-    title: "Produtos cadastrados",
-    subtitle: "Itens com marca, gramagem e histórico em pelo menos um mercado.",
+    eyebrow: "Verified catalog",
+    title: "Registered products",
+    subtitle: "Items with brand, weight and history in at least one market.",
     icon: Package,
   },
   savings: {
-    eyebrow: "Economia real",
-    title: "Diferença entre mercados",
-    subtitle: "Variação entre o menor e o maior preço do mesmo produto.",
+    eyebrow: "Real savings",
+    title: "Difference between markets",
+    subtitle: "Variation between the lowest and highest price of the same product.",
     icon: TrendingDown,
   },
 };
@@ -213,14 +213,14 @@ export function MetricSpotlightDialog({
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border bg-card px-3 py-2 sm:px-4">
           <span className="flex min-w-0 items-center gap-1.5 truncate text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3 w-3 shrink-0" />
-            Dados colaborativos de Feijó/AC
+            Collaborative data from Feijó/AC
           </span>
           <Link
             to={kind === "markets" ? "/estabelecimentos" : kind === "products" ? "/buscar" : "/comparador"}
             onClick={() => onOpenChange(false)}
             className="pc-metric-link inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2"
           >
-            {kind === "markets" ? "Ver mercados" : kind === "products" ? "Ver catálogo" : "Comparador"}
+            {kind === "markets" ? "View markets" : kind === "products" ? "View catalog" : "Comparator"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -236,20 +236,20 @@ function statStrip(
 ): [string, string][] {
   if (kind === "markets")
     return [
-      ["Mercados", num(data.totals.establishments)],
-      ["Produtos", num(data.totals.products)],
-      ["Comparáveis", num(data.totals.productsCompared)],
+      ["Markets", num(data.totals.establishments)],
+      ["Products", num(data.totals.products)],
+      ["Comparable", num(data.totals.productsCompared)],
     ];
   if (kind === "products")
     return [
-      ["Cadastrados", num(data.totals.products)],
-      ["Categorias", num(data.topCategories.length)],
-      ["Mercados", num(data.totals.establishments)],
+      ["Registered", num(data.totals.products)],
+      ["Categories", num(data.topCategories.length)],
+      ["Markets", num(data.totals.establishments)],
     ];
   return [
-    ["Média", `${data.totals.avgSavingsPct}%`],
-    ["Melhor", `${data.totals.bestSavingsPct}%`],
-    ["Comparados", num(data.totals.productsCompared)],
+    ["Average", `${data.totals.avgSavingsPct}%`],
+    ["Best", `${data.totals.bestSavingsPct}%`],
+    ["Compared", num(data.totals.productsCompared)],
   ];
 }
 
@@ -299,7 +299,7 @@ function SearchBar({
           onClick={() => onChange("")}
           className="pc-metric-ink shrink-0 text-[11px] font-bold uppercase tracking-wide"
         >
-          limpar
+          clear
         </button>
       )}
     </div>
@@ -314,7 +314,7 @@ function LoadMoreButton({ remaining, onClick }: { remaining: number; onClick: ()
       onClick={onClick}
       className="mt-2 w-full rounded-lg border border-border bg-muted/40 py-1.5 text-[11.5px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
     >
-      Carregar mais ({remaining})
+      Load more ({remaining})
     </button>
   );
 }
@@ -395,18 +395,18 @@ function MarketsList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length} ${filtered.length === 1 ? "mercado" : "mercados"}`}>
-        Lista de parceiros
+      <SectionLabel count={`${filtered.length} ${filtered.length === 1 ? "market" : "markets"}`}>
+        Partner list
       </SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Nome, bairro ou cidade…"
-        ariaLabel="Buscar mercados"
+        placeholder="Name, neighborhood or city…"
+        ariaLabel="Search markets"
       />
 
       {shown.length === 0 ? (
-        <EmptyRow>Nenhum mercado encontrado.</EmptyRow>
+        <EmptyRow>No markets found.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((s) => (
@@ -415,7 +415,7 @@ function MarketsList({
                 to="/estabelecimento/$slug"
                 params={{ slug: s.slug }}
                 onClick={onNavigate}
-                aria-label={`Abrir página do mercado ${s.name}`}
+                aria-label={`Open market page for ${s.name}`}
                 className="-mx-1 flex items-center gap-2.5 rounded-lg px-1 py-2 transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
               >
                 <StoreBadge

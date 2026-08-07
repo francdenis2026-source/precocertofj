@@ -66,9 +66,9 @@ export function AllCategoriesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden">
         <DialogHeader className="border-b border-border px-5 pt-5 pb-3">
-          <DialogTitle className="text-[18px] font-bold">Todas as categorias</DialogTitle>
+          <DialogTitle className="text-[18px] font-bold">All categories</DialogTitle>
           <DialogDescription className="text-[13px]">
-            Escolha um nicho ou pesquise pela categoria de produto (ex.: laticínios).
+            Choose a category or search by product type (e.g. dairy).
           </DialogDescription>
           <div className="relative mt-3">
             <Search
@@ -76,14 +76,14 @@ export function AllCategoriesDialog({
               aria-hidden
             />
             <label htmlFor="cat-dialog-search" className="sr-only">
-              Filtrar categorias
+              Filter categories
             </label>
             <input
               id="cat-dialog-search"
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filtrar categorias…"
+              placeholder="Filter categories…"
               autoComplete="off"
               className={cn(
                 "h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[14px] text-foreground",
@@ -97,7 +97,7 @@ export function AllCategoriesDialog({
         <div className="max-h-[65vh] overflow-y-auto px-4 py-4">
           {filtered.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted-foreground">
-              Nenhuma categoria encontrada.
+              No categories found.
             </p>
           ) : (
             <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -106,7 +106,7 @@ export function AllCategoriesDialog({
                   <button
                     type="button"
                     onClick={() => go(c)}
-                    aria-label={`Buscar em ${c.label}`}
+                    aria-label={`Search in ${c.label}`}
                     className={cn(
                       "group flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left",
                       "min-h-[64px] transition-all hover:-translate-y-px hover:border-brand/60 hover:shadow-md",
@@ -132,7 +132,7 @@ export function AllCategoriesDialog({
                       </span>
                       {/* Mapeamento explícito hub → categorias de produto da loja */}
                       <span className="mt-0.5 block truncate text-[11px] text-muted-foreground/80">
-                        {c.coverage || "Sem categorias de produto vinculadas"}
+                        {c.coverage || "No linked product categories"}
                       </span>
                     </span>
                     <ArrowRight

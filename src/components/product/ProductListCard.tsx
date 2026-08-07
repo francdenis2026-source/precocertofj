@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 
 const brl = (n: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+  new Intl.NumberFormat("en-GB", { style: "currency", currency: "BRL" }).format(n);
 
 export interface ProductListCardProps {
   name: string;
@@ -65,7 +65,7 @@ export function ProductListCard({
         </div>
         {(formattedDate || onAlert || onHistory) && (
           <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span title={absoluteDate}>{formattedDate ? `Atualizado ${formattedDate}` : ""}</span>
+            <span title={absoluteDate}>{formattedDate ? `Updated ${formattedDate}` : ""}</span>
             <div className="flex items-center gap-1">
               {onAlert ? (
                 <button
@@ -75,10 +75,10 @@ export function ProductListCard({
                     onAlert();
                   }}
                   className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  title="Criar alerta de queda de preço"
-                  aria-label={`Criar alerta de preço para ${name}`}
+                  title="Create price drop alert"
+                  aria-label={`Create price alert for ${name}`}
                 >
-                  <Bell className="h-3 w-3" /> Alerta
+                  <Bell className="h-3 w-3" /> Alert
                 </button>
               ) : null}
               {onHistory ? (
@@ -89,9 +89,9 @@ export function ProductListCard({
                     onHistory();
                   }}
                   className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  aria-label={`Ver histórico de preço de ${name}`}
+                  aria-label={`View price history for ${name}`}
                 >
-                  <History className="h-3 w-3" /> Histórico
+                  <History className="h-3 w-3" /> History
                 </button>
               ) : null}
             </div>

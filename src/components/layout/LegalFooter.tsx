@@ -14,7 +14,7 @@ export function LegalFooter({ updatedAt }: { updatedAt: string }) {
       <div className="mx-auto grid w-full max-w-5xl gap-2 px-3 py-2 sm:px-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6 md:px-8">
         {/* Bloco de contato — sempre em uma coluna fluida */}
         <p className={cn(tc.meta, "min-w-0 leading-snug")}>
-          Idealizado por{" "}
+          Created by{" "}
           <strong className="font-semibold text-foreground">Franc D&apos;nis</strong> — Feijó (AC).
           Parcerias, delivery ou apps sob demanda:{" "}
           <a
@@ -36,7 +36,7 @@ export function LegalFooter({ updatedAt }: { updatedAt: string }) {
 
         {/* CTA + timestamp — coluna auto, sem quebra */}
         <div className="flex shrink-0 items-center justify-end gap-2">
-          <span className={cn(tc.meta, "whitespace-nowrap")}>Atualizado {updatedAt}</span>
+          <span className={cn(tc.meta, "whitespace-nowrap")}>Updated {updatedAt}</span>
           <Link
             to="/fale-conosco"
             className={cn(
@@ -44,7 +44,7 @@ export function LegalFooter({ updatedAt }: { updatedAt: string }) {
               "pc-focus inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-border px-3 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
             )}
           >
-            Fale conosco
+            Contact us
           </Link>
         </div>
       </div>

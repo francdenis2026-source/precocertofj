@@ -25,7 +25,7 @@ interface BackButtonProps {
  */
 export function BackButton({
   fallbackTo = "/",
-  label = "Voltar",
+  label = "Back",
   shortLabel,
   className,
   variant = "ghost",

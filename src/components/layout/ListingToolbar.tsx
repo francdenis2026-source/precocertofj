@@ -50,10 +50,10 @@ export function ListingToolbar({
             <Input
               value={search.value}
               onChange={(e) => search.onChange(e.target.value)}
-              placeholder={search.placeholder ?? "Buscar..."}
+              placeholder={search.placeholder ?? "Search..."}
               className="h-10 pl-9"
               inputMode="search"
-              aria-label={search.ariaLabel ?? search.placeholder ?? "Buscar"}
+              aria-label={search.ariaLabel ?? search.placeholder ?? "Search"}
             />
           </div>
         )}
