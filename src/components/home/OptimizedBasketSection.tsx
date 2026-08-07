@@ -47,12 +47,11 @@ export function OptimizedBasketSection() {
             <Sparkles className="h-3.5 w-3.5" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exclusivo PreçoCerto</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white leading-tight">
-            Cestas que valem <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFD700]">muito mais</span>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)] leading-tight">
+            Cestas que valem <span className="text-[var(--brand-primary)]">muito mais</span>
           </h2>
-          <p className="text-white/60 text-sm max-w-lg">
-            Nossa inteligência varreu os mercados de Feijó e montou as combinações mais baratas para o seu bolso hoje.
+          <p className="text-[var(--text-secondary)] text-xs max-w-sm">
+            As combinações mais baratas nos mercados de Feijó hoje.
           </p>
         </div>
 
