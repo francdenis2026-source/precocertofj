@@ -20,7 +20,7 @@ export function SearchHeroSection({ query }: { query: string }) {
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[#0F1B3D] p-8 md:p-10 shadow-lg group/hero text-white">
+    <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0A142F] p-8 md:p-12 shadow-2xl group/hero text-white transition-all duration-500 hover:shadow-primary/5">
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-12 relative z-10">
@@ -55,19 +55,19 @@ export function SearchHeroSection({ query }: { query: string }) {
           </header>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="space-y-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Melhor preço</p>
-                <Price value={bestPrice} size="lg" tone="onhero" className="text-3xl font-bold text-white" />
+              <div className="space-y-1 bg-white/5 rounded-2xl p-5 border border-white/10 transition-colors hover:bg-white/10">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Melhor preço</p>
+                <Price value={bestPrice} size="lg" tone="onhero" className="text-3xl font-black text-white" />
               </div>
-              <div className="space-y-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Preço médio</p>
-                <Price value={avgPrice} size="lg" tone="onhero" className="text-3xl font-bold text-white" />
+              <div className="space-y-1 bg-white/5 rounded-2xl p-5 border border-white/10 transition-colors hover:bg-white/10">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Preço médio</p>
+                <Price value={avgPrice} size="lg" tone="onhero" className="text-3xl font-black text-white" />
               </div>
-              <div className="space-y-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Economia máx.</p>
+              <div className="space-y-1 bg-[var(--brand-primary)]/10 rounded-2xl p-5 border border-[var(--brand-primary)]/20 transition-all hover:bg-[var(--brand-primary)]/20">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Economia máx.</p>
                 <div className="flex items-baseline gap-2">
-                  <Price value={potentialSavings} size="lg" tone="onhero" className="text-3xl font-bold text-white" />
-                  <span className="text-xs font-bold text-emerald-400">({savingsPct}%)</span>
+                  <Price value={potentialSavings} size="lg" tone="onhero" className="text-3xl font-black text-white" />
+                  <span className="text-xs font-black text-emerald-400">({savingsPct}%)</span>
                 </div>
               </div>
           </div>

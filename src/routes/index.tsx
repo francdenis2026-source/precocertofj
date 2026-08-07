@@ -155,7 +155,7 @@ function HomePage() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
               backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-              filter: isSearchFocused ? "brightness(0.3) blur(6px)" : "brightness(0.7) blur(2px)"
+              filter: isSearchFocused ? "brightness(0.3) blur(12px)" : "brightness(0.6) blur(4px)"
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
@@ -180,9 +180,9 @@ function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-7xl font-black tracking-tight text-white leading-[0.9] sm:leading-[0.85] mb-8">
+            <h1 className="text-5xl sm:text-8xl font-black tracking-tight text-white leading-[0.85] mb-10">
               A inteligência que seu <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFD700] drop-shadow-sm">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] via-[#FFF5D1] to-[var(--brand-primary)] bg-[length:200%_auto] animate-[gradient-x_4s_linear_infinite] drop-shadow-2xl">
                 dinheiro merece
               </span>
             </h1>
