@@ -105,7 +105,7 @@ export function RecentProductsCarousel() {
 
   if (isLoading && products.length === 0) {
     return (
-      <section aria-label="Loading recently added products" className="mt-4">
+      <section aria-label="Carregando produtos adicionados recentemente" className="mt-4">
         <div className="mb-2 h-4 w-52 animate-pulse rounded-full bg-muted" />
         <div className="flex gap-3 overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -120,7 +120,7 @@ export function RecentProductsCarousel() {
 
   return (
     <motion.section
-      aria-label="Recently added products"
+      aria-label="Produtos adicionados recentemente"
       className="mt-2 relative"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -132,10 +132,10 @@ export function RecentProductsCarousel() {
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
             <Sparkles className="h-3 w-3" strokeWidth={3} aria-hidden />
-            Live Catalog
+            Catálogo ao vivo
           </p>
           <h2 className="mt-1 text-[20px] sm:text-[24px] font-black tracking-tight text-[var(--text-primary)] leading-none">
-            Recent Additions
+            Adições recentes
           </h2>
         </div>
         <Link
@@ -245,7 +245,7 @@ export function RecentProductsCarousel() {
                             </div>
                             {store && (
                               <p className="text-[10px] font-medium text-[var(--text-tertiary)] truncate max-w-[100px]">
-                                no <span className="text-[var(--text-secondary)] font-bold">{store}</span>
+                                em <span className="text-[var(--text-secondary)] font-bold">{store}</span>
                               </p>
                             )}
                           </>
@@ -272,7 +272,7 @@ export function RecentProductsCarousel() {
       </Carousel>
 
       {snapCount > 1 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5" role="tablist" aria-label="Carousel navigation">
+        <div className="mt-3 flex items-center justify-center gap-1.5" role="tablist" aria-label="Navegação do carrossel">
           {Array.from({ length: snapCount }).map((_, i) => {
             const active = i === selected;
             return (

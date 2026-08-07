@@ -117,7 +117,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         setItems(enriched);
       } catch (e: any) {
         if (!ctrl.signal.aborted) {
-          setError(e?.message ?? "Search is unavailable right now");
+          setError(e?.message ?? "Pesquisa indisponível no momento");
           setItems([]);
         }
       } finally {
@@ -202,8 +202,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="Search a product and see where it is cheapest"
-          aria-label="Search products"
+          placeholder="Pesquise um produto e veja onde é mais barato"
+          aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
@@ -220,7 +220,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               setQ("");
               inputRef.current?.focus();
             }}
-            aria-label="Clear search"
+            aria-label="Limpar pesquisa"
             className="shrink-0 rounded-full p-1.5 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)]"
           >
             <X className="h-4 w-4" />
@@ -233,7 +233,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             compact ? "h-9 text-[14px]" : "h-11 text-[15px] sm:h-12",
           )}
         >
-          Search
+          Pesquisar
         </button>
       </form>
 
@@ -249,7 +249,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             {!canQuery ? (
               <div className="p-4">
                 <p className="mb-3 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
-                  <TrendingUp className="h-3 w-3" /> Trending searches
+                  <TrendingUp className="h-3 w-3" /> Pesquisas em alta
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {(trending ?? []).slice(0, 8).map((t: any) => (
@@ -268,38 +268,38 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             ) : loading && items.length === 0 ? (
               <div className="flex items-center gap-3 px-5 py-6 text-sm text-[var(--text-secondary)]">
                 <Loader2 className="h-4 w-4 animate-spin text-[var(--brand-primary)]" />
-                Searching stores in Feijó…
+                Pesquisando lojas em Feijó…
               </div>
             ) : error ? (
               <div role="alert" className="px-5 py-6 text-center">
-                <p className="mb-3 text-sm font-bold text-[var(--text-primary)]">Search is unavailable right now</p>
+                <p className="mb-3 text-sm font-bold text-[var(--text-primary)]">Pesquisa indisponível no momento</p>
                 <button
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => setQ((v) => `${v} `)}
                   className="rounded-lg border border-[var(--brand-primary)] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-[var(--brand-primary)]"
                 >
-                  Try again
+                  Tentar novamente
                 </button>
               </div>
             ) : items.length === 0 ? (
               <div className="px-5 py-6 text-center">
-                <p className="mb-1 text-sm font-bold text-[var(--text-primary)]">No results for “{term}”</p>
-                <p className="mb-4 text-xs text-[var(--text-secondary)]">This product may not have been recorded yet.</p>
+                <p className="mb-1 text-sm font-bold text-[var(--text-primary)]">Nenhum resultado para “{term}”</p>
+                <p className="mb-4 text-xs text-[var(--text-secondary)]">Este produto pode ainda não ter sido registrado.</p>
                 <button
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => go(term)}
                   className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white"
                 >
-                  Search anyway <ArrowRight className="h-3.5 w-3.5" />
+                  Pesquisar mesmo assim <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             ) : (
               <ul
                 id={LISTBOX_ID}
                 role="listbox"
-                aria-label="Product suggestions"
+                aria-label="Sugestões de produtos"
                 className="max-h-[340px] overflow-y-auto overscroll-contain py-1"
               >
                 {items.map((s, i) => (
@@ -335,7 +335,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                               <Store className="h-3 w-3" /> {s.market}
                             </>
                           ) : (
-                            s.category ?? "Catalogue"
+                            s.category ?? "Catálogo"
                           )}
                         </span>
                       </span>
@@ -343,7 +343,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                         <span className="shrink-0 text-right">
                           <span className="block text-sm font-black text-[var(--brand-primary)]">{BRL(s.minPrice)}</span>
                           {i === 0 && (
-                            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500">Lowest price</span>
+                            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500">Menor preço</span>
                           )}
                         </span>
                       ) : loading ? (
@@ -354,9 +354,9 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                 ))}
                 <li className="flex items-center justify-between border-t border-[var(--border-subtle)] px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[var(--text-tertiary)]">
                   <span className="flex items-center gap-1.5">
-                    <CornerDownLeft className="h-3 w-3" /> Enter to see all
+                    <CornerDownLeft className="h-3 w-3" /> Enter para ver tudo
                   </span>
-                  <span>↑ ↓ to navigate</span>
+                  <span>↑ ↓ para navegar</span>
                 </li>
               </ul>
             )}

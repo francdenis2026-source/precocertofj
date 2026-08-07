@@ -9,18 +9,18 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
   const sections = [
     {
       id: "brand",
-      title: "Brand",
+      title: "Marca",
       options: ["Parmalat", "Italac", "Ninho", "Piracanjuba"],
     },
     {
       id: "market",
-      title: "Market",
+      title: "Mercado",
       options: ["Varejão Contamigos", "Pague Pouco", "Doce Dia", "Super Econômico"],
     },
     {
       id: "dist",
-      title: "Distance",
-      options: ["Up to 2km", "Up to 5km", "Up to 10km"],
+      title: "Distância",
+      options: ["Até 2km", "Até 5km", "Até 10km"],
     },
   ];
 
@@ -38,7 +38,7 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
       <div className="flex items-center justify-between px-2">
         <div className="space-y-1">
           <h2 className="text-sm font-black uppercase tracking-[0.2em] text-foreground flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-primary" /> Filters
+            <SlidersHorizontal className="h-4 w-4 text-primary" /> Filtros
           </h2>
         </div>
         {activeFilters.length > 0 && (
@@ -46,7 +46,7 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
             onClick={() => setActiveFilters([])}
             className="text-[10px] font-bold text-destructive hover:brightness-125 uppercase tracking-wider transition-all"
           >
-            Clear all
+            Limpar tudo
           </button>
         )}
       </div>
@@ -82,17 +82,17 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
         ))}
 
         <div className="space-y-3">
-           <h3 className="text-xs font-bold text-foreground">Price Range</h3>
+           <h3 className="text-xs font-bold text-foreground">Faixa de Preço</h3>
            <div className="flex items-center gap-2">
               <input 
                 type="number" 
-                placeholder="Min" 
+                placeholder="Mín" 
                 className="w-full bg-card border border-border rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-primary/20 outline-none"
               />
               <span className="text-muted-foreground">—</span>
               <input 
                 type="number" 
-                placeholder="Max" 
+                placeholder="Máx" 
                 className="w-full bg-card border border-border rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-primary/20 outline-none"
               />
            </div>
@@ -103,7 +103,7 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
              <div className="h-4 w-4 rounded border border-border bg-card flex items-center justify-center group-hover:border-primary transition-colors">
                 <Check className="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
              </div>
-             <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">Only verified offers</span>
+             <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">Apenas ofertas verificadas</span>
           </label>
         </div>
       </div>

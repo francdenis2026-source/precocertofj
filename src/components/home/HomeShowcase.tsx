@@ -132,9 +132,9 @@ export function HomeShowcaseSection() {
   // Skeleton state
   if (isLoading && !hasProducts && !hasComparisons) {
     return (
-      <section aria-label="Loading showcase" className="mt-3 space-y-5 md:mt-4">
-        <ShowcaseSkeleton title="Featured lowest prices" />
-        <ShowcaseSkeleton title="Recently added products" narrow />
+      <section aria-label="Carregando vitrine" className="mt-3 space-y-5 md:mt-4">
+        <ShowcaseSkeleton title="Menores preços em destaque" />
+        <ShowcaseSkeleton title="Produtos adicionados recentemente" narrow />
       </section>
     );
   }
@@ -143,12 +143,12 @@ export function HomeShowcaseSection() {
   if (isError && !hasProducts && !hasComparisons) {
     return (
       <section
-        aria-label="Error loading showcase"
+        aria-label="Erro ao carregar vitrine"
         className="mt-3 flex flex-col items-center gap-2 rounded-2xl border border-destructive/30 bg-destructive/5 p-5 text-center"
       >
         <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden />
         <p className="text-sm font-medium text-foreground">
-          We couldn't load the showcase right now.
+          Não foi possível carregar a vitrine agora.
         </p>
         <button
           type="button"
@@ -158,7 +158,7 @@ export function HomeShowcaseSection() {
           }}
           className="mt-1 inline-flex h-8 items-center rounded-full border border-border bg-background px-4 text-xs font-semibold text-primary transition hover:border-primary/50 hover:bg-primary/5"
         >
-          Try again
+          Tentar novamente
         </button>
       </section>
     );
@@ -166,9 +166,9 @@ export function HomeShowcaseSection() {
 
   if (!hasProducts && !hasComparisons) {
     return (
-      <section aria-label="Empty showcase" className="mt-3">
+      <section aria-label="Vitrine vazia" className="mt-3">
         <div className="rounded-2xl border border-dashed border-border bg-surface p-6 text-center text-[13px] text-muted-foreground">
-          Our showcase is still being built — the best prices will appear here soon.
+          Nossa vitrine ainda está sendo construída — os melhores preços aparecerão aqui em breve.
         </div>
       </section>
     );
@@ -183,7 +183,7 @@ export function HomeShowcaseSection() {
       {hasFilteredComparisons && <CheapestComparisonsBlock rows={filteredComparisons} />}
       {hasComparisons && !hasFilteredComparisons && (
         <div className="rounded-2xl border border-dashed border-border bg-surface p-5 text-center text-[12.5px] text-muted-foreground">
-          No catalog product currently has a registered price.
+          Nenhum produto do catálogo tem preço registrado no momento.
         </div>
       )}
 
@@ -230,14 +230,14 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
   return (
     <ShowcaseRow
       icon={<Sparkles className="h-3 w-3" strokeWidth={2.2} />}
-      eyebrow="Highlights"
-      title="Lowest prices of the day"
+      eyebrow="Destaques"
+      title="Menores preços do dia"
       right={
         <Link
           to="/melhores-precos"
           className="text-[11px] font-semibold text-primary hover:underline"
         >
-          View all →
+          Ver tudo →
         </Link>
       }
     >
@@ -270,7 +270,7 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
               <Link
                 to="/produto-publico/$slug"
                 params={{ slug }}
-                aria-label={`View ${r.display_name}`}
+                aria-label={`Ver ${r.display_name}`}
                 className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <PriceCard
@@ -282,7 +282,7 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
                   previousPrice={previous}
                   marketName={shortenStoreName(r.cheapest_store)}
                   unit={r.size_value ? `${r.size_value} ${r.size_unit}` : null}
-                  highlight={isMulti ? "Lowest price" : null}
+                  highlight={isMulti ? "Menor preço" : null}
                 />
               </Link>
             </motion.div>
@@ -292,9 +292,9 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
       {top.length > 4 && (
         <p className="mt-2 flex items-center gap-1 text-[11px] text-muted-foreground">
           <DSBadge variant="savingsSoft" size="sm">
-            {top.length} highlights
+            {top.length} destaques
           </DSBadge>
-          <span>average savings of <Price value={top.reduce((s, r) => s + (Number(r.avg_price) - Number(r.min_price)), 0) / top.length} size="xs" tone="savings" /></span>
+          <span>economia média de <Price value={top.reduce((s, r) => s + (Number(r.avg_price) - Number(r.min_price)), 0) / top.length} size="xs" tone="savings" /></span>
         </p>
       )}
     </ShowcaseRow>
@@ -329,8 +329,8 @@ function RecentProductsRow({
   return (
     <ShowcaseRow
       icon={<Package className="h-3 w-3" strokeWidth={2.2} />}
-      eyebrow="Catalog"
-      title="Recently added products"
+      eyebrow="Catálogo"
+      title="Produtos adicionados recentemente"
       right={
         hasMore ? (
           <button
@@ -338,7 +338,7 @@ function RecentProductsRow({
             onClick={() => setShowAll((v) => !v)}
             className="text-[11px] font-semibold text-primary hover:underline"
           >
-            {showAll ? "Show less" : `Show more (${products.length - INITIAL})`}
+            {showAll ? "Mostrar menos" : `Mostrar mais (${products.length - INITIAL})`}
           </button>
         ) : null
       }
@@ -356,7 +356,7 @@ function RecentProductsRow({
                   <Link
                     to="/produto-publico/$slug"
                     params={{ slug }}
-                    aria-label={`View ${cmp.display_name}`}
+                    aria-label={`Ver ${cmp.display_name}`}
                     className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     <PriceCard
@@ -368,7 +368,7 @@ function RecentProductsRow({
                       previousPrice={previous}
                       marketName={shortenStoreName(cmp.cheapest_store)}
                       unit={cmp.size_value ? `${cmp.size_value} ${cmp.size_unit}` : null}
-                      highlight={isMulti ? "Lowest price" : null}
+                      highlight={isMulti ? "Menor preço" : null}
                     />
                   </Link>
                 </TeaserCard>
@@ -384,7 +384,7 @@ function RecentProductsRow({
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug: p.id }}
-                  aria-label={`View details for ${p.displayName}`}
+                  aria-label={`Ver detalhes de ${p.displayName}`}
                   className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
                 >
                   <ProductImage
@@ -462,14 +462,14 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
   return (
     <ShowcaseRow
       icon={<Tag className="h-3 w-3" strokeWidth={2.2} />}
-      eyebrow="Deals"
-      title="Lowest prices in the network"
+      eyebrow="Ofertas"
+      title="Menores preços da rede"
       right={
         <Link
           to="/melhores-precos"
           className="text-[11px] font-semibold text-primary hover:underline"
         >
-          View all →
+          Ver tudo →
         </Link>
       }
     >
@@ -477,7 +477,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
       {/* Chips de categoria */}
       <div className="scroll-x -mx-1 mb-2 flex gap-1 overflow-x-auto px-1 pb-1">
         <CatChip active={activeCat === null} onClick={() => setActiveCat(null)}>
-          All <span className="ml-1 opacity-60">{rows.length}</span>
+          Todos <span className="ml-1 opacity-60">{rows.length}</span>
         </CatChip>
         {categoryCounts.map(([cat, n]) => (
           <CatChip key={cat} active={activeCat === cat} onClick={() => setActiveCat(cat)}>
@@ -506,7 +506,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
               <button
                 type="button"
                 aria-pressed={isSel}
-                aria-label={isSel ? "Remove from comparison" : "Select to compare"}
+                aria-label={isSel ? "Remover da comparação" : "Selecionar para comparar"}
                 onClick={() => toggleSelect(r.product_key)}
                 className={
                   "absolute left-1 top-2 z-10 inline-flex h-4 w-4 items-center justify-center rounded-full border text-[11px] font-bold transition " +
@@ -527,7 +527,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
               <Link
                 to="/produto-publico/$slug"
                 params={{ slug }}
-                aria-label={`View details for ${r.display_name}`}
+                aria-label={`Ver detalhes de ${r.display_name}`}
                 className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <ProductImage
@@ -558,7 +558,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                   </div>
                   <div className="mt-1 border-t border-accent/25 pt-0.5">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-strong">
-                      Lowest
+                      Menor preço
                     </p>
                     <div className="flex items-baseline justify-between gap-1">
                       <Price value={Number(r.min_price)} size="sm" as="p" />
@@ -579,10 +579,10 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                   onClick={() => setDetailRow(r)}
                   disabled={!isMulti}
                   className="inline-flex flex-1 items-center justify-center gap-0.5 rounded-full border border-accent-strong/40 bg-accent-strong/[0.08] px-1 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-accent-strong transition hover:bg-accent-strong/15 disabled:opacity-40"
-                  title={isMulti ? "Compare prices across markets" : "Only one price available"}
+                  title={isMulti ? "Comparar preços entre mercados" : "Apenas um preço disponível"}
                 >
                   <GitCompare className="h-2 w-2" />
-                  Compare
+                  Comparar
                 </button>
                 <AddToCartButton slug={slug} label={r.display_name} variant="compact" />
               </div>
@@ -599,7 +599,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
             onClick={() => setShowAll((v) => !v)}
             className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-primary transition hover:border-primary/50"
           >
-            {showAll ? "Show less" : `Show more (${filteredAll.length - INITIAL_LIMIT})`}
+            {showAll ? "Mostrar menos" : `Mostrar mais (${filteredAll.length - INITIAL_LIMIT})`}
           </button>
         </div>
       )}
@@ -612,19 +612,19 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
             <Scale className="h-4 w-4 shrink-0 text-primary" />
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-semibold text-foreground">
-                {selected.length} of {MAX_SELECT} selected
+                {selected.length} de {MAX_SELECT} selecionados
               </p>
               <p className="truncate text-[11px] text-muted-foreground">
                 {selected.length < MIN_SELECT
-                  ? `Choose at least ${MIN_SELECT} products`
-                  : "Ready to see the ranking"}
+                  ? `Escolha pelo menos ${MIN_SELECT} produtos`
+                  : "Pronto para ver o ranking"}
               </p>
             </div>
             <button
               type="button"
               onClick={() => setSelected([])}
               className="rounded-full p-1.5 text-muted-foreground hover:text-foreground"
-              aria-label="Clear selection"
+              aria-label="Limpar seleção"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -635,7 +635,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
               className="inline-flex items-center gap-1 rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Trophy className="h-3 w-3" />
-              View ranking
+              Ver ranking
             </button>
           </div>
         </div>
@@ -696,8 +696,8 @@ function CompareDialog({
                 {row.display_name}
               </DialogTitle>
               <DialogDescription className="text-left text-xs">
-                Side-by-side comparison across {row.store_count}{" "}
-                {row.store_count === 1 ? "market" : "markets"} · savings of up to{" "}
+                Comparação lado a lado entre {row.store_count}{" "}
+                {row.store_count === 1 ? "mercado" : "mercados"} · economia de até{" "}
                 {Number(row.savings_pct).toFixed(1)}%
               </DialogDescription>
             </DialogHeader>
@@ -730,12 +730,12 @@ function CompareDialog({
                         </p>
                         {isBest && (
                           <p className="text-[11px] font-medium uppercase tracking-wider text-savings">
-                            Best price
+                            Melhor preço
                           </p>
                         )}
                         {isWorst && !isBest && (
                           <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                            Most expensive
+                            Mais caro
                           </p>
                         )}
                       </div>
@@ -751,8 +751,8 @@ function CompareDialog({
               })}
             </ul>
             <div className="flex items-center justify-between rounded-xl bg-muted/40 px-3 py-2 text-[11px] text-muted-foreground">
-              <span>Average: <Price value={Number(row.avg_price)} size="xs" tone="muted" /></span>
-              <span>Max: <Price value={Number(row.max_price)} size="xs" tone="muted" /></span>
+              <span>Média: <Price value={Number(row.avg_price)} size="xs" tone="muted" /></span>
+              <span>Máximo: <Price value={Number(row.max_price)} size="xs" tone="muted" /></span>
             </div>
           </>
         )}
@@ -781,10 +781,10 @@ function RankingDialog({
       <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle className="text-left font-display text-lg">
-            Ranking of best prices
+            Ranking dos melhores preços
           </DialogTitle>
           <DialogDescription className="text-left text-xs">
-            {rows.length} products compared — sorted by highest savings across markets.
+            {rows.length} produtos comparados — ordenados pela maior economia entre mercados.
           </DialogDescription>
         </DialogHeader>
 
@@ -808,7 +808,7 @@ function RankingDialog({
                 <p className="truncate text-[11px] text-muted-foreground">
                   <Trophy className="mr-0.5 inline h-2.5 w-2.5 text-savings" />
                   {shortenStoreName(r.cheapest_store)} · {r.store_count}{" "}
-                  {r.store_count === 1 ? "market" : "markets"}
+                  {r.store_count === 1 ? "mercado" : "mercados"}
                 </p>
               </div>
               <div className="text-right">
@@ -826,15 +826,15 @@ function RankingDialog({
 
         <div className="grid grid-cols-3 gap-2 rounded-xl bg-muted/40 p-3 text-center text-[11px]">
           <div>
-            <p className="uppercase tracking-wider text-muted-foreground">Lowest total</p>
+            <p className="uppercase tracking-wider text-muted-foreground">Total mais baixo</p>
             <Price as="p" value={totalMin} size="md" className="mt-0.5 justify-center" />
           </div>
           <div>
-            <p className="uppercase tracking-wider text-muted-foreground">Average</p>
+            <p className="uppercase tracking-wider text-muted-foreground">Média</p>
             <Price as="p" value={totalAvg} size="sm" className="mt-0.5 justify-center" />
           </div>
           <div>
-            <p className="uppercase tracking-wider text-muted-foreground">Highest total</p>
+            <p className="uppercase tracking-wider text-muted-foreground">Total mais alto</p>
             <Price
               as="p"
               value={totalMax}
@@ -845,9 +845,9 @@ function RankingDialog({
           </div>
         </div>
         <p className="text-center text-[11px] text-muted-foreground">
-          Potential savings:{" "}
+          Economia potencial:{" "}
           <Price value={Math.max(0, totalAvg - totalMin)} size="sm" tone="savings" />{" "}
-          compared to average
+          em relação à média
         </p>
       </DialogContent>
     </Dialog>
