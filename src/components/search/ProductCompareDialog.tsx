@@ -36,11 +36,11 @@ function daysSince(iso: string | null | undefined): number | null {
 
 function freshnessLabel(days: number | null): { label: string; stale: boolean } | null {
   if (days == null) return null;
-  if (days === 0) return { label: "hoje", stale: false };
-  if (days === 1) return { label: "1 dia", stale: false };
-  if (days < 30) return { label: `${days} dias`, stale: false };
-  if (days < 60) return { label: `${days} dias`, stale: true };
-  return { label: `${Math.floor(days / 30)} meses`, stale: true };
+  if (days === 0) return { label: "today", stale: false };
+  if (days === 1) return { label: "1 day", stale: false };
+  if (days < 30) return { label: `${days} days`, stale: false };
+  if (days < 60) return { label: `${days} days`, stale: true };
+  return { label: `${Math.floor(days / 30)} months`, stale: true };
 }
 
 export function ProductCompareDialog({
@@ -123,13 +123,13 @@ export function ProductCompareDialog({
         <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
           <div className="min-w-0">
             <p className="font-mono text-[12.5px] uppercase tracking-[0.22em] text-accent-strong">
-              Comparar produtos
+              Compare products
             </p>
             <h2
               id="compare-title"
               className="font-display text-base font-semibold tracking-tight text-foreground"
             >
-              {entries.length} item{entries.length > 1 ? "s" : ""} · ranking por custo total
+              {entries.length} item{entries.length > 1 ? "s" : ""} · ranked by total cost
             </h2>
           </div>
           <div className="flex items-center gap-1.5">
@@ -138,8 +138,8 @@ export function ProductCompareDialog({
                 type="button"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                aria-label="Atualizar preços (admin)"
-                title="Atualizar preços (somente admin)"
+                aria-label="Refresh prices (admin)"
+                title="Refresh prices (admin only)"
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface text-muted-foreground shadow-sm transition hover:border-accent-strong/50 hover:text-accent-strong disabled:opacity-50"
               >
                 <RefreshCw
@@ -151,7 +151,7 @@ export function ProductCompareDialog({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Fechar comparação"
+              aria-label="Close comparison"
               className="rounded-full p-1.5 text-muted-foreground hover:bg-muted/40 hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -164,7 +164,7 @@ export function ProductCompareDialog({
             <thead className="sticky top-0 bg-background/95 backdrop-blur">
               <tr className="border-b border-border">
                 <th className="px-3 py-2 text-left font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
-                  Estabelecimento
+                  Store
                 </th>
                 {entries.map((e) => (
                   <th
@@ -178,7 +178,7 @@ export function ProductCompareDialog({
                       <button
                         type="button"
                         onClick={() => onRemove(e.productName)}
-                        aria-label={`Remover ${e.productName} da comparação`}
+                        aria-label={`Remove ${e.productName} from comparison`}
                         className="shrink-0 rounded-full p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                       >
                         <X className="h-3 w-3" />
@@ -198,7 +198,7 @@ export function ProductCompareDialog({
                     colSpan={entries.length + 2}
                     className="px-3 py-6 text-center font-mono text-[12.5px] text-muted-foreground"
                   >
-                    Nenhum estabelecimento em comum.
+                    No stores in common.
                   </td>
                 </tr>
               ) : (
@@ -275,7 +275,7 @@ export function ProductCompareDialog({
                                 ) : (
                                   <Clock className="h-2.5 w-2.5" />
                                 )}
-                                {fresh.stale ? "defasado" : "há"} {fresh.label}
+                                {fresh.stale ? "stale · " : ""}{fresh.label} ago
                               </p>
                             ) : null}
                           </td>
@@ -292,7 +292,7 @@ export function ProductCompareDialog({
                             />
                             {isBest ? (
                               <p className="mt-1 font-mono text-[12.5px] uppercase tracking-widest text-accent-strong">
-                                melhor total
+                                best total
                               </p>
                             ) : bestTotal != null ? (
                               <Price
@@ -307,7 +307,7 @@ export function ProductCompareDialog({
                           </>
                         ) : (
                           <span className="font-mono text-[12.5px] text-muted-foreground">
-                            parcial
+                            partial
                           </span>
                         )}
                       </td>
@@ -323,21 +323,21 @@ export function ProductCompareDialog({
           {totalSavings != null ? (
             <div className="mb-2 flex flex-wrap items-center gap-2 rounded-lg border border-savings/30 bg-savings/[0.06] px-3 py-2">
               <span className="font-mono text-[12.5px] uppercase tracking-[0.2em] text-savings">
-                Economia máxima
+                Maximum savings
               </span>
               <Price value={totalSavings} size="md" tone="savings" />
               <span className="font-mono text-[12.5px] text-muted-foreground">
-                comparando o mais barato ao mais caro no mesmo carrinho
+                comparing the cheapest to the most expensive in the same cart
               </span>
             </div>
           ) : null}
           <p className="font-mono text-[12.5px] text-muted-foreground">
-            Ranking por custo total (somando o preço mais baixo de cada item por
-            estabelecimento). Preço unitário em{" "}
+            Ranked by total cost (adding the lowest price of each item per
+            store). Unit price in{" "}
             <span className="text-accent-strong">R$/kg</span> ou{" "}
             <span className="text-accent-strong">R$/L</span> quando disponível.
-            Preços com mais de 30 dias aparecem como{" "}
-            <span className="text-destructive">defasados</span>.
+            Prices older than 30 days appear as{" "}
+            <span className="text-destructive">stale</span>.
           </p>
           {(() => {
             const bestSummary = entries
@@ -355,7 +355,7 @@ export function ProductCompareDialog({
             return (
               <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2">
                 <span className="font-mono text-[12.5px] uppercase tracking-[0.2em] text-accent-strong">
-                  Melhor combinação
+                  Best combination
                 </span>
                 {bestSummary.map((x) => (
                   <span
@@ -365,7 +365,7 @@ export function ProductCompareDialog({
                     <span className="max-w-[160px] truncate">{x.name}</span>
                     <span className="text-muted-foreground">·</span>
                     <Price value={x.cheapest?.price} size="sm" tone="best" />
-                    <span className="text-muted-foreground">em {x.cheapest?.marketName}</span>
+                    <span className="text-muted-foreground">at {x.cheapest?.marketName}</span>
                   </span>
                 ))}
                 <Price value={total} size="md" prefix="Σ R$" className="ml-auto" />
@@ -391,11 +391,11 @@ export function CompareTray({
   return (
     <div
       role="region"
-      aria-label="Bandeja de comparação"
+      aria-label="Comparison tray"
       className="pointer-events-auto fixed inset-x-0 bottom-3 z-40 mx-auto flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-background/95 px-3 py-2 shadow-lg backdrop-blur"
     >
       <span className="font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
-        Comparar
+        Compare
       </span>
       <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 font-mono text-[12.5px] font-bold tabular-nums text-primary-foreground">
         {count}
@@ -406,18 +406,18 @@ export function CompareTray({
         disabled={count < 2}
         className="rounded-full bg-primary px-3 py-1 font-mono text-[12.5px] font-bold uppercase tracking-widest text-primary-foreground transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        Ver comparação
+        See comparison
       </button>
       <button
         type="button"
         onClick={onClear}
         className="rounded-full border border-border px-2 py-1 font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
       >
-        Limpar
+        Clear
       </button>
       {count < 2 ? (
         <span className="font-mono text-[12.5px] text-muted-foreground">
-          selecione ao menos 2
+          select at least 2
         </span>
       ) : null}
     </div>
