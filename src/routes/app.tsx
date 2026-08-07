@@ -140,7 +140,7 @@ function DashboardPage() {
           <SectionCard 
             title="Insights & Economia" 
             description="Veja onde você está economizando mais este mês em Feijó."
-            className="lg:col-span-2 pc-animate-fade-in border-none bg-white text-[#1A1A2E] shadow-sm rounded-[32px] overflow-hidden"
+            className="lg:col-span-2 pc-animate-fade-in border-none bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm rounded-[32px] overflow-hidden"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-[var(--brand-primary)]">
                 <Link to="/app/insights">Ver Relatório Completo <ChevronRight className="ml-1 h-3 w-3" /></Link>
@@ -151,7 +151,7 @@ function DashboardPage() {
               <div className="space-y-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Eficiência de Compra</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-[#1A1A2E]">84%</span>
+                  <span className="text-3xl font-black text-[var(--text-primary)]">84%</span>
                   <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">+5% este mês</span>
                 </div>
                 <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden">
@@ -165,7 +165,7 @@ function DashboardPage() {
               </div>
               <div className="space-y-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Melhor Localidade</p>
-                <p className="font-display text-lg font-bold leading-tight text-[#1A1A2E]">Varejão Contamigos</p>
+                <p className="font-display text-lg font-bold leading-tight text-[var(--text-primary)]">Varejão Contamigos</p>
                 <div className="flex items-center gap-2 text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-wider">
                   <TrendingUp className="h-3 w-3" />
                   <span>R$ 42,50 Poupados</span>
@@ -174,7 +174,7 @@ function DashboardPage() {
               <div className="space-y-3">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Meta de Notas</p>
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-bold text-[#1A1A2E]">8 / 10 Notas</p>
+                  <p className="text-sm font-bold text-[var(--text-primary)]">8 / 10 Notas</p>
                   <span className="text-[10px] font-black text-muted-foreground uppercase">80%</span>
                 </div>
                 <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden">
