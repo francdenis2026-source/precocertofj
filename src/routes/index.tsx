@@ -228,11 +228,10 @@ function HomePage() {
                 <OptimizedBasketSection />
               </section>
               <section>
-                <div className="flex items-center justify-between mb-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                       <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Monitoramento Ativo</h2>
-                      <h3 className="text-xl font-black">Preços em Feijó</h3>
+                      <h3 className="text-xl font-black text-[var(--text-primary)]">Preços em Feijó</h3>
                     </div>
                     <div className="flex bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)] w-fit">
                       {[
