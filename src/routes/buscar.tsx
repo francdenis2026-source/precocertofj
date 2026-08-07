@@ -11,6 +11,8 @@ import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { searchProductPrice } from "@/lib/price-search.functions";
 import { useState, useRef } from "react";
+import { PageLoader } from "@/components/feedback";
+
 
 
 const searchSchema = z.object({
@@ -43,6 +45,7 @@ function SearchResultsPage() {
     enabled: !!q && q.length >= 1,
   });
 
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050B14]">
@@ -67,5 +70,6 @@ function SearchResultsPage() {
     </div>
   );
 }
+
 
 
