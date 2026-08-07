@@ -283,7 +283,7 @@ function ComparadorPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [filterAvailability, setFilterAvailability] = useState<"all" | "in_stock">("all");
   const [sortBy, setSortBy] = useState<"price" | "availability">("price");
-  const [sideBySide, setSideBySide] = useState<{ storeAId: string; storeAName: string; storeBId: string; storeBName: string } | null>(null);
+  const [sideBySide, setSideBySide] = useState<{ storeIds: string[] } | null>(null);
 
 
   const saveCartFn = useServerFn(saveComparisonCart);
@@ -1295,17 +1295,13 @@ function ComparadorPage() {
                                       <td className="px-2 py-1.5 text-right">
                                         <button 
                                           onClick={() => {
-                                            const other = finalResults.find(r => r.market !== res.market) || finalResults[0];
                                             setSideBySide({
-                                              storeAId: res.establishmentId,
-                                              storeAName: res.market,
-                                              storeBId: other.establishmentId,
-                                              storeBName: other.market
+                                              storeIds: [res.establishmentId]
                                             });
                                           }}
                                           className="text-[10px] font-black uppercase text-primary hover:underline"
                                         >
-                                          Comparar
+                                          Detalhes
                                         </button>
                                       </td>
                                     </tr>
@@ -1316,12 +1312,11 @@ function ComparadorPage() {
                                   <td colSpan={3} className="p-2">
                                     <button 
                                       onClick={() => {
-                                        const top2 = [...finalResults].sort((a, b) => a.total - b.total).slice(0, 2);
+                                        const ids = finalResults
+                                          .sort((a, b) => a.total - b.total)
+                                          .map(r => r.establishmentId);
                                         setSideBySide({
-                                          storeAId: top2[0].establishmentId,
-                                          storeAName: top2[0].market,
-                                          storeBId: top2[1].establishmentId,
-                                          storeBName: top2[1].market
+                                          storeIds: ids
                                         });
                                       }}
                                       className="pc-button-primary w-full h-8 text-[11px]"
@@ -1331,6 +1326,7 @@ function ComparadorPage() {
                                   </td>
                                 </tr>
                               )}
+
                             </>
                           );
                         })()}
@@ -1368,12 +1364,13 @@ function ComparadorPage() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar">
             <SideBySideComparison
-              {...sideBySide}
+              storeIds={sideBySide.storeIds}
               onClose={() => setSideBySide(null)}
             />
           </div>
         </div>
       )}
+
 
       </div>
 

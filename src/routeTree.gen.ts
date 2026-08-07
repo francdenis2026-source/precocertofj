@@ -74,6 +74,7 @@ import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AppProdutosRouteImport } from './routes/app_.produtos'
 import { Route as AppEstabelecimentosRouteImport } from './routes/app_.estabelecimentos'
 import { Route as AppNotasRouteImport } from './routes/app/notas'
+import { Route as AppComparacoesRouteImport } from './routes/app.comparacoes'
 import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
 import { Route as AdminVitrineRouteImport } from './routes/admin_.vitrine'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
@@ -450,6 +451,11 @@ const AppNotasRoute = AppNotasRouteImport.update({
   path: '/notas',
   getParentRoute: () => AppRoute,
 } as any)
+const AppComparacoesRoute = AppComparacoesRouteImport.update({
+  id: '/comparacoes',
+  path: '/comparacoes',
+  getParentRoute: () => AppRoute,
+} as any)
 const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
   id: '/admin_/webhooks',
   path: '/admin/webhooks',
@@ -787,6 +793,7 @@ export interface FileRoutesByFullPath {
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/app/comparacoes': typeof AppComparacoesRoute
   '/app/notas': typeof AppNotasRoute
   '/app/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app/produtos': typeof AppProdutosRoute
@@ -904,6 +911,7 @@ export interface FileRoutesByTo {
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/app/comparacoes': typeof AppComparacoesRoute
   '/app/notas': typeof AppNotasRoute
   '/app/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app/produtos': typeof AppProdutosRoute
@@ -1022,6 +1030,7 @@ export interface FileRoutesById {
   '/admin_/sinonimos': typeof AdminSinonimosRoute
   '/admin_/vitrine': typeof AdminVitrineRoute
   '/admin_/webhooks': typeof AdminWebhooksRoute
+  '/app/comparacoes': typeof AppComparacoesRoute
   '/app/notas': typeof AppNotasRoute
   '/app_/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app_/produtos': typeof AppProdutosRoute
@@ -1141,6 +1150,7 @@ export interface FileRouteTypes {
     | '/admin/sinonimos'
     | '/admin/vitrine'
     | '/admin/webhooks'
+    | '/app/comparacoes'
     | '/app/notas'
     | '/app/estabelecimentos'
     | '/app/produtos'
@@ -1258,6 +1268,7 @@ export interface FileRouteTypes {
     | '/admin/sinonimos'
     | '/admin/vitrine'
     | '/admin/webhooks'
+    | '/app/comparacoes'
     | '/app/notas'
     | '/app/estabelecimentos'
     | '/app/produtos'
@@ -1375,6 +1386,7 @@ export interface FileRouteTypes {
     | '/admin_/sinonimos'
     | '/admin_/vitrine'
     | '/admin_/webhooks'
+    | '/app/comparacoes'
     | '/app/notas'
     | '/app_/estabelecimentos'
     | '/app_/produtos'
@@ -1977,6 +1989,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppNotasRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/comparacoes': {
+      id: '/app/comparacoes'
+      path: '/comparacoes'
+      fullPath: '/app/comparacoes'
+      preLoaderRoute: typeof AppComparacoesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/admin_/webhooks': {
       id: '/admin_/webhooks'
       path: '/admin/webhooks'
@@ -2341,12 +2360,14 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface AppRouteChildren {
+  AppComparacoesRoute: typeof AppComparacoesRoute
   AppNotasRoute: typeof AppNotasRoute
   AppInsightsIndexRoute: typeof AppInsightsIndexRoute
   AppProdutoIdSlugRoute: typeof AppProdutoIdSlugRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppComparacoesRoute: AppComparacoesRoute,
   AppNotasRoute: AppNotasRoute,
   AppInsightsIndexRoute: AppInsightsIndexRoute,
   AppProdutoIdSlugRoute: AppProdutoIdSlugRoute,

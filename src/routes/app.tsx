@@ -23,7 +23,8 @@ import {
   Tag,
   Search,
   ShoppingCart,
-  Zap
+  Zap,
+  Scale
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -121,7 +122,14 @@ function DashboardPage() {
                   Ver comércios
                 </Link>
               </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link to="/app/comparacoes">
+                  <Scale className="mr-2 h-4 w-4" />
+                  Comparativos
+                </Link>
+              </Button>
             </div>
+
           }
         />
 
