@@ -166,8 +166,8 @@ function HomePage() {
           <div className="absolute inset-0 bg-[var(--bg-base)]" />
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.15 }}
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center"
+            animate={{ opacity: 0.25 }}
+            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[2px]"
           />
         </div>
 
