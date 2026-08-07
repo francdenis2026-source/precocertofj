@@ -1,70 +1,60 @@
-import { ReactNode } from "react";
+import { motion } from "framer-motion";
 import { LucideIcon, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type Stat = {
   label: string;
-  value: ReactNode;
+  value: React.ReactNode;
   icon?: LucideIcon;
-  hint?: ReactNode;
+  hint?: React.ReactNode;
   delta?: { value: string; direction?: "up" | "down" | "flat" };
   tone?: "default" | "primary" | "success" | "warning" | "danger";
 };
 
-const toneMap: Record<NonNullable<Stat["tone"]>, string> = {
-  default: "border-[var(--border-subtle)] bg-[var(--bg-surface)]",
-  primary: "border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/5",
-  success: "border-emerald-500/20 bg-emerald-500/5",
-  warning: "border-amber-500/20 bg-amber-500/5",
-  danger: "border-destructive/20 bg-destructive/5",
-};
-
 export function StatGrid({ stats, className }: { stats: Stat[]; className?: string }) {
   return (
-    <div
-      className={cn(
-        "grid gap-3 sm:grid-cols-2 lg:grid-cols-4",
-        className,
-      )}
-    >
+    <div className={cn("grid gap-4 grid-cols-2 lg:grid-cols-4", className)}>
       {stats.map((s, i) => {
         const Icon = s.icon;
         const Trend = s.delta?.direction === "down" ? TrendingDown : TrendingUp;
+        
         return (
           <div
             key={i}
             className={cn(
-              "rounded-[20px] border p-6 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-1 group",
-              toneMap[s.tone ?? "default"],
+              "pc-stat-card transition-transform hover:-translate-y-1",
+              s.tone === "primary" && "border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/5",
+              s.tone === "success" && "border-[var(--success)]/20 bg-[var(--success)]/5",
+              s.tone === "danger" && "border-[var(--danger)]/20 bg-[var(--danger)]/5"
             )}
           >
             <div className="flex items-center justify-between gap-2">
-                <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
-                  {s.label}
-                </span>
-              {Icon && <Icon className="h-4 w-4 text-muted-foreground" aria-hidden />}
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+                {s.label}
+              </span>
+              {Icon && <Icon className="h-4 w-4 text-[var(--text-tertiary)]" />}
             </div>
-            <div className="mt-2 font-display text-[clamp(1.5rem,2.2vw,2rem)] font-black leading-none tracking-tight text-[var(--text-primary)]">
+            
+            <div className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)]">
               {s.value}
             </div>
+
             {(s.delta || s.hint) && (
-              <div className="mt-1.5 flex items-center gap-2 text-[12.5px] text-muted-foreground">
+              <div className="mt-2 flex items-center gap-2 text-[12px]">
                 {s.delta && (
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11.5px] font-medium",
-                      s.delta.direction === "down"
-                        ? "bg-destructive/10 text-destructive"
-                        : s.delta.direction === "flat"
-                        ? "bg-muted text-muted-foreground"
-                        : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+                      "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-bold uppercase tracking-wider text-[10px]",
+                      s.delta.direction === "down" ? "bg-[var(--danger)]/10 text-[var(--danger)]" : 
+                      s.delta.direction === "flat" ? "bg-muted text-[var(--text-tertiary)]" : 
+                      "bg-[var(--success)]/10 text-[var(--success)]"
                     )}
                   >
                     <Trend className="h-3 w-3" />
                     {s.delta.value}
                   </span>
                 )}
-                {s.hint}
+                {s.hint && <span className="text-[var(--text-tertiary)] font-medium">{s.hint}</span>}
               </div>
             )}
           </div>
