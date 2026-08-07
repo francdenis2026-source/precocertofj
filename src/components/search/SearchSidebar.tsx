@@ -239,18 +239,19 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-border/60 pt-5">
-      <header className="mb-3 flex items-center justify-between gap-2">
+    <section className="pc-card">
+      <header className="mb-4 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink">
+          <span className="grid h-8 w-8 flex-none place-items-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
             {icon}
           </span>
-          <h3 className="truncate text-[13px] font-medium text-foreground">
+          <h3 className="truncate text-[11px] font-black uppercase tracking-[0.15em] text-[var(--text-secondary)]">
             {title}
           </h3>
         </div>
         {action}
       </header>
+
       {children}
     </section>
   );

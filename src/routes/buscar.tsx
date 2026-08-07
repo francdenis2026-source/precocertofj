@@ -45,8 +45,9 @@ function SearchResultsPage() {
   const { data: result, isPending } = usePriceSearch(q);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0A182C] [overflow-anchor:none]">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] [overflow-anchor:none]">
       <SiteHeader variant="solid" />
+
       
       <main className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
         <div ref={anchorRef} className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
