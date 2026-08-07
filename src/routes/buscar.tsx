@@ -10,7 +10,8 @@ import { SearchResultsList } from "@/components/search/SearchResultsList";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { searchProductPrice } from "@/lib/price-search.functions";
-import { useState } from "react";
+import { useState, useRef } from "react";
+
 
 const searchSchema = z.object({
   q: z.string().optional().default(""),
