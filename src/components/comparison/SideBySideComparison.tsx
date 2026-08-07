@@ -26,6 +26,7 @@ import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Button } from "@/components/ui/button";
 
 declare module "jspdf" {
   interface jsPDF {
