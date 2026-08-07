@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PremiumOfferCard } from "./PremiumOfferCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Price } from "@/components/ds/Price";
-import { ArrowUpDown, Filter } from "lucide-react";
+import { ArrowUpDown, Filter, ShoppingBag } from "lucide-react";
 
 export function SearchResultsList() {
   const { q } = Route.useSearch();
