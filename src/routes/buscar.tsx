@@ -11,7 +11,6 @@ import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { searchProductPrice } from "@/lib/price-search.functions";
 import { useState } from "react";
-import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
 
 const searchSchema = z.object({
   q: z.string().optional().default(""),
@@ -19,23 +18,25 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
-  head: ({ search }) => ({
-    meta: [
-      { title: `Resultados para "${search.q || ""}" — PreçoCerto` },
-      { name: "description", content: `Encontre o menor preço para ${search.q} nos mercados de Feijó.` },
-    ],
-  }),
+  head: ({ search }) => {
+    const q = (search as any).q || "";
+    return {
+      meta: [
+        { title: `Resultados para "${q}" — PreçoCerto` },
+        { name: "description", content: `Encontre o menor preço para ${q} nos mercados de Feijó.` },
+      ],
+    };
+  },
   component: SearchResultsPage,
 });
 
 function SearchResultsPage() {
   const { q } = Route.useSearch();
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const runSearch = useServerFn(searchProductPrice);
 
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
-    queryFn: () => runSearch({ data: { query: q } }),
+    queryFn: () => runSearch({ data: { query: q || "" } }),
     enabled: !!q && q.length >= 2,
   });
 
@@ -59,8 +60,7 @@ function SearchResultsPage() {
           </div>
         </div>
       </main>
-
-      <SearchGlassScrim isVisible={false} />
     </div>
   );
 }
+
