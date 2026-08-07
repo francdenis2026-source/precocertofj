@@ -89,13 +89,13 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
     >
       {/* Accent Header */}
       <div className={cn(
-        "h-2 w-full",
+        "h-1 w-full",
         index === 0 ? "bg-[var(--brand-primary)]" : "bg-white/10"
       )} />
 
       <div className="p-4 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2.5 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-500">
+          <div className="p-2 rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-500">
             <ShoppingBasket className="h-5 w-5" />
           </div>
           {basket.economyPct > 10 && (
@@ -105,7 +105,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
           )}
         </div>
 
-        <h3 className="text-lg font-black text-[var(--text-primary)] mb-1 group-hover:text-[var(--brand-primary)] transition-colors">
+        <h3 className="text-md font-black text-[var(--text-primary)] mb-0.5 group-hover:text-[var(--brand-primary)] transition-colors">
           {basket.name}
         </h3>
         
