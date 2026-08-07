@@ -87,16 +87,16 @@ export function SearchHeroSection({ query }: { query: string }) {
 
         <div className="space-y-4">
            <div className="flex items-center justify-between">
-             <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Tendência (30 dias)</h3>
-             <Badge variant="savingsSoft" size="sm">
-                <TrendingDown className="h-3 w-3 mr-1" /> Estável
-             </Badge>
-           </div>
-           <div className="h-[140px] w-full bg-muted/20 rounded-2xl p-4 overflow-hidden border border-border/40">
-              <PriceHistoryChart productName={topGroup.productName} compact />
-           </div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-white/50">Tendência (30 dias)</h3>
+              <Badge variant="savingsSoft" size="sm" className="bg-emerald-500/20 text-emerald-400 border-none">
+                 <TrendingDown className="h-3 w-3 mr-1" /> Estável
+              </Badge>
+            </div>
+            <div className="h-[140px] w-full bg-white/5 rounded-2xl p-4 overflow-hidden border border-white/10">
+               <PriceHistoryChart productName={topGroup.productName} compact />
+            </div>
            <div className="text-center">
-             <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1 mx-auto">
+             <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1 mx-auto transition-colors">
                Ver histórico completo <Maximize2 className="h-3 w-3" />
              </button>
            </div>

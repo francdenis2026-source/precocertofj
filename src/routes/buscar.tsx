@@ -81,7 +81,7 @@ function SearchResultsPage() {
               </div>
             ) : result && result.groups.length > 0 ? (
               <>
-                <SearchDashboard />
+                
                 <SearchResultsList />
               </>
             ) : (
