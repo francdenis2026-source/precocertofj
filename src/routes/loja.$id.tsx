@@ -23,6 +23,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { exportStoreCatalog } from "@/lib/export.functions";
+import { MobileNav } from "@/components/nav/MobileNav";
 import {
   getPublicStoreCatalog,
   type PublicStoreProduct,
