@@ -141,6 +141,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
 
 
+        {/* Compact search in header — visible on all pages except home hero */}
+        {showNav && (pathname !== "/" || scrolled) && (
+          <div className="hidden flex-1 max-w-md mx-4 md:block">
+            <SmartSearchBar compact />
+          </div>
+        )}
+
         {/* Primary nav — desktop */}
         {showNav && (
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
@@ -161,6 +168,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             ))}
           </nav>
         )}
+
 
 
         {/* CTAs */}
