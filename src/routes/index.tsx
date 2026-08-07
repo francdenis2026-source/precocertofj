@@ -316,7 +316,7 @@ function HomePage() {
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      addItem({ id: p.id || p.name, name: p.name, price: p.price, marketName: p.marketName });
+                      addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
                     }}
                     className="absolute top-3 right-3 p-2 rounded-xl bg-primary/10 text-primary opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-black z-10"
                     aria-label={`Adicionar ${p.name} à comparação`}
