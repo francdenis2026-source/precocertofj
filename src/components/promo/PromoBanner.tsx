@@ -14,7 +14,7 @@ export function PromoBanner() {
       
       <motion.div 
         whileHover={{ y: -2 }}
-        className="relative flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 rounded-[22px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-lg)] overflow-hidden"
+        className="relative flex flex-col items-center justify-between gap-4 p-4 rounded-[16px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] overflow-hidden"
       >
         {/* Animated Background Decoration */}
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-[var(--brand-primary)]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000 pointer-events-none"></div>
