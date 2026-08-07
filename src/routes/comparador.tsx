@@ -2,20 +2,21 @@ import { createFileRoute, useNavigate, retainSearchParams } from "@tanstack/reac
 import { 
   Search, 
   Scale, 
-  ChevronDown, 
   PackageSearch, 
-  Trophy, 
   Sparkles,
   LayoutGrid,
   Rows3,
-  Filter,
-  ArrowRight,
+  Trophy,
   TrendingDown,
   Info,
   Clock,
+  X,
+  Plus,
+  ArrowRight,
+  ChevronRight,
   ArrowUpRight
 } from "lucide-react";
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useMemo, useRef, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -34,6 +35,7 @@ import { filterAndSortComparisonRows } from "@/lib/comparison-search";
 import { useButcherIds } from "@/hooks/useButcherIds";
 import { applyButcherFilter } from "@/lib/butcher-filter";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
+import { toast } from "sonner";
 
 // --- Schema & Types ---
 
@@ -88,7 +90,17 @@ type Comparison = {
 
 // --- Helper Components ---
 
-const ComparisonCard = memo(({ item, onClick }: { item: Comparison, onClick: () => void }) => {
+const ComparisonCard = memo(({ 
+  item, 
+  onClick, 
+  onCompare, 
+  isComparing 
+}: { 
+  item: Comparison, 
+  onClick: () => void, 
+  onCompare: (e: React.MouseEvent) => void,
+  isComparing: boolean
+}) => {
   return (
     <motion.div
       layout
@@ -104,6 +116,20 @@ const ComparisonCard = memo(({ item, onClick }: { item: Comparison, onClick: () 
           alt={item.display_name}
           className="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
         />
+        <div className="absolute top-4 left-4 z-10">
+          <button 
+            onClick={onCompare}
+            className={cn(
+              "p-2 rounded-xl border backdrop-blur-md transition-all",
+              isComparing 
+                ? "bg-brand-primary border-brand-primary text-white scale-110 shadow-lg" 
+                : "bg-surface/80 border-border/20 text-muted-foreground hover:bg-surface hover:text-brand-primary"
+            )}
+            title={isComparing ? "Remover da comparação" : "Adicionar à comparação"}
+          >
+            <Scale className="h-4 w-4" />
+          </button>
+        </div>
         {item.savings_pct > 0 && (
           <div className="absolute top-4 right-4 z-10">
             <SavingsBadge pct={item.savings_pct} variant="solid" size="md" />
@@ -143,6 +169,8 @@ function ComparadorPage() {
   const navigate = useNavigate({ from: "/comparador" });
   const [searchVal, setSearchVal] = useState(q);
   const [selectedItem, setSelectedItem] = useState<Comparison | null>(null);
+  const [compareList, setCompareList] = useState<Comparison[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
 
   const { data: allComparisons, isLoading } = useQuery({
     queryKey: ["price-comparisons-full"],
@@ -174,6 +202,21 @@ function ComparadorPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     navigate({ search: (prev: any) => ({ ...prev, q: searchVal }) });
+  };
+
+  const toggleCompare = (e: React.MouseEvent, item: Comparison) => {
+    e.stopPropagation();
+    setCompareList(prev => {
+      const isAlready = prev.find(p => p.product_key === item.product_key);
+      if (isAlready) {
+        return prev.filter(p => p.product_key !== item.product_key);
+      }
+      if (prev.length >= 4) {
+        toast.info("Você pode comparar até 4 produtos por vez.");
+        return prev;
+      }
+      return [...prev, item];
+    });
   };
 
   return (
@@ -300,6 +343,8 @@ function ComparadorPage() {
                 <ComparisonCard 
                   key={item.product_key} 
                   item={item} 
+                  isComparing={compareList.some(p => p.product_key === item.product_key)}
+                  onCompare={(e) => toggleCompare(e, item)}
                   onClick={() => setSelectedItem(item)}
                 />
               ))}
@@ -324,6 +369,60 @@ function ComparadorPage() {
           )}
         </section>
 
+        {/* --- Floating Comparison Tray --- */}
+        <AnimatePresence>
+          {compareList.length > 0 && (
+            <motion.div 
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-6"
+            >
+              <div className="bg-brand-secondary/95 backdrop-blur-xl rounded-[24px] p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-6">
+                <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-1">
+                  {compareList.map((item) => (
+                    <motion.div 
+                      key={item.product_key}
+                      layout
+                      className="relative group shrink-0"
+                    >
+                      <div className="h-12 w-12 rounded-xl bg-white/10 border border-white/10 p-1.5">
+                        <ProductImage src={item.image_url} alt={item.display_name} className="h-full w-full object-contain" />
+                      </div>
+                      <button 
+                        onClick={(e) => toggleCompare(e, item)}
+                        className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-danger text-white flex items-center justify-center shadow-lg scale-0 group-hover:scale-100 transition-transform"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </motion.div>
+                  ))}
+                  {Array.from({ length: Math.max(0, 2 - compareList.length) }).map((_, i) => (
+                    <div key={i} className="h-12 w-12 rounded-xl border border-white/5 border-dashed flex items-center justify-center text-white/20">
+                      <Plus className="h-4 w-4" />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="hidden sm:block text-right">
+                    <p className="text-[10px] text-white/50 font-black uppercase tracking-widest">Comparar</p>
+                    <p className="text-xs text-white font-bold">{compareList.length} {compareList.length === 1 ? 'item' : 'itens'}</p>
+                  </div>
+                  <Button 
+                    disabled={compareList.length < 2}
+                    onClick={() => setShowComparison(true)}
+                    className="pc-button-primary rounded-xl h-12 px-6"
+                  >
+                    Comparar Agora
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* --- Product Details Modal --- */}
         <ProductStoresDialog 
           open={!!selectedItem}
@@ -338,8 +437,84 @@ function ComparadorPage() {
           })) || []}
           detailSlug={selectedItem?.catalog_slug}
         />
+
+        {/* --- Side-by-Side Comparison Modal --- */}
+        <AnimatePresence>
+          {showComparison && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-brand-secondary/40 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+            >
+              <motion.div 
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                className="bg-white rounded-[32px] w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative"
+              >
+                <button 
+                  onClick={() => setShowComparison(false)}
+                  className="absolute top-6 right-6 h-10 w-10 rounded-full bg-muted/50 hover:bg-danger/10 hover:text-danger flex items-center justify-center transition-all z-10"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="p-8 md:p-12 border-b border-border/10">
+                  <div className="flex items-center gap-4 text-brand-primary mb-4">
+                    <Scale className="h-6 w-6" />
+                    <span className="text-xs font-black uppercase tracking-[0.2em]">Comparativo Detalhado</span>
+                  </div>
+                  <h2 className="text-3xl font-black tracking-tight text-brand-secondary">
+                    Duelo de <span className="text-brand-primary">Preços</span>
+                  </h2>
+                </div>
+
+                <div className="flex-1 overflow-x-auto p-8 md:p-12">
+                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8 min-w-[800px]">
+                      {compareList.map((item) => (
+                        <div key={item.product_key} className="space-y-8">
+                           <div className="space-y-4">
+                             <div className="aspect-square rounded-3xl bg-muted/20 p-6 flex items-center justify-center relative">
+                               <ProductImage src={item.image_url} alt={item.display_name} className="h-full w-full object-contain" />
+                               {item.savings_pct > 0 && (
+                                 <div className="absolute top-4 right-4">
+                                   <SavingsBadge pct={item.savings_pct} />
+                                 </div>
+                               )}
+                             </div>
+                             <h3 className="font-bold text-lg leading-tight line-clamp-2 h-[2.8em]">{item.display_name}</h3>
+                             <Price value={item.min_price} size="xl" tone="best" />
+                           </div>
+
+                           <div className="space-y-6">
+                             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border/10 pb-2">Preços por loja</p>
+                             <div className="space-y-4">
+                               {item.stores.slice(0, 5).map((s, i) => (
+                                 <div key={i} className="flex items-center justify-between gap-4">
+                                   <div className="min-w-0">
+                                     <p className="text-xs font-bold truncate text-foreground/80">{shortenStoreName(s.store_name)}</p>
+                                   </div>
+                                   <Price value={s.price} size="sm" />
+                                 </div>
+                               ))}
+                             </div>
+                           </div>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="p-8 bg-muted/10 border-t border-border/10 flex items-center justify-between">
+                   <p className="text-sm text-muted-foreground">Analise os estabelecimentos e escolha o melhor custo-benefício.</p>
+                   <Button onClick={() => setShowComparison(false)} className="pc-button-primary rounded-full px-8">
+                     Fechar Comparação
+                   </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </PageShellContent>
     </PageShell>
   );
 }
-
