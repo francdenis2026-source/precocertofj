@@ -21,7 +21,8 @@ import {
   ArrowDownWideNarrow,
   Clock,
   MapPin,
-  Sparkles
+  Sparkles,
+  Scale
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
