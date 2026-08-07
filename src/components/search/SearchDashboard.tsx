@@ -1,20 +1,13 @@
 import { motion } from "framer-motion";
 import { TrendingDown, ShoppingBag, PiggyBank, RefreshCw } from "lucide-react";
 import { Price } from "@/components/ds/Price";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { searchProductPrice } from "@/lib/price-search.functions";
+import { usePriceSearch } from "@/lib/use-price-search";
 import { Route } from "@/routes/buscar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function SearchDashboard() {
   const { q } = Route.useSearch();
-  const runSearch = useServerFn(searchProductPrice);
-  const { data: result, isLoading } = useQuery({
-    queryKey: ["price-search", q],
-    queryFn: () => runSearch({ data: { query: q || "" } }),
-    enabled: true,
-  });
+  const { data: result, isPending: isLoading } = usePriceSearch(q);
 
   if (isLoading) {
     return (

@@ -1,6 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { searchProductPrice } from "@/lib/price-search.functions";
+import { usePriceSearch } from "@/lib/use-price-search";
 import { motion } from "framer-motion";
 import { Price } from "@/components/ds/Price";
 import { Badge } from "@/components/ds/Badge";
@@ -9,12 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PriceHistoryChart } from "./PriceHistoryChart";
 
 export function SearchHeroSection({ query }: { query: string }) {
-  const runSearch = useServerFn(searchProductPrice);
-  const { data: result, isLoading } = useQuery({
-    queryKey: ["price-search", query],
-    queryFn: () => runSearch({ data: { query: query || "" } }),
-    enabled: true,
-  });
+  const { data: result, isPending: isLoading } = usePriceSearch(query);
 
   if (isLoading) return <SearchHeroSkeleton />;
   if (!result || !result.groups.length) return null;
