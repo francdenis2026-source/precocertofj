@@ -20,7 +20,7 @@ export function SearchHeroSection({ query }: { query: string }) {
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-[40px] border border-border bg-white dark:bg-card/80 backdrop-blur-xl p-8 md:p-12 shadow-[0_24px_64px_rgba(0,0,0,0.06)] group/hero">
+    <section className="relative overflow-hidden rounded-[40px] border border-border bg-white dark:bg-[#0B1E3A]/80 backdrop-blur-xl p-8 md:p-12 shadow-[0_24px_64px_rgba(0,0,0,0.06)] group/hero">
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-12 relative z-10">
