@@ -26,11 +26,11 @@ export function PromoBanner() {
           </div>
           
           <div className="space-y-2">
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-[var(--text-primary)]">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--text-primary)]">
               30 dias <span className="text-[var(--brand-primary)]">grátis</span>
             </h2>
-            <p className="text-sm sm:text-base text-[var(--text-secondary)] font-medium max-w-md">
-              Mande sua 1ª nota e use tudo de graça por um mês. Participe agora da nossa rede de economia colaborativa!
+            <p className="text-[11px] sm:text-xs text-[var(--text-secondary)] font-medium max-w-sm">
+              Envie sua 1ª nota e ganhe acesso total por um mês.
             </p>
           </div>
         </div>
