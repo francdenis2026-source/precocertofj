@@ -142,243 +142,169 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 overflow-x-hidden">
-      <SiteHeader variant="overlay" showThemeToggle />
+      <SiteHeader variant="overlay" />
       
-      {/* Premium Hero Section */}
-      <div className="relative min-h-[92vh] flex flex-col pt-20 pb-16 overflow-hidden">
-        {/* Background Layer with Parallax-like effect (Dynamic Blur) */}
+      {/* Hero Section */}
+      <div className="relative min-h-[85vh] flex flex-col pt-20 pb-16 overflow-hidden">
+        {/* Visual Background */}
         <div className="absolute inset-0 z-0">
           <motion.div
             initial={{ scale: 1.1, opacity: 0 }}
             animate={{ scale: 1.05, opacity: 1 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-              filter: isSearchFocused ? "brightness(0.3) blur(12px)" : "brightness(0.6) blur(4px)"
+              filter: isSearchFocused ? "brightness(0.3) blur(8px)" : "brightness(0.5) blur(2px)"
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[var(--bg-base)]" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center max-w-7xl mx-auto px-4 w-full text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="mb-8"
+            className="max-w-4xl w-full"
           >
-            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.3)] mb-10 transition-all hover:bg-white/10 hover:border-white/20">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)] shadow-[0_0_8px_var(--brand-primary)]"></span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">
-                Rede de Monitoramento Ativa <span className="text-[var(--brand-primary)] mx-2 opacity-50">·</span> Feijó, AC
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8">
+              <Sparkles className="h-4 w-4 text-[var(--brand-primary)]" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                Inteligência para economizar em Feijó
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-8xl font-black tracking-tight text-white leading-[0.85] mb-10">
-              A inteligência que seu <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] via-[#FFF5D1] to-[var(--brand-primary)] bg-[length:200%_auto] animate-[gradient-x_4s_linear_infinite] drop-shadow-2xl">
-                dinheiro merece
-              </span>
+            <h1 className="text-4xl sm:text-7xl font-black tracking-tight text-white leading-[0.9] mb-8">
+              Sua economia começa <br />
+              <span className="text-[var(--brand-primary)]">com inteligência</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-12 font-medium">
-              Não aceite pagar mais caro. Nossa plataforma monitora todos os mercados da nossa Feijó para você economizar em cada item do carrinho.
+            <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-12 font-medium">
+              Monitoramos os mercados de Feijó em tempo real para você pagar sempre o menor preço em cada item da sua lista.
             </p>
 
-            {/* Centralized Search - The heart of the experience */}
-            <div className="w-full max-w-3xl mx-auto mb-16 relative">
+            <div className="w-full max-w-2xl mx-auto mb-12">
               <SmartSearchBar onFocusChange={setIsSearchFocused} />
-              <AnimatePresence>
-                {!isSearchFocused && (
-                   <motion.div 
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
-                     exit={{ opacity: 0 }}
-                     className="absolute -bottom-8 left-0 right-0 flex justify-center gap-6 text-[11px] font-bold text-white/40 uppercase tracking-widest"
-                   >
-                     <span>Produtos Populares: Feijão, Arroz, Leite, Óleo</span>
-                   </motion.div>
-                )}
-              </AnimatePresence>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+              {[
+                { label: "Produtos", val: loaderData.stats?.productsCount || "2.4k+" },
+                { label: "Mercados", val: loaderData.stats?.storesCount || "12" },
+                { label: "Atualizações", val: "Diárias" },
+                { label: "Economia", val: "Até 30%" },
+              ].map((s) => (
+                <div key={s.label} className="flex flex-col">
+                  <span className="text-2xl font-black text-white">{s.val}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{s.label}</span>
+                </div>
+              ))}
             </div>
           </motion.div>
-
-          {/* Real-time Stats Section */}
-          <section className="w-full max-w-5xl mx-auto pt-8 border-t border-white/10">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <StatItem label="Produtos" value={loaderData.stats?.productsCount || 2450} suffix="+" />
-              <StatItem label="Mercados" value={loaderData.stats?.storesCount || 12} />
-              <StatItem label="Notas Recebidas" value={142} suffix="k" />
-              <StatItem label="Economia Gerada" value={loaderData.economy?.totalSaved || 85} prefix="R$" suffix="k" />
-            </div>
-          </section>
         </div>
-
-        {/* Floating Price Elements (Visual purely) */}
-        <FloatingPrice 
-          className="top-[20%] left-[5%] hidden lg:block" 
-          name="Arroz 5kg" 
-          price={24.90} 
-          delay={0}
-        />
-        <FloatingPrice 
-          className="bottom-[30%] right-[8%] hidden lg:block" 
-          name="Leite 1L" 
-          price={4.85} 
-          delay={1.5}
-        />
       </div>
 
-      <main className="relative z-10 bg-[var(--bg-base)]">
-        {/* Category Dashboard */}
-        <section className="max-w-7xl mx-auto px-4 -mt-12 mb-20 relative z-20">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6">
+      <main className="relative z-10 -mt-12">
+        {/* Categories Section */}
+        <section className="max-w-7xl mx-auto px-4 mb-20">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
             {CATEGORIES.map((cat, i) => (
-              <CategoryCard key={cat.slug} {...cat} index={i} />
+              <Link
+                key={cat.slug}
+                to="/buscar"
+                search={{ q: cat.label }}
+                className="pc-card group flex flex-col items-center justify-center gap-4 p-6 text-center"
+              >
+                <div className="h-12 w-12 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center transition-colors group-hover:bg-[var(--brand-primary)]">
+                  <cat.Icon className="h-6 w-6 text-[var(--text-secondary)] group-hover:text-black" />
+                </div>
+                <span className="text-[13px] font-bold">{cat.label}</span>
+              </Link>
             ))}
           </div>
         </section>
 
-        {/* Promo Showcase */}
+        {/* Promotional Banner */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
           <PromoBanner />
         </section>
 
-        {/* Optimized Baskets - Smart Intelligence System */}
+        {/* Shopping Optimization */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
           <OptimizedBasketSection />
         </section>
 
-        {/* Live Market Insights (formerly Recent Products) */}
+        {/* Live Prices / Recent Products */}
         <section className="max-w-7xl mx-auto px-4 mb-24">
-          <RecentProductsCarousel />
-        </section>
-
-
-
-
-
-        {/* Dashboard Table Section */}
-        <section className="max-w-7xl mx-auto px-4 mb-24">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div className="min-w-0">
-              <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)] mb-1">
-                Monitoramento ao vivo
-              </h2>
-              <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)]">
-                Preços reais em toda a nossa Feijó
-              </h3>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-2">Monitoramento Ativo</h2>
+              <h3 className="text-3xl font-black tracking-tight">Preços Reais em Feijó</h3>
             </div>
-
             
-            <div className="flex items-center gap-2 bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)]">
-              <button 
-                onClick={() => setSort("recent")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
-                  sort === "recent" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                )}
-              >
-                <Clock className="h-3.5 w-3.5" />
-                Novos
-              </button>
-              <button 
-                onClick={() => setSort("price")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
-                  sort === "price" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                )}
-              >
-                <TrendingDown className="h-3.5 w-3.5" />
-                Baratos
-              </button>
-              <button 
-                onClick={() => setSort("near")}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all",
-                  sort === "near" ? "bg-[var(--brand-primary)] text-white dark:text-black shadow-lg" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                )}
-              >
-                <MapPin className="h-3.5 w-3.5" />
-                Perto
-              </button>
+            <div className="flex bg-[var(--bg-surface-elevated)] p-1 rounded-2xl border border-[var(--border-subtle)]">
+              {[
+                { id: "recent", label: "Novos", icon: Clock },
+                { id: "price", label: "Baratos", icon: TrendingDown },
+                { id: "near", label: "Perto", icon: MapPin },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setSort(s.id as any)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase transition-all",
+                    sort === s.id ? "bg-[var(--brand-primary)] text-black" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                  )}
+                >
+                  <s.icon className="h-3.5 w-3.5" />
+                  {s.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="rounded-[40px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)] transition-all hover:shadow-[0_40px_80px_-20px_rgba(11,30,58,0.15)]">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
-                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Produto</th>
-                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Mercado</th>
-                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Preço</th>
-                    <th className="px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] text-right">Atualização</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--border-subtle)]">
-                  {filteredProducts.map((p, i) => (
-                    <motion.tr
-                      key={`${p.name}-${p.when}`}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      onClick={() => setSelectedProduct({ 
-                        name: p.name, 
-                        minPrice: p.price, 
-                        cheapestStore: p.marketName,
-                        updatedAt: p.when
-                      })}
-                      className="group cursor-pointer hover:bg-[var(--bg-surface-elevated)]/50 transition-colors"
-                    >
-                      <td className="px-6 py-5">
-                         <div className="flex items-center gap-3">
-                           <div className="h-12 w-12 shrink-0 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] overflow-hidden flex items-center justify-center">
-                             <span className="text-xs font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
-                           </div>
-                           <div>
-                             <p className="text-[14px] font-bold text-[var(--text-primary)] leading-tight group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</p>
-                             <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mt-0.5">Catálogo</p>
-                           </div>
-                         </div>
-                      </td>
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-2">
-                          <Store className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
-                          <span className="text-[13px] font-bold text-[var(--text-secondary)]">{p.marketName ?? "—"}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-5 text-right">
-                        <Price value={p.price} size="lg" className="font-black" />
-                        {i === 0 && <span className="block text-[9px] font-black text-emerald-500 uppercase tracking-tighter">Melhor Oferta</span>}
-                      </td>
-                      <td className="px-6 py-5 text-right">
-                        <div className="flex items-center justify-end gap-1.5 text-[11px] font-bold text-[var(--text-tertiary)]">
-                          <Clock className="h-3 w-3" />
-                          {formatDate(p.when)}
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="p-6 bg-[var(--bg-surface-elevated)]/30 border-t border-[var(--border-subtle)] text-center">
-              <Link to="/buscar" search={{ q: "" }} className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline flex items-center justify-center gap-2">
-                Ver catálogo completo <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((p, i) => (
+              <motion.div
+                key={`${p.name}-${p.when}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                onClick={() => setSelectedProduct({ 
+                  name: p.name, 
+                  minPrice: p.price, 
+                  cheapestStore: p.marketName,
+                  updatedAt: p.when
+                })}
+                className="pc-card group cursor-pointer flex gap-4 items-center"
+              >
+                <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
+                  <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
+                    <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+                  </div>
+                  <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
+                  <div className="mt-1">
+                    <Price value={p.price} size="lg" className="font-black" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link to="/buscar" search={{ q: "" }} className="pc-button-secondary">
+              Ver Catálogo Completo <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </section>
 
-        {/* Partners Carousel */}
-        <section className="max-w-7xl mx-auto px-4 pb-24 text-center">
+        {/* Registered Stores */}
+        <section className="max-w-7xl mx-auto px-4 pb-24">
            <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--text-tertiary)] mb-8">
              Nossa rede de colaboração
            </h2>
