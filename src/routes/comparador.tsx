@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { saveComparisonCart, exportComparisonData } from "@/lib/comparison-actions.functions";
+import { SideBySideComparison } from "@/components/comparison/SideBySideComparison";
 import { toggleCartAlert, getStoreAlertsStatus } from "@/lib/notifications.functions";
 import { exportStoreQuotePdf } from "@/lib/store-quote-pdf";
 import { Button } from "@/components/ui/button";
@@ -282,6 +283,8 @@ function ComparadorPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [filterAvailability, setFilterAvailability] = useState<"all" | "in_stock">("all");
   const [sortBy, setSortBy] = useState<"price" | "availability">("price");
+  const [sideBySide, setSideBySide] = useState<{ storeAId: string; storeAName: string; storeBId: string; storeBName: string } | null>(null);
+
 
   const saveCartFn = useServerFn(saveComparisonCart);
   const toggleAlertFn = useServerFn(toggleCartAlert);
@@ -1222,93 +1225,126 @@ function ComparadorPage() {
             </div>
 
             {selected.length >= 2 && (
-              <div className="overflow-hidden rounded-xl border border-border bg-background/50">
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse text-left text-[12px]">
-                    <thead>
-                      <tr className="border-b border-border bg-muted/30">
-                        <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                          Mercado
-                        </th>
-                        <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                          Total
-                        </th>
-                        <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                          Diferença
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/50">
-                      {(() => {
-                        const productCount = selectedRows.length;
+              <div className="space-y-3">
+                <div className="overflow-hidden rounded-xl border border-border bg-background/50">
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-left text-[12px]">
+                      <thead>
+                        <tr className="border-b border-border bg-muted/30">
+                          <th className="px-2 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                            Mercado
+                          </th>
+                          <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                            Total
+                          </th>
+                          <th className="px-2 py-1.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                            Ação
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/50">
+                        {(() => {
+                          const productCount = selectedRows.length;
+                          const allMarketNames = new Set<string>();
+                          selectedRows.forEach(r => (r.stores || []).forEach(s => allMarketNames.add(s.store_name)));
 
-                        // Encontrar o menor preço de cada produto para calcular economia
-                        const productMins = selectedRows.map(r => Number(r.min_price));
+                          const finalResults = Array.from(allMarketNames).map(market => {
+                            let total = 0;
+                            let itemsCount = 0;
+                            let establishmentId = "";
+                            
+                            selectedRows.forEach(r => {
+                              const match = (r.stores || []).find(s => s.store_name === market);
+                              if (match) {
+                                total += Number(match.price);
+                                itemsCount++;
+                                if (!establishmentId) establishmentId = match.establishment_id;
+                              }
+                            });
 
-                        // Coletar mercados que têm TODOS os produtos selecionados
-                        const allMarketNames = new Set<string>();
-                        selectedRows.forEach(r => (r.stores || []).forEach(s => allMarketNames.add(s.store_name)));
+                            return { market, total, itemsCount, establishmentId };
+                          }).filter(r => r.itemsCount === productCount);
 
-                        const results = Array.from(allMarketNames).map(market => {
-                          let total = 0;
-                          let itemsCount = 0;
-                          
-                          selectedRows.forEach(r => {
-                            const match = (r.stores || []).find(s => s.store_name === market);
-                            if (match) {
-                              total += Number(match.price);
-                              itemsCount++;
-                            }
-                          });
-
-                          return { market, total, itemsCount };
-                        }).filter(r => r.itemsCount === productCount);
-
-                        if (results.length === 0) {
-                          return (
-                            <tr>
-                              <td colSpan={3} className="px-3 py-4 text-center italic text-muted-foreground">
-                                Nenhum mercado possui todos os itens simultaneamente.
-                              </td>
-                            </tr>
-                          );
-                        }
-
-                        const bestTotal = Math.min(...results.map(r => r.total));
-                        const sumMins = productMins.reduce((a, b) => a + b, 0);
-
-                        return results
-                          .sort((a, b) => a.total - b.total)
-                          .map(res => {
-                            const isBest = res.total === bestTotal;
-                            const diff = res.total - sumMins;
+                          if (finalResults.length === 0) {
                             return (
-                              <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
-                                <td className="px-2 py-1.5 font-medium truncate max-w-[120px]">
-                                  {res.market}
-                                </td>
-                                <td className="px-2 py-1.5 text-right font-mono">
-                                  <Price value={res.total} size="sm" tone={isBest ? "best" : "default"} />
-                                </td>
-                                <td className="px-2 py-1.5 text-right">
-                                  {isBest ? (
-                                    <span className="font-bold text-savings">MELHOR</span>
-                                  ) : (
-                                    <span className="text-muted-foreground">+<Price value={diff} /></span>
-                                  )}
+                              <tr>
+                                <td colSpan={3} className="px-3 py-4 text-center italic text-muted-foreground">
+                                  Nenhum mercado possui todos os itens simultaneamente.
                                 </td>
                               </tr>
                             );
-                          });
-                      })()}
-                    </tbody>
-                  </table>
+                          }
+
+                          const bestTotal = Math.min(...finalResults.map(r => r.total));
+
+                          return (
+                            <>
+                              {finalResults
+                                .sort((a, b) => a.total - b.total)
+                                .slice(0, 3)
+                                .map(res => {
+                                  const isBest = res.total === bestTotal;
+                                  return (
+                                    <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
+                                      <td className="px-2 py-1.5 font-medium truncate max-w-[120px]">
+                                        {res.market}
+                                      </td>
+                                      <td className="px-2 py-1.5 text-right font-mono">
+                                        <Price value={res.total} size="sm" tone={isBest ? "best" : "default"} />
+                                      </td>
+                                      <td className="px-2 py-1.5 text-right">
+                                        <button 
+                                          onClick={() => {
+                                            const other = finalResults.find(r => r.market !== res.market) || finalResults[0];
+                                            setSideBySide({
+                                              storeAId: res.establishmentId,
+                                              storeAName: res.market,
+                                              storeBId: other.establishmentId,
+                                              storeBName: other.market
+                                            });
+                                          }}
+                                          className="text-[10px] font-black uppercase text-primary hover:underline"
+                                        >
+                                          Comparar
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              {finalResults.length >= 2 && (
+                                <tr>
+                                  <td colSpan={3} className="p-2">
+                                    <button 
+                                      onClick={() => {
+                                        const top2 = [...finalResults].sort((a, b) => a.total - b.total).slice(0, 2);
+                                        setSideBySide({
+                                          storeAId: top2[0].establishmentId,
+                                          storeAName: top2[0].market,
+                                          storeBId: top2[1].establishmentId,
+                                          storeBName: top2[1].market
+                                        });
+                                      }}
+                                      className="pc-button-primary w-full h-8 text-[11px]"
+                                    >
+                                      Comparação Lado a Lado Completa
+                                    </button>
+                                  </td>
+                                </tr>
+                              )}
+                            </>
+                          );
+                        })()}
+
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         </div>
       )}
+
 
       <ProductStoresDialog
         open={openStoresRow != null}
@@ -1328,7 +1364,19 @@ function ComparadorPage() {
         }
       />
 
+      {sideBySide && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar">
+            <SideBySideComparison
+              {...sideBySide}
+              onClose={() => setSideBySide(null)}
+            />
+          </div>
+        </div>
+      )}
+
       </div>
+
       </PageShellContent>
       <GuestGateDialog
         open={compareGate.open}
