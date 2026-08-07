@@ -38,6 +38,9 @@ import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { PromoBanner } from "@/components/promo/PromoBanner";
 import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
+import { ComparisonStickyBar } from "@/components/home/ComparisonStickyBar";
+import { useComparisonList } from "@/hooks/use-comparison-list";
+import { RealtimeMonitoringDashboard } from "@/components/monitoring/RealtimeMonitoringDashboard";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
@@ -192,7 +195,14 @@ function HomePage() {
             <div className="flex flex-wrap justify-center gap-4 mb-12">
               <Button 
                 onClick={() => navigate({ to: "/comparador" })}
+                onMouseEnter={() => {
+                   import("@/lib/prefetch.functions").then(m => m.prefetchComparisonData({ data: {} }));
+                }}
+                onFocus={() => {
+                   import("@/lib/prefetch.functions").then(m => m.prefetchComparisonData({ data: {} }));
+                }}
                 className="h-12 px-8 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md font-black uppercase tracking-wider text-[11px]"
+                aria-label="Ir para ferramenta de comparação de produtos"
               >
                 <Scale className="mr-2 h-4 w-4 text-[var(--brand-primary)]" />
                 Comparar Produtos
@@ -204,6 +214,7 @@ function HomePage() {
                 }}
                 variant="ghost"
                 className="h-12 px-8 rounded-xl text-white/70 hover:text-white hover:bg-white/5 font-black uppercase tracking-wider text-[11px]"
+                aria-label="Ver melhores cestas de produtos"
               >
                 Melhores Cestas
               </Button>
@@ -286,38 +297,56 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((p, i) => (
-              <motion.div
-                key={`${p.name}-${p.when}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() => setSelectedProduct({ 
-                  name: p.name, 
-                  minPrice: p.price, 
-                  cheapestStore: p.marketName,
-                  updatedAt: p.when
-                })}
-                className="pc-card group cursor-pointer flex gap-4 items-center"
-              >
-                <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
-                  <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
-                    <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+            {filteredProducts.map((p, i) => {
+              const { addItem } = useComparisonList();
+              return (
+                <motion.div
+                  key={`${p.name}-${p.when}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => setSelectedProduct({ 
+                    name: p.name, 
+                    minPrice: p.price, 
+                    cheapestStore: p.marketName,
+                    updatedAt: p.when
+                  })}
+                  className="pc-card group cursor-pointer flex gap-4 items-center relative"
+                >
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
+                    }}
+                    className="absolute top-3 right-3 p-2 rounded-xl bg-primary/10 text-primary opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-black z-10"
+                    aria-label={`Adicionar ${p.name} à comparação`}
+                  >
+                    <PlusCircle className="h-4 w-4" />
+                  </button>
+                  <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
+                    <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
                   </div>
-                  <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
-                  <div className="mt-1">
-                    <Price value={p.price} size="lg" className="font-black" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
+                      <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+                    </div>
+                    <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
+                    <div className="mt-1">
+                      <Price value={p.price} size="lg" className="font-black" />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
+          </div>
+          
+          <div className="mt-20">
+            <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-8 text-center">Monitoramento Inteligente (Real-time)</h2>
+            <RealtimeMonitoringDashboard />
           </div>
 
-          <div className="mt-10 text-center">
+          <div className="mt-20 text-center">
             <Link to="/buscar" search={{ q: "" }} className="pc-button-secondary">
               Ver Catálogo Completo <ArrowRight className="h-4 w-4" />
             </Link>
@@ -359,6 +388,8 @@ function HomePage() {
             </div>
           </div>
         </section>
+        
+        <ComparisonStickyBar />
       </main>
 
       {selectedProduct && (
