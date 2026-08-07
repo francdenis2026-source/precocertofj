@@ -38,7 +38,7 @@ export function RegisteredStoresCarousel() {
         >
           <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white p-1.5 shadow-sm group-hover:scale-110 transition-transform">
             {store.name.includes("Contamigos") ? (
-              <ContamigosLogo size="xs" hideName />
+              <ContamigosLogo size="sm" hideName />
             ) : (
               <StoreLogoThumb 
                 src={store.logoUrl} 
