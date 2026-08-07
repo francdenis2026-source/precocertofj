@@ -1245,7 +1245,6 @@ function ComparadorPage() {
                       <tbody className="divide-y divide-border/50">
                         {(() => {
                           const productCount = selectedRows.length;
-                          const productMins = selectedRows.map(r => Number(r.min_price));
                           const allMarketNames = new Set<string>();
                           selectedRows.forEach(r => (r.stores || []).forEach(s => allMarketNames.add(s.store_name)));
 
@@ -1278,62 +1277,64 @@ function ComparadorPage() {
 
                           const bestTotal = Math.min(...results.map(r => r.total));
 
-                          return results
-                            .sort((a, b) => a.total - b.total)
-                            .slice(0, 3) // Show top 3 for comparison trigger
-                            .map(res => {
-                              const isBest = res.total === bestTotal;
-                              return (
-                                <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
-                                  <td className="px-2 py-1.5 font-medium truncate max-w-[120px]">
-                                    {res.market}
-                                  </td>
-                                  <td className="px-2 py-1.5 text-right font-mono">
-                                    <Price value={res.total} size="sm" tone={isBest ? "best" : "default"} />
-                                  </td>
-                                  <td className="px-2 py-1.5 text-right">
+                          return (
+                            <>
+                              {results
+                                .sort((a, b) => a.total - b.total)
+                                .slice(0, 3)
+                                .map(res => {
+                                  const isBest = res.total === bestTotal;
+                                  return (
+                                    <tr key={res.market} className={cn(isBest && "bg-savings/5")}>
+                                      <td className="px-2 py-1.5 font-medium truncate max-w-[120px]">
+                                        {res.market}
+                                      </td>
+                                      <td className="px-2 py-1.5 text-right font-mono">
+                                        <Price value={res.total} size="sm" tone={isBest ? "best" : "default"} />
+                                      </td>
+                                      <td className="px-2 py-1.5 text-right">
+                                        <button 
+                                          onClick={() => {
+                                            const other = results.find(r => r.market !== res.market) || results[0];
+                                            setSideBySide({
+                                              storeAId: res.establishmentId,
+                                              storeAName: res.market,
+                                              storeBId: other.establishmentId,
+                                              storeBName: other.market
+                                            });
+                                          }}
+                                          className="text-[10px] font-black uppercase text-primary hover:underline"
+                                        >
+                                          Comparar
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              {results.length >= 2 && (
+                                <tr>
+                                  <td colSpan={3} className="p-2">
                                     <button 
                                       onClick={() => {
-                                        const other = results.find(r => r.market !== res.market) || results[0];
+                                        const top2 = results.sort((a, b) => a.total - b.total).slice(0, 2);
                                         setSideBySide({
-                                          storeAId: res.establishmentId,
-                                          storeAName: res.market,
-                                          storeBId: other.establishmentId,
-                                          storeBName: other.market
+                                          storeAId: top2[0].establishmentId,
+                                          storeAName: top2[0].market,
+                                          storeBId: top2[1].establishmentId,
+                                          storeBName: top2[1].market
                                         });
                                       }}
-                                      className="text-[10px] font-black uppercase text-primary hover:underline"
+                                      className="pc-button-primary w-full h-8 text-[11px]"
                                     >
-                                      Comparar
+                                      Comparação Lado a Lado Completa
                                     </button>
                                   </td>
                                 </tr>
-                              );
-                            });
+                              )}
+                            </>
+                          );
                         })()}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                
-                {results.length >= 2 && (
-                  <button 
-                    onClick={() => {
-                      const top2 = results.sort((a, b) => a.total - b.total).slice(0, 2);
-                      setSideBySide({
-                        storeAId: top2[0].establishmentId,
-                        storeAName: top2[0].market,
-                        storeBId: top2[1].establishmentId,
-                        storeBName: top2[1].market
-                      });
-                    }}
-                    className="pc-button-primary w-full h-10 text-[12px]"
-                  >
-                    Comparação Lado a Lado Completa
-                  </button>
-                )}
-              </div>
-            )}
+
 
           </div>
         </div>
