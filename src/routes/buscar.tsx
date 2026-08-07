@@ -1,6 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -9,9 +7,9 @@ import { SearchDashboard } from "@/components/search/SearchDashboard";
 import { SearchResultsList } from "@/components/search/SearchResultsList";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
-import { searchProductPrice } from "@/lib/price-search.functions";
+import { usePriceSearch } from "@/lib/use-price-search";
 import { useState, useRef } from "react";
-import { PageLoader } from "@/components/feedback";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 
@@ -36,29 +34,40 @@ export const Route = createFileRoute("/buscar")({
 
 function SearchResultsPage() {
   const { q } = Route.useSearch();
-  const runSearch = useServerFn(searchProductPrice);
+  const navigate = useNavigate();
   const anchorRef = useRef<HTMLDivElement>(null);
 
   // Local state for persistence in the UI if needed
   const [recentQueries, setRecentQueries] = useState<string[]>([]);
 
-  const { data: result, isLoading } = useQuery({
-    queryKey: ["price-search", q],
-    queryFn: () => runSearch({ data: { query: q || "" } }),
-    enabled: true, // Always enabled so we can show empty states
-    staleTime: 30_000,
-  });
-
-  if (isLoading) return <PageLoader />;
+  // `keepPreviousData` mantém o resultado anterior visível enquanto a próxima
+  // busca carrega — nada é desmontado, então a página não sobe nem desce.
+  const { data: result, isPending } = usePriceSearch(q);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050B14]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050B14] [overflow-anchor:none]">
       <SiteHeader variant="solid" />
       
       <main className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
         <div ref={anchorRef} className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
           {/* Main Content Area */}
-          <div className="space-y-12">
+          <div className="space-y-12 min-h-[640px] [overflow-anchor:none]">
+            {isPending && !result ? (
+              <div className="space-y-8" aria-busy="true">
+                <Skeleton className="h-[320px] w-full rounded-[40px]" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Skeleton key={i} className="h-[400px] w-full rounded-3xl" />
+                  ))}
+                </div>
+              </div>
+            ) : (
+            <>
             {/* Show Hero only if there's a result and a query */}
             {q && result && result.groups.length > 0 && (
               <SearchHeroSection query={q} />
@@ -81,6 +90,8 @@ function SearchResultsPage() {
                  <p className="text-muted-foreground">Tente buscar por um termo diferente ou confira as sugestões ao lado.</p>
               </div>
             )}
+            </>
+            )}
           </div>
 
           {/* Sidebar Area */}
@@ -89,9 +100,15 @@ function SearchResultsPage() {
             <SearchSidebar 
               recent={recentQueries} 
               onPickQuery={(query) => {
-                // Navigate to same page with new query
-                window.location.search = `?q=${encodeURIComponent(query)}`;
-              }} 
+                // Navegação client-side, sem recarregar a página e sem
+                // empilhar histórico — a rota não remonta, então não há salto.
+                navigate({
+                  to: "/buscar",
+                  search: { q: query },
+                  replace: true,
+                  resetScroll: false,
+                });
+              }}
             />
           </div>
         </div>
