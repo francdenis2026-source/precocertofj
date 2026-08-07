@@ -14,7 +14,7 @@ import {
   XCircle
 } from "lucide-react";
 import { Price } from "@/components/ds/Price";
-import { getMultiStoreComparison } from "@/lib/multi-comparison.functions";
+import { getMultiStoreComparison, MultiComparisonResult, ComparisonItem } from "@/lib/multi-comparison.functions";
 import { saveBasket } from "@/lib/saved-baskets.functions";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,7 +38,7 @@ export function SideBySideComparison({
   const [showDetails, setShowDetails] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const q = useQuery({
+  const q = useQuery<MultiComparisonResult>({
     queryKey: ["multi-store-comparison", storeIds],
     queryFn: () => fetchMultiStats({ data: { storeIds } }),
     staleTime: 5 * 60_000,
@@ -48,11 +48,12 @@ export function SideBySideComparison({
 
   // Handle saving the comparison set
   const handleSave = async () => {
+    if (!data) return;
     setIsSaving(true);
     try {
       await saveBasketFn({
         data: {
-          name: `Comparação: ${data?.stores.map(s => s.name).join(", ").slice(0, 40)}...`,
+          name: `Comparação: ${data.stores.map(s => s.name).join(", ").slice(0, 40)}...`,
           mode: "compare",
           filters: { storeIds: storeIds },
           snapshot: { storeIds: storeIds, timestamp: new Date().toISOString() },
@@ -108,8 +109,9 @@ export function SideBySideComparison({
     );
   }
 
-  const cheapestStoreId = Object.entries(data.totals).length > 0 
-    ? Object.entries(data.totals).reduce((a, b) => a[1] < b[1] ? a : b)[0]
+  const totalsEntries = Object.entries(data.totals);
+  const cheapestStoreId = totalsEntries.length > 0 
+    ? totalsEntries.reduce((a, b) => a[1] < b[1] ? a : b)[0]
     : null;
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
@@ -256,7 +258,7 @@ export function SideBySideComparison({
                       </tr>
                     </thead>
                     <tbody>
-                      {data.items.map((item, idx) => {
+                      {data.items.map((item: ComparisonItem, idx: number) => {
                         const isMissingAny = data.stores.some(s => !item.prices[s.id]);
                         
                         return (
