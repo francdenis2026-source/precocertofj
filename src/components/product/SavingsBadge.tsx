@@ -42,7 +42,7 @@ export function SavingsBadge({
   return (
     <span
       className={cn(base, sizes[size], variants[variant], className)}
-      aria-label={`Savings of ${safe.toFixed(precision)} percent`}
+      aria-label={`Economia de ${safe.toFixed(precision)} por cento`}
     >
       <TrendingDown className={size === "sm" ? "h-2.5 w-2.5" : "h-3 w-3"} strokeWidth={2.4} />
       -{safe.toFixed(precision)}%

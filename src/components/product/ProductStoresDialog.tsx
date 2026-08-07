@@ -487,7 +487,7 @@ function ConfidenceDot({ level }: { level: "alta" | "media" | "baixa" }) {
       : level === "media"
         ? "bg-accent/15 text-accent"
         : "bg-destructive/15 text-destructive";
-  const label = level === "alta" ? "High confidence" : level === "media" ? "Medium confidence" : "Low confidence";
+  const label = level === "alta" ? "Alta confiança" : level === "media" ? "Confiança média" : "Baixa confiança";
   return (
     <span
       className={cn(
@@ -588,22 +588,22 @@ function VisitorLockPanel({
             <Lock className="h-5 w-5" strokeWidth={2} />
           </span>
           <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
-            Prices by store
+            Preços por mercado
           </p>
           <h3 className="mt-1 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
-            Sign in to see the price at each store
+            Entre para ver o preço em cada mercado
           </h3>
           <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">
-            {storeCount} store{storeCount > 1 ? "s" : ""} already registered this product
+            {storeCount} mercado{storeCount > 1 ? "s" : ""} já cadastraram este produto
             {minPrice != null ? (
               <>
-                {" "}— starting at{" "}
+                {" "}— a partir de{" "}
                 <Price value={minPrice} size="sm" />.
               </>
             ) : (
               "."
             )}{" "}
-            Create your free account to unlock the full comparison — 30 days, no card required.
+            Crie sua conta gratuita para desbloquear a comparação completa — 30 dias, sem cartão.
           </p>
 
           <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
@@ -613,18 +613,18 @@ function VisitorLockPanel({
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--color-primary)_60%,transparent)] transition hover:brightness-110"
             >
               <LogIn className="h-3.5 w-3.5" strokeWidth={2.2} />
-              Sign in / Sign up
+              Entrar / Cadastrar
             </Link>
             <Link
               to="/assinar"
               className="inline-flex items-center justify-center rounded-full border border-primary/40 bg-background px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary transition hover:bg-primary/5"
             >
-              See plans
+              Ver planos
             </Link>
           </div>
           <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             <X className="mr-1 inline h-3 w-3 text-savings" strokeWidth={2.4} />
-            No card · 30 days free
+            Sem cartão · 30 dias grátis
           </p>
         </div>
       </div>
