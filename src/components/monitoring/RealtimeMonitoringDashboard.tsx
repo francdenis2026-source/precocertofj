@@ -100,15 +100,15 @@ export function RealtimeMonitoringDashboard() {
                     {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
                   </h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className={cn("h-1.5 w-1.5 rounded-full animate-pulse", store.status === 'online' ? "bg-emerald-500" : "bg-rose-500")} />
-                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">{store.status}</span>
+                    <div className={cn("h-1.5 w-1.5 rounded-full", store.status === 'online' ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-rose-500")} />
+                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">{store.status === 'online' ? 'Ativo' : 'Offline'}</span>
                   </div>
                 </div>
               </div>
               
               <div className="flex flex-col items-end">
                 <div className="px-2 py-0.5 rounded-md bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
-                   <span className="text-[8px] font-black text-[var(--brand-primary)]">{store.activeSensors}S</span>
+                   <span className="text-[8px] font-black text-[var(--brand-primary)]">SCAN {store.activeSensors}</span>
                 </div>
               </div>
             </div>
@@ -142,12 +142,12 @@ export function RealtimeMonitoringDashboard() {
 
             <div className="relative z-10 flex items-center justify-between pt-3 mt-1 border-t border-[var(--border-subtle)]/50">
               <div className="flex items-center gap-1">
-                <RefreshCcw className="h-2.5 w-2.5 text-muted-foreground" />
-                <span className="text-[8px] font-bold text-muted-foreground uppercase">{new Date(store.lastSync).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second: '2-digit'})}</span>
+                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tighter">Sincronizado {new Date(store.lastSync).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
               </div>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500">
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/10">
                 <CheckCircle2 className="h-2.5 w-2.5" />
-                <span className="text-[7px] font-black uppercase tracking-tighter">Verified</span>
+                <span className="text-[7px] font-black uppercase tracking-tighter">Auditado</span>
               </div>
             </div>
           </motion.div>
