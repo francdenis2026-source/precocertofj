@@ -18,8 +18,8 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
-  head: ({ search }) => {
-    const q = (search as any).q || "";
+  head: (ctx) => {
+    const q = (ctx as any).search?.q || "";
     return {
       meta: [
         { title: `Resultados para "${q}" — PreçoCerto` },
@@ -29,6 +29,7 @@ export const Route = createFileRoute("/buscar")({
   },
   component: SearchResultsPage,
 });
+
 
 function SearchResultsPage() {
   const { q } = Route.useSearch();
