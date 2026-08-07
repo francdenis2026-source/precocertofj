@@ -367,42 +367,62 @@ export function SideBySideComparison({
               <motion.div 
                 key={store.id}
                 layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className={cn(
-                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden",
-                  isCheapest ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" : "opacity-90 grayscale-[0.3] hover:grayscale-0"
+                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group",
+                  isCheapest 
+                    ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" 
+                    : "bg-surface/40 hover:bg-surface/60 opacity-90 hover:opacity-100"
                 )}
               >
                 {isCheapest && (
-                  <div className="absolute top-0 right-0 p-2">
-                    <CheckCircle2 className="h-5 w-5 text-savings" />
+                  <div className="absolute top-0 right-0 p-3">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <CheckCircle2 className="h-6 w-6 text-savings" />
+                    </motion.div>
                   </div>
                 )}
                 
-                <div className="h-14 w-14 rounded-2xl bg-muted/30 flex items-center justify-center mb-4 border border-border/40">
-                  <Store className="h-7 w-7 text-primary" />
+                <div className={cn(
+                  "h-14 w-14 rounded-2xl flex items-center justify-center mb-4 border transition-transform duration-500 group-hover:rotate-6",
+                  isCheapest ? "bg-savings/10 border-savings/20" : "bg-muted/30 border-border/40"
+                )}>
+                  <Store className={cn("h-7 w-7", isCheapest ? "text-savings" : "text-primary")} />
                 </div>
                 
-                <h4 className="font-black text-lg mb-1 truncate w-full">{store.name}</h4>
+                <h4 className="font-black text-lg mb-1 truncate w-full group-hover:text-primary transition-colors">{store.name}</h4>
                 
                 <div className="mb-4">
                   <Price value={total} size="xl" tone={isCheapest ? 'best' : 'default'} />
-                  <p className="text-[10px] uppercase tracking-widest font-black text-muted-foreground mt-1">
+                  <p className="text-[9px] uppercase tracking-[0.2em] font-black text-muted-foreground mt-1">
                     Custo Total ({data.commonCount} itens)
                   </p>
                 </div>
 
                 {savings > 0 && (
-                  <div className="text-savings font-black text-xs mb-3 flex items-center gap-1">
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-savings font-black text-xs mb-3 flex items-center gap-1 bg-savings/10 px-3 py-1 rounded-full"
+                  >
                     Economia de <Price value={savings} size="xs" tone="best" />
-                  </div>
+                  </motion.div>
                 )}
 
                 {isCheapest && data.stores.length > 1 && (
-                  <div className="pc-badge bg-savings text-white px-4 py-1.5 shadow-lg shadow-savings/20 font-black text-[10px] uppercase tracking-wider">
+                  <motion.div 
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="pc-badge bg-savings text-white px-4 py-1.5 shadow-lg shadow-savings/20 font-black text-[9px] uppercase tracking-wider"
+                  >
                     MELHOR PREÇO TOTAL
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             );
@@ -449,17 +469,17 @@ export function SideBySideComparison({
               className="overflow-hidden"
             >
               <div className="pt-6 border-t border-border/40 mt-6">
-                <div className="overflow-x-auto pb-4 custom-scrollbar">
-                  <table className="w-full border-separate border-spacing-y-2">
+                <div className="overflow-x-auto pb-4 custom-scrollbar rounded-2xl border border-border/20">
+                  <table className="w-full border-separate border-spacing-y-1.5 px-2">
                     <thead>
-                      <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-left">
-                        <th className="px-4 py-2 sticky left-0 bg-surface/90 backdrop-blur z-10">Produto</th>
+                      <tr className="text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground/60 text-left">
+                        <th className="px-6 py-3 sticky left-0 bg-surface/95 backdrop-blur z-10 first:rounded-l-xl">Produto</th>
                         {data.stores.map(s => (
-                          <th key={s.id} className="px-4 py-2 text-right">{s.name}</th>
+                          <th key={s.id} className="px-6 py-3 text-right">{s.name}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="before:block before:h-1">
                       {filteredItems.map((item: ComparisonItem, idx: number) => {
                         const isMissingAny = data.stores.some(s => !item.prices[s.id]);
                         
