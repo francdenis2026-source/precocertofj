@@ -174,7 +174,7 @@ function HomePage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.15 }}
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[1px]"
+            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[2px]"
           />
         </div>
 
