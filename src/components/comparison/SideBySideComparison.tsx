@@ -26,6 +26,7 @@ import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Button } from "@/components/ui/button";
 
 declare module "jspdf" {
   interface jsPDF {
@@ -224,62 +225,67 @@ export function SideBySideComparison({
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
   return (
-    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-xl max-h-[90vh] flex flex-col">
+    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px]">
       {/* Header */}
-      <div className="border-b border-border/40 bg-primary/5 p-6 shrink-0">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="border-b border-border/40 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 p-8 shrink-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-primary">
-              <Scale className="h-6 w-6" />
-              <h3 className="text-xl font-black tracking-tight uppercase">
-                {isShared ? "Comparação Compartilhada" : "Comparação Multi-Lojas"}
-              </h3>
+            <div className="flex items-center gap-3 text-primary">
+              <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Scale className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">
+                  {isShared ? "Comparativo Compartilhado" : "Comparador de Elite"}
+                </h3>
+                <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1">
+                  Inteligência de Mercado em Tempo Real
+                </p>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground font-medium">
-              Análise de {data.stores.length} estabelecimentos em Feijó.
-            </p>
           </div>
           
-          <div className="flex items-center gap-2 flex-wrap justify-end">
+          <div className="flex items-center gap-3 flex-wrap justify-end">
             {!isShared && (
               <>
-                <button 
+                <Button 
                   onClick={() => handleSave(false)}
                   disabled={isSaving}
-                  className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs"
+                  variant="outline"
+                  className="rounded-xl px-6 h-11 border-border/40 bg-surface/50 hover:bg-primary/10 hover:border-primary/40 transition-all font-bold text-xs"
                 >
-                  <Save className="h-4 w-4" />
-                  Salvar
-                </button>
-                <button 
+                  <Save className="h-4 w-4 mr-2" />
+                  SALVAR
+                </Button>
+                <Button 
                   onClick={() => handleSave(true)}
                   disabled={isSaving}
-                  className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs bg-primary/10"
+                  className="pc-button-primary h-11 px-6 rounded-xl shadow-lg shadow-primary/20"
                 >
-                  <Share2 className="h-4 w-4" />
-                  Link Público
-                </button>
+                  <Share2 className="h-4 w-4 mr-2" />
+                  COMPARTILHAR
+                </Button>
               </>
             )}
-            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1">
+            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1.5 border border-border/10">
               <button 
                 onClick={handleExportCSV}
                 title="Exportar CSV"
-                className="p-2 hover:bg-background rounded-lg transition-colors"
+                className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <Download className="h-4 w-4" />
               </button>
               <button 
                 onClick={handleExportPDF}
                 title="Exportar PDF"
-                className="p-2 hover:bg-background rounded-lg transition-colors"
+                className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <FileText className="h-4 w-4" />
               </button>
             </div>
             {onClose && (
-              <button onClick={onClose} className="rounded-full p-2 hover:bg-muted transition-colors ml-2">
-                <ArrowRight className="h-5 w-5 rotate-180" />
+              <button onClick={onClose} className="rounded-full p-2.5 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
+                <XCircle className="h-5 w-5" />
               </button>
             )}
           </div>
