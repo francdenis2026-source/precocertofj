@@ -65,7 +65,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
       },
       { name: "author", content: "PreçoCerto" },
-      { name: "theme-color", content: "#F8FAFC" },
+      { name: "theme-color", content: "#07111F" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "PreçoCerto" },
@@ -147,7 +147,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children:
-          "try{var s=localStorage.getItem('pc-theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var r=document.documentElement;r.classList.add(d?'dark':'light');r.classList.remove(d?'light':'dark');r.dataset.theme=d?'dark':'light';r.style.colorScheme=d?'dark':'light';}catch(e){}",
+          // PricePal ships dark-only: pin the document before first paint.
+          "try{var r=document.documentElement;r.classList.add('dark');r.classList.remove('light');r.dataset.theme='dark';r.style.colorScheme='dark';localStorage.setItem('pc-theme','dark');}catch(e){}",
       },
       {
         children:

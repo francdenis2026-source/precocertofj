@@ -18,9 +18,10 @@ function storageKeyFor(userId: string | null): string {
   return userId ? `${KEY_PREFIX}.${userId}` : LEGACY_KEY;
 }
 
-function resolveIsDark(mode: Theme): boolean {
-  if (mode === "dark") return true;
-  return false;
+// PricePal ships a single, refined dark surface. The preference plumbing is
+// kept intact (other screens still read/write it) but always resolves dark.
+function resolveIsDark(_mode: Theme): boolean {
+  return true;
 }
 
 function apply(mode: Theme) {
@@ -43,17 +44,9 @@ function parse(raw: string | null): Theme | null {
  * aparelho), herda o valor global legado — sem sobrescrever nada.
  */
 function readStored(userId: string | null): Theme {
-  if (typeof window === "undefined") return "dark";
-  try {
-    const own = parse(window.localStorage.getItem(storageKeyFor(userId)));
-    if (own) return own;
-    if (userId) {
-      const legacy = parse(window.localStorage.getItem(LEGACY_KEY));
-      if (legacy) return legacy;
-    }
-  } catch {
-    /* storage indisponível */
-  }
+  void userId;
+  void parse;
+  void storageKeyFor;
   return "dark";
 }
 
