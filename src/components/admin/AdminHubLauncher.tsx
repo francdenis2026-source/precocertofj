@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { ChevronRight, Check, type LucideIcon } from "lucide-react";
+import { ChevronRight, Check, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 import type { AdminTabTone } from "@/components/admin/AdminTabs";
@@ -8,7 +9,7 @@ export type HubDestination = {
   key: string;
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: any;
   /**
    * TanStack Router `to` string. Passed as-is to <Link> so param routes stay
    * type-safe on the caller side.
@@ -39,6 +40,7 @@ export type HubLauncherProps = {
   sections: HubSection[];
   /** Optional call-to-action shown at the top-right of the header (e.g. "Voltar ao dashboard"). */
   headerCta?: { label: string; to: string };
+  onCommercialUpdate?: () => void;
 };
 
 /**
@@ -85,6 +87,7 @@ export function AdminHubLauncher({
   tone,
   sections,
   headerCta,
+  onCommercialUpdate,
 }: HubLauncherProps) {
   const location = useLocation();
   const pathname = location.pathname;
@@ -113,19 +116,32 @@ export function AdminHubLauncher({
           <h1 className={cn(tc.h1, "mt-1 truncate")}>{title}</h1>
           <p className={cn(tc.sectionNote, "mt-1 max-w-2xl")}>{description}</p>
         </div>
-        {headerCta && (
-          <Link
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            to={headerCta.to as any}
-            className={cn(
-              tc.control,
-              "inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-border/70 bg-card px-3 py-1.5 text-muted-foreground",
-              "hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-            )}
-          >
-            {headerCta.label}
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          {onCommercialUpdate && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full gap-2 border-amber-500/30 bg-amber-500/5 text-amber-700 hover:bg-amber-500/10"
+              onClick={onCommercialUpdate}
+            >
+              <Sparkles className="h-4 w-4" />
+              Carga Comercial
+            </Button>
+          )}
+          {headerCta && (
+            <Link
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              to={headerCta.to as any}
+              className={cn(
+                tc.control,
+                "inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-border/70 bg-card px-3 py-1.5 text-muted-foreground",
+                "hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              )}
+            >
+              {headerCta.label}
+            </Link>
+          )}
+        </div>
       </header>
 
       {/* Seções agrupadas */}

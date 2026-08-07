@@ -358,7 +358,7 @@ export function AdvancedProductSearch() {
               <li key={p.catalogId}>
                 <Link
                   to="/buscar"
-                  search={{ q: p.displayName, mode: "strict", pure: "1" }}
+                  search={{ q: p.displayName }}
                   className="group flex h-full items-center gap-3 rounded-xl border border-border/60 bg-background p-2.5 transition-all hover:border-primary/50 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                 >
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-muted">
