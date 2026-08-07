@@ -16,61 +16,60 @@
 }
 
 :root {
-  /* New Unified Palette: "Premium Modern" */
-  --pc-brand-gold: #D4AF37; 
-  --pc-brand-gold-glow: rgba(212, 175, 55, 0.2);
-  --pc-navy-deep: #0B1E3A;
-  --pc-slate-soft: #F8FAFC;
+  /* Unified Palette: Modern Professional (Removing Navy) */
+  --pc-brand-gold: #C5A02D; 
+  --pc-brand-gold-glow: rgba(197, 160, 45, 0.15);
   
-  /* Comparison Surface */
-  --pc-compare-bg: #F8FAFC;
-  --pc-compare-header: #FFFFFF;
+  /* Neutral Palette */
+  --pc-neutral-900: #0F172A; /* Deep Slate (Not Navy) */
+  --pc-neutral-800: #1E293B;
+  --pc-neutral-100: #F1F5F9;
+  --pc-neutral-50: #F8FAFC;
   
-  /* Theme: Light Professional (Refined) */
+  /* Theme: Compact Modern */
   --bg-base: #F8FAFC;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #F1F5F9;
   --border-subtle: #E2E8F0;
   
-  /* Typography: Increased Clarity */
+  /* Typography */
   --text-primary: #0F172A;
-  --text-secondary: #334155;
-  --text-tertiary: #64748B;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
   
   --brand-primary: var(--pc-brand-gold);
-  --brand-secondary: var(--pc-navy-deep);
+  --brand-secondary: var(--pc-neutral-800);
   
   --success: #10B981;
   --danger: #EF4444;
   --savings: #10B981;
   
-  /* Scale & Spacing: Unified System */
-  --radius-xl: 24px;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
+  /* Compact Scale */
+  --radius-xl: 16px; /* Reduced from 24px */
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
   
-  /* Unified Shadow System */
-  --pc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --pc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --pc-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* Shadows */
+  --pc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+  --pc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
   
-  --dur-base: 0.3s;
+  --dur-base: 0.2s;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root[data-theme='dark'] {
-  --bg-base: #0B0E14;
-  --bg-surface: #121826;
-  --bg-surface-elevated: #1C2533;
-  --border-subtle: #263142;
+  --bg-base: #020617;
+  --bg-surface: #0F172A;
+  --bg-surface-elevated: #1E293B;
+  --border-subtle: #334155;
   
-  --text-primary: #F8FAFC;
+  --text-primary: #F1F5F9;
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
   
-  --brand-secondary: #F8FAFC;
+  --brand-secondary: #F1F5F9;
 }
 
 @theme {
@@ -111,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: var(--pc-shadow-sm);
   transition: all var(--dur-base) var(--ease-smooth);
   &:hover {

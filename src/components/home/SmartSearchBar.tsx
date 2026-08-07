@@ -229,7 +229,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-5 font-black uppercase tracking-[0.15em] text-[#0B1E3A] transition-all hover:brightness-105 active:scale-95",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-5 font-black uppercase tracking-[0.15em] text-white transition-all hover:brightness-105 active:scale-95",
             compact ? "h-9 text-[10px]" : "h-10 text-[10px] sm:h-12 sm:text-[11px]",
           )}
         >
@@ -290,7 +290,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => go(term)}
-                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-[#0B1E3A]"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-4 py-2 text-[11px] font-black uppercase tracking-wider text-white"
                 >
                   Buscar mesmo assim <ArrowRight className="h-3.5 w-3.5" />
                 </button>
