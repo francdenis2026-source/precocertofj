@@ -300,15 +300,17 @@ function ComparadorPage() {
       const PAGE = 1000;
       const acc: Comparison[] = [];
       for (let offset = 0; ; offset += PAGE) {
-        // Here we ensure database integration is pulling the latest correct data
-        const { data, error } = await supabase
+        // Enhanced database integration for real-time accuracy
+        const { data: rawData, error } = await supabase
           .rpc("get_price_comparisons")
           .range(offset, offset + PAGE - 1);
+        
         if (error) {
           console.error("Database integration error:", error);
           throw error;
         }
-        const batch = (data as unknown as Comparison[]) ?? [];
+        
+        const batch = (rawData as unknown as Comparison[]) ?? [];
         acc.push(...batch);
         if (batch.length < PAGE) break;
       }
