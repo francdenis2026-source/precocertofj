@@ -34,9 +34,9 @@ export function RegisteredStoresCarousel() {
           to="/loja/$id"
           params={{ id: store.id }}
           search={{ q: "", from: "" }}
-          className="pc-card group flex flex-col items-center justify-center p-4 gap-2 text-center h-auto min-h-[100px]"
+          className="pc-card group flex flex-col items-center justify-center p-4 gap-2 text-center h-auto min-h-[100px] border-none shadow-none hover:shadow-none hover:translate-y-0"
         >
-          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white p-1.5 shadow-sm group-hover:scale-110 transition-transform">
+          <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-white p-1.5 shadow-sm group-hover:scale-105 transition-transform">
             {store.name.includes("Contamigos") ? (
               <ContamigosLogo size="sm" hideName />
             ) : (
