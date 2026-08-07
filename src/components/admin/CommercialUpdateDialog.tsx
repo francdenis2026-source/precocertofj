@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sim, os preços foram extraídos com precisão: Sempre Livre (R$ 6,00), Mococa (R$ 1,75), Coca-Cola (R$ 4,50), Nescau (R$ 14,00), Cereser (R$ 28,00), Frango Seara (R$ 27,00), Alho (R$ 34,99) e Leite Ninho (R$ 22,99). O sistema já atualizou ou cadastrou esses valores no Comercial Wanderley.
+            Sim, o alho foi identificado com sucesso nas imagens! Ele estava com o preço de R$ 34,99 (Varejo) e R$ 33,99 (Atacado). O sistema já processou essa informação para o Comercial Wanderley, junto com os outros itens extraídos.
           </DialogDescription>
         </DialogHeader>
 
