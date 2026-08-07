@@ -53,6 +53,7 @@ import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
@@ -344,6 +345,11 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
@@ -815,6 +821,7 @@ export interface FileRoutesByFullPath {
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/share/$token': typeof ShareTokenRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/db-dump': typeof ApiPublicDbDumpRoute
@@ -933,6 +940,7 @@ export interface FileRoutesByTo {
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/share/$token': typeof ShareTokenRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/db-dump': typeof ApiPublicDbDumpRoute
@@ -1052,6 +1060,7 @@ export interface FileRoutesById {
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/share/$token': typeof ShareTokenRoute
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/db-dump': typeof ApiPublicDbDumpRoute
@@ -1172,6 +1181,7 @@ export interface FileRouteTypes {
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
+    | '/share/$token'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/db-dump'
@@ -1290,6 +1300,7 @@ export interface FileRouteTypes {
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
+    | '/share/$token'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/db-dump'
@@ -1408,6 +1419,7 @@ export interface FileRouteTypes {
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
+    | '/share/$token'
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/db-dump'
@@ -1520,6 +1532,7 @@ export interface RootRouteChildren {
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
+  ShareTokenRoute: typeof ShareTokenRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
   ApiPublicDbDumpRoute: typeof ApiPublicDbDumpRoute
   ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
@@ -1840,6 +1853,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/produto/$slug': {
@@ -2532,6 +2552,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,
+  ShareTokenRoute: ShareTokenRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
   ApiPublicDbDumpRoute: ApiPublicDbDumpRoute,
   ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
