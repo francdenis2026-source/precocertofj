@@ -15,8 +15,9 @@ import {
   History, 
   Star, 
   Bell, 
-  TrendingDown, 
-  ChevronRight, 
+  TrendingDown,
+  TrendingUp,
+  ChevronRight,
   Package,
   Store,
   Tag,
@@ -130,44 +131,47 @@ function DashboardPage() {
           {/* Nova Seção de Insights Rápidos */}
           <SectionCard 
             title="Insights & Economia" 
-            description="Veja como o seu dinheiro rendeu mais este mês."
-            className="lg:col-span-2 pc-animate-fade-in border-none bg-gradient-to-br from-[#0B1E3A] to-[#050E1B] text-white shadow-2xl"
+            description="Veja onde você está economizando mais este mês em Feijó."
+            className="lg:col-span-2 pc-animate-fade-in border-none bg-white text-[#1A1A2E] shadow-sm rounded-[32px] overflow-hidden"
             action={
-              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/10">
-                <Link to="/app/insights">Ver tudo sobre minha economia <ChevronRight className="ml-1 h-3 w-3" /></Link>
+              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-[var(--brand-primary)]">
+                <Link to="/app/insights">Ver Relatório Completo <ChevronRight className="ml-1 h-3 w-3" /></Link>
               </Button>
             }
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-2">
-              <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Eficiência de Compra</p>
+              <div className="space-y-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Eficiência de Compra</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black">84%</span>
-                  <span className="text-xs font-bold text-emerald-400">+5% este mês</span>
+                  <span className="text-3xl font-black text-[#1A1A2E]">84%</span>
+                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">+5% este mês</span>
                 </div>
-                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: '84%' }}
                     transition={{ duration: 1, ease: "easeOut" }}
-                    className="h-full bg-[var(--brand-primary)] rounded-full shadow-[0_0_12px_rgba(212,175,55,0.4)]" 
+                    className="h-full bg-[var(--brand-primary)] rounded-full" 
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Inteligência de Rota</p>
-                <p className="text-sm font-bold leading-tight">Sugestão: Atacadão + Farmácia</p>
+              <div className="space-y-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Melhor Localidade</p>
+                <p className="font-display text-lg font-bold leading-tight text-[#1A1A2E]">Varejão Contamigos</p>
                 <div className="flex items-center gap-2 text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-wider">
-                  <TrendingDown className="h-3.5 w-3.5" /> 
-                  Poupe R$ 42,90 hoje
+                  <TrendingUp className="h-3 w-3" />
+                  <span>R$ 42,50 Poupados</span>
                 </div>
               </div>
-              <div className="flex items-center justify-end">
-                <Button asChild variant="executive" className="w-full md:w-auto font-black text-[10px] uppercase tracking-[0.15em] bg-[var(--brand-primary)] text-[var(--brand-secondary)] hover:bg-[var(--brand-primary)]/90 h-11 px-6">
-                  <Link to="/app/insights">
-                    Achar melhor caminho <Zap className="ml-2 h-4 w-4 fill-current" />
-                  </Link>
-                </Button>
+              <div className="space-y-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Meta de Notas</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-bold text-[#1A1A2E]">8 / 10 Notas</p>
+                  <span className="text-[10px] font-black text-muted-foreground uppercase">80%</span>
+                </div>
+                <div className="h-2 w-full bg-muted/50 rounded-full overflow-hidden">
+                  <div className="h-full w-[80%] bg-[var(--brand-primary)] rounded-full" />
+                </div>
               </div>
             </div>
           </SectionCard>

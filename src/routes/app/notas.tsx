@@ -102,98 +102,86 @@ function PromoStatusPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-4xl px-4 md:px-6 pb-20">
+      <div className="mx-auto max-w-5xl px-4 md:px-6 pb-20">
         <PageHeader
           title="Status de Notas"
-          description="Acompanhe aqui o processamento das notas fiscais que você enviou."
+          description="Acompanhe o processamento das notas fiscais enviadas para a promoção."
+          breadcrumbs={[{ label: "Painel", to: "/app" }, { label: "Minhas Notas" }]}
           actions={
-            <Button asChild variant="outline" size="sm">
-              <Link to="/app">Voltar ao painel</Link>
+            <Button asChild className="rounded-xl shadow-md">
+              <Link to="/">Enviar Nova Nota</Link>
             </Button>
           }
         />
 
-        <SectionCard 
-          title="Minhas Notas" 
-          description="Lista de envios realizados para a promoção '30 dias grátis'."
-          className="pc-animate-fade-in"
-        >
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-[var(--brand-primary)] opacity-50 mb-4" />
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Buscando seus envios...</p>
-            </div>
-          ) : !data || data.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="h-16 w-16 rounded-full bg-muted/30 flex items-center justify-center mb-6 opacity-20">
-                <FileText className="h-8 w-8" />
+        <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+          <div className="space-y-6">
+            <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Histórico de Envios</h2>
+            
+            {isLoading ? (
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="h-24 animate-pulse rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]" />
+                ))}
               </div>
-              <h3 className="text-lg font-bold mb-2">Nenhuma nota enviada</h3>
-              <p className="text-sm text-muted-foreground max-w-xs mb-8">
-                Você ainda não participou da nossa promoção enviando sua primeira nota fiscal.
-              </p>
-              <Button asChild className="rounded-xl font-bold px-8">
-                <Link to="/">Participar Agora</Link>
-              </Button>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="py-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Arquivo / Data</th>
-                    <th className="py-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {data.map((item) => {
-                    const config = getStatusConfig(item.status);
-                    const StatusIcon = config.icon;
-                    return (
-                      <tr key={item.id} className="group transition-colors hover:bg-muted/30">
-                        <td className="py-4 pr-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 shrink-0 rounded-xl bg-muted/50 flex items-center justify-center text-muted-foreground">
-                              <FileText className="h-5 w-5" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm font-bold truncate text-foreground">{item.fileName}</p>
-                              <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                                {new Date(item.createdAt).toLocaleDateString("pt-BR", {
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit"
-                                })}
-                              </p>
-                            </div>
+            ) : !data || data.length === 0 ? (
+              <div className="rounded-[32px] border border-dashed border-border bg-[var(--bg-surface)] p-12 text-center">
+                <FileText className="mx-auto h-12 w-12 text-muted-foreground opacity-20" aria-hidden />
+                <h3 className="mt-4 font-display text-lg font-bold">Nenhuma nota enviada</h3>
+                <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">
+                  Envie suas notas fiscais para atualizar os preços e ganhar acesso premium.
+                </p>
+                <Button asChild className="mt-6 rounded-xl px-8" size="lg">
+                  <Link to="/">Participar Agora</Link>
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {data.map((item) => {
+                  const config = getStatusConfig(item.status);
+                  const StatusIcon = config.icon;
+                  return (
+                    <div key={item.id} className="pc-card flex items-center justify-between gap-4 p-5">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "flex h-12 w-12 items-center justify-center rounded-2xl shadow-sm",
+                          config.bg, config.color
+                        )}>
+                          <StatusIcon className="h-6 w-6" />
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="truncate font-display text-base font-bold text-foreground">
+                            {item.fileName}
+                          </h4>
+                          <div className="mt-1 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                            <span>{new Date(item.createdAt).toLocaleDateString("pt-BR")}</span>
+                            <span>·</span>
+                            <span className={config.color}>{config.label}</span>
                           </div>
-                        </td>
-                        <td className="py-4">
-                          <div className={cn(
-                            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider",
-                            config.color, config.bg, config.border
-                          )}>
-                            <StatusIcon className="h-3 w-3" />
-                            {config.label}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </SectionCard>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
-        <div className="mt-8 p-6 rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/5">
-          <h4 className="text-sm font-black uppercase tracking-widest text-[var(--brand-primary)] mb-2">Como funciona?</h4>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Após o envio, nossa equipe valida se a nota fiscal é válida e pertence a um estabelecimento da nossa região. 
-            Assim que aprovada, sua conta ganha automaticamente 30 dias de acesso premium.
-          </p>
+          <div className="space-y-6">
+            <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Promoção</h2>
+            <div className="pc-card space-y-6 p-6">
+              <div className="space-y-1">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Notas Enviadas</span>
+                <p className="font-display text-3xl font-bold text-[var(--brand-primary)]">{data?.length || 0}</p>
+              </div>
+              <div className="border-t border-border pt-6 space-y-2">
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--brand-primary)]">Como funciona?</h4>
+                <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
+                  Cada nota aprovada garante 30 dias de acesso premium. Nossa equipe valida o estabelecimento em até 24h.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </AppShell>

@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, BarChart3, Search as SearchIcon, Store, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BarChart3, Search as SearchIcon, Store, X, ChevronLeft } from "lucide-react";
+import { PageHeader } from "@/components/layout";
+import { Button } from "@/components/ui/button";
 
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
@@ -102,57 +104,13 @@ function ProductsPage() {
 
   return (
     <AppShell>
-      <div className="app-dashboard pc-page">
-        <header className="pc-page-header pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
-          <Link
-            to="/app"
-            className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
-          >
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Voltar ao painel
-          </Link>
-          <h1 className={cn(tc.h1, "mt-1")}>Produtos e preços</h1>
-          <p className={cn(tc.sectionNote, "mt-0.5")}>
-            Toque em um produto para comparar o preço entre os estabelecimentos de Feijó.
-          </p>
-        </header>
-
-        {/* Filtros */}
-        <section
-          aria-label="Filtros de produtos"
-          className="pc-pad-sm space-y-1.5 rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
-        >
-          <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-            <label className="relative min-w-0">
-              <span className="sr-only">Buscar produto</span>
-              <SearchIcon
-                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden
-              />
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Buscar produto: arroz, café, sabão…"
-                className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9 pr-8")}
-                maxLength={80}
-                inputMode="search"
-                autoComplete="off"
-              />
-              {input && (
-                <button
-                  type="button"
-                  aria-label="Limpar busca"
-                  onClick={() => setInput("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              )}
-            </label>
-            <div
-              role="radiogroup"
-              aria-label="Ordenar resultados"
-              className="flex shrink-0 flex-wrap items-center gap-1"
-            >
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pb-20">
+        <PageHeader
+          title="Produtos e preços"
+          description="Toque em um produto para comparar o preço entre os estabelecimentos de Feijó."
+          breadcrumbs={[{ label: "Painel", to: "/app" }, { label: "Produtos" }]}
+          actions={
+             <div className="flex shrink-0 flex-wrap items-center gap-1">
               {SORTS.map((s) => (
                 <button
                   key={s.id}
@@ -161,23 +119,51 @@ function ProductsPage() {
                   aria-checked={sort === s.id}
                   onClick={() => setSort(s.id)}
                   className={cn(
-                    tc.control,
-                    "h-8 rounded-md border px-2.5 transition-colors",
+                    "h-8 rounded-lg border px-3 text-[10px] font-black uppercase tracking-wider transition-all",
                     sort === s.id
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
+                      ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--pc-brand-navy)]"
+                      : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {s.label}
                 </button>
               ))}
             </div>
+          }
+        />
+
+        {/* Filtros */}
+        <div className="mb-8 space-y-4">
+          <div className="relative w-full">
+            <SearchIcon
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Buscar produto: arroz, café, sabão…"
+              className="h-12 rounded-2xl bg-[var(--bg-surface)] pl-10 pr-10 shadow-sm border-[var(--border-subtle)] focus:border-[var(--brand-primary)]/50"
+              maxLength={80}
+              inputMode="search"
+              autoComplete="off"
+            />
+            {input && (
+              <button
+                type="button"
+                aria-label="Limpar busca"
+                onClick={() => setInput("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           <div
             role="radiogroup"
             aria-label="Filtrar por categoria"
-            className="flex gap-1.5 overflow-x-auto pb-0.5"
+            className="flex gap-2 overflow-x-auto pb-2 no-scrollbar"
           >
             <Chip active={!category} onClick={() => setCategory(null)}>
               Todas
@@ -192,39 +178,36 @@ function ProductsPage() {
               </Chip>
             ))}
           </div>
-        </section>
+        </div>
 
         {/* Resultados */}
         <section aria-live="polite" aria-busy={resultsQ.isFetching}>
           {showSkeleton ? (
-            <ul className="pc-card-grid">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.from({ length: 9 }).map((_, i) => (
-                <li
+                <div
                   key={i}
-                  className="h-[72px] animate-pulse rounded-lg border border-border/60 bg-card/70"
-                  style={{ opacity: 1 - i * 0.05 }}
+                  className="h-28 animate-pulse rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]"
                 />
               ))}
-            </ul>
+            </div>
           ) : resultsQ.isError ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-center">
-              <p className={tc.body}>Não conseguimos carregar os produtos agora.</p>
-              <button
-                type="button"
+            <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center">
+              <p className="text-sm font-medium">Não conseguimos carregar os produtos agora.</p>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => resultsQ.refetch()}
-                className={cn(
-                  tc.control,
-                  "mt-3 h-9 rounded-md border border-border px-3 hover:bg-muted",
-                )}
+                className="mt-4 rounded-xl"
               >
                 Tentar novamente
-              </button>
+              </Button>
             </div>
           ) : results.length === 0 ? (
-            <div className="rounded-lg border border-border/70 bg-card/94 p-5 text-center backdrop-blur-md">
-              <SearchIcon className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
-              <p className={cn(tc.itemTitle, "mt-2")}>Nenhum produto encontrado</p>
-              <p className={cn(tc.meta, "mt-1")}>
+            <div className="rounded-2xl border border-dashed border-border bg-[var(--bg-surface)] p-12 text-center">
+              <SearchIcon className="mx-auto h-8 w-8 text-muted-foreground opacity-20" aria-hidden />
+              <p className="mt-4 text-sm font-bold text-foreground">Nenhum produto encontrado</p>
+              <p className="text-xs text-muted-foreground">
                 {term
                   ? `Nada para “${term}”. Tente outro termo ou remova o filtro de categoria.`
                   : "Ajuste os filtros para ver os produtos disponíveis."}
@@ -232,65 +215,63 @@ function ProductsPage() {
             </div>
           ) : (
             <>
-              <ul className="pc-card-grid">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {results.map((r) => (
-                  <li key={r.catalogId} className="relative">
+                  <div key={r.catalogId} className="relative group">
                     <button
                       type="button"
                       onClick={() => setCompareKey(r.displayName)}
-                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-border/70 bg-card/94 px-4 py-3 pb-8 text-left shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40"
+                      className="pc-card w-full flex flex-col items-start gap-3 p-5 pb-12"
                     >
-                      <span className="min-w-0">
-                        <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>
-                        <span
-                          className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}
-                        >
-                          {r.brand && <span className="truncate">{r.brand}</span>}
-                          {r.brand && <span aria-hidden>·</span>}
-                          <Store className="h-3 w-3 shrink-0" aria-hidden />
-                          {r.storesCount} {r.storesCount === 1 ? "mercado" : "mercados"}
-                        </span>
-                        <span
-                          className={cn(
-                            tc.metaMuted,
-                            "mt-0.5 inline-flex items-center gap-1 text-primary",
+                      <div className="flex w-full items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="truncate font-display text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">
+                            {r.displayName}
+                          </h3>
+                          <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground font-medium uppercase tracking-wider">
+                            {r.brand && <span className="truncate">{r.brand}</span>}
+                            {r.brand && <span aria-hidden>·</span>}
+                            <Store className="h-3 w-3 shrink-0" aria-hidden />
+                            {r.storesCount} {r.storesCount === 1 ? "mercado" : "mercados"}
+                          </div>
+                        </div>
+                        <div className="shrink-0 text-right">
+                          <Price value={r.minPrice} size="lg" tone="best" />
+                          {r.maxPrice != null && r.minPrice != null && r.maxPrice > r.minPrice && (
+                            <span className="mt-0.5 block text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                              até R$ {r.maxPrice.toFixed(2).replace(".", ",")}
+                            </span>
                           )}
-                        >
+                        </div>
+                      </div>
+
+                      <div className="mt-2 flex w-full items-center justify-between border-t border-border/40 pt-4">
+                        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-[var(--brand-primary)]">
                           <BarChart3 className="h-3 w-3" aria-hidden /> Comparar preços
                         </span>
-                      </span>
-                      <span className="shrink-0 text-right">
-                        <Price value={r.minPrice} size="md" tone="best" />
-                        {r.maxPrice != null && r.minPrice != null && r.maxPrice > r.minPrice && (
-                          <span className={cn(tc.metaMuted, "block")}>
-                            até {r.maxPrice.toFixed(2).replace(".", ",")}
-                          </span>
-                        )}
-                      </span>
+                        <ArrowRight className="h-4 w-4 text-[var(--brand-primary)] transition-transform group-hover:translate-x-1" />
+                      </div>
                     </button>
                     <PriceDropAlertToggle
                       variant="chip"
-                      className="absolute bottom-2 left-3"
+                      className="absolute bottom-4 left-5"
                       productName={r.displayName}
                       targetPrice={r.minPrice}
                     />
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
 
               {results.length >= limit && limit < 60 && (
-                <div className="mt-3 flex justify-center">
-                  <button
-                    type="button"
+                <div className="mt-8 flex justify-center">
+                  <Button
+                    variant="outline"
                     onClick={() => setLimit((n) => Math.min(60, n + 24))}
                     disabled={resultsQ.isFetching}
-                    className={cn(
-                      tc.control,
-                      "h-9 rounded-md border border-border px-4 transition-colors hover:bg-muted disabled:opacity-60",
-                    )}
+                    className="rounded-xl px-8"
                   >
                     {resultsQ.isFetching ? "Carregando…" : "Ver mais produtos"}
-                  </button>
+                  </Button>
                 </div>
               )}
             </>
