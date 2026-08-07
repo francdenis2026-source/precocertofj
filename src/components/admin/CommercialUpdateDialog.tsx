@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Décimo segundo lote do Comercial Vanderley processado: Toscana Suína (R$ 23,99), Sabonetes Francis (R$ 2,75), Cerveja Heineken 269ml (R$ 5,00), Desodorantes Monange e Above (R$ 12,00), Amaciante Brisa 500ml (R$ 4,50), Cafés Saboroso do Vovô, Vovô Pureza e 3 Corações (R$ 14,00 a R$ 20,00), Balas Freegells (R$ 12,75), Refrigerante Tuchaua Champ 2L (R$ 7,50) e Sabonetes Líquidos Labotrat e Kerabrasil (R$ 14,00 a R$ 22,00). Todos os dados foram atualizados!
+            Décimo terceiro lote do Comercial Vanderley processado: Margarinas Delicata, Doriana e Cremosy (R$ 5,00 a R$ 12,75), Suco Teen Mais sabores (R$ 5,99 a R$ 6,50) e refresco Clik (R$ 6,50). Todos os dados foram atualizados!
           </DialogDescription>
         </DialogHeader>
 
