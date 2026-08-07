@@ -964,6 +964,58 @@ function CatalogReviewPanel() {
       </div>
     </div>
   );
+}
+
+function AdminPanel() {
+  const exportFn = useServerFn(downloadFullDatabase);
+  const organizeFn = useServerFn(organizeAllProducts);
+  const [loading, setLoading] = useState(false);
+  const [organizing, setOrganizing] = useState(false);
+
+  const { data: roleData } = useQuery({
+    queryKey: ['my-roles'],
+    queryFn: async () => {
+      const { data } = await supabase.from('user_roles').select('role').eq('role', 'admin').maybeSingle();
+      return data;
+    }
+  });
+
+  if (!roleData) return null;
+
+  async function handleExport() {
+    setLoading(true);
+    try {
+      const result = await exportFn();
+      if ('error' in result) throw new Error(result.error as string);
+      
+      const blob = new Blob([result.content], { type: result.mimeType });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = result.filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success("Banco de dados exportado com sucesso!");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha na exportação");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleOrganize() {
+    setOrganizing(true);
+    try {
+      const res = await organizeFn();
+      toast.success(`Produtos organizados! ${res.updatedCount} itens reclassificados.`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha na organização");
+    } finally {
+      setOrganizing(false);
+    }
+  }
 
   return (
     <div className="col-span-3 mt-2 flex flex-col gap-3">
@@ -972,10 +1024,10 @@ function CatalogReviewPanel() {
       <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between">
         <div>
           <h3 className="font-display text-sm font-semibold flex items-center gap-2 text-primary">
-            <Database className="h-4 w-4" /> Exportação de Dados
+            <Database className="h-4 w-4" /> Exportação e Organização
           </h3>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            Baixe o banco de dados completo do PricePal em formato JSON.
+            Gerencie o banco de dados e as categorias globais.
           </p>
         </div>
         <div className="flex gap-2">
@@ -985,7 +1037,7 @@ function CatalogReviewPanel() {
             className="flex items-center gap-2 bg-[oklch(0.36_0.11_255)] text-white px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
             {organizing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
-            Padronizar Categorias
+            Organizar
           </button>
           <button
             onClick={handleExport}
@@ -993,7 +1045,7 @@ function CatalogReviewPanel() {
             className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
-            Exportar DB
+            Exportar
           </button>
         </div>
       </div>
