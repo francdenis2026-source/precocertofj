@@ -132,10 +132,10 @@ export function RecentProductsCarousel() {
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">
             <Sparkles className="h-3 w-3" strokeWidth={3} aria-hidden />
-            Catálogo Vivo
+            Live Catalog
           </p>
           <h2 className="mt-1 text-[20px] sm:text-[24px] font-black tracking-tight text-[var(--text-primary)] leading-none">
-            Novidades Recentes
+            Recent Additions
           </h2>
         </div>
         <Link

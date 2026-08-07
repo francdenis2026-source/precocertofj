@@ -26,8 +26,8 @@ const TESTIMONIALS: Testimonial[] = [
   { name: "Maria dos Santos", role: "Centro",           quote: "I compare in 10 seconds and save nearly R$80 a month.",              initials: "MS" },
   { name: "João Ferreira",    role: "Segundo Distrito", quote: "I use it every Saturday before shopping. No surprises at checkout.",           initials: "JF" },
   { name: "Ana Paula Lima",   role: "Bela Vista",       quote: "I sent photos of flyers and saw my price go live the same day.",       initials: "AL" },
-  { name: "Carlos Menezes",   role: "Cidade Nova",      quote: "Descobri que o arroz mais barato ficava a duas quadras de casa.",      initials: "CM" },
-  { name: "Rita Oliveira",    role: "Bairro Novo",      quote: "O ranking semanal virou parte da minha rotina antes de sair.",         initials: "RO" },
+  { name: "Carlos Menezes",   role: "Cidade Nova",      quote: "I found out the cheapest rice was just two blocks from home.",      initials: "CM" },
+  { name: "Rita Oliveira",    role: "Bairro Novo",      quote: "The weekly ranking became part of my routine before heading out.",         initials: "RO" },
   { name: "Bruno Aguiar",     role: "Centro",           quote: "Simple and direct: I pick the product and see where it is cheaper.",   initials: "BA" },
 ];
 

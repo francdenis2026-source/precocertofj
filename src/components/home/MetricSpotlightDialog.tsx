@@ -467,7 +467,7 @@ function CategoryBars({
   if (top.length === 0) return null;
   return (
     <>
-      <SectionLabel count={`top ${top.length}`}>Distribuição por categoria</SectionLabel>
+      <SectionLabel count={`top ${top.length}`}>Distribution by category</SectionLabel>
       <ul className="mb-3 space-y-1.5">
         {top.map((c) => (
           <li key={c.key} className="flex items-center gap-2">
@@ -512,15 +512,15 @@ function ProductsRecentList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length}`}>Últimas atualizações</SectionLabel>
+      <SectionLabel count={`${filtered.length}`}>Latest updates</SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Produto ou mercado…"
-        ariaLabel="Buscar atualizações de preço"
+        placeholder="Product or store…"
+        ariaLabel="Search price updates"
       />
       {shown.length === 0 ? (
-        <EmptyRow>Nenhuma atualização encontrada.</EmptyRow>
+        <EmptyRow>No updates found.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((u, i) => (
@@ -533,7 +533,7 @@ function ProductsRecentList({
                   to="/buscar"
                   search={{ q: u.productName } as never}
                   onClick={onNavigate}
-                  aria-label={`Comparar preços de ${u.productName}`}
+                  aria-label={`Compare prices for ${u.productName}`}
                   className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   {u.productName}
@@ -593,15 +593,15 @@ function SavingsList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length} itens`}>Maiores economias agora</SectionLabel>
+      <SectionLabel count={`${filtered.length} items`}>Biggest savings now</SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Produto, categoria ou mercado…"
-        ariaLabel="Buscar economias"
+        placeholder="Product, category or store…"
+        ariaLabel="Search savings"
       />
       {shown.length === 0 ? (
-        <EmptyRow>Nenhuma economia encontrada.</EmptyRow>
+        <EmptyRow>No savings found.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((s, i) => (
@@ -625,7 +625,7 @@ function SavingsList({
                     to="/produto/$slug"
                     params={{ slug: s.catalogSlug }}
                     onClick={onNavigate}
-                    aria-label={`Ver comparação de ${s.displayName}`}
+                    aria-label={`View comparison for ${s.displayName}`}
                     className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                   >
                     {s.displayName}
@@ -636,7 +636,7 @@ function SavingsList({
                   </div>
                 )}
                 <div className="truncate text-[11px] text-muted-foreground">
-                  {s.storeCount} mercados · menor em{" "}
+                  {s.storeCount} stores · lowest at{" "}
                   {s.cheapestStoreSlug && s.cheapestStore ? (
                     <Link
                       to="/estabelecimento/$slug"
@@ -667,7 +667,7 @@ function SavingsList({
                   to="/produto/$slug"
                   params={{ slug: s.catalogSlug }}
                   onClick={onNavigate}
-                  aria-label={`Abrir comparação de ${s.displayName}`}
+                  aria-label={`Open comparison for ${s.displayName}`}
                   className="pc-metric-ink-hover grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />

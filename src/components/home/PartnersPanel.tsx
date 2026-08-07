@@ -110,7 +110,7 @@ export function PartnersPanel({
               className="mt-0.5 truncate text-[11.5px] sm:text-[12px]"
               style={{ color: "color-mix(in oklab, var(--pc-home-heading) 68%, transparent)" }}
             >
-              Toque no mercado para ver os preços de hoje
+              Tap a store to see today's prices
             </p>
           </div>
 

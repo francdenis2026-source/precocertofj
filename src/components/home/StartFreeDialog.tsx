@@ -57,14 +57,14 @@ export function StartFreeDialog({ children, redirect }: Props) {
             }}
           >
             <Sparkles className="h-3 w-3" strokeWidth={2.6} />
-            7 dias grátis · sem cartão
+            7-day free trial · no card required
           </div>
           <DialogHeader className="space-y-1.5 text-left">
             <DialogTitle
               className="text-[22px] font-bold leading-tight tracking-tight"
               style={{ color: "var(--pc-home-heading)" }}
             >
-              Comece a economizar em Feijó
+              Start saving in Feijó
             </DialogTitle>
             <DialogDescription
               className="text-[13.5px] leading-relaxed"
@@ -72,7 +72,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
                 color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)",
               }}
             >
-              Crie sua conta em menos de 1 minuto. Sem cartão, sem cobrança automática.
+              Create your account in under 1 minute. No card, no auto-billing.
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -85,9 +85,9 @@ export function StartFreeDialog({ children, redirect }: Props) {
             }}
           >
             {[
-              { icon: Zap, text: "Compare preços dos mercados de Feijó em segundos" },
-              { icon: ShieldCheck, text: "Receba aviso quando o preço cair no seu bairro" },
-              { icon: Sparkles, text: "Ajude a rede local a comprar melhor a cada nota" },
+              { icon: Zap, text: "Compare prices across Feijó stores in seconds" },
+              { icon: ShieldCheck, text: "Get notified when prices drop in your neighborhood" },
+              { icon: Sparkles, text: "Help the local community shop smarter with every receipt" },
             ].map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-start gap-2.5">
                 <span
@@ -116,7 +116,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
                 backgroundColor: "var(--pc-home-gold)",
               }}
             >
-              Criar conta grátis
+              Create free account
               <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
             </Link>
 
@@ -131,7 +131,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
               }}
             >
               <LogIn className="h-4 w-4" strokeWidth={2.2} />
-              Já tenho conta
+              I already have an account
             </Link>
           </div>
 
@@ -141,7 +141,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
               color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)",
             }}
           >
-            Ao continuar, você aceita os termos de uso e a política de privacidade.
+            By continuing, you agree to the terms of use and privacy policy.
           </p>
         </div>
       </DialogContent>
