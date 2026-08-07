@@ -18,10 +18,11 @@ export function filterByTokens<T extends ScanLike>(
   const tokens = tokenizeQuery(query);
   if (tokens.length === 0) return { tokens, list: rows };
 
-  const matcher = buildTokenMatcher(tokens);
+  const matchers = tokens.map(t => buildTokenMatcher(t, mode));
   const list = rows.filter((r) => {
     if (r.price_captured === null) return false;
-    return matcher(normalize(r.product_name), mode);
+    const nameNorm = normalize(r.product_name);
+    return matchers.every(m => m.test(nameNorm));
   });
 
   return { tokens, list };
@@ -74,7 +75,7 @@ export function scoreProductName(
   }
 
   const total = tokens.length || 1;
-  const allInName = (exact + prefix) >= total ? 1 : 0;
+  const allInName = (exact + prefix) >= tokens.length ? 1 : 0;
   
   const nameWordsList = nameNorm.split(/[^a-z0-9]+/).filter(Boolean);
   const nameWords = nameWordsList.length;
