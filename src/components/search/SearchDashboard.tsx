@@ -36,19 +36,18 @@ export function SearchDashboard() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1 }}
-          className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-[32px] shadow-sm hover:shadow-xl hover:border-primary transition-all duration-300 group"
+          className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-[16px] shadow-sm transition-all duration-300"
         >
-          <div className="flex items-center gap-2 mb-1 text-muted-foreground">
-            {stat.icon}
-            <span className="text-[10px] font-bold uppercase tracking-wider">{stat.label}</span>
+          <div className="flex flex-col-reverse gap-0.5">
+            {stat.isNumber ? (
+              <div className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
+                {stat.value}
+              </div>
+            ) : (
+              <Price value={stat.value} size="md" tone={stat.tone} className="font-bold" />
+            )}
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-tertiary)]">{stat.label}</span>
           </div>
-          {stat.isNumber ? (
-            <div className="text-2xl font-bold tracking-tight text-foreground">
-              {stat.value}
-            </div>
-          ) : (
-            <Price value={stat.value} size="lg" tone={stat.tone} />
-          )}
         </motion.div>
       ))}
     </div>
