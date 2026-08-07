@@ -21,7 +21,7 @@ export function SearchHeroSection({ query }: { query: string }) {
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 md:p-10 shadow-[var(--shadow-md)]">
+    <section className="relative overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 md:p-10 shadow-[var(--pc-shadow-md)]">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,380px] gap-10 relative z-10">
         <div className="space-y-8">
           <header className="space-y-4">
