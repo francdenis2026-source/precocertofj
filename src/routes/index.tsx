@@ -162,7 +162,7 @@ function HomePage() {
               filter: isSearchFocused ? "brightness(0.3) blur(8px)" : "brightness(0.5) blur(2px)"
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[var(--bg-base)]" />
         </div>
 
         {/* Hero Content */}
