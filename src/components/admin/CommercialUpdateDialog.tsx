@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Envie as imagens enviadas pelo comercial Wanderley para extração automática de preços. Extraia as informaçoes dos produtos e cadastra no comercial wanderley, caso ja exita desconsidere, se tiver mudado preços, atualiza; quantos produtos foram extraidos, sempre me informe a quantodade.
+            Sim, consegui extrair os itens das imagens! Envie as fotos do comercial Wanderley e eu farei a extração automática. Caso o produto já exista, ele será ignorado; se o preço mudou, ele será atualizado. Sempre informarei a quantidade exata de itens processados.
           </DialogDescription>
         </DialogHeader>
 
