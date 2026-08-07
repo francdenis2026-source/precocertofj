@@ -53,8 +53,8 @@ export function RealtimeMonitoringDashboard() {
             <Zap className="h-3 w-3 text-emerald-500 animate-pulse" />
           </div>
           <div>
-            <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Live Insights</span>
-            <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none">Monitoramento Ativo</p>
+            <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Painel Vivo</span>
+            <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none">Varredura de Comércios em Tempo Real</p>
           </div>
         </div>
         <button 
@@ -114,8 +114,13 @@ export function RealtimeMonitoringDashboard() {
             </div>
 
             <div className="relative z-10 grid grid-cols-1 gap-1.5 mt-1">
-              {store.insights.slice(0, 1).map((insight: any, idx: number) => (
-                <div key={idx} className="flex items-start gap-2.5 px-3 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)]/50 border border-[var(--border-subtle)]/50 group-hover:bg-[var(--bg-surface-elevated)] group-hover:border-[var(--brand-primary)]/20 transition-colors">
+              {store.insights.map((insight: any, idx: number) => (
+                <div key={idx} className={cn(
+                  "flex items-start gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-300",
+                  idx === 0 
+                    ? "bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 shadow-inner" 
+                    : "bg-[var(--bg-surface-elevated)]/50 border border-[var(--border-subtle)]/50 group-hover:bg-[var(--bg-surface-elevated)]"
+                )}>
                   <div className={cn(
                     "mt-0.5 p-1 rounded-md",
                     insight.type === 'demand' ? "bg-amber-500/10 text-amber-500" :
@@ -125,7 +130,12 @@ export function RealtimeMonitoringDashboard() {
                     {insight.type === 'stock' && <PackageSearch className="h-2.5 w-2.5" />}
                     {insight.type === 'price' && <Activity className="h-2.5 w-2.5" />}
                   </div>
-                  <p className="text-[10px] font-bold text-[var(--text-secondary)] leading-snug">{insight.message}</p>
+                  <p className={cn(
+                    "text-[10px] font-bold leading-snug",
+                    idx === 0 ? "text-[var(--brand-primary)]" : "text-[var(--text-secondary)]"
+                  )}>
+                    {insight.message}
+                  </p>
                 </div>
               ))}
             </div>
