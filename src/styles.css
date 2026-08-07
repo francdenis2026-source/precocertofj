@@ -132,7 +132,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 @utility section-title {
-  @apply text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6;
+  @apply text-[11px] font-black uppercase tracking-[0.25em] text-[var(--text-tertiary)] mb-8 transition-colors hover:text-[var(--brand-primary)];
 }
 
 @utility glass-card {
@@ -144,7 +144,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 @utility pc-card {
-  @apply rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-sm transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-md hover:border-[var(--brand-primary)]/30;
+  @apply rounded-[var(--pc-radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-[var(--pc-shadow-md)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-1 active:scale-[0.99];
 }
 
 @utility no-scrollbar {

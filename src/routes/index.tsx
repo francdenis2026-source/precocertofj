@@ -170,13 +170,13 @@ function HomePage() {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl mb-8">
-              <span className="relative flex h-2.5 w-2.5">
+            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.3)] mb-10 transition-all hover:bg-white/10 hover:border-white/20">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)] shadow-[0_0_8px_var(--brand-primary)]"></span>
               </span>
-              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90">
-                Atualizado em tempo real <span className="text-[var(--brand-primary)] mx-1">·</span> Feijó, AC
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">
+                Rede de Monitoramento Ativa <span className="text-[var(--brand-primary)] mx-2 opacity-50">·</span> Feijó, AC
               </span>
             </div>
 
