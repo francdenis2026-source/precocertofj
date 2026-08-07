@@ -54,8 +54,9 @@ export function PremiumOfferCard({ group, isBest }: { group: ProductGroup; isBes
         <header className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-              {group.matchReasons?.[0]?.replace("brand:", "") || "Produto"}
+              {String(group.matchReasons?.[0] || "Produto").replace("brand:", "")}
             </span>
+
             <button className="text-muted-foreground/40 hover:text-primary transition-colors">
               <Star className="h-4 w-4" />
             </button>
