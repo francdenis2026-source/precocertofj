@@ -169,14 +169,14 @@ export function ProductQuickView({
             </DialogTitle>
             <DialogDescription className="mt-0.5 text-[11.5px]">
               {[data?.brand, product?.unit ?? data?.unit].filter(Boolean).join(" · ") ||
-                "Product details"}
+                "Detalhes do produto"}
             </DialogDescription>
             {product?.minPrice != null && (
               <p className="mt-1.5 leading-none">
                 <Price value={product.minPrice} size="lg" />
                 {product.maxPrice != null && product.maxPrice > product.minPrice && (
                   <span className="ml-1.5 inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
-                    up to
+                    até
                     <Price value={product.maxPrice} size="sm" tone="muted" />
                   </span>
                 )}
@@ -190,18 +190,18 @@ export function ProductQuickView({
           className="max-h-[65svh] overflow-y-auto p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
           tabIndex={0}
           role="region"
-          aria-label="Product details and prices"
+          aria-label="Detalhes e preços do produto"
         >
           {/* Price History Section */}
           {!isLoading && data?.history && data.history.length > 1 && (
             <div className="mb-4 rounded-xl border border-border bg-card/40 p-3">
               <div className="mb-3 flex items-center justify-between">
                 <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                  <History className="h-3 w-3" /> Price History
+                  <History className="h-3 w-3" /> Histórico de preço
                 </p>
                 <div className="flex gap-2">
                   <button className="flex items-center gap-1 text-[10px] font-bold text-brand-gold hover:underline">
-                    <BellPlus className="h-3 w-3" /> Track
+                    <BellPlus className="h-3 w-3" /> Acompanhar
                   </button>
                 </div>
               </div>
@@ -220,7 +220,7 @@ export function ProductQuickView({
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#0B0B14', border: '1px solid rgba(255,215,0,0.2)', borderRadius: '8px', fontSize: '10px' }}
                       labelStyle={{ color: '#94A3B8' }}
-                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Lowest Price'] as any}
+                      formatter={(value: any) => [`R$ ${Number(value).toFixed(2)}`, 'Menor Preço'] as any}
                       labelFormatter={(label: any) => new Date(label).toLocaleDateString('en-GB')}
                     />
                     <Line 
@@ -242,7 +242,7 @@ export function ProductQuickView({
               <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gold-ink">
-                  Lowest price
+                  Menor preço
                 </p>
                 <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
               </div>
@@ -262,7 +262,7 @@ export function ProductQuickView({
           <div className="mb-4 space-y-3">
             <div className="flex items-center justify-between">
               <p className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-muted-foreground">
-                <Store className="h-3.5 w-3.5" aria-hidden /> Price by store
+                <Store className="h-3.5 w-3.5" aria-hidden /> Preço por mercado
               </p>
               
               <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-lg border border-border/50">
@@ -272,7 +272,7 @@ export function ProductQuickView({
                     "p-1.5 rounded-md transition-all",
                     sortOrder === "price" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
                   )}
-                  title="Lowest Price"
+                  title="Menor Preço"
                 >
                   <ArrowDownWideNarrow className="h-3 w-3" />
                 </button>
@@ -282,7 +282,7 @@ export function ProductQuickView({
                     "p-1.5 rounded-md transition-all",
                     sortOrder === "savings" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
                   )}
-                  title="Biggest Savings"
+                  title="Maior Economia"
                 >
                   <TrendingDown className="h-3 w-3" />
                 </button>
@@ -292,7 +292,7 @@ export function ProductQuickView({
                     "p-1.5 rounded-md transition-all",
                     sortOrder === "recent" ? "bg-brand-gold text-brand-navy shadow-sm" : "text-muted-foreground hover:text-foreground"
                   )}
-                  title="Most Recent"
+                  title="Mais Recente"
                 >
                   <Timer className="h-3 w-3" />
                 </button>
@@ -301,10 +301,10 @@ export function ProductQuickView({
             
             <div className="flex gap-2">
               <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card/60 py-2.5 text-[11px] font-black uppercase tracking-tight text-foreground transition-all hover:border-brand-gold hover:bg-brand-gold/5 active:scale-95">
-                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Track
+                <BellPlus className="h-3.5 w-3.5 text-brand-gold" /> Acompanhar
               </button>
               <button className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-card/60 py-2.5 text-[11px] font-black uppercase tracking-tight text-foreground transition-all hover:border-brand-gold hover:bg-brand-gold/5 active:scale-95">
-                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Compare
+                <Scale className="h-3.5 w-3.5 text-brand-gold" /> Comparar
               </button>
             </div>
           </div>
@@ -315,7 +315,7 @@ export function ProductQuickView({
               role="status"
               aria-live="polite"
               aria-busy="true"
-              aria-label="Loading prices"
+              aria-label="Carregando preços"
             >
               {Array.from({ length: 4 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-2 px-2.5 py-2.5">
@@ -331,14 +331,14 @@ export function ProductQuickView({
             >
               <AlertTriangle className="mx-auto h-4 w-4 text-gold-ink" aria-hidden />
               <p className="mt-1.5 text-[12.5px] font-semibold text-foreground">
-                Could not load prices
+                Não foi possível carregar os preços
               </p>
               <button
                 type="button"
                 onClick={() => refetch()}
                 className="mt-2 inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
-                <RotateCcw className="h-3 w-3" aria-hidden /> Try again
+                <RotateCcw className="h-3 w-3" aria-hidden /> Tentar novamente
               </button>
             </div>
           ) : markets.length === 0 ? (
@@ -347,7 +347,7 @@ export function ProductQuickView({
               aria-live="polite"
               className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-3 text-center text-[12.5px] text-muted-foreground"
             >
-              No other prices have been recorded for this product yet.
+              Nenhum outro preço foi registrado para este produto ainda.
             </p>
           ) : (
             (sizeGroups.length > 0
@@ -380,7 +380,7 @@ export function ProductQuickView({
                             value={m.priceMax}
                             size="sm"
                             tone="muted"
-                            prefix="up to R$"
+                            prefix="até R$"
                             className="mt-0.5 flex justify-end"
                           />
                         )}
@@ -396,9 +396,9 @@ export function ProductQuickView({
           {data?.min != null && data?.avg != null && data.avg > data.min && (
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
               <TrendingDown className="h-3 w-3 text-gold-ink" aria-hidden />
-              Savings of up to{" "}
+              Economia de até{" "}
               <Price value={data.avg - data.min} size="sm" tone="savings" />{" "}
-              vs. average
+              vs. média
             </p>
           )}
         </div>
@@ -410,7 +410,7 @@ export function ProductQuickView({
             onClick={onClose}
             className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-brand-gold text-[12.5px] font-bold text-brand-navy transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card"
           >
-            Compare across all stores
+            Comparar em todos os mercados
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </Link>
         </div>
