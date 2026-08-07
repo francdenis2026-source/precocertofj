@@ -131,7 +131,7 @@ function DashboardPage() {
           <SectionCard 
             title="Insights & Economia" 
             description="Veja como o seu dinheiro rendeu mais este mês."
-            className="lg:col-span-2 pc-animate-fade-in border-none bg-gradient-to-br from-[#0B1E3A] to-[#0A182C] text-white shadow-2xl"
+            className="lg:col-span-2 pc-animate-fade-in border-none bg-white text-[#1A1A2E] shadow-sm rounded-[32px] overflow-hidden"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/10">
                 <Link to="/app/insights">Ver tudo sobre minha economia <ChevronRight className="ml-1 h-3 w-3" /></Link>
