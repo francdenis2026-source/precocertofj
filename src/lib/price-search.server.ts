@@ -35,8 +35,9 @@ export async function performPriceSearch(data: {
   pureOnly: boolean;
   /** Ignora o cache curto — usado quando chega preço novo em tempo real. */
   fresh?: boolean;
+  category?: string;
 }): Promise<PriceSearchResult> {
-  const cacheKey = `${data.query.trim().toLowerCase()}|${data.mode}|${data.pureOnly ? 1 : 0}`;
+  const cacheKey = `${data.query.trim().toLowerCase()}|${data.category || ""}|${data.mode}|${data.pureOnly ? 1 : 0}`;
   const hit = searchResultCache.get(cacheKey);
   if (!data.fresh && hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
 
@@ -54,6 +55,7 @@ async function runPriceSearch(data: {
   query: string;
   mode: SearchMode;
   pureOnly: boolean;
+  category?: string;
 }): Promise<PriceSearchResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -68,7 +70,7 @@ async function runPriceSearch(data: {
   // Segurança de relevância: se após tokenização não resta nenhum termo
   // significativo (ex.: apenas stopwords/conectivos "de", "em", "kg"),
   // não retornamos resultados — evita listar todo o catálogo.
-  if (effectiveTokens.length === 0) {
+  if (effectiveTokens.length === 0 && !data.category) {
     return {
       query: data.query,
       mode,
@@ -121,8 +123,9 @@ async function runPriceSearch(data: {
     : Promise.resolve({ data: [], error: null });
 
   const [scansRes, suggestionsRes, cacheRes] = await Promise.all([
-    supabaseAdmin.rpc("search_scans_unaccented" as never, {
+    supabaseAdmin.rpc("search_scans_unaccented_v2" as never, {
       _q: lookupQuery,
+      _category: data.category || null,
       _limit: 300,
     } as never),
     supabaseAdmin.rpc("search_catalog_suggestions" as never, {

@@ -165,7 +165,7 @@ const ComparisonCard = memo(({
 });
 
 function ComparadorPage() {
-  const { q, cat, view: viewMode, sort: sortKey } = Route.useSearch();
+  const { q, cat, view: viewMode, sort: sortKey } = Route.useSearch() as { q: string, cat: string, view: string, sort: string };
   const navigate = useNavigate({ from: "/comparador" });
   const [searchVal, setSearchVal] = useState(q);
   const [selectedItem, setSelectedItem] = useState<Comparison | null>(null);

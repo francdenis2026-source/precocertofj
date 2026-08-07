@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PriceHistoryChart } from "./PriceHistoryChart";
 import { cn } from "@/lib/utils";
 
-export function SearchHeroSection({ query }: { query: string }) {
+export function SearchHeroSection({ query, isCategory }: { query: string; isCategory?: boolean }) {
   const { data: result, isPending: isLoading } = usePriceSearch(query);
 
   if (isLoading) return <SearchHeroSkeleton />;
@@ -27,7 +27,7 @@ export function SearchHeroSection({ query }: { query: string }) {
           <header className="space-y-4">
              <div className="flex flex-wrap items-center gap-3">
                 <span className="pc-badge bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 px-3 py-1">
-                  Melhor Resultado
+                  {isCategory ? 'Explorar Categoria' : 'Melhor Resultado'}
                 </span>
                 <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] flex items-center gap-1.5">
                   <Clock className="h-3.5 w-3.5" /> Atualizado hoje
@@ -36,7 +36,7 @@ export function SearchHeroSection({ query }: { query: string }) {
              
              <div className="space-y-2">
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-                  {topGroup.productName}
+                  {isCategory ? `Produtos em ${query}` : topGroup.productName}
                 </h1>
                 <div className="flex items-center gap-4 text-[13px]">
                    <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">

@@ -10,11 +10,11 @@ import { searchProductPrice } from "@/lib/price-search.functions";
  * permanece na tela. Isso evita que a página encolha (skeleton) e volte a
  * crescer — que é o que fazia a tela "pular" para cima/baixo.
  */
-export function usePriceSearch(query: string) {
+export function usePriceSearch(query: string, category?: string) {
   const runSearch = useServerFn(searchProductPrice);
   return useQuery({
-    queryKey: ["price-search", query],
-    queryFn: () => runSearch({ data: { query: query || "" } }),
+    queryKey: ["price-search", query, category],
+    queryFn: () => runSearch({ data: { query: query || "", category } }),
     enabled: true,
     staleTime: 30_000,
     placeholderData: keepPreviousData,
