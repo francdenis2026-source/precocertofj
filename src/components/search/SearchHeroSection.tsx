@@ -30,7 +30,7 @@ export function SearchHeroSection({ query }: { query: string }) {
                <Badge variant="primary" size="sm" className="uppercase tracking-[0.2em] font-black px-4 py-1 rounded-full shadow-lg shadow-primary/20">
                  Melhor resultado
                </Badge>
-               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1.5">
+               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80 flex items-center gap-1.5">
                  <Clock className="h-3 w-3" /> Hoje
                </span>
              </div>
@@ -55,16 +55,16 @@ export function SearchHeroSection({ query }: { query: string }) {
           </header>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-             <div className="space-y-2 bg-primary/5 rounded-3xl p-5 border border-primary/10 transition-transform group-hover/hero:scale-[1.02]">
-               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Melhor preço</p>
+             <div className="space-y-2 bg-primary/10 rounded-3xl p-5 border border-primary/20 transition-transform group-hover/hero:scale-[1.02]">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Melhor preço</p>
                <Price value={bestPrice} size="xl" tone="best" className="text-4xl" />
              </div>
-             <div className="space-y-2 bg-muted/20 rounded-3xl p-5 border border-border/40 transition-transform group-hover/hero:scale-[1.02] delay-75">
-               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">Preço médio</p>
+             <div className="space-y-2 bg-muted rounded-3xl p-5 border border-border/60 transition-transform group-hover/hero:scale-[1.02] delay-75">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Preço médio</p>
                <Price value={avgPrice} size="xl" className="text-4xl" />
              </div>
-             <div className="space-y-2 bg-savings/5 rounded-3xl p-5 border border-savings/10 transition-transform group-hover/hero:scale-[1.02] delay-150">
-               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-savings/60">Economia máx.</p>
+             <div className="space-y-2 bg-savings/10 rounded-3xl p-5 border border-savings/20 transition-transform group-hover/hero:scale-[1.02] delay-150">
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-savings">Economia máx.</p>
                <div className="flex items-baseline gap-2">
                  <Price value={potentialSavings} size="xl" tone="savings" className="text-4xl" />
                  <span className="text-sm font-black text-savings">({savingsPct}%)</span>
