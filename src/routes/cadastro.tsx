@@ -226,36 +226,39 @@ function CadastroPage() {
               <Field
                 label="Nome completo"
                 value={name}
-                onChange={(v) => setName(v.toLocaleUpperCase("pt-BR"))}
+                onChange={(v) => setName(v.toLocaleUpperCase("pt-BR").slice(0, 80))}
                 onBlur={() => markTouched("name")}
                 placeholder="Nome e sobrenome"
                 autoComplete="name"
                 state={vName}
                 showState={touched.name}
                 uppercase
+                maxLength={80}
               />
               <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
-                  onChange={(v) => setCpf(maskCpf(v))}
+                  onChange={(v) => setCpf(maskCpf(v).slice(0, 14))}
                   onBlur={() => markTouched("cpf")}
                   placeholder="000.000.000-00"
                   inputMode="numeric"
                   autoComplete="username"
                   state={vCpf}
                   showState={touched.cpf}
+                  maxLength={14}
                 />
                 <Field
                   label="Celular (opcional)"
                   value={phone}
-                  onChange={(v) => setPhone(maskPhone(v))}
+                  onChange={(v) => setPhone(maskPhone(v).slice(0, 15))}
                   onBlur={() => markTouched("phone")}
                   placeholder="(00) 00000-0000"
                   inputMode="tel"
                   autoComplete="tel"
                   state={vPhone}
                   showState={touched.phone}
+                  maxLength={15}
                 />
               </div>
 
@@ -379,6 +382,7 @@ function Field({
   state,
   showState,
   uppercase,
+  maxLength,
 }: {
   label: string;
   value: string;
@@ -391,6 +395,7 @@ function Field({
   state?: FieldState;
   showState?: boolean;
   uppercase?: boolean;
+  maxLength?: number;
 }) {
   const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
   const good = !!(showState && state?.valid && value);
@@ -415,6 +420,7 @@ function Field({
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
+        maxLength={maxLength}
         aria-invalid={invalid}
         autoCapitalize={uppercase ? "characters" : undefined}
         className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4 ${uppercase ? "uppercase placeholder:normal-case" : ""}`}

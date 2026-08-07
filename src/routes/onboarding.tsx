@@ -120,11 +120,12 @@ function OnboardingPage() {
           <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
             <Input
               value={fullName}
-              onChange={(e) => setFullName(e.target.value.toLocaleUpperCase("pt-BR"))}
+              onChange={(e) => setFullName(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 80))}
               placeholder="Ex.: Maria Silva"
               autoComplete="name"
               autoCapitalize="characters"
               className="uppercase placeholder:normal-case"
+              maxLength={80}
               autoFocus
             />
           </FieldRow>
@@ -132,10 +133,18 @@ function OnboardingPage() {
           <FieldRow icon={<Phone className="h-4 w-4" />} label="Celular (WhatsApp)">
             <Input
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/\D/g, "").slice(0, 11);
+                let masked = raw;
+                if (raw.length > 2) masked = `(${raw.slice(0, 2)}) ${raw.slice(2)}`;
+                if (raw.length > 7) masked = `(${raw.slice(0, 2)}) ${raw.slice(2, 7)}-${raw.slice(7)}`;
+                setPhone(masked);
+              }}
+              value={phone}
               placeholder="(68) 90000-0000"
               inputMode="tel"
               autoComplete="tel"
+              maxLength={15}
             />
           </FieldRow>
 
@@ -143,18 +152,20 @@ function OnboardingPage() {
             <FieldRow icon={<MapPin className="h-4 w-4" />} label="Cidade">
               <Input
                 value={city}
-                onChange={(e) => setCity(e.target.value.toLocaleUpperCase("pt-BR"))}
+                onChange={(e) => setCity(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 50))}
                 autoCapitalize="characters"
                 className="uppercase"
+                maxLength={50}
               />
             </FieldRow>
             <FieldRow icon={<MapPin className="h-4 w-4" />} label="Bairro">
               <Input
                 value={neighborhood}
-                onChange={(e) => setNeighborhood(e.target.value.toLocaleUpperCase("pt-BR"))}
+                onChange={(e) => setNeighborhood(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 50))}
                 placeholder="Ex.: Centro"
                 autoCapitalize="characters"
                 className="uppercase placeholder:normal-case"
+                maxLength={50}
               />
             </FieldRow>
           </div>
