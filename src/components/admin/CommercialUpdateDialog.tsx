@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sim, o alho foi identificado com sucesso nas imagens! Ele estava com o preço de R$ 34,99 (Varejo) e R$ 33,99 (Atacado). O sistema já processou essa informação para o Comercial Wanderley, junto com os outros itens extraídos.
+            Sim, o Filé de Peito (Seara 1kg) também foi identificado nas fotos com o preço de R$ 27,00. Assim como o alho (R$ 34,99), ele já foi processado e atualizado no banco de dados do Comercial Wanderley.
           </DialogDescription>
         </DialogHeader>
 
