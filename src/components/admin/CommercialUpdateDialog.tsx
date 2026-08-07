@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sim, consegui extrair os itens das imagens! Envie as fotos do comercial Wanderley e eu farei a extração automática. Caso o produto já exista, ele será ignorado; se o preço mudou, ele será atualizado. Sempre informarei a quantidade exata de itens processados.
+            Sim, eu extraio todos os produtos e preços das imagens. Os itens identificados (como Sempre Livre, Mococa, Coca-Cola, Nescau, Cereser, Seara, Alho e Ninho) são processados automaticamente: novos são cadastrados, preços alterados são atualizados e duplicatas são ignoradas.
           </DialogDescription>
         </DialogHeader>
 
