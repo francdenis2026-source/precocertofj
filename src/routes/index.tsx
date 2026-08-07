@@ -368,7 +368,7 @@ function HomePage() {
 
         {/* CTA Section */}
         <section className="max-w-7xl mx-auto px-4 pb-32">
-          <div className="pc-card p-12 bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border-[var(--brand-primary)]/20 relative overflow-hidden text-center">
+          <div className="pc-card p-12 bg-gradient-to-br from-white to-[var(--bg-surface-elevated)] border-[var(--brand-primary)]/10 relative overflow-hidden text-center">
             <div className="absolute top-0 right-0 p-8 opacity-5">
               <Scale className="h-40 w-40 rotate-12" />
             </div>
