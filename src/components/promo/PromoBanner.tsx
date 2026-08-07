@@ -38,7 +38,7 @@ export function PromoBanner() {
         <div className="relative z-10 shrink-0 w-full md:w-auto">
           <Button 
             onClick={() => setModalOpen(true)}
-            className="group/btn relative w-full md:w-auto h-14 px-8 rounded-xl bg-[var(--brand-primary)] text-black font-black uppercase tracking-[0.2em] text-[11px] overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_10px_40px_-10px_var(--brand-primary)] active:scale-95"
+            className="group/btn relative w-full h-10 px-6 rounded-lg bg-[var(--brand-primary)] text-white font-black uppercase tracking-[0.2em] text-[9px] overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-95"
           >
             <span className="relative z-10 flex items-center justify-center gap-3">
               <Sparkles className="h-4 w-4 animate-pulse" />
