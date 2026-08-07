@@ -12,6 +12,9 @@ import {
   ClipboardList,
   Eraser,
 } from "lucide-react";
+import { CommercialUpdateDialog } from "@/components/admin/CommercialUpdateDialog";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin_/operacao")({
   ssr: false,
@@ -131,14 +134,26 @@ const SECTIONS: HubSection[] = [
 ];
 
 function OperacaoHubPage() {
+  const [openCommercial, setOpenCommercial] = useState(false);
+
   return (
-    <AdminHubLauncher
-      eyebrow="Hub · Operação"
-      title="Sistema & Operação"
-      description="Configuração da plataforma isolada do dia-a-dia: comercial, integrações, plataforma e auditoria administrativa."
-      tone="system"
-      sections={SECTIONS}
-      headerCta={{ label: "← Dashboard admin", to: "/admin" }}
-    />
+    <>
+      <AdminHubLauncher
+        eyebrow="Hub · Operação"
+        title="Sistema & Operação"
+        description="Configuração da plataforma isolada do dia-a-dia: comercial, integrações, plataforma e auditoria administrativa."
+        tone="system"
+        sections={SECTIONS}
+        headerCta={{ label: "← Dashboard admin", to: "/admin" }}
+        onCommercialUpdate={() => setOpenCommercial(true)}
+      />
+
+      <CommercialUpdateDialog
+        open={openCommercial}
+        onOpenChange={setOpenCommercial}
+        establishmentId="7a552250-8b1e-4b7b-8451-84062a42588e" // Exemplo: Varejão Contamigos
+        establishmentName="Varejão Contamigos"
+      />
+    </>
   );
 }
