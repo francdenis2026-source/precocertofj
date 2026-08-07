@@ -38,8 +38,9 @@ function SearchResultsPage() {
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
     queryFn: () => runSearch({ data: { query: q || "" } }),
-    enabled: !!q && q.length >= 2,
+    enabled: !!q && q.length >= 1,
   });
+
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050B14]">
