@@ -189,12 +189,12 @@ function SearchPage() {
                        <button className="h-10 px-4 rounded-xl border border-[#E5E7EB] text-sm font-bold hover:bg-[#F9FAFB] transition-all flex items-center gap-2">
                          <Star className="h-4 w-4" /> Favoritar
                        </button>
-                        <Link 
-                          to="/loja/$id" 
-                          params={{ id: activeMarket.id }}
-                          search={{}}
-                         className="h-10 px-6 rounded-xl bg-[#2563EB] text-white text-sm font-bold hover:bg-[#1D4ED8] transition-all flex items-center gap-2 shadow-lg shadow-[#2563EB]/20"
-                       >
+                         <Link 
+                           to="/loja/$id" 
+                           params={{ id: activeMarket.id }}
+                           search={{ q: "", from: "" }}
+                          className="h-10 px-6 rounded-xl bg-[#2563EB] text-white text-sm font-bold hover:bg-[#1D4ED8] transition-all flex items-center gap-2 shadow-lg shadow-[#2563EB]/20"
+                        >
                          Ver Mercado <ChevronRight className="h-4 w-4" />
                        </Link>
                      </div>
