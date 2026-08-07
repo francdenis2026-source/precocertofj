@@ -65,13 +65,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, color: "#D4AF37" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, color: "#0B1E3A" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, color: "#1E293B" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, color: "#D4AF37" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, color: "#0B1E3A" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, color: "#1E293B" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, color: "#D4AF37" },
+  { slug: "supermercados", label: "Mercados", Icon: Store },
+  { slug: "padarias", label: "Padarias", Icon: Coffee },
+  { slug: "acougues", label: "Açougues", Icon: Utensils },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets },
+  { slug: "higiene", label: "Higiene", Icon: Smile },
 ];
 
 function formatDate(iso: string): string {
