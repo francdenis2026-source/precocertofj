@@ -33,22 +33,8 @@ export function SearchResultsList() {
   return (
     <div className="space-y-8">
        <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
-          <div className="flex items-center gap-8">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Melhor Preço</span>
-              <Price value={result.min} size="md" tone="best" className="font-bold" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Economia</span>
-              <Price value={(result.max ?? 0) - (result.min ?? 0)} size="md" tone="savings" className="font-bold" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Ofertados</span>
-              <span className="text-lg font-bold leading-none">{result.samples}</span>
-            </div>
-          </div>
           <div className="flex items-center gap-3">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Ordenar por:</label>
+            <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Ordenar por:</label>
             <select className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[var(--brand-primary)]/20 outline-none cursor-pointer text-[var(--text-primary)]">
               <option>Menor Preço</option>
               <option>Maior Preço</option>

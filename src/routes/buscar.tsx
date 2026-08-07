@@ -68,23 +68,25 @@ function SearchResultsPage() {
               </div>
             ) : (
             <>
-            {/* Show Hero only if there's a result and a query */}
-            {q && result && result.groups.length > 0 && (
-              <SearchHeroSection query={q} />
-            )}
+              {/* Show Hero and Stats Dashboard only if there's a result and a query */}
+              {q && result && result.groups.length > 0 && (
+                <div className="space-y-6">
+                  <SearchHeroSection query={q} />
+                  <SearchDashboard />
+                </div>
+              )}
 
-            {/* If no query or no results, show a centered search state or message */}
-            {!q ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                 <h2 className="text-2xl font-black text-foreground mb-2">O que você procura hoje?</h2>
-                 <p className="text-muted-foreground max-w-md">Busque por produtos específicos para encontrar o menor preço nos mercados de Feijó.</p>
-              </div>
-            ) : result && result.groups.length > 0 ? (
-              <>
-                
-                <SearchResultsList />
-              </>
-            ) : (
+              {/* If no query or no results, show a centered search state or message */}
+              {!q ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                   <h2 className="text-2xl font-black text-foreground mb-2">O que você procura hoje?</h2>
+                   <p className="text-muted-foreground max-w-md">Busque por produtos específicos para encontrar o menor preço nos mercados de Feijó.</p>
+                </div>
+              ) : result && result.groups.length > 0 ? (
+                <div className="space-y-8 pt-4">
+                  <SearchResultsList />
+                </div>
+              ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                  <p className="text-lg font-bold text-foreground">Nenhum resultado encontrado para "{q}"</p>
                  <p className="text-muted-foreground">Tente buscar por um termo diferente ou confira as sugestões ao lado.</p>

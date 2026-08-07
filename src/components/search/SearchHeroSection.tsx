@@ -30,7 +30,7 @@ export function SearchHeroSection({ query }: { query: string }) {
                 <Badge variant="primary" size="sm" className="bg-primary/20 text-white border-none uppercase tracking-widest font-black px-3 py-0.5 rounded-full">
                   MELHOR RESULTADO
                 </Badge>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-white/60 flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/80 flex items-center gap-1.5">
                   <Clock className="h-3 w-3" /> HOJE
                 </span>
              </div>
