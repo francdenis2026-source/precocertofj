@@ -225,66 +225,85 @@ export function SideBySideComparison({
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
   return (
-    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px]">
+    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/80 backdrop-blur-3xl max-h-[90vh] flex flex-col rounded-[32px] relative">
+      {/* Dynamic Background SVG Pattern */}
+      <div className="absolute inset-0 -z-10 opacity-[0.03] pointer-events-none overflow-hidden">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
       {/* Header */}
-      <div className="border-b border-border/40 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 p-8 shrink-0">
+      <div className="border-b border-border/40 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 p-6 md:p-8 shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1">
-            <div className="flex items-center gap-3 text-primary">
-              <div className="h-10 w-10 rounded-xl bg-primary/20 flex items-center justify-center">
+            <motion.div 
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="flex items-center gap-3 text-primary"
+            >
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shadow-inner">
                 <Scale className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-2xl font-black tracking-tight uppercase leading-none">
+                <h3 className="text-xl md:text-2xl font-black tracking-tight uppercase leading-none">
                   {isShared ? "Comparativo Compartilhado" : "Comparador de Elite"}
                 </h3>
-                <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1">
+                <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
                   Inteligência de Mercado em Tempo Real
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
           
-          <div className="flex items-center gap-3 flex-wrap justify-end">
+          <div className="flex items-center gap-2 flex-wrap justify-end">
             {!isShared && (
-              <>
-                <Button 
-                  onClick={() => handleSave(false)}
-                  disabled={isSaving}
-                  variant="outline"
-                  className="rounded-xl px-6 h-11 border-border/40 bg-surface/50 hover:bg-primary/10 hover:border-primary/40 transition-all font-bold text-xs"
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  SALVAR
-                </Button>
-                <Button 
-                  onClick={() => handleSave(true)}
-                  disabled={isSaving}
-                  className="pc-button-primary h-11 px-6 rounded-xl shadow-lg shadow-primary/20"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  COMPARTILHAR
-                </Button>
-              </>
+              <div className="flex items-center gap-2 mr-2 border-r border-border/40 pr-4">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    onClick={() => handleSave(false)}
+                    disabled={isSaving}
+                    variant="ghost"
+                    className="rounded-xl h-10 border-border/40 hover:bg-primary/5 transition-all font-bold text-[10px] tracking-widest uppercase"
+                  >
+                    <Save className="h-3.5 w-3.5 mr-2" />
+                    SALVAR
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    onClick={() => handleSave(true)}
+                    disabled={isSaving}
+                    className="pc-button-primary h-10 px-6 rounded-xl shadow-lg shadow-primary/20 text-[10px] tracking-widest uppercase"
+                  >
+                    <Share2 className="h-3.5 w-3.5 mr-2" />
+                    COMPARTILHAR
+                  </Button>
+                </motion.div>
+              </div>
             )}
-            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1.5 border border-border/10">
+            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1 border border-border/10">
               <button 
                 onClick={handleExportCSV}
-                title="Exportar CSV"
                 className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <Download className="h-4 w-4" />
               </button>
               <button 
                 onClick={handleExportPDF}
-                title="Exportar PDF"
                 className="p-2 hover:bg-background rounded-lg transition-all text-muted-foreground hover:text-primary"
               >
                 <FileText className="h-4 w-4" />
               </button>
             </div>
             {onClose && (
-              <button onClick={onClose} className="rounded-full p-2.5 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
+              <button onClick={onClose} className="rounded-full p-2 hover:bg-danger/10 text-muted-foreground hover:text-danger transition-all ml-2">
                 <XCircle className="h-5 w-5" />
               </button>
             )}
