@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Décimo terceiro lote do Comercial Vanderley processado: Margarinas Delicata, Doriana e Cremosy (R$ 5,00 a R$ 12,75), Suco Teen Mais sabores (R$ 5,99 a R$ 6,50) e refresco Clik (R$ 6,50). Todos os dados foram atualizados!
+            Atualmente, o Comercial Vanderley possui 207 produtos cadastrados no sistema. Hoje, realizamos o processamento de diversos lotes de imagens, incluindo itens como margarinas Delicata/Doriana/Cremosy e sucos Teen/Clik, garantindo que todas as ofertas visualizadas fossem atualizadas ou inseridas no catálogo. Embora os registros históricos mostrem 207 itens totais, as extrações de hoje foram consolidadas para manter os preços sempre precisos.
           </DialogDescription>
         </DialogHeader>
 
