@@ -194,6 +194,7 @@ async function runPriceSearch(data: {
         effectiveTokens,
         r.brand,
         data.query,
+        r.category
       );
       return {
         id: r.id,
@@ -423,6 +424,7 @@ async function runPriceSearch(data: {
         effectiveFilterTokens,
         null,
         didYouMean ?? data.query,
+        data.category
       );
       return {
         catalogId: catalogIdByName.get(normalize(g.display)) ?? null,

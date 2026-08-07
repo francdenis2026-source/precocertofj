@@ -8,7 +8,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 import {
   Award, MapPin, Settings, LogOut, Sparkles, Heart,
   Hash, Loader2, Check, User, Phone, ShoppingBag, Trash2, ExternalLink, Camera,
-  Download, Database
+  Download, Database, BarChart3, TrendingUp, Store, ChevronRight
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +25,8 @@ import { maskCpf, maskPhone, maskCep, stripCpf, isValidCpf } from "@/lib/cpf";
 import { toast } from "sonner";
 import { downloadFullDatabase } from "@/lib/database-export.functions";
 import { organizeAllProducts } from "@/lib/catalog-organization.functions";
+import { getAdminMetrics } from "@/lib/admin-metrics.functions";
+import { getPendingClassification, updateProductClassification } from "@/lib/catalog-review.functions";
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -338,7 +340,7 @@ function Perfil() {
                     : "carregando"
                 }
               />
-              <AdminExportPanel />
+              <AdminPanel />
 
             </div>
 
@@ -808,8 +810,168 @@ function MyStoreQuotesPanel() {
 }
 
 function AdminExportPanel() {
+  // Removido - agora faz parte do AdminPanel
+  return null;
+}
+
+function AdminMetricsPanel() {
+  const fetchMetrics = useServerFn(getAdminMetrics);
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-metrics'],
+    queryFn: () => fetchMetrics(),
+    refetchInterval: 300000 // 5 min
+  });
+
+  if (isLoading || !data) return (
+    <div className="animate-pulse rounded-2xl border border-border bg-card p-4 space-y-4">
+      <div className="h-4 w-32 bg-muted rounded" />
+      <div className="grid grid-cols-2 gap-2">
+        <div className="h-16 bg-muted rounded-xl" />
+        <div className="h-16 bg-muted rounded-xl" />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="rounded-2xl border border-border bg-card overflow-hidden">
+      <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
+        <h3 className="font-display text-sm font-semibold flex items-center gap-2 text-foreground">
+          <BarChart3 className="h-4 w-4 text-primary" /> Métricas do Ecossistema
+        </h3>
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Live</span>
+      </div>
+      
+      <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3 rounded-xl bg-background border border-border">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Produtos</p>
+          <p className="text-xl font-mono font-medium mt-1">{data.totalProducts}</p>
+        </div>
+        <div className="p-3 rounded-xl bg-background border border-border">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Lojas</p>
+          <p className="text-xl font-mono font-medium mt-1">{data.establishments.length}</p>
+        </div>
+        <div className="p-3 rounded-xl bg-background border border-border">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Categorias</p>
+          <p className="text-xl font-mono font-medium mt-1">{data.categories.length}</p>
+        </div>
+        <div className="p-3 rounded-xl bg-background border border-border">
+          <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Status</p>
+          <p className="text-xs font-bold text-savings mt-2 flex items-center gap-1">
+            <TrendingUp className="h-3 w-3" /> OTIMIZADO
+          </p>
+        </div>
+      </div>
+
+      <div className="px-4 pb-4">
+        <div className="text-[11px] font-bold text-muted-foreground mb-2 flex items-center gap-1 uppercase">
+          <Store className="h-3 w-3" /> Inventário por Loja
+        </div>
+        <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+          {data.establishments.slice(0, 10).map(e => (
+            <div key={e.id} className="flex items-center justify-between text-xs py-1.5 border-b border-border/50 last:border-0">
+              <span className="truncate max-w-[150px] font-medium">{e.name}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-muted-foreground">{e.productCount} itens</span>
+                <span className="w-16 h-1 bg-muted rounded-full overflow-hidden">
+                   <div 
+                    className="h-full bg-primary" 
+                    style={{ width: `${Math.min(100, (e.productCount / data.totalProducts) * 500)}%` }} 
+                  />
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CatalogReviewPanel() {
+  const fetchPending = useServerFn(getPendingClassification);
+  const updateClass = useServerFn(updateProductClassification);
+  const qc = useQueryClient();
+  
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['pending-catalog'],
+    queryFn: () => fetchPending(),
+  });
+
+  const [reviewingId, setReviewingId] = useState<string | null>(null);
+
+  const categories = ['Mercearia', 'Açougue', 'Bebidas', 'Limpeza', 'Higiene', 'Hortifruti', 'Padaria', 'Laticínios', 'Infantil', 'Farmácia', 'Outros'];
+
+  async function handleUpdate(productId: string, category: string) {
+    try {
+      await updateClass({ data: { productId, category } });
+      toast.success("Classificação atualizada!");
+      qc.invalidateQueries({ queryKey: ['pending-catalog'] });
+      qc.invalidateQueries({ queryKey: ['admin-metrics'] });
+    } catch (e) {
+      toast.error("Erro ao salvar classificação");
+    }
+  }
+
+  if (isLoading || !data || data.length === 0) return null;
+
+  return (
+    <div className="rounded-2xl border border-border bg-card">
+      <div className="p-4 border-b border-border bg-amber-50/50 dark:bg-amber-950/10 flex items-center justify-between">
+        <h3 className="font-display text-sm font-semibold flex items-center gap-2 text-amber-700 dark:text-amber-500">
+          <Sparkles className="h-4 w-4" /> Revisão de IA do Catálogo
+        </h3>
+        <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-500 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+          {data.length} Pendentes
+        </span>
+      </div>
+      
+      <div className="divide-y divide-border">
+        {data.slice(0, 3).map(p => (
+          <div key={p.id} className="p-4 flex flex-col gap-3">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-sm font-medium truncate">{p.display_name}</p>
+                <p className="text-[11px] text-muted-foreground italic">Sugestão: {p.category || 'Não definida'}</p>
+              </div>
+              <button 
+                onClick={() => setReviewingId(reviewingId === p.id ? null : p.id)}
+                className="text-[11px] font-bold text-primary hover:underline flex items-center"
+              >
+                Corrigir <ChevronRight className={`h-3 w-3 transition-transform ${reviewingId === p.id ? 'rotate-90' : ''}`} />
+              </button>
+            </div>
+            
+            {reviewingId === p.id && (
+              <div className="flex flex-wrap gap-1.5 animate-in slide-in-from-top-1 duration-200">
+                {categories.map(c => (
+                  <button
+                    key={c}
+                    onClick={() => handleUpdate(p.id, c)}
+                    className="text-[10px] px-2 py-1 rounded-md border border-border hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="p-3 bg-muted/20 text-center">
+         <button onClick={() => refetch()} className="text-[11px] font-medium text-muted-foreground hover:text-foreground">
+           Carregar mais sugestões
+         </button>
+      </div>
+    </div>
+  );
+}
+
+function AdminPanel() {
   const exportFn = useServerFn(downloadFullDatabase);
+  const organizeFn = useServerFn(organizeAllProducts);
   const [loading, setLoading] = useState(false);
+  const [organizing, setOrganizing] = useState(false);
+
   const { data: roleData } = useQuery({
     queryKey: ['my-roles'],
     queryFn: async () => {
@@ -843,9 +1005,6 @@ function AdminExportPanel() {
     }
   }
 
-  const organizeFn = useServerFn(organizeAllProducts);
-  const [organizing, setOrganizing] = useState(false);
-
   async function handleOrganize() {
     setOrganizing(true);
     try {
@@ -860,13 +1019,15 @@ function AdminExportPanel() {
 
   return (
     <div className="col-span-3 mt-2 flex flex-col gap-3">
+      <AdminMetricsPanel />
+      <CatalogReviewPanel />
       <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between">
         <div>
           <h3 className="font-display text-sm font-semibold flex items-center gap-2 text-primary">
-            <Database className="h-4 w-4" /> Painel de Administração
+            <Database className="h-4 w-4" /> Exportação e Organização
           </h3>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            Gerencie o banco de dados e as categorias globais do sistema.
+            Gerencie o banco de dados e as categorias globais.
           </p>
         </div>
         <div className="flex gap-2">
@@ -876,7 +1037,7 @@ function AdminExportPanel() {
             className="flex items-center gap-2 bg-[oklch(0.36_0.11_255)] text-white px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
             {organizing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
-            Padronizar Categorias
+            Organizar
           </button>
           <button
             onClick={handleExport}
@@ -884,7 +1045,7 @@ function AdminExportPanel() {
             className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
-            Exportar DB
+            Exportar
           </button>
         </div>
       </div>
