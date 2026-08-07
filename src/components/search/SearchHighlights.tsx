@@ -168,19 +168,19 @@ export function SearchHighlights({ onPickQuery }: Props) {
   const asCards = effectiveView !== "cobertura";
 
   const title = isPersonal
-    ? "Destaques para você"
+    ? "Highlights for you"
     : isEconomia
       ? "Onde a diferença de preço é maior"
-      : "Mais comparados nos mercados";
+      : "Most compared in markets";
   const subtitle = isPersonal
-    ? "Baseado no que você mais pesquisa e nos itens que salvou."
+    ? "Based on what you search most and the items you've saved."
     : isEconomia
       ? "Mesmo produto, mercados diferentes — quanto dá para economizar hoje."
-      : "Itens presentes em vários mercados parceiros — clique para comparar.";
+      : "Items available in several partner markets — click to compare.";
 
   return (
     <section
-      aria-label="Destaques da busca"
+      aria-label="Search highlights"
       className="relative border-t border-border/60 pt-5"
     >
       <div
@@ -211,7 +211,7 @@ export function SearchHighlights({ onPickQuery }: Props) {
         </div>
 
         <QuickFilterBar<View>
-          ariaLabel="Tipo de destaque"
+          ariaLabel="Highlight type"
           value={effectiveView}
           size="sm"
           onChange={(next) => {
@@ -223,20 +223,20 @@ export function SearchHighlights({ onPickQuery }: Props) {
               ? [
                   {
                     value: "para-voce" as View,
-                    label: "Para você",
-                    hint: "Categorias que você mais pesquisa e itens salvos",
+                    label: "For you",
+                    hint: "Categories you search most and saved items",
                   },
                 ]
               : []),
             {
               value: "economia" as View,
-              label: "Economias",
-              hint: "Maior diferença de preço entre mercados",
+              label: "Savings",
+              hint: "Biggest price difference between markets",
             },
             {
               value: "cobertura" as View,
-              label: "Maior cobertura",
-              hint: "Produtos presentes em mais mercados",
+              label: "Widest coverage",
+              hint: "Products available in more markets",
             },
           ]}
         />
@@ -245,11 +245,11 @@ export function SearchHighlights({ onPickQuery }: Props) {
       {categories.length > 1 && (
         <div
           role="group"
-          aria-label="Filtrar destaques por categoria"
+          aria-label="Filter highlights by category"
           className="-mx-1 mt-2.5 flex snap-x gap-1.5 overflow-x-auto px-1 pb-1"
         >
           <CategoryChip
-            label="Todas"
+            label="All"
             active={!activeCategory}
             onClick={() => setCategory("")}
           />
@@ -317,11 +317,11 @@ function EmptyHighlights({
     >
       <p className="text-[13.5px] font-medium tracking-tight text-foreground">
         {categoryLabel
-          ? `Ainda não há destaques em ${categoryLabel}.`
-          : "Ainda não há destaques por aqui."}
+          ? `No highlights in ${categoryLabel} yet.`
+          : "No highlights here yet."}
       </p>
       <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
-        Busque um item específico ou ajude cadastrando um preço que você viu no mercado.
+        Search for a specific item or help out by registering a price you saw at the market.
       </p>
 
       <form
@@ -333,7 +333,7 @@ function EmptyHighlights({
         }}
       >
         <label className="sr-only" htmlFor="empty-highlight-search">
-          Buscar um item específico
+          Search for a specific item
         </label>
         <div className="relative min-w-0 flex-1">
           <Search
@@ -344,7 +344,7 @@ function EmptyHighlights({
             id="empty-highlight-search"
             value={term}
             onChange={(e) => setTerm(e.target.value)}
-            placeholder="Ex.: arroz 5kg"
+            placeholder="E.g.: rice 5kg"
             className="h-8 w-full rounded-full border border-border bg-background pl-8 pr-3 text-[13px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           />
         </div>
@@ -352,7 +352,7 @@ function EmptyHighlights({
           type="submit"
           className="inline-flex h-8 shrink-0 items-center rounded-full bg-brand-gold px-3 text-[13px] font-semibold text-brand-navy transition-colors hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          Buscar
+          Search
         </button>
       </form>
 
@@ -363,7 +363,7 @@ function EmptyHighlights({
             onClick={onClearCategory}
             className="inline-flex h-7 items-center rounded-full border border-border px-2.5 text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
           >
-            Ver todas as categorias
+            View all categories
           </button>
         )}
         <Link
@@ -371,7 +371,7 @@ function EmptyHighlights({
           className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[13px] font-semibold text-gold-ink-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-gold-ink"
         >
           <PlusCircle aria-hidden className="h-3.5 w-3.5" />
-          Cadastrar um preço
+          Register a price
         </Link>
       </div>
     </div>
@@ -432,7 +432,7 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
           size="sm"
           prefix="−R$"
           className="inline-flex shrink-0 items-center rounded-full bg-brand-gold px-1.5 py-0.5 text-brand-navy"
-          srLabel={`Economia de ${brl(item.savings)}`}
+          srLabel={`Savings of ${brl(item.savings)}`}
         />
       </span>
 
@@ -452,7 +452,7 @@ function CoveredRow({ item, onPick }: { item: HighlightItem; onPick: () => void 
           {item.name}
         </span>
         <span className="block truncate text-[12.5px] text-muted-foreground">
-          em {item.storeCount} mercados · a partir de{" "}
+          in {item.storeCount} markets · from{" "}
           <Price value={item.minPrice} size="xs" tone="muted" />
         </span>
       </span>
