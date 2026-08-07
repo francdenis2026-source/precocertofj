@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Oitavo lote do Comercial Vanderley processado: Cerveja Amstel (R$ 40,00), Cafés Rio Acre, Serena e Dugomes (R$ 13,50 - R$ 16,00), Cerveja Crystal Beer (R$ 32,00), Maçã KG (R$ 15,99), Mucilon e Nutribom (R$ 8,00 - R$ 28,00), Nescafé Tradição (R$ 24,00), Sopão Maggi (R$ 10,00), Vinho Galitos (R$ 29,00), Sobrecoxa Sadia (R$ 18,99) e Creme Dental Colgate (R$ 8,00 - R$ 9,00). Todos os itens foram atualizados!
+            Nono lote do Comercial Vanderley processado: Cervejas Heineken e Michelob Ultra (R$ 7,00), Inseticida Pro Inset (R$ 12,00), Refrigerantes Cristal (R$ 5,00 a R$ 7,00), Batata KG (R$ 13,99), Kits Pantene e Vult (R$ 20,00 a R$ 45,00), Coca-Cola 350ml (R$ 4,50), Bebida Láctea Real (R$ 5,00), Leite em Pó Italac (R$ 15,99) e Salgadinhos Jumbitos e Kro (R$ 4,50 a R$ 6,00). Todos os itens foram atualizados!
           </DialogDescription>
         </DialogHeader>
 
