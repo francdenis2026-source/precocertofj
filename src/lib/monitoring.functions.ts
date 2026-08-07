@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
   .handler(async () => {
-    const { data: stores } = await supabase.from('establishments').select('id, name');
+    const { data: stores } = await supabase.from('establishments').select('id, name, logo_url');
     
     // Simulate real-time variation on top of real stores
     const monitoringData = (stores || []).map(store => {
@@ -14,6 +14,7 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       return {
         storeId: store.id,
         storeName: store.name,
+        storeLogoUrl: store.logo_url,
         status: random(0) > 0.05 ? 'online' : 'offline',
         activeSensors: Math.floor(random(1) * 10) + 5,
         lastSync: new Date().toISOString(),
