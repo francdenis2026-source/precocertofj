@@ -71,10 +71,10 @@ export function CommercialUpdateDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-amber-500" />
-            Atualização Comercial - {establishmentName}
+            Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Envie as imagens enviadas pelo comercial (Vanderley) para extração automática de preços.
+            Envie as imagens enviadas pelo comercial Wanderley para extração automática de preços. Extraia as informaçoes dos produtos e cadastra no comercial wanderley, caso ja exita desconsidere, se tiver mudado preços, atualiza.
           </DialogDescription>
         </DialogHeader>
 

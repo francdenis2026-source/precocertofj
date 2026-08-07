@@ -151,8 +151,8 @@ function OperacaoHubPage() {
       <CommercialUpdateDialog
         open={openCommercial}
         onOpenChange={setOpenCommercial}
-        establishmentId="7a552250-8b1e-4b7b-8451-84062a42588e" // Exemplo: Varejão Contamigos
-        establishmentName="Varejão Contamigos"
+        establishmentId="555544d3-d211-4125-8bdb-70351e768b63"
+        establishmentName="Comercial Vanderley"
       />
     </>
   );
