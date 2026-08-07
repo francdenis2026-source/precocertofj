@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Décimo primeiro lote do Comercial Vanderley processado: Leite Moça Integral e Mistura Láctea Mococa (R$ 4,75 a R$ 8,00), Sobrecoxa Sadia 1kg (R$ 18,99), Corote e Skarloff Ice (R$ 7,00 a R$ 7,50), Mingau Nutribom (R$ 6,00), Tomate KG (R$ 13,99), Ovos Brancos 30un (R$ 25,00), Incenso Super Wierook (R$ 10,00) e Cremes Dentais Colgate (R$ 11,00 a R$ 14,00). Preços atualizados no sistema!
+            Décimo segundo lote do Comercial Vanderley processado: Toscana Suína (R$ 23,99), Sabonetes Francis (R$ 2,75), Cerveja Heineken 269ml (R$ 5,00), Desodorantes Monange e Above (R$ 12,00), Amaciante Brisa 500ml (R$ 4,50), Cafés Saboroso do Vovô, Vovô Pureza e 3 Corações (R$ 14,00 a R$ 20,00), Balas Freegells (R$ 12,75), Refrigerante Tuchaua Champ 2L (R$ 7,50) e Sabonetes Líquidos Labotrat e Kerabrasil (R$ 14,00 a R$ 22,00). Todos os dados foram atualizados!
           </DialogDescription>
         </DialogHeader>
 
