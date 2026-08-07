@@ -10,9 +10,11 @@ export function SearchResultsList() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-[400px] w-full rounded-3xl" />
+          <div key={i} className="h-32 w-full rounded-2xl bg-muted/20 animate-pulse overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+          </div>
         ))}
       </div>
     );
@@ -28,18 +30,19 @@ export function SearchResultsList() {
   }
 
   return (
-    <div className="space-y-10">
-       <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-black tracking-tight text-foreground">
-              Resultados
+    <div className="space-y-8">
+       <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
+          <div className="space-y-0.5">
+            <h2 className="text-lg font-bold tracking-tight text-[var(--text-primary)]">
+              Ofertas / Outras Lojas
             </h2>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-              {result.samples} ofertas em tempo real
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">
+              {result.samples} resultados encontrados em Feijó
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <select className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer">
+          <div className="flex items-center gap-3">
+            <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Ordenar por:</label>
+            <select className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-lg px-3 py-1.5 text-xs font-bold focus:ring-1 focus:ring-[var(--brand-primary)]/20 outline-none cursor-pointer text-[var(--text-primary)]">
               <option>Menor Preço</option>
               <option>Maior Preço</option>
               <option>Mais Relevante</option>
@@ -47,7 +50,7 @@ export function SearchResultsList() {
           </div>
        </div>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence mode="popLayout">
             {result.groups.map((group, i) => (
               <motion.div
