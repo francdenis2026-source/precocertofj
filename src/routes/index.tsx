@@ -154,6 +154,8 @@ function HomePage() {
     return list.slice(0, 4);
   }, [rawRecentProducts, sort]);
 
+  const categories = CATEGORIES; // Alias for mapping in JSX
+
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 overflow-x-hidden">
       <SiteHeader variant="overlay" />
