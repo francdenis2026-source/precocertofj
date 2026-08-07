@@ -50,7 +50,7 @@ export function RealtimeMonitoringDashboard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-emerald-500/20">
-            <Zap className="h-3 w-3 text-emerald-500 animate-pulse" />
+            <Zap className="h-3 w-3 text-emerald-500 animate-pulse-slow" />
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Painel Vivo</span>
