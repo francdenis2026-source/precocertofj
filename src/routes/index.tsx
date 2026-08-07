@@ -21,7 +21,8 @@ import {
   ArrowDownWideNarrow,
   Clock,
   MapPin,
-  Sparkles
+  Sparkles,
+  Scale
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -184,8 +185,28 @@ function HomePage() {
               Monitoramos os mercados de Feijó em tempo real para você pagar sempre o menor preço em cada item da sua lista.
             </p>
 
-            <div className="w-full max-w-2xl mx-auto mb-12">
+            <div className="w-full max-w-2xl mx-auto mb-10">
               <SmartSearchBar onFocusChange={setIsSearchFocused} />
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              <Button 
+                onClick={() => navigate({ to: "/comparador" })}
+                className="h-12 px-8 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md font-black uppercase tracking-wider text-[11px]"
+              >
+                <Scale className="mr-2 h-4 w-4 text-[var(--brand-primary)]" />
+                Comparar Produtos
+              </Button>
+              <Button 
+                onClick={() => {
+                  const el = document.getElementById('baskets-section');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                variant="ghost"
+                className="h-12 px-8 rounded-xl text-white/70 hover:text-white hover:bg-white/5 font-black uppercase tracking-wider text-[11px]"
+              >
+                Melhores Cestas
+              </Button>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
@@ -231,7 +252,7 @@ function HomePage() {
         </section>
 
         {/* Shopping Optimization */}
-        <section className="max-w-7xl mx-auto px-4 mb-24">
+        <section id="baskets-section" className="max-w-7xl mx-auto px-4 mb-24">
           <OptimizedBasketSection />
         </section>
 
@@ -305,10 +326,38 @@ function HomePage() {
 
         {/* Registered Stores */}
         <section className="max-w-7xl mx-auto px-4 pb-24">
-           <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--text-tertiary)] mb-8">
-             Nossa rede de colaboração
-           </h2>
+           <div className="flex items-center justify-between mb-8">
+             <h2 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--text-tertiary)]">
+               Nossa rede de colaboração
+             </h2>
+             <Link to="/estabelecimentos" className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)] hover:underline">
+               Ver todos os mercados
+             </Link>
+           </div>
            <RegisteredStoresCarousel />
+        </section>
+
+        {/* CTA Section */}
+        <section className="max-w-7xl mx-auto px-4 pb-32">
+          <div className="pc-card p-12 bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border-[var(--brand-primary)]/20 relative overflow-hidden text-center">
+            <div className="absolute top-0 right-0 p-8 opacity-5">
+              <Scale className="h-40 w-40 rotate-12" />
+            </div>
+            
+            <h2 className="text-3xl font-black mb-4">Economia Profissional</h2>
+            <p className="text-[var(--text-secondary)] max-w-2xl mx-auto mb-8 font-medium">
+              Use nossa ferramenta avançada de comparação para analisar preços em tempo real, identificar indisponibilidades e encontrar o melhor custo total para sua compra.
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button 
+                onClick={() => navigate({ to: "/comparador" })}
+                className="h-14 px-10 rounded-2xl bg-[var(--brand-primary)] text-black font-black uppercase tracking-widest text-[12px] hover:brightness-110 shadow-xl shadow-[var(--brand-primary)]/20"
+              >
+                Acessar Comparador de Preços
+              </Button>
+            </div>
+          </div>
         </section>
       </main>
 
