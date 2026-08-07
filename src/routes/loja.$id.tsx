@@ -396,9 +396,10 @@ function ProductCard({ p, storeId, allItems }: { p: PublicStoreProduct; storeId:
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <Link 
-        to="/loja/$id/produto/$slug" 
-        params={{ id: storeId, slug: p.slug }}
+    <Link 
+      to="/loja/$id/produto/$slug" 
+      params={{ id: storeId, slug: p.slug }}
+      search={{ q: "", from: "" }}
         className="group flex flex-col h-full bg-white rounded-3xl border border-gray-100 hover:border-blue-200 overflow-hidden hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 active:scale-[0.98]"
       >
         <div className="relative aspect-square bg-white flex items-center justify-center p-6 sm:p-8">

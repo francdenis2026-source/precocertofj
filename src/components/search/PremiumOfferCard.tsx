@@ -1,6 +1,5 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Badge } from "@/components/ds/Badge";
 import { ProductImage } from "@/components/ds/ProductImage";
 import { Clock, Store, TrendingDown, ArrowRight, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
@@ -19,11 +18,11 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
     >
       <Link 
         to="/loja/$id/produto/$slug" 
-        params={{ id: bestPrice.marketId || storeId, slug: group.productName.toLowerCase().replace(/\s+/g, '-') }}
+        params={{ id: bestPrice.establishmentId || storeId, slug: group.productName.toLowerCase().replace(/\s+/g, '-') }}
+        search={{ q: "", from: "" }}
         className="group flex flex-col h-full bg-white rounded-3xl border border-gray-100 hover:border-blue-200 overflow-hidden hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 active:scale-[0.98]"
       >
         <div className="relative aspect-square bg-white flex items-center justify-center p-6 sm:p-8">
-          {/* Background decoration */}
           <div className="absolute inset-0 bg-gray-50/50 scale-90 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           
           <ProductImage 
