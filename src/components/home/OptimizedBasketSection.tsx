@@ -31,7 +31,7 @@ export function OptimizedBasketSection() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[300px] w-full rounded-[var(--radius-xl)] bg-slate-100" />
+          <Skeleton key={i} className="h-[300px] w-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)]" />
         ))}
       </div>
     );
@@ -135,7 +135,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
             <Price value={basket.total} size="md" className="font-black" />
           </div>
           
-          <Button asChild size="icon" className="h-8 w-8 rounded-lg bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-lg shadow-[var(--brand-primary)]/20">
+          <Button asChild size="icon" className="h-8 w-8 rounded-lg bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-[var(--text-on-brand)] shadow-lg shadow-[var(--brand-primary)]/20">
             <Link to="/cesta-basica" search={{ mode: 'compare' }}>
               <ArrowRight className="h-4 w-4" />
             </Link>
