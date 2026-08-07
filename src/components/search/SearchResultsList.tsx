@@ -26,19 +26,19 @@ export function SearchResultsList() {
     <div className="space-y-8">
        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
           <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">Ofertas em Feijó</h2>
+            <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">Offers in Feijó</h2>
             <p className="text-[12px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">
-              {result.groups.length} {result.groups.length === 1 ? 'produto encontrado' : 'produtos encontrados'}
+              {result.groups.length} {result.groups.length === 1 ? 'product found' : 'products found'}
             </p>
           </div>
           
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-[var(--bg-surface)] px-4 py-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Ordenar:</label>
+              <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Sort:</label>
               <select className="bg-transparent text-[12px] font-bold focus:outline-none cursor-pointer text-[var(--text-primary)]">
-                <option>Menor Preço</option>
-                <option>Maior Economia</option>
-                <option>Mais Relevantes</option>
+                <option>Lowest Price</option>
+                <option>Biggest Savings</option>
+                <option>Most Relevant</option>
               </select>
             </div>
           </div>

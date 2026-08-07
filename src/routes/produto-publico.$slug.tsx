@@ -55,15 +55,15 @@ export const Route = createFileRoute("/produto-publico/$slug")({
     const image = loaderData?.imageUrl;
     return {
       meta: [
-        { title: `${name} — Preços em mercados | PreçoCerto` },
+        { title: `${name} — Prices at markets | PreçoCerto` },
         {
           name: "description",
-          content: `Veja preço atual, histórico e onde comprar ${name} mais barato.`,
+          content: `See current price, history, and where to buy ${name} cheaper.`,
         },
         { property: "og:title", content: `${name} — PreçoCerto` },
         {
           property: "og:description",
-          content: `Preço atual, anterior e locais que vendem ${name}.`,
+          content: `Current price, previous price, and places that sell ${name}.`,
         },
         ...(image ? [{ property: "og:image", content: image }] : []),
       ],
@@ -86,21 +86,21 @@ export const Route = createFileRoute("/produto-publico/$slug")({
   ),
   errorComponent: ({ error, reset }) => (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <ErrorState title="Erro ao carregar produto" message={error.message} onRetry={reset} />
+      <ErrorState title="Error loading product" message={error.message} onRetry={reset} />
     </div>
   ),
   notFoundComponent: () => (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <EmptyState
         icon={Package}
-        title="Produto não encontrado"
-        message="Este produto não existe ou foi removido do catálogo."
+        title="Product not found"
+        message="This product does not exist or has been removed from the catalog."
         action={
           <Link
             to="/comparador"
             className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-medium text-primary-foreground"
           >
-            Voltar ao comparador
+            Back to comparator
           </Link>
         }
       />
@@ -199,19 +199,19 @@ function ProductPublicPage() {
             className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
           >
             <ArrowLeft className="h-3.5 w-3.5" strokeWidth={2} />
-            Voltar
+            Back
           </Link>
           <span
             role="note"
-            aria-label="Seção: Detalhes do produto"
+            aria-label="Section: Product details"
             className="hidden items-center rounded-full border border-accent-strong/30 bg-accent/10 px-2.5 py-1 text-[12.5px] font-semibold uppercase tracking-[0.18em] text-accent-strong sm:inline-flex"
           >
-            Detalhes do produto
+            Product details
           </span>
           <div className="flex items-center gap-2">
             <ShareButton
               title={`PreçoCerto — ${data.displayName}`}
-              text={`Veja onde ${data.displayName} está mais barato`}
+              text={`See where ${data.displayName} is cheaper`}
             />
             
           </div>
@@ -248,10 +248,10 @@ function ProductPublicPage() {
               <div className="flex flex-wrap items-center gap-1.5 text-[12.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 <span
                   role="note"
-                  aria-label="Categoria: Produto"
+                  aria-label="Category: Product"
                   className="inline-flex items-center rounded-full border border-accent-strong/30 bg-accent/10 px-2 py-0.5 text-accent-strong"
                 >
-                  Produto
+                  Product
                 </span>
                 {data.brand && (
                   <>
@@ -274,12 +274,12 @@ function ProductPublicPage() {
               <div className="mt-2.5 flex items-end justify-between gap-3 rounded-xl border border-border bg-background p-2.5 md:p-3">
                 <div className="min-w-0">
                   <p className="text-[12.5px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
-                    Melhor preço
+                    Best price
                   </p>
                   <Price as="p" value={bestPrice} size="xl" tone="best" className="mt-1" />
                   {cheapest && (
                     <p className="mt-1 truncate text-[12.5px] text-muted-foreground">
-                      em <span className="font-semibold text-foreground">{cheapest.marketName}</span>
+                      at <span className="font-semibold text-foreground">{cheapest.marketName}</span>
                     </p>
                   )}
                   {delta != null && delta !== 0 && (
@@ -314,9 +314,9 @@ function ProductPublicPage() {
 
               {data.samples > 0 && (
                 <div className="mt-2 grid grid-cols-3 gap-1.5">
-                  <MiniStat label="Média" amount={data.avg} />
-                  <MiniStat label="Mínimo" amount={data.min} tone="best" />
-                  <MiniStat label="Amostras" value={String(data.samples)} />
+                  <MiniStat label="Average" amount={data.avg} />
+                  <MiniStat label="Minimum" amount={data.min} tone="best" />
+                  <MiniStat label="Samples" value={String(data.samples)} />
                 </div>
               )}
             </div>
@@ -326,8 +326,8 @@ function ProductPublicPage() {
         {paywalled ? (
           <section className="mt-4">
             <PaywallInline
-              title="Desbloqueie o histórico e o comparativo entre mercados"
-              subtitle="Você já viu 3 produtos grátis. Crie sua conta para continuar consultando preços em cada mercado, tendências e alertas — tudo sem custo."
+              title="Unlock history and market comparison"
+              subtitle="You've already seen 3 free products. Create your account to keep checking prices across markets, trends, and alerts — all for free."
             />
           </section>
         ) : (
@@ -338,14 +338,14 @@ function ProductPublicPage() {
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <p className="text-[12.5px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
-                      Tendência
+                      Trend
                     </p>
                     <h2 className="font-display text-sm font-bold text-foreground md:text-base">
-                      Histórico de preços
+                      Price history
                     </h2>
                   </div>
                   <span className="text-[12.5px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                    {data.history.length} dias
+                    {data.history.length} days
                   </span>
                 </div>
                 <Sparkline
@@ -366,10 +366,10 @@ function ProductPublicPage() {
             <section className="mt-3">
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
                 <h2 className="font-display text-sm font-bold text-foreground md:text-base">
-                  Comparar mercados
+                  Compare markets
                 </h2>
                 <span className="text-[12.5px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  {filteredMarkets.length} de {data.markets.length}
+                  {filteredMarkets.length} of {data.markets.length}
                 </span>
               </div>
 
@@ -378,19 +378,19 @@ function ProductPublicPage() {
                   active={sort === "price"}
                   onClick={() => setSort("price")}
                   icon={<ArrowDownWideNarrow className="h-3 w-3" strokeWidth={2.25} />}
-                  label="Menor preço"
+                  label="Lowest price"
                 />
                 <SortChip
                   active={sort === "savings"}
                   onClick={() => setSort("savings")}
                   icon={<Percent className="h-3 w-3" strokeWidth={2.25} />}
-                  label="Maior economia"
+                  label="Biggest savings"
                 />
                 <SortChip
                   active={sort === "recent"}
                   onClick={() => setSort("recent")}
                   icon={<TrendingUp className="h-3 w-3" strokeWidth={2.25} />}
-                  label="Mais recente"
+                  label="Most recent"
                 />
 
                 {data.markets.length > 1 && (
@@ -400,9 +400,9 @@ function ProductPublicPage() {
                       value={marketFilter}
                       onChange={(e) => setMarketFilter(e.target.value)}
                       className="bg-transparent text-[12.5px] font-medium text-foreground outline-none"
-                      aria-label="Filtrar por mercado"
+                      aria-label="Filter by market"
                     >
-                      <option value="all">Todos mercados</option>
+                      <option value="all">All markets</option>
                       {data.markets.map((m) => (
                         <option key={m.marketName} value={m.marketName}>
                           {m.marketName}
@@ -416,8 +416,8 @@ function ProductPublicPage() {
               {filteredMarkets.length === 0 ? (
                 <EmptyState
                   icon={ShoppingBag}
-                  title="Sem resultados"
-                  message="Nenhum mercado corresponde a esse filtro."
+                  title="No results"
+                  message="No market matches this filter."
                 />
               ) : (
                 <ul className="space-y-1.5">
@@ -440,7 +440,7 @@ function ProductPublicPage() {
               <div className="mt-3 flex items-start gap-2 rounded-lg bg-muted/40 px-3 py-2 text-[12.5px] text-muted-foreground">
                 <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2.25} />
                 <p>
-                  A barra de fundo mostra o preço em relação ao mais alto encontrado. Toque em um card para ver marca, unidade e observações.
+                  The background bar shows the price relative to the highest one found. Tap a card to see brand, unit, and notes.
                 </p>
               </div>
             </section>
@@ -634,7 +634,7 @@ function MarketCard({
             <Detail label="Amostras" value={String(m.samples)} />
             <Detail label="Variação" value={`${variation.toFixed(0)}%`} />
             <Detail label="Preço médio" amount={m.priceAvg} />
-            <Detail label="Menor preço" amount={m.priceMin} tone="best" />
+            <Detail label="Lowest price" amount={m.priceMin} tone="best" />
             <Detail label="Maior preço" amount={m.priceMax} tone="muted" />
             <Detail label="Último scan" value={fmtDate(m.lastSeen)} />
           </div>
