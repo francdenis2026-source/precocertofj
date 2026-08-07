@@ -22,7 +22,7 @@ export function RealtimeMonitoringDashboard() {
   const { data: stats, isLoading, refetch, isFetching } = useQuery({
     queryKey: ["realtime-monitoring-stats"],
     queryFn: () => fetchStats(),
-    refetchInterval: 10000, // Refresh every 10s
+    refetchInterval: 3000, // Reduced from 10s to 3s for a more "real-time" feel without over-fetching
   });
 
   if (isLoading) {
