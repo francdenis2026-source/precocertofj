@@ -4,6 +4,7 @@ import { Price } from "@/components/ds/Price";
 import { usePriceSearch } from "@/lib/use-price-search";
 import { Route } from "@/routes/buscar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export function SearchDashboard() {
   const { q } = Route.useSearch();
@@ -29,27 +30,39 @@ export function SearchDashboard() {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {stats.map((stat, i) => (
-        <motion.div
-          key={stat.label}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
-          className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-[16px] shadow-sm transition-all duration-300"
-        >
-          <div className="flex flex-col-reverse gap-0.5">
-            {stat.isNumber ? (
-              <div className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
-                {stat.value}
-              </div>
-            ) : (
-              <Price value={stat.value} size="md" tone={stat.tone} className="font-bold" />
+    <div className="bg-[#F7F8FA] dark:bg-[#0E1B31] border border-[var(--border-subtle)] rounded-[20px] p-5 shadow-sm overflow-hidden">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-gray-200 dark:divide-gray-800">
+        {stats.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className={cn(
+              "flex flex-col gap-1.5",
+              i > 0 && "pl-6"
             )}
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--text-tertiary)]">{stat.label}</span>
-          </div>
-        </motion.div>
-      ))}
+          >
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280]">
+              {stat.label}
+            </span>
+            <div className="flex items-center gap-2">
+              {stat.isNumber ? (
+                <div className="text-[20px] font-bold tracking-tight text-[#1A1A2E] dark:text-white leading-none">
+                  {stat.value}
+                </div>
+              ) : (
+                <Price 
+                  value={stat.value} 
+                  size="md" 
+                  tone={stat.tone} 
+                  className="text-[20px] font-bold text-[#1A1A2E] dark:text-white leading-none" 
+                />
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
