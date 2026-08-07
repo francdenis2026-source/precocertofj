@@ -26,7 +26,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "z-10 -mx-4 mb-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 px-4 pb-6 pt-5 backdrop-blur-md md:-mx-6 md:px-6",
+        "z-10 -mx-4 mb-6 border-b border-[var(--border-subtle)] bg-[var(--bg-base)] px-4 pb-6 pt-5 backdrop-blur-md md:-mx-6 md:px-6",
         sticky && "lg:sticky lg:top-0",
         className,
       )}

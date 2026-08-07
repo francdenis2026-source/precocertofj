@@ -74,103 +74,101 @@ function StoresPage() {
 
   return (
     <AppShell>
-      <div className="app-dashboard pc-page">
-        <header className="pc-page-header pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
-          <Link
-            to="/app"
-            className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
-          >
-            <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Voltar ao painel
-          </Link>
-          <h1 className={cn(tc.h1, "mt-1")}>Estabelecimentos</h1>
-          <p className={cn(tc.sectionNote, "mt-0.5")}>
-            Toque em um card para abrir a página do local com endereço, atendimento e produtos.
-          </p>
-          <label className="relative mt-2 block">
-            <span className="sr-only">Buscar estabelecimento</span>
-            <SearchIcon
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Buscar mercado, farmácia, bairro…"
-              className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9")}
-              maxLength={60}
-              autoComplete="off"
-            />
-          </label>
-        </header>
+      <div className="mx-auto max-w-6xl px-4 md:px-6 pb-20">
+        <PageHeader
+          title="Estabelecimentos"
+          description="Toque em um card para abrir a página do local com endereço, atendimento e produtos."
+          breadcrumbs={[{ label: "Painel", to: "/app" }, { label: "Estabelecimentos" }]}
+          actions={
+            <div className="relative w-full sm:w-64">
+              <SearchIcon
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
+              <Input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Buscar mercado..."
+                className="h-10 rounded-xl bg-[var(--bg-surface)] pl-9 shadow-sm"
+                maxLength={60}
+                autoComplete="off"
+              />
+            </div>
+          }
+        />
 
         <section aria-live="polite" aria-busy={storesQ.isLoading}>
           {storesQ.isLoading ? (
-            <ul className="pc-card-grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <li
+                <div
                   key={i}
-                  className="h-[72px] animate-pulse rounded-lg border border-border/60 bg-card/70"
-                  style={{ opacity: 1 - i * 0.08 }}
+                  className="h-32 animate-pulse rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]"
                 />
               ))}
-            </ul>
+            </div>
           ) : storesQ.isError ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-center">
-              <p className={tc.body}>Não conseguimos carregar os estabelecimentos.</p>
-              <button
-                type="button"
+            <div className="rounded-[24px] border border-destructive/20 bg-destructive/5 p-8 text-center">
+              <p className="text-sm font-medium">Não conseguimos carregar os estabelecimentos.</p>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => storesQ.refetch()}
-                className={cn(
-                  tc.control,
-                  "mt-3 h-9 rounded-md border border-border px-3 hover:bg-muted",
-                )}
+                className="mt-4 rounded-xl"
               >
                 Tentar novamente
-              </button>
+              </Button>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="rounded-lg border border-border/70 bg-card/94 p-5 text-center backdrop-blur-md">
-              <Store className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
-              <p className={cn(tc.itemTitle, "mt-2")}>Nenhum estabelecimento encontrado</p>
-              <p className={cn(tc.meta, "mt-1")}>Tente outro nome ou bairro.</p>
+            <div className="rounded-[24px] border border-dashed border-border bg-[var(--bg-surface)] p-12 text-center">
+              <Store className="mx-auto h-8 w-8 text-muted-foreground opacity-20" aria-hidden />
+              <p className="mt-4 text-sm font-bold">Nenhum estabelecimento encontrado</p>
+              <p className="text-xs text-muted-foreground">Tente outro nome ou bairro.</p>
             </div>
           ) : (
-            <ul className="pc-card-grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((s) => {
                 const logo = s.logoUrl ? (logos[s.logoUrl] ?? s.logoUrl) : null;
                 return (
-                  <li key={s.id}>
-                    <Link
-                      to="/app/loja/$id"
-                      params={{ id: s.id }}
-                      className="grid min-h-[64px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg border border-border/70 bg-card/94 p-2.5 shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
-                    >
-                      <StoreLogo src={logo} name={s.name} className="h-9 w-9" />
-                      <span className="min-w-0">
-                        <span className={cn(tc.storeName, "block truncate")}>{s.name}</span>
-                        <span className={cn(tc.metaMuted, "flex items-center gap-1 truncate")}>
-                          <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+                  <Link
+                    key={s.id}
+                    to="/loja/$id"
+                    params={{ id: s.id }}
+                    className="pc-card group flex flex-col items-start gap-4 p-5"
+                  >
+                    <div className="flex w-full items-start justify-between">
+                      <StoreLogo src={logo} name={s.name} className="h-14 w-14 rounded-2xl shadow-sm transition-transform group-hover:scale-105" />
+                      <div className={cn(
+                        "rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider",
+                        s.productCount > 0
+                          ? "bg-emerald-500/10 text-emerald-600"
+                          : "bg-muted text-muted-foreground"
+                      )}>
+                        {s.productCount} {s.productCount === 1 ? "produto" : "produtos"}
+                      </div>
+                    </div>
+                    
+                    <div className="min-w-0 flex-1">
+                      <h3 className="truncate font-display text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-primary)] transition-colors">
+                        {s.name}
+                      </h3>
+                      <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+                        <span className="truncate">
                           {s.neighborhood ? `${s.neighborhood} · ` : ""}
                           {s.city}
                         </span>
-                        <span
-                          className={cn(
-                            "mt-0.5 inline-flex items-center rounded-full px-1.5 py-px text-[10px] font-bold tabular-nums",
-                            s.productCount > 0
-                              ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                              : "bg-muted text-muted-foreground",
-                          )}
-                        >
-                          {s.productCount} {s.productCount === 1 ? "produto" : "produtos"}
-                        </span>
-                      </span>
+                      </p>
+                    </div>
 
-                      <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-                    </Link>
-                  </li>
+                    <div className="mt-2 flex w-full items-center justify-between border-t border-border/40 pt-4">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-[var(--brand-primary)]">Ver catálogo</span>
+                      <ArrowRight className="h-4 w-4 text-[var(--brand-primary)] transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </Link>
                 );
               })}
-            </ul>
+            </div>
           )}
         </section>
       </div>
