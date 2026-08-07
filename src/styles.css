@@ -16,25 +16,25 @@
 }
 
 :root {
-  /* Modern Professional Palette: "Acre Coast" */
-  --pc-brand-gold: #C5A02D; /* Refined Gold */
-  --pc-brand-gold-glow: rgba(197, 160, 45, 0.2);
+  /* New Unified Palette: "Premium Modern" */
+  --pc-brand-gold: #D4AF37; 
+  --pc-brand-gold-glow: rgba(212, 175, 55, 0.2);
   --pc-navy-deep: #0B1E3A;
-  --pc-slate-soft: #F1F5F9;
+  --pc-slate-soft: #F8FAFC;
   
   /* Comparison Surface */
   --pc-compare-bg: #F8FAFC;
   --pc-compare-header: #FFFFFF;
   
-  /* Theme: Light Professional */
+  /* Theme: Light Professional (Refined) */
   --bg-base: #F8FAFC;
   --bg-surface: #FFFFFF;
   --bg-surface-elevated: #F1F5F9;
   --border-subtle: #E2E8F0;
   
-  /* Typography for Clarity & A11y */
+  /* Typography: Increased Clarity */
   --text-primary: #0F172A;
-  --text-secondary: #475569;
+  --text-secondary: #334155;
   --text-tertiary: #64748B;
   
   --brand-primary: var(--pc-brand-gold);
@@ -44,17 +44,17 @@
   --danger: #EF4444;
   --savings: #10B981;
   
-  /* Scale & Spacing */
-  --radius-xl: 32px;
-  --radius-lg: 20px;
+  /* Scale & Spacing: Unified System */
+  --radius-xl: 24px;
+  --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
   
-  /* Enhanced Shadows for Depth */
-  --pc-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
-  --pc-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
-  --pc-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.04), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
-  --pc-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.05), 0 10px 10px -5px rgba(15, 23, 42, 0.03);
+  /* Unified Shadow System */
+  --pc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --pc-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --pc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --pc-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   
   --dur-base: 0.3s;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -115,8 +115,8 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--pc-shadow-sm);
   transition: all var(--dur-base) var(--ease-smooth);
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--pc-shadow-xl);
+    transform: translateY(-2px);
+    box-shadow: var(--pc-shadow-lg);
     border-color: var(--brand-primary);
   }
 }
@@ -139,7 +139,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #FFFFFF;
   font-weight: 800;
   padding: 0.875rem 1.75rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   transition: all var(--dur-base) var(--ease-smooth);
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
   font-weight: 800;
   padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   transition: all var(--dur-base) var(--ease-smooth);
   font-size: 0.7rem;
   text-transform: uppercase;

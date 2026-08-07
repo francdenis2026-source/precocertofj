@@ -20,7 +20,7 @@ export function RegisteredStoresCarousel() {
     return (
       <>
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-2xl animate-pulse bg-slate-100 dark:bg-slate-800" />
+          <div key={i} className="h-20 rounded-[var(--radius-lg)] animate-pulse bg-slate-100 dark:bg-slate-800" />
         ))}
       </>
     );
@@ -34,9 +34,9 @@ export function RegisteredStoresCarousel() {
           to="/loja/$id"
           params={{ id: store.id }}
           search={{ q: "", from: "" }}
-          className="pc-card group flex flex-col items-center justify-center p-4 gap-2 text-center h-auto min-h-[100px]"
+          className="pc-card group flex flex-col items-center justify-center p-4 gap-2 text-center h-auto min-h-[100px] border-none shadow-none hover:shadow-none hover:translate-y-0"
         >
-          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white p-1.5 shadow-sm group-hover:scale-110 transition-transform">
+          <div className="h-10 w-10 flex items-center justify-center rounded-[var(--radius-md)] bg-white p-1.5 shadow-sm group-hover:scale-105 transition-transform">
             {store.name.includes("Contamigos") ? (
               <ContamigosLogo size="sm" hideName />
             ) : (

@@ -65,13 +65,13 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store, color: "#D4AF37" },
-  { slug: "padarias", label: "Padarias", Icon: Coffee, color: "#0B1E3A" },
-  { slug: "acougues", label: "Açougues", Icon: Utensils, color: "#1E293B" },
-  { slug: "hortifruti", label: "Hortifruti", Icon: Apple, color: "#D4AF37" },
-  { slug: "bebidas", label: "Bebidas", Icon: Milk, color: "#0B1E3A" },
-  { slug: "limpeza", label: "Limpeza", Icon: Droplets, color: "#1E293B" },
-  { slug: "higiene", label: "Higiene", Icon: Smile, color: "#D4AF37" },
+  { slug: "supermercados", label: "Mercados", Icon: Store },
+  { slug: "padarias", label: "Padarias", Icon: Coffee },
+  { slug: "acougues", label: "Açougues", Icon: Utensils },
+  { slug: "hortifruti", label: "Hortifruti", Icon: Apple },
+  { slug: "bebidas", label: "Bebidas", Icon: Milk },
+  { slug: "limpeza", label: "Limpeza", Icon: Droplets },
+  { slug: "higiene", label: "Higiene", Icon: Smile },
 ];
 
 function formatDate(iso: string): string {
@@ -108,7 +108,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
       >
         <PlusCircle className="h-4 w-4" />
       </button>
-      <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
+      <div className="h-16 w-16 shrink-0 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] flex items-center justify-center">
         <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
       </div>
       <div className="min-w-0 flex-1">
@@ -166,8 +166,8 @@ function HomePage() {
           <div className="absolute inset-0 bg-[var(--bg-base)]" />
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.15 }}
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center"
+            animate={{ opacity: 0.25 }}
+            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[2px]"
           />
         </div>
 
@@ -178,7 +178,7 @@ function HomePage() {
               Inteligência em Feijó
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-[var(--text-primary)]">
+          <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 text-[var(--text-primary)]">
             Economia inteligente para <span className="text-[var(--brand-primary)]">sua rotina.</span>
           </h1>
           <p className="text-lg text-[var(--text-secondary)] mb-10 max-w-xl mx-auto font-medium">
@@ -347,11 +347,11 @@ function CategoryCard({ slug, label, Icon, index }: { slug: string; label: strin
       <Link 
         to="/buscar" 
         search={{ q: label } as any}
-        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
+        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[var(--brand-primary)]/40 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
-        <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 shadow-inner">
+        <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 shadow-inner">
           <Icon className="h-7 w-7" />
         </div>
         
