@@ -11,8 +11,8 @@ export function SearchResultsList() {
   const runSearch = useServerFn(searchProductPrice);
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
-    queryFn: () => runSearch({ data: { query: q } }),
-    enabled: !!q,
+    queryFn: () => runSearch({ data: { query: q || "" } }),
+    enabled: true,
   });
 
   if (isLoading) {

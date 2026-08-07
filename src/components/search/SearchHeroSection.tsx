@@ -12,8 +12,8 @@ export function SearchHeroSection({ query }: { query: string }) {
   const runSearch = useServerFn(searchProductPrice);
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", query],
-    queryFn: () => runSearch({ data: { query } }),
-    enabled: !!query,
+    queryFn: () => runSearch({ data: { query: query || "" } }),
+    enabled: true,
   });
 
   if (isLoading) return <SearchHeroSkeleton />;
@@ -38,7 +38,7 @@ export function SearchHeroSection({ query }: { query: string }) {
                  Melhor resultado
                </Badge>
                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1.5">
-                 <Clock className="h-3 w-3" /> Atualizado há 2 horas
+                 <Clock className="h-3 w-3" /> Hoje
                </span>
              </div>
              
@@ -51,13 +51,13 @@ export function SearchHeroSection({ query }: { query: string }) {
              <div className="flex items-center gap-6 text-sm">
                <div className="flex flex-col">
                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Marca</span>
-                 <strong className="text-foreground text-lg">Parmalat</strong>
-               </div>
-               <div className="w-px h-8 bg-border/60" />
-               <div className="flex flex-col">
-                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Categoria</span>
-                 <strong className="text-foreground text-lg">Laticínios</strong>
-               </div>
+                  <strong className="text-foreground text-lg">{topGroup.prices[0]?.marketName || "—"}</strong>
+                </div>
+                <div className="w-px h-8 bg-border/60" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Outras Lojas</span>
+                  <strong className="text-foreground text-lg">{result.markets.length} disponíveis</strong>
+                </div>
              </div>
           </header>
 
