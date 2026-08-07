@@ -195,6 +195,8 @@ function formatSize(size_value: number | null, size_unit: string): string | null
 
 function ComparadorPage() {
   const { q, cat, view: viewParam, sort: sortParam, sel: selParam, conf: confParam, p: productParam } = Route.useSearch() as any;
+  const { q: _q } = Route.useSearch(); // Trigger re-render when search changes
+
   const navigate = useNavigate({ from: "/comparador" });
   const searchInputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLElement>(null);
