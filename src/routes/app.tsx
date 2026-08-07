@@ -23,7 +23,8 @@ import {
   Tag,
   Search,
   ShoppingCart,
-  Zap
+  Zap,
+  Scale
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/ProductImage";
