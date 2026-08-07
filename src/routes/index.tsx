@@ -162,7 +162,7 @@ function HomePage() {
               filter: isSearchFocused ? "brightness(0.3) blur(8px)" : "brightness(0.5) blur(2px)"
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[var(--bg-base)]" />
         </div>
 
         {/* Hero Content */}
@@ -368,7 +368,7 @@ function HomePage() {
 
         {/* CTA Section */}
         <section className="max-w-7xl mx-auto px-4 pb-32">
-          <div className="pc-card p-12 bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border-[var(--brand-primary)]/20 relative overflow-hidden text-center">
+          <div className="pc-card p-12 bg-gradient-to-br from-white to-[var(--bg-surface-elevated)] border-[var(--brand-primary)]/10 relative overflow-hidden text-center">
             <div className="absolute top-0 right-0 p-8 opacity-5">
               <Scale className="h-40 w-40 rotate-12" />
             </div>

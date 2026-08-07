@@ -17,21 +17,21 @@
 
 :root {
   /* Brand Tokens */
-  --pc-brand-gold: #D4AF37;
-  --pc-brand-gold-glow: rgba(212, 175, 55, 0.4);
+  --pc-brand-gold: #C5A02D;
+  --pc-brand-gold-glow: rgba(197, 160, 45, 0.3);
   
-  /* Theme: Light */
-  --bg-base: #F7F8FA;
+  /* Theme: Premium Light (Predominant) */
+  --bg-base: #F8FAFC;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F3F6;
-  --border-subtle: #E5E7EB;
+  --bg-surface-elevated: #F1F5F9;
+  --border-subtle: #E2E8F0;
   
-  --text-primary: #1A1A2E;
-  --text-secondary: #4B5563;
-  --text-tertiary: #9CA3AF;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
   
   --brand-primary: var(--pc-brand-gold);
-  --brand-secondary: #0B1E3A;
+  --brand-secondary: #1E293B;
   
   --success: #10B981;
   --danger: #EF4444;
@@ -43,24 +43,27 @@
   --radius-sm: 8px;
   
   /* Shadows */
-  --pc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --pc-shadow-md: 0 12px 24px -8px rgba(11, 30, 58, 0.08);
-  --pc-shadow-lg: 0 32px 64px -16px rgba(11, 30, 58, 0.12);
+  --pc-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --pc-shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  --pc-shadow-lg: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
   
   /* Animation */
-  --dur-base: 0.2s;
-  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-base: 0.3s;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :root[data-theme='dark'] {
-  --bg-base: #0B0E14;
-  --bg-surface: #131720;
-  --bg-surface-elevated: #1C2331;
-  --border-subtle: #242D3D;
+  /* Dark theme is now a "Midnight" variant of the premium look, not pure black */
+  --bg-base: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-surface-elevated: #334155;
+  --border-subtle: #475569;
   
-  --text-primary: #F3F4F6;
-  --text-secondary: #9CA3AF;
-  --text-tertiary: #6B7280;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  
+  --brand-secondary: #F1F5F9;
 }
 
 @theme {
@@ -122,23 +125,22 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   background-color: var(--brand-primary);
-  color: #0B1E3A;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.75rem 1.5rem;
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 0.875rem 1.75rem;
   border-radius: var(--radius-md);
   transition: all var(--dur-base) var(--ease-smooth);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(197, 160, 45, 0.2);
   &:hover {
-    filter: brightness(1.1);
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px -5px var(--pc-brand-gold-glow);
+    filter: brightness(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(197, 160, 45, 0.3);
   }
   &:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 }
 

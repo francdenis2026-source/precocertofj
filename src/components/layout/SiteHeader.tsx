@@ -143,7 +143,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                         : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
                     )}
                   >
-                    <span className="grid h-6 w-6 place-items-center rounded-full bg-[var(--brand-primary)] text-[10px] font-bold text-white uppercase">
+                    <span className="grid h-6 w-6 place-items-center rounded-full bg-[var(--brand-primary)] text-[10px] font-bold text-white uppercase shadow-sm">
                       {initials}
                     </span>
                     <span className="hidden sm:inline">{firstName}</span>
