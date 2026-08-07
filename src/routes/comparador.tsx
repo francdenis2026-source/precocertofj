@@ -1,25 +1,22 @@
 import { createFileRoute, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { 
   Search, 
-  SlidersHorizontal, 
   Scale, 
   ChevronDown, 
   PackageSearch, 
   Trophy, 
-  ArrowRight, 
-  Filter, 
-  Clock, 
-  TrendingDown, 
-  Store, 
-  LayoutGrid, 
+  Sparkles,
+  LayoutGrid,
   Rows3,
-  Download,
-  Share2,
+  Filter,
+  ArrowRight,
+  TrendingDown,
   Info,
-  Sparkles
+  Clock,
+  ArrowUpRight
 } from "lucide-react";
-import { memo, useMemo, useRef, useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { memo, useMemo, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,7 +33,7 @@ import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { filterAndSortComparisonRows } from "@/lib/comparison-search";
 import { useButcherIds } from "@/hooks/useButcherIds";
 import { applyButcherFilter } from "@/lib/butcher-filter";
-import { toast } from "sonner";
+import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
 
 // --- Schema & Types ---
 
@@ -55,7 +52,7 @@ export const Route = createFileRoute("/comparador")({
   head: () => ({
     title: "Comparador de Preços — PreçoCerto",
     meta: [
-      { name: "description", content: "Compare preços reais nos mercados de Feijó." },
+      { name: "description", content: "Substitua dúvidas por economia. Compare preços reais nos mercados de Feijó." },
       { property: "og:title", content: "Comparador de Preços — PreçoCerto" },
       { property: "og:type", content: "website" },
     ],
@@ -87,7 +84,6 @@ type Comparison = {
   image_url: string | null;
   catalog_slug: string | null;
   stores: StoreEntry[];
-  last_seen_at?: string;
 };
 
 // --- Helper Components ---
@@ -113,12 +109,6 @@ const ComparisonCard = memo(({ item, onClick }: { item: Comparison, onClick: () 
             <SavingsBadge pct={item.savings_pct} variant="solid" size="md" />
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-           <p className="text-[10px] text-white font-black uppercase tracking-widest flex items-center gap-1.5">
-             <Clock className="h-3 w-3" />
-             Visto há pouco
-           </p>
-        </div>
       </div>
 
       <div className="p-6 flex flex-col flex-1 gap-4">
@@ -148,12 +138,9 @@ const ComparisonCard = memo(({ item, onClick }: { item: Comparison, onClick: () 
   );
 });
 
-// --- Main Page ---
-
 function ComparadorPage() {
   const { q, cat, view: viewMode, sort: sortKey } = Route.useSearch();
   const navigate = useNavigate({ from: "/comparador" });
-  const queryClient = useQueryClient();
   const [searchVal, setSearchVal] = useState(q);
   const [selectedItem, setSelectedItem] = useState<Comparison | null>(null);
 
@@ -336,7 +323,23 @@ function ComparadorPage() {
             </div>
           )}
         </section>
+
+        {/* --- Product Details Modal --- */}
+        <ProductStoresDialog 
+          open={!!selectedItem}
+          onOpenChange={(open) => !open && setSelectedItem(null)}
+          productName={selectedItem?.display_name || ""}
+          category={selectedItem?.category}
+          sizeLabel={selectedItem ? `${selectedItem.size_value} ${selectedItem.size_unit}` : null}
+          stores={selectedItem?.stores.map(s => ({
+            establishment_id: s.establishment_id,
+            store_name: s.store_name,
+            price: s.price,
+          })) || []}
+          detailSlug={selectedItem?.catalog_slug}
+        />
       </PageShellContent>
     </PageShell>
   );
 }
+
