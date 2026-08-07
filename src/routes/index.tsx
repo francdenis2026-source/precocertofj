@@ -155,7 +155,7 @@ function HomePage() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{
               backgroundImage: "url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')",
-              filter: isSearchFocused ? "brightness(0.3) blur(6px)" : "brightness(0.7) blur(2px)"
+              filter: isSearchFocused ? "brightness(0.3) blur(12px)" : "brightness(0.6) blur(4px)"
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
@@ -170,19 +170,19 @@ function HomePage() {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl mb-8">
-              <span className="relative flex h-2.5 w-2.5">
+            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.3)] mb-10 transition-all hover:bg-white/10 hover:border-white/20">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-primary)] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--brand-primary)]"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-primary)] shadow-[0_0_8px_var(--brand-primary)]"></span>
               </span>
-              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-white/90">
-                Atualizado em tempo real <span className="text-[var(--brand-primary)] mx-1">·</span> Feijó, AC
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">
+                Rede de Monitoramento Ativa <span className="text-[var(--brand-primary)] mx-2 opacity-50">·</span> Feijó, AC
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-7xl font-black tracking-tight text-white leading-[0.9] sm:leading-[0.85] mb-8">
+            <h1 className="text-5xl sm:text-8xl font-black tracking-tight text-white leading-[0.85] mb-10">
               A inteligência que seu <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] to-[#FFD700] drop-shadow-sm">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-primary)] via-[#FFF5D1] to-[var(--brand-primary)] bg-[length:200%_auto] animate-[gradient-x_4s_linear_infinite] drop-shadow-2xl">
                 dinheiro merece
               </span>
             </h1>
@@ -237,8 +237,8 @@ function HomePage() {
 
       <main className="relative z-10 bg-[var(--bg-base)]">
         {/* Category Dashboard */}
-        <section className="max-w-7xl mx-auto px-4 -mt-10 mb-20 relative z-20">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+        <section className="max-w-7xl mx-auto px-4 -mt-12 mb-20 relative z-20">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6">
             {CATEGORIES.map((cat, i) => (
               <CategoryCard key={cat.slug} {...cat} index={i} />
             ))}
@@ -311,7 +311,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="rounded-[32px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]">
+          <div className="rounded-[40px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)] transition-all hover:shadow-[0_40px_80px_-20px_rgba(11,30,58,0.15)]">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>

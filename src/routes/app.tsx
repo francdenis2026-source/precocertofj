@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/brand/AppShell";
@@ -130,34 +131,42 @@ function DashboardPage() {
           <SectionCard 
             title="Insights & Economia" 
             description="Veja como o seu dinheiro rendeu mais este mês."
-            className="lg:col-span-2 pc-animate-fade-in"
+            className="lg:col-span-2 pc-animate-fade-in border-none bg-gradient-to-br from-[#0B1E3A] to-[#050E1B] text-white shadow-2xl"
             action={
-              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider">
+              <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-white/70 hover:text-white hover:bg-white/10">
                 <Link to="/app/insights">Ver tudo sobre minha economia <ChevronRight className="ml-1 h-3 w-3" /></Link>
               </Button>
             }
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-1">
-              <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Eficiência</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-2">
+              <div className="space-y-2">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Eficiência de Compra</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black">84%</span>
-                  <span className="text-xs font-bold text-green-500">+5% vs mês ant.</span>
+                  <span className="text-3xl font-black">84%</span>
+                  <span className="text-xs font-bold text-emerald-400">+5% este mês</span>
                 </div>
-                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-primary rounded-full" style={{ width: '84%' }} />
+                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '84%' }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-[var(--brand-primary)] rounded-full shadow-[0_0_12px_rgba(212,175,55,0.4)]" 
+                  />
                 </div>
               </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Rota Sugerida</p>
-                <p className="text-sm font-bold truncate">Melhor caminho: Atacadão + Farmácia</p>
-                <p className="text-[10px] font-bold text-primary flex items-center gap-1">
-                  <TrendingDown className="h-3 w-3" /> Economia de R$ 42,90
-                </p>
+              <div className="space-y-2">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Inteligência de Rota</p>
+                <p className="text-sm font-bold leading-tight">Sugestão: Atacadão + Farmácia</p>
+                <div className="flex items-center gap-2 text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-wider">
+                  <TrendingDown className="h-3.5 w-3.5" /> 
+                  Poupe R$ 42,90 hoje
+                </div>
               </div>
               <div className="flex items-center justify-end">
-                <Button asChild variant="outline" size="sm" className="w-full md:w-auto font-black text-[10px] uppercase">
-                  <Link to="/app/insights">Achar melhor caminho <Zap className="ml-2 h-3.5 w-3.5 fill-primary text-primary" /></Link>
+                <Button asChild variant="executive" className="w-full md:w-auto font-black text-[10px] uppercase tracking-[0.15em] bg-[var(--brand-primary)] text-[var(--brand-secondary)] hover:bg-[var(--brand-primary)]/90 h-11 px-6">
+                  <Link to="/app/insights">
+                    Achar melhor caminho <Zap className="ml-2 h-4 w-4 fill-current" />
+                  </Link>
                 </Button>
               </div>
             </div>

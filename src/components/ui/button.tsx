@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   [
-    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[13px] font-bold cursor-pointer",
-    "transition-all duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
+    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-[13px] font-black uppercase tracking-wider cursor-pointer",
+    "transition-all duration-300 ease-[var(--ease-out-smooth)]",
     // Foco: anel dourado (navy/gold) consistente em light/dark — WCAG AA
     "outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)]",
     "disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none",
-    "hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] motion-reduce:transform-none",
+    "hover:-translate-y-[2px] hover:shadow-lg active:translate-y-0 active:scale-[0.97] motion-reduce:transform-none",
     "data-[loading=true]:pointer-events-none data-[loading=true]:cursor-progress",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200",
   ].join(" "),
