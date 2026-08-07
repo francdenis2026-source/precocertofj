@@ -283,6 +283,8 @@ function ComparadorPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [filterAvailability, setFilterAvailability] = useState<"all" | "in_stock">("all");
   const [sortBy, setSortBy] = useState<"price" | "availability">("price");
+  const [sideBySide, setSideBySide] = useState<{ storeAId: string; storeAName: string; storeBId: string; storeBName: string } | null>(null);
+
 
   const saveCartFn = useServerFn(saveComparisonCart);
   const toggleAlertFn = useServerFn(toggleCartAlert);
