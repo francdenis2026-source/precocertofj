@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Aqui estão! Identifiquei os produtos das novas imagens: Composto Lácteo Dubon (R$ 13,99), Stella Artois Pure Gold (R$ 8,00), Skarloff Ice (R$ 7,50), Nescau (R$ 12,00), Milk Shake Apti (R$ 17,00), Creme Amélia (R$ 27,00), Sabonete Phebo (R$ 5,00), Geleia Olé (R$ 9,75), Goiabada Predilecta (R$ 8,00), Colgate Total 12 (R$ 11,00) e Bebida Láctea Mococa (R$ 1,75). Todos foram processados para o Comercial Vanderley.
+            Com certeza! Consegui extrair todos os preços com precisão: Dubon (R$ 13,99), Stella Artois (R$ 8,00), Skarloff (R$ 7,50), Nescau (R$ 12,00), Milk Shake Apti (R$ 17,00), Creme Amélia (R$ 27,00), Phebo (R$ 5,00), Geleia Olé (R$ 9,75), Goiabada (R$ 8,00), Colgate (R$ 11,00) e Bebida Mococa (R$ 1,75). Todos os valores já estão refletidos no Comercial Vanderley.
           </DialogDescription>
         </DialogHeader>
 
