@@ -34,15 +34,15 @@ export const processPackImages = createServerFn({ method: "POST" })
             : product.productName;
 
           // 3. Update/Insert Logic
-          // Check for existing scan in this establishment for this product
-          // We use similarity or exact name match depending on project policy. 
-          // Here we'll check exact name for safety in bulk processing, or use find_similar_scans if needed.
           const { data: existing } = await supabase
             .from("scans")
             .select("id, price_captured")
             .eq("establishment_id", data.establishmentId)
             .eq("product_name", fullName)
             .maybeSingle();
+
+          const status = "salvo" as "rascunho" | "salvo" | "arquivado" | "processado";
+          const verdict = "unknown" as "unknown" | "high" | "low" | "medium";
 
           if (existing) {
             if (existing.price_captured !== product.price) {
@@ -51,7 +51,7 @@ export const processPackImages = createServerFn({ method: "POST" })
                 .update({ 
                   price_captured: product.price,
                   updated_at: new Date().toISOString(),
-                  status: 'salvo'
+                  status
                 })
                 .eq("id", existing.id);
               results.push({ name: fullName, action: "updated", price: product.price });
@@ -67,8 +67,8 @@ export const processPackImages = createServerFn({ method: "POST" })
                 establishment_id: data.establishmentId,
                 market_name: marketName,
                 unit: product.unit,
-                status: "salvo",
-                verdict: "unknown",
+                status,
+                verdict,
                 created_at: new Date().toISOString()
               });
             results.push({ name: fullName, action: "inserted", price: product.price });
