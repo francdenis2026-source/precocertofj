@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Quarto lote do Comercial Vanderley processado: Leite Italac (R$ 16,99), Chantilly Amélia (R$ 27,00), Café 3 Corações (R$ 20,00), Vinhos Country Wine (R$ 20,00) e Saint Germain (R$ 30,00), Ketchup D'Ajuda (R$ 6,00), Amaciante Downy (R$ 10,99), Cremes Dentais Colgate e Sorriso (R$ 9,99/R$ 4,50), Sucos Teen (R$ 5,99) e Água Sanitária Cristal (R$ 4,00). Todos os itens foram atualizados!
+            Quinto lote do Comercial Vanderley processado: Batatas e Snacks (R$ 4,00 a R$ 9,00), Chocolates Hershey's e Io-Io (R$ 9,99/R$ 7,00), Composto Dobon (R$ 13,99), Vinhos Quinta do Morgado (R$ 28,00), Sabonetes Líquidos (R$ 14,00 a R$ 22,00), Leite Condensado Mococa (R$ 8,00), Achocolatados Mocoquinha, Sabonetes em barra Davene (R$ 6,00), Cerveja Spaten (R$ 7,50) e Óleo Soya (R$ 8,75). Todos os preços atualizados!
           </DialogDescription>
         </DialogHeader>
 
