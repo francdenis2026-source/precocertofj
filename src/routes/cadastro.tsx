@@ -232,6 +232,7 @@ function CadastroPage() {
                 autoComplete="name"
                 state={vName}
                 showState={touched.name}
+                uppercase
               />
               <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 <Field
@@ -377,6 +378,7 @@ function Field({
   autoComplete,
   state,
   showState,
+  uppercase,
 }: {
   label: string;
   value: string;
@@ -388,6 +390,7 @@ function Field({
   autoComplete?: string;
   state?: FieldState;
   showState?: boolean;
+  uppercase?: boolean;
 }) {
   const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
   const good = !!(showState && state?.valid && value);
@@ -413,7 +416,8 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
+        autoCapitalize={uppercase ? "characters" : undefined}
+        className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4 ${uppercase ? "uppercase placeholder:normal-case" : ""}`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
