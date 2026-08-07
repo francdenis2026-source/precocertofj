@@ -15,7 +15,8 @@ import {
   FileText,
   Share2,
   Filter,
-  ArrowUpDown
+  ArrowUpDown,
+  Trophy
 } from "lucide-react";
 import { Price } from "@/components/ds/Price";
 import { getMultiStoreComparison, MultiComparisonResult, ComparisonItem } from "@/lib/multi-comparison.functions";
@@ -390,32 +391,32 @@ export function SideBySideComparison({
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 className={cn(
-                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group",
+                  "pc-card p-6 flex flex-col items-center text-center transition-all duration-300 relative overflow-hidden group border-border/20",
                   isCheapest 
-                    ? "border-savings/40 bg-savings/[0.03] shadow-lg ring-2 ring-savings/20" 
-                    : "bg-surface/40 hover:bg-surface/60 opacity-90 hover:opacity-100"
+                    ? "bg-gradient-to-br from-success/[0.04] to-transparent ring-2 ring-success/30 shadow-xl shadow-success/5" 
+                    : "bg-bg-surface hover:bg-bg-surface-elevated/40"
                 )}
               >
                 {isCheapest && (
-                  <div className="absolute top-0 right-0 p-3">
+                  <div className="absolute top-0 right-0 p-4">
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      initial={{ scale: 0, rotate: -45 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     >
-                      <CheckCircle2 className="h-6 w-6 text-savings" />
+                      <Trophy className="h-6 w-6 text-brand-primary drop-shadow-sm" />
                     </motion.div>
                   </div>
                 )}
                 
                 <div className={cn(
-                  "h-14 w-14 rounded-2xl flex items-center justify-center mb-4 border transition-transform duration-500 group-hover:rotate-6",
-                  isCheapest ? "bg-savings/10 border-savings/20" : "bg-muted/30 border-border/40"
+                  "h-16 w-16 rounded-[22px] flex items-center justify-center mb-5 border transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-sm",
+                  isCheapest ? "bg-success/10 border-success/20" : "bg-bg-surface-elevated border-border/40"
                 )}>
-                  <Store className={cn("h-7 w-7", isCheapest ? "text-savings" : "text-primary")} />
+                  <Store className={cn("h-8 w-8", isCheapest ? "text-success" : "text-brand-secondary")} />
                 </div>
                 
-                <h4 className="font-black text-lg mb-1 truncate w-full group-hover:text-primary transition-colors">{store.name}</h4>
+                <h4 className="font-black text-lg mb-2 truncate w-full group-hover:text-brand-secondary transition-colors tracking-tight">{store.name}</h4>
                 
                 <div className="mb-4">
                   <Price value={total} size="xl" tone={isCheapest ? 'best' : 'default'} />
