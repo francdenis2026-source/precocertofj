@@ -170,12 +170,12 @@ export function SearchHighlights({ onPickQuery }: Props) {
   const title = isPersonal
     ? "Highlights for you"
     : isEconomia
-      ? "Onde a diferença de preço é maior"
+      ? "Where the price difference is biggest"
       : "Most compared in markets";
   const subtitle = isPersonal
     ? "Based on what you search most and the items you've saved."
     : isEconomia
-      ? "Mesmo produto, mercados diferentes — quanto dá para economizar hoje."
+      ? "Same product, different markets — how much you can save today."
       : "Items available in several partner markets — click to compare.";
 
   return (
