@@ -347,7 +347,7 @@ function CategoryCard({ slug, label, Icon, index }: { slug: string; label: strin
       <Link 
         to="/buscar" 
         search={{ q: label } as any}
-        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[var(--radius-lg)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300 hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
+        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
