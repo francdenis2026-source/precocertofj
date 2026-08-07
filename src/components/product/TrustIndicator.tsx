@@ -15,21 +15,21 @@ export function computeTrust(lastSeenAt: string | null | undefined, totalScans: 
 }
 
 export function formatRelative(iso: string | null | undefined): string {
-  if (!iso) return "no date";
+  if (!iso) return "sem data";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "no date";
+  if (Number.isNaN(d.getTime())) return "sem data";
   const diffMs = Date.now() - d.getTime();
   const min = Math.round(diffMs / 60000);
-  if (min < 1) return "just now";
-  if (min < 60) return `${min} min ago`;
+  if (min < 1) return "agora mesmo";
+  if (min < 60) return `${min} min atrás`;
   const h = Math.round(min / 60);
-  if (h < 24) return `${h} h ago`;
+  if (h < 24) return `${h} h atrás`;
   const day = Math.round(h / 24);
-  if (day < 30) return `${day} ${day === 1 ? "day" : "days"} ago`;
+  if (day < 30) return `${day} ${day === 1 ? "dia" : "dias"} atrás`;
   const mo = Math.round(day / 30);
-  if (mo < 12) return `${mo} ${mo === 1 ? "month" : "months"} ago`;
+  if (mo < 12) return `${mo} ${mo === 1 ? "mês" : "meses"} atrás`;
   const y = Math.round(mo / 12);
-  return `${y} ${y === 1 ? "year" : "years"} ago`;
+  return `${y} ${y === 1 ? "ano" : "anos"} atrás`;
 }
 
 export function formatFullDate(iso: string | null | undefined): string {
@@ -80,22 +80,22 @@ const CONFIG: Record<TrustLevel, {
   description: string;
 }> = {
   alta: {
-    label: "High confidence",
+    label: "Alta confiança",
     color: "border-savings/40 bg-savings/10 text-savings-foreground",
     icon: ShieldCheck,
-    description: "Price confirmed recently with multiple readings.",
+    description: "Preço confirmado recentemente com múltiplas leituras.",
   },
   media: {
-    label: "Medium confidence",
+    label: "Confiança média",
     color: "border-warning/40 bg-warning/10 text-warning dark:text-warning",
     icon: Shield,
-    description: "Price with a reasonably recent reading. May have small variations.",
+    description: "Preço com leitura razoavelmente recente. Pode ter pequenas variações.",
   },
   baixa: {
-    label: "Low confidence",
+    label: "Baixa confiança",
     color: "border-destructive/30 bg-destructive/10 text-destructive",
     icon: ShieldAlert,
-    description: "Last reading is old or infrequent. Confirm at the store before deciding.",
+    description: "Última leitura é antiga ou pouco frequente. Confirme no mercado antes de decidir.",
   },
 };
 
@@ -126,7 +126,7 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
           aria-label={cfg.label}
         >
           <Icon className="h-3 w-3" aria-hidden />
-          {compact ? cfg.label.replace(/^(High|Medium|Low) /, "") : cfg.label}
+          {compact ? cfg.label.replace(/^(Alta|Confiança média|Baixa) ?/, "") : cfg.label}
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -142,23 +142,23 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
             <p className="mt-1 leading-snug text-muted-foreground">{cfg.description}</p>
             <dl className="mt-2 space-y-0.5 text-[11px] text-muted-foreground">
               <div className="flex items-center justify-between gap-2">
-                <dt>Last reading</dt>
+                <dt>Última leitura</dt>
                 <dd className="font-medium text-foreground">
                   {formatRelative(lastSeenAt)}
                 </dd>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <dt>Total readings</dt>
+                <dt>Total de leituras</dt>
                 <dd className="font-medium text-foreground">{scans}</dd>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <dt>Full date</dt>
+                <dt>Data completa</dt>
                 <dd className="font-medium text-foreground">{formatFullDate(lastSeenAt)}</dd>
               </div>
             </dl>
             <p className="mt-2 flex items-start gap-1 rounded-md bg-muted/50 p-1.5 text-[11px] leading-snug text-muted-foreground">
               <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden />
-              Values are collected in stores and may vary due to table updates or labeling. Confirm at the point of sale.
+              Os valores são coletados nos mercados e podem variar por atualização de tabela ou etiquetagem. Confirme no ponto de venda.
             </p>
           </div>
         </div>
