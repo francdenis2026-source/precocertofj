@@ -1364,12 +1364,13 @@ function ComparadorPage() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar">
             <SideBySideComparison
-              {...sideBySide}
+              storeIds={sideBySide.storeIds}
               onClose={() => setSideBySide(null)}
             />
           </div>
         </div>
       )}
+
 
       </div>
 
