@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Mais itens identificados no Comercial Vanderley: Macarrão Dallas (R$ 4,50), Manteiga Cabeça de Touro (R$ 38,00), Vinho Pérgola (R$ 48,00), Açúcar Barralcool (R$ 3,50), Peito de Frango Friato (R$ 25,00), Bolos Dona Benta (R$ 10,00), Guaraná Baré (R$ 7,00), Sabonetes Francis (R$ 5,00) e Albany (R$ 2,50), e Miojo (R$ 1,50). Todos processados e atualizados!
+            Terceiro lote do Comercial Vanderley processado: Creme Mococa (R$ 2,50), Ruffles (R$ 13,00), Margarina Delícia (R$ 22,00), Desodorantes Rexona (R$ 17,00) e Old Spice (R$ 15,00), Maionese Quero (R$ 3,75), Cenoura (R$ 14,99), Fanta Laranja (R$ 12,00), Sabonete Francis (R$ 3,75), Maionese Arisco (R$ 11,00) e Água Cristal (R$ 4,00). Todos os itens foram extraídos e atualizados!
           </DialogDescription>
         </DialogHeader>
 
