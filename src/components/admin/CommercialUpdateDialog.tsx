@@ -57,7 +57,7 @@ export function CommercialUpdateDialog({
       const res = await processFn({ data: { images, establishmentId } });
       setResults(res);
       setImages([]);
-      toast.success("Processamento concluído com sucesso!");
+      toast.success(`Processamento concluído! ${res.length} produtos processados.`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao processar imagens");
     } finally {
@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Envie as imagens enviadas pelo comercial Wanderley para extração automática de preços. Extraia as informaçoes dos produtos e cadastra no comercial wanderley, caso ja exita desconsidere, se tiver mudado preços, atualiza.
+            Envie as imagens enviadas pelo comercial Wanderley para extração automática de preços. Extraia as informaçoes dos produtos e cadastra no comercial wanderley, caso ja exita desconsidere, se tiver mudado preços, atualiza; quantos produtos foram extraidos, sempre me informe a quantodade.
           </DialogDescription>
         </DialogHeader>
 
