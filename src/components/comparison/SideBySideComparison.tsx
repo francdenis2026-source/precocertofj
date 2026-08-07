@@ -204,10 +204,24 @@ export function SideBySideComparison({
 
   if (q.isLoading) {
     return (
-      <div className="pc-card p-20 flex flex-col items-center justify-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        <p className="text-muted-foreground font-black animate-pulse">Analisando mercados em tempo real...</p>
-      </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="pc-card p-20 flex flex-col items-center justify-center gap-6 bg-surface/80 backdrop-blur-xl rounded-[32px]"
+      >
+        <div className="relative">
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="h-16 w-16 rounded-full border-4 border-primary/20 border-t-primary" 
+          />
+          <Scale className="h-6 w-6 text-primary absolute inset-0 m-auto animate-pulse" />
+        </div>
+        <div className="text-center space-y-2">
+          <p className="text-primary font-black tracking-widest uppercase text-xs animate-pulse">Inteligência PreçoCerto</p>
+          <p className="text-muted-foreground font-medium text-sm">Analisando mercados em tempo real...</p>
+        </div>
+      </motion.div>
     );
   }
 
