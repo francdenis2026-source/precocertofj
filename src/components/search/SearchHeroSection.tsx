@@ -51,13 +51,13 @@ export function SearchHeroSection({ query }: { query: string }) {
              <div className="flex items-center gap-6 text-sm">
                <div className="flex flex-col">
                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Marca</span>
-                 <strong className="text-foreground text-lg">Parmalat</strong>
-               </div>
-               <div className="w-px h-8 bg-border/60" />
-               <div className="flex flex-col">
-                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Categoria</span>
-                 <strong className="text-foreground text-lg">Laticínios</strong>
-               </div>
+                  <strong className="text-foreground text-lg">{topGroup.prices[0]?.marketName || "—"}</strong>
+                </div>
+                <div className="w-px h-8 bg-border/60" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-black">Outras Lojas</span>
+                  <strong className="text-foreground text-lg">{result.markets.length} disponíveis</strong>
+                </div>
              </div>
           </header>
 
