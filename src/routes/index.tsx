@@ -228,57 +228,57 @@ function HomePage() {
                 <OptimizedBasketSection />
               </section>
               <section>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                      <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Monitoramento Ativo</h2>
-                      <h3 className="text-xl font-black text-[var(--text-primary)]">Preços em Feijó</h3>
-                    </div>
-                    <div className="flex bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)] w-fit">
-                      {[
-                        { id: "recent", label: "Novos" },
-                        { id: "price", label: "Baratos" },
-                      ].map((s) => (
-                        <button
-                          key={s.id}
-                          onClick={() => setSort(s.id as any)}
-                          className={cn(
-                            "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all",
-                            sort === s.id ? "bg-[var(--brand-primary)] text-white shadow-sm" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
-                          )}
-                        >
-                          {s.label}
-                        </button>
-                      ))}
-                    </div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Monitoramento Ativo</h2>
+                    <h3 className="text-xl font-black text-[var(--text-primary)]">Preços em Feijó</h3>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {filteredProducts.map((p, i) => (
-                      <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
+                  <div className="flex bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)] w-fit">
+                    {[
+                      { id: "recent", label: "Novos" },
+                      { id: "price", label: "Baratos" },
+                    ].map((s) => (
+                      <button
+                        key={s.id}
+                        onClick={() => setSort(s.id as any)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all",
+                          sort === s.id ? "bg-[var(--brand-primary)] text-white shadow-sm" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                        )}
+                      >
+                        {s.label}
+                      </button>
                     ))}
                   </div>
-                </section>
-             </div>
-             
-             <aside className="space-y-12">
-                <section>
-                   <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Nossos Parceiros</h2>
-                   <div className="grid grid-cols-2 gap-3">
-                     <RegisteredStoresCarousel />
-                   </div>
-                </section>
-                <section>
-                  <PromoBanner />
-                </section>
-             </aside>
-          </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {filteredProducts.map((p, i) => (
+                    <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
+                  ))}
+                </div>
+              </section>
+           </div>
+           
+           <aside className="space-y-12">
+              <section>
+                 <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Nossos Parceiros</h2>
+                 <div className="grid grid-cols-2 gap-3">
+                   <RegisteredStoresCarousel />
+                 </div>
+              </section>
+              <section>
+                <PromoBanner />
+              </section>
+           </aside>
+        </div>
 
-          <div className="mt-20 pt-12 border-t border-[var(--border-subtle)]">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-8 text-center">Monitoramento em Tempo Real</h2>
-            <div className="max-w-4xl mx-auto">
-              <RealtimeMonitoringDashboard />
-            </div>
+        <div className="mt-20 pt-12 border-t border-[var(--border-subtle)]">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-8 text-center">Monitoramento em Tempo Real</h2>
+          <div className="max-w-4xl mx-auto">
+            <RealtimeMonitoringDashboard />
           </div>
         </div>
+
         <ComparisonStickyBar />
       </main>
 
