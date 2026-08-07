@@ -39,7 +39,7 @@ export function SearchResultsList() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <select className="bg-white dark:bg-card/50 backdrop-blur-md border border-border rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer">
+            <select className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer">
               <option>Menor Preço</option>
               <option>Maior Preço</option>
               <option>Mais Relevante</option>

@@ -61,14 +61,14 @@
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #050E1B;
+  --pc-bg-base: #0A182C;
   --pc-bg-surface: #0B1E3A;
   --pc-bg-surface-elevated: #112A4F;
-  --pc-brand-primary: #E8C25A;
+  --pc-brand-primary: #D4AF37;
   --pc-brand-secondary: #F8FAFC;
   --pc-brand-accent: #818CF8;
-  --pc-brand-glow: rgba(232, 194, 90, 0.2);
-  --pc-border-subtle: rgba(232, 194, 90, 0.1);
+  --pc-brand-glow: rgba(212, 175, 55, 0.2);
+  --pc-border-subtle: rgba(212, 175, 55, 0.2);
   --pc-text-primary: #F8FAFC;
   --pc-text-secondary: #94A3B8;
   --pc-text-tertiary: #64748B;
