@@ -12,6 +12,9 @@ export type MultiComparisonResult = {
   items: ComparisonItem[];
   commonCount: number;
   totals: Record<string, number>;
+  // Improved totals considering missing items
+  adjustedTotals: Record<string, number>;
+  savingsPotential: Record<string, number>;
 };
 
 export const getMultiStoreComparison = createServerFn({ method: "GET" })
@@ -24,7 +27,14 @@ export const getMultiStoreComparison = createServerFn({ method: "GET" })
     const { storeIds } = data;
 
     if (!storeIds || storeIds.length === 0) {
-      return { stores: [], items: [], commonCount: 0, totals: {} };
+      return { 
+        stores: [], 
+        items: [], 
+        commonCount: 0, 
+        totals: {}, 
+        adjustedTotals: {}, 
+        savingsPotential: {} 
+      };
     }
 
     // 1. Fetch store names
@@ -71,17 +81,38 @@ export const getMultiStoreComparison = createServerFn({ method: "GET" })
     });
 
     const totals: Record<string, number> = {};
+    const adjustedTotals: Record<string, number> = {};
+    
+    // Simple sum of all found items for each store
     storeIds.forEach(sId => {
-      totals[sId] = commonItemKeys.reduce((acc, key) => acc + (productGroups.get(key)!.prices[sId] || 0), 0);
+      totals[sId] = Array.from(productGroups.values())
+        .reduce((acc, item) => acc + (item.prices[sId] || 0), 0);
     });
+
+    // "Clean" total: Only products that exist in EVERY store
+    storeIds.forEach(sId => {
+      adjustedTotals[sId] = commonItemKeys.reduce((acc, key) => acc + (productGroups.get(key)!.prices[sId] || 0), 0);
+    });
+
+    // Savings potential: For each store, how much would you save compared to the most expensive store on common items?
+    const savingsPotential: Record<string, number> = {};
+    if (commonItemKeys.length > 0) {
+      const allTotals = Object.values(adjustedTotals);
+      const maxTotal = Math.max(...allTotals);
+      storeIds.forEach(sId => {
+        savingsPotential[sId] = maxTotal - adjustedTotals[sId];
+      });
+    }
 
     return {
       stores: storeIds.map(id => ({
         id,
         name: storeMap.get(id) || "Mercado Desconhecido"
       })),
-      items: Array.from(productGroups.values()).slice(0, 100),
+      items: Array.from(productGroups.values()).slice(0, 200),
       commonCount: commonItemKeys.length,
-      totals
+      totals,
+      adjustedTotals,
+      savingsPotential
     };
   });
