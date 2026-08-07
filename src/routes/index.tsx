@@ -96,7 +96,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
         cheapestStore: p.marketName,
         updatedAt: p.when
       })}
-      className="pc-card group cursor-pointer flex gap-4 items-center relative"
+      className="pc-card group cursor-pointer flex gap-3 p-3 items-center relative overflow-hidden"
     >
       <button 
         onClick={(e) => {
