@@ -3,6 +3,7 @@ import { Route } from "@/routes/buscar";
 import { motion, AnimatePresence } from "framer-motion";
 import { PremiumOfferCard } from "./PremiumOfferCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Price } from "@/components/ds/Price";
 
 export function SearchResultsList() {
   const { q } = Route.useSearch();
