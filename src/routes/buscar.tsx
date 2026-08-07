@@ -42,8 +42,9 @@ function SearchResultsPage() {
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
     queryFn: () => runSearch({ data: { query: q || "" } }),
-    enabled: !!q && q.length >= 1,
+    enabled: true, // Always enabled so we can show empty states
   });
+
 
   if (isLoading) return <PageLoader />;
 
