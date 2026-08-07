@@ -18,7 +18,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { usePointerEventsGuard } from "@/hooks/use-pointer-events-guard";
 import { ConfirmProvider } from "@/components/ui/confirm-provider";
 import { IdleLogoutMonitor } from "@/components/auth/IdleLogoutMonitor";
-import { useAutoTranslate } from "@/lib/pt-terms";
 
 import { UnlockConversionTracker } from "@/components/analytics/UnlockConversionTracker";
 import { useReadingMode } from "@/hooks/use-reading-mode";
@@ -212,7 +211,6 @@ function RootInner() {
     };
   }, []);
 
-  useAutoTranslate();
   useTheme();
   useReadingMode();
   // Watchdog global: libera pointer-events/scroll-lock presos no <body>

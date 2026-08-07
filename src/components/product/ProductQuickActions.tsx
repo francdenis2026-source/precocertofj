@@ -73,9 +73,9 @@ export function ProductQuickActions({
 
   const ensureCatalogId = async (): Promise<string> => {
     if (resolvedCatalogId) return resolvedCatalogId;
-    if (!slug) throw new Error("Produto não encontrado no catálogo");
+    if (!slug) throw new Error("Product not found in catalog");
     const resolved = await resolveFn({ data: { slug } });
-    if (!resolved.catalogId) throw new Error("Produto não encontrado no catálogo");
+    if (!resolved.catalogId) throw new Error("Product not found in catalog");
     setResolvedCatalogId(resolved.catalogId);
     return resolved.catalogId;
   };
@@ -85,10 +85,10 @@ export function ProductQuickActions({
     onSuccess: (result) => {
       setFavorited(result.favorited);
       qc.invalidateQueries({ queryKey: ["favorite-items"] });
-      toast.success(result.favorited ? "Favorito adicionado" : "Favorito removido");
+      toast.success(result.favorited ? "Added to favorites" : "Removed from favorites");
     },
     onError: (err: unknown) => {
-      toast.error(err instanceof Error ? err.message : "Falha ao favoritar");
+      toast.error(err instanceof Error ? err.message : "Failed to update favorite");
     },
   });
 
@@ -97,11 +97,11 @@ export function ProductQuickActions({
       addToListFn({ data: { listId, catalogId: await ensureCatalogId(), quantity: 1 } }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shopping-lists"] });
-      toast.success("Produto enviado para a lista");
+      toast.success("Product added to list");
       setListOpen(false);
     },
     onError: (err: unknown) => {
-      toast.error(err instanceof Error ? err.message : "Falha ao enviar para lista");
+      toast.error(err instanceof Error ? err.message : "Failed to add to list");
     },
   });
 
@@ -117,8 +117,8 @@ export function ProductQuickActions({
           <button
             type="button"
             className={buttonClass}
-            aria-label={`Comparar preço de ${label} em todos os mercados`}
-            title="Comparar em todos os mercados"
+            aria-label={`Compare price of ${label} across all stores`}
+            title="Compare across all stores"
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -132,8 +132,8 @@ export function ProductQuickActions({
             to="/produto-publico/$slug"
             params={{ slug }}
             className={buttonClass}
-            aria-label={`Ver preço de ${label} em todos os mercados`}
-            title="Ver em todos os mercados"
+            aria-label={`View price of ${label} across all stores`}
+            title="View across all stores"
             onClick={(event) => event.stopPropagation()}
           >
             <StorefrontMark className="h-3.5 w-3.5" strokeWidth={1.9} />
@@ -146,8 +146,8 @@ export function ProductQuickActions({
           type="button"
           className={cn(buttonClass, favorited && "border-primary/40 bg-primary/10 text-primary")}
           disabled={favoriteMutation.isPending}
-          aria-label={favorited ? `Remover ${label} dos favoritos` : `Favoritar ${label}`}
-          title={favorited ? "Remover dos favoritos" : "Favoritar"}
+          aria-label={favorited ? `Remove ${label} from favorites` : `Add ${label} to favorites`}
+          title={favorited ? "Remove from favorites" : "Add to favorites"}
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -183,8 +183,8 @@ export function ProductQuickActions({
           <button
             type="button"
             className={buttonClass}
-            aria-label={`Enviar ${label} para uma lista`}
-            title="Enviar para lista"
+            aria-label={`Add ${label} to a list`}
+            title="Add to list"
             disabled={listMutation.isPending}
             onClick={(event) => {
               event.preventDefault();
@@ -197,7 +197,7 @@ export function ProductQuickActions({
                 ensureCatalogId()
                   .then(() => setListOpen((value) => !value))
                   .catch((error: unknown) => {
-                    toast.error(error instanceof Error ? error.message : "Produto não encontrado");
+                    toast.error(error instanceof Error ? error.message : "Product not found");
                   });
                 return;
               }
@@ -215,13 +215,13 @@ export function ProductQuickActions({
             <>
               <button
                 type="button"
-                aria-label="Fechar opções de lista"
+                aria-label="Close list options"
                 className="fixed inset-0 z-40 cursor-default"
                 onClick={() => setListOpen(false)}
               />
               <div className="absolute right-0 top-full z-50 mt-1 min-w-52 rounded-lg border border-border bg-card p-1 shadow-lg">
                 <p className="px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                  Enviar para
+                  Add to
                 </p>
                 {(listsQuery.data ?? []).length > 0 ? (
                   (listsQuery.data ?? []).map((list) => (
@@ -249,7 +249,7 @@ export function ProductQuickActions({
                       navigate({ to: "/lista" });
                     }}
                   >
-                    Criar primeira lista
+                    Create first list
                   </button>
                 )}
               </div>
@@ -261,8 +261,8 @@ export function ProductQuickActions({
         open={favoriteGate.open}
         onOpenChange={favoriteGate.setOpen}
         action="favorite"
-        title="Favoritos são grátis para quem tem conta"
-        description="Crie sua conta grátis (7 dias sem cartão) para salvar produtos favoritos e receber alertas quando o preço mudar."
+        title="Favorites are free with an account"
+        description="Create your free account (7 days, no card) to save favorite products and get alerts when the price changes."
       />
     </div>
   );

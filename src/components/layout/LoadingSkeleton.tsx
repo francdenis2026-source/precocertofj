@@ -9,7 +9,7 @@ export function LoadingSkeleton({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-2", className)} role="status" aria-label="Carregando">
+    <div className={cn("space-y-2", className)} role="status" aria-label="Loading">
       {Array.from({ length: rows }).map((_, i) => (
         <div
           key={i}
@@ -51,7 +51,7 @@ export function RankingSkeleton({
   return (
     <div
       role="status"
-      aria-label="Carregando ranking de preços"
+      aria-label="Loading price ranking"
       className={cn("space-y-2.5", className)}
     >
       <div className="animate-pulse rounded-xl border border-border/70 bg-card p-3">
@@ -130,7 +130,7 @@ export function LocationsSkeleton({
   className?: string;
 }) {
   return (
-    <div role="status" aria-label="Carregando locais e ofertas" className={cn("space-y-2", className)}>
+    <div role="status" aria-label="Loading locations and deals" className={cn("space-y-2", className)}>
       {Array.from({ length: rows }).map((_, i) => (
         <div
           key={i}

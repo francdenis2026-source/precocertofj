@@ -20,7 +20,7 @@ interface ListingCountProps {
 export function ListingCount({
   count,
   total,
-  noun = "produto",
+  noun = "product",
   extras,
   className,
 }: ListingCountProps) {
@@ -37,7 +37,7 @@ export function ListingCount({
       {total != null && total !== count ? (
         <>
           {" "}
-          de{" "}
+          of{" "}
           <strong className="font-semibold tabular-nums text-foreground">{total}</strong>
         </>
       ) : null}{" "}

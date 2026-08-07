@@ -19,7 +19,7 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
  * resultados. Componente puramente apresentacional.
  */
 export const PriceSpotlight = memo(function PriceSpotlight({
-  kicker = "Destaque",
+  kicker = "Featured",
   productName,
   sizeLabel,
   price,
@@ -27,7 +27,7 @@ export const PriceSpotlight = memo(function PriceSpotlight({
   storesAvailable,
   lastSeenLabel,
   detailSlug,
-  ctaLabel = "Ver comparação completa",
+  ctaLabel = "See full comparison",
   className,
 }: {
   kicker?: string;
@@ -45,7 +45,7 @@ export const PriceSpotlight = memo(function PriceSpotlight({
 
   return (
     <section
-      aria-label="Menor preço em destaque"
+      aria-label="Featured lowest price"
       className={cn(
         "pc-surface-3 relative overflow-hidden px-4 py-4 md:px-6 md:py-5",
         className,
@@ -66,13 +66,13 @@ export const PriceSpotlight = memo(function PriceSpotlight({
           <p className={cn(tc.meta, "mt-1.5 text-muted-foreground")}>
             {storeName ? (
               <>
-                em{" "}
+                at{" "}
                 <span className={cn(tc.storeName, "align-baseline")}>
                   {shortenStoreName(storeName)}
                 </span>
               </>
             ) : (
-              "Menor preço atual"
+              "Current lowest price"
             )}
           </p>
         </div>
@@ -89,7 +89,7 @@ export const PriceSpotlight = memo(function PriceSpotlight({
 
         {/* Coluna 2 — Produto e disponibilidade */}
         <div className="min-w-0 border-t border-border/60 pt-3 md:border-t-0 md:pt-0">
-          <p className={cn(tc.eyebrow, "text-muted-foreground")}>Produto</p>
+          <p className={cn(tc.eyebrow, "text-muted-foreground")}>Product</p>
           <h3
             className={cn(
               serif,
@@ -106,12 +106,12 @@ export const PriceSpotlight = memo(function PriceSpotlight({
             {typeof storesAvailable === "number" && storesAvailable > 0 ? (
               <span className={cn(tc.meta, "text-foreground/80")}>
                 <span className="font-semibold text-foreground">{storesAvailable}</span>{" "}
-                {storesAvailable === 1 ? "mercado" : "mercados"} com preço
+                {storesAvailable === 1 ? "store" : "stores"} with price
               </span>
             ) : null}
             {lastSeenLabel ? (
               <span className={cn(tc.meta, "text-muted-foreground")}>
-                Atualizado {lastSeenLabel}
+                Updated {lastSeenLabel}
               </span>
             ) : null}
           </div>

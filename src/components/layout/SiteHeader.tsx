@@ -1,9 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
-import { prefetchRouteData } from "@/lib/route-prefetch";
-import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Ticket, Menu, ShieldCheck } from "lucide-react";
+import { LogOut, User as UserIcon, LayoutDashboard, ChevronDown, Menu, ShieldCheck } from "lucide-react";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useMyRoles } from "@/hooks/useMyRoles";
@@ -16,8 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -32,12 +28,13 @@ type Props = {
 };
 
 const NAV_LINKS = [
-  { to: "/precos", label: "Comparar Preços" },
-  { to: "/estabelecimentos", label: "Mercados" },
-  { to: "/planos", label: "Planos" },
+  { to: "/precos", label: "Compare Prices" },
+  { to: "/estabelecimentos", label: "Stores" },
+  { to: "/cesta", label: "Smart Basket" },
+  { to: "/planos", label: "Pricing" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
   const pathname = useLocation({ select: (l) => l.pathname });
   const canShowBack = showBack && pathname !== "/";
@@ -54,67 +51,72 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   }, []);
 
   const { signOut, loading: signingOut } = useSignOut();
+  void signingOut;
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
-  const shellClass = isOverlay
-    ? cn(
-        "sticky top-0 z-40 w-full shrink-0 transition-all duration-300",
-        scrolled 
-          ? "border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 backdrop-blur-md shadow-[var(--shadow-sm)]" 
-          : "bg-transparent border-transparent"
-      )
-    : "sticky top-0 z-40 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 text-[var(--text-primary)] shadow-[var(--shadow-sm)] backdrop-blur-md";
+  const floating = isOverlay && !scrolled;
+
+  const shellClass = cn(
+    "sticky top-0 z-40 w-full shrink-0 text-[var(--text-primary)]",
+    "transition-[background-color,border-color,box-shadow] duration-300 ease-out",
+    floating
+      ? "border-b border-transparent bg-transparent"
+      : "border-b border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--bg-base)_78%,transparent)] shadow-[var(--pc-shadow-sm)] backdrop-blur-xl",
+  );
 
   return (
     <header className={shellClass}>
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8 flex items-center justify-between h-16 md:h-20">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 md:h-20 md:px-8">
         {/* Brand */}
-        <Link to="/" className="group flex items-center gap-3">
+        <Link
+          to="/"
+          aria-label="PricePal — home"
+          className="group flex shrink-0 items-center gap-3 rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
+        >
           <img
             src="/logo-mark.png"
-            alt="PreçoCerto"
-            className="h-10 w-10 md:h-12 md:w-12 object-contain"
+            alt=""
+            aria-hidden="true"
+            className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105 md:h-11 md:w-11"
           />
-          <div className="hidden sm:flex flex-col leading-none">
-            <span className={cn(
-              "text-lg md:text-xl font-bold tracking-tight",
-              isOverlay && !scrolled ? "text-white" : "text-[var(--text-primary)]"
-            )}>
-              Preço<span className="text-[var(--brand-primary)]">Certo</span>
+          <span className="hidden flex-col leading-none sm:flex">
+            <span className="text-[19px] font-semibold tracking-[-0.02em] text-[var(--text-primary)] md:text-[21px]">
+              Price<span className="text-[var(--brand-primary)]">Pal</span>
             </span>
-            <span className={cn(
-              "text-[10px] font-bold uppercase tracking-wider mt-0.5",
-              isOverlay && !scrolled ? "text-white/60" : "text-[var(--text-tertiary)]"
-            )}>
+            <span className="mt-1 text-[12px] font-medium text-[var(--text-tertiary)]">
               Feijó · Acre
             </span>
-          </div>
+          </span>
         </Link>
 
-        {/* Compact search (only when scrolled or solid) */}
+        {/* Compact search (only when scrolled or on inner pages) */}
         {(pathname !== "/" || scrolled) && (
-          <div className="hidden lg:block flex-1 max-w-md mx-8">
+          <div className="mx-4 hidden min-w-0 max-w-md flex-1 lg:block">
             <SmartSearchBar compact />
           </div>
         )}
 
         {/* Navigation & Actions */}
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex shrink-0 items-center gap-2 md:gap-4">
           {showNav && (
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((l) => (
                 <Link
                   key={l.to}
                   to={l.to}
+                  activeProps={{ "data-active": "true" } as any}
                   className={cn(
-                    "px-4 py-2 text-[14px] font-semibold transition-colors rounded-lg",
-                    isOverlay && !scrolled 
-                      ? "text-white/80 hover:text-white hover:bg-white/10" 
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
+                    "group relative rounded-[var(--radius-md)] px-3 py-2 text-[15px] font-medium text-[var(--text-secondary)]",
+                    "transition-colors duration-200 hover:text-[var(--text-primary)]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
+                    "data-[active=true]:text-[var(--text-primary)]",
                   )}
                 >
                   {l.label}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-[var(--brand-primary)] transition-transform duration-300 ease-out group-hover:scale-x-100 group-data-[active=true]:scale-x-100"
+                  />
                 </Link>
               ))}
             </nav>
@@ -124,26 +126,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             {!isOverlay && canShowBack && (
               <BackButton variant="pill" className="hidden sm:inline-flex" />
             )}
-            
-            {showThemeToggle && (
-               <ThemeToggle className={cn(isOverlay && !scrolled && "text-white hover:bg-white/10")} />
-            )}
 
             {loading ? (
-              <div className="h-10 w-24 animate-pulse rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)]" />
+              <div className="h-11 w-24 animate-pulse rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)]" />
             ) : session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
                     className={cn(
-                      "h-10 rounded-[var(--radius-md)] gap-2 border px-3 text-[14px] font-bold",
-                      isOverlay && !scrolled 
-                        ? "border-white/20 bg-white/10 text-white hover:bg-white/20" 
-                        : "border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
+                      "h-11 gap-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] px-3 text-[15px] font-medium",
+                      "bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
                     )}
                   >
-                    <span className="grid h-6 w-6 place-items-center rounded-full bg-[var(--brand-primary)] text-[10px] font-bold text-white uppercase shadow-sm">
+                    <span className="grid h-7 w-7 place-items-center rounded-full bg-[var(--brand-primary)] text-[12px] font-semibold uppercase text-[var(--text-on-brand)]">
                       {initials}
                     </span>
                     <span className="hidden sm:inline">{firstName}</span>
@@ -151,7 +147,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-[var(--radius-lg)]">
-                  <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                  <DropdownMenuLabel>My account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {isAdmin && (
                     <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })}>
@@ -159,24 +155,26 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" /> Painel
+                    <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })}>
-                    <UserIcon className="mr-2 h-4 w-4" /> Perfil
+                    <UserIcon className="mr-2 h-4 w-4" /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => void signOut()} className="text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" /> Sair
+                    <LogOut className="mr-2 h-4 w-4" /> Sign out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link
-                to="/login"
-                className="pc-button-primary"
-              >
-                Entrar
-              </Link>
+              <>
+                <Link to="/login" className="pc-button-ghost hidden sm:inline-flex">
+                  Sign in
+                </Link>
+                <Link to="/cadastro" className="pc-button-primary">
+                  Get started
+                </Link>
+              </>
             )}
 
             {showNav && (
@@ -184,17 +182,15 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 <SheetTrigger asChild>
                   <Button
                     variant="ghost"
-                    className={cn(
-                      "h-10 w-10 p-0 lg:hidden rounded-[var(--radius-md)]",
-                      isOverlay && !scrolled ? "text-white hover:bg-white/10" : "text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
-                    )}
+                    aria-label="Open menu"
+                    className="h-11 w-11 rounded-[var(--radius-md)] p-0 text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] lg:hidden"
                   >
-                    <Menu className="h-6 w-6" />
+                    <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] border-[var(--border-subtle)] bg-[var(--bg-surface)]">
                   <SheetHeader className="mb-8">
-                    <SheetTitle className="text-left font-bold tracking-tight">Menu</SheetTitle>
+                    <SheetTitle className="text-left text-[20px] font-semibold tracking-[-0.02em]">Menu</SheetTitle>
                   </SheetHeader>
                   <nav className="flex flex-col gap-2">
                     {NAV_LINKS.map((l) => (
@@ -202,11 +198,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                         key={l.to}
                         to={l.to}
                         onClick={() => setMenuOpen(false)}
-                        className="flex h-12 items-center px-4 text-[15px] font-bold text-[var(--text-primary)] rounded-[var(--radius-md)] hover:bg-[var(--bg-surface-elevated)]"
+                        className="flex h-12 items-center rounded-[var(--radius-md)] px-4 text-[16px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
                       >
                         {l.label}
                       </Link>
                     ))}
+                    {!session && (
+                      <Link
+                        to="/login"
+                        onClick={() => setMenuOpen(false)}
+                        className="mt-2 flex h-12 items-center rounded-[var(--radius-md)] px-4 text-[16px] font-medium text-[var(--brand-primary)] hover:bg-[var(--bg-surface-elevated)]"
+                      >
+                        Sign in
+                      </Link>
+                    )}
                   </nav>
                 </SheetContent>
               </Sheet>

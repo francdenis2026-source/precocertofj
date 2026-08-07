@@ -45,8 +45,8 @@ export function ComparisonStickyBar() {
                 )}
               </div>
               <div className="shrink-0">
-                <p className="text-[11px] font-black uppercase tracking-wider">{items.length} ITENS</p>
-                <p className="text-[9px] text-muted-foreground font-bold uppercase">NA LISTA DE COMPARAÇÃO</p>
+                <p className="text-[11px] font-black uppercase tracking-wider">{items.length} ITEMS</p>
+                <p className="text-[9px] text-muted-foreground font-bold uppercase">IN COMPARISON LIST</p>
               </div>
             </div>
 
@@ -56,7 +56,7 @@ export function ComparisonStickyBar() {
                 size="icon"
                 onClick={clear}
                 className="h-10 w-10 rounded-xl hover:bg-danger/10 hover:text-danger"
-                aria-label="Limpar lista"
+                aria-label="Clear list"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -65,7 +65,7 @@ export function ComparisonStickyBar() {
                 className="pc-button-primary h-10 px-6 rounded-xl flex items-center gap-2 whitespace-nowrap"
               >
                 <Scale className="h-4 w-4" />
-                <span>Comparar</span>
+                <span>Compare</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>

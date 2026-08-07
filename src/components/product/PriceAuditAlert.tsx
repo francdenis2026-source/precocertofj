@@ -27,7 +27,7 @@ export function PriceAuditAlert({ report }: { report: AuditReport | null }) {
       <button
         type="button"
         onClick={() => setDismissed(true)}
-        aria-label="Dispensar alerta de auditoria"
+        aria-label="Dismiss audit alert"
         className="absolute right-2 top-2 rounded-full p-1 text-muted-foreground transition hover:text-foreground"
       >
         <X className="h-3.5 w-3.5" />
@@ -40,7 +40,7 @@ export function PriceAuditAlert({ report }: { report: AuditReport | null }) {
           <ShieldCheck className="h-3.5 w-3.5 text-warning" strokeWidth={2} />
         )}
         <span className={critical ? "text-destructive" : "text-warning"}>
-          Auditoria de preços · {report.criticalCount} crítico(s), {report.warnCount} aviso(s)
+          Price audit · {report.criticalCount} critical, {report.warnCount} warning(s)
         </span>
       </p>
 
@@ -54,7 +54,7 @@ export function PriceAuditAlert({ report }: { report: AuditReport | null }) {
 
       {report.issues.length > shown.length && (
         <p className="mt-1.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-          +{report.issues.length - shown.length} outra(s) inconsistência(s)
+          +{report.issues.length - shown.length} other inconsistenc{report.issues.length - shown.length === 1 ? "y" : "ies"}
         </p>
       )}
     </div>

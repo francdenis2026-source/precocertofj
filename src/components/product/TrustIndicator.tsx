@@ -15,28 +15,28 @@ export function computeTrust(lastSeenAt: string | null | undefined, totalScans: 
 }
 
 export function formatRelative(iso: string | null | undefined): string {
-  if (!iso) return "sem data";
+  if (!iso) return "no date";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "sem data";
+  if (Number.isNaN(d.getTime())) return "no date";
   const diffMs = Date.now() - d.getTime();
   const min = Math.round(diffMs / 60000);
-  if (min < 1) return "agora";
-  if (min < 60) return `há ${min} min`;
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
   const h = Math.round(min / 60);
-  if (h < 24) return `há ${h} h`;
+  if (h < 24) return `${h} h ago`;
   const day = Math.round(h / 24);
-  if (day < 30) return `há ${day} ${day === 1 ? "dia" : "dias"}`;
+  if (day < 30) return `${day} ${day === 1 ? "day" : "days"} ago`;
   const mo = Math.round(day / 30);
-  if (mo < 12) return `há ${mo} ${mo === 1 ? "mês" : "meses"}`;
+  if (mo < 12) return `${mo} ${mo === 1 ? "month" : "months"} ago`;
   const y = Math.round(mo / 12);
-  return `há ${y} ${y === 1 ? "ano" : "anos"}`;
+  return `${y} ${y === 1 ? "year" : "years"} ago`;
 }
 
 export function formatFullDate(iso: string | null | undefined): string {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleString("pt-BR", {
+  return d.toLocaleString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -58,7 +58,7 @@ export function formatShortDate(iso: string | Date | null | undefined): string {
   if (!iso) return "—";
   const d = iso instanceof Date ? iso : new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("pt-BR", {
+  return d.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric"
@@ -70,7 +70,7 @@ export function formatAbsoluteTooltip(iso: string | Date | null | undefined): st
   if (!iso) return "";
   const d = iso instanceof Date ? iso : new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 }
 
 const CONFIG: Record<TrustLevel, {
@@ -80,22 +80,22 @@ const CONFIG: Record<TrustLevel, {
   description: string;
 }> = {
   alta: {
-    label: "Confiança alta",
+    label: "High confidence",
     color: "border-savings/40 bg-savings/10 text-savings-foreground",
     icon: ShieldCheck,
-    description: "Preço confirmado recentemente e com múltiplas leituras.",
+    description: "Price confirmed recently with multiple readings.",
   },
   media: {
-    label: "Confiança média",
+    label: "Medium confidence",
     color: "border-warning/40 bg-warning/10 text-warning dark:text-warning",
     icon: Shield,
-    description: "Preço com leitura razoavelmente recente. Pode ter pequenas variações.",
+    description: "Price with a reasonably recent reading. May have small variations.",
   },
   baixa: {
-    label: "Confiança baixa",
+    label: "Low confidence",
     color: "border-destructive/30 bg-destructive/10 text-destructive",
     icon: ShieldAlert,
-    description: "Última leitura antiga ou pouco frequente. Confirme na mercado antes de decidir.",
+    description: "Last reading is old or infrequent. Confirm at the store before deciding.",
   },
 };
 
@@ -126,7 +126,7 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
           aria-label={cfg.label}
         >
           <Icon className="h-3 w-3" aria-hidden />
-          {compact ? cfg.label.replace("Confiança ", "") : cfg.label}
+          {compact ? cfg.label.replace(/^(High|Medium|Low) /, "") : cfg.label}
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -142,23 +142,23 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
             <p className="mt-1 leading-snug text-muted-foreground">{cfg.description}</p>
             <dl className="mt-2 space-y-0.5 text-[11px] text-muted-foreground">
               <div className="flex items-center justify-between gap-2">
-                <dt>Última leitura</dt>
+                <dt>Last reading</dt>
                 <dd className="font-medium text-foreground">
                   {formatRelative(lastSeenAt)}
                 </dd>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <dt>Total de leituras</dt>
+                <dt>Total readings</dt>
                 <dd className="font-medium text-foreground">{scans}</dd>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <dt>Data completa</dt>
+                <dt>Full date</dt>
                 <dd className="font-medium text-foreground">{formatFullDate(lastSeenAt)}</dd>
               </div>
             </dl>
             <p className="mt-2 flex items-start gap-1 rounded-md bg-muted/50 p-1.5 text-[11px] leading-snug text-muted-foreground">
               <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden />
-              Os valores são coletados nas gôndolas e podem variar por atualização de tabela ou etiquetagem. Confirme no ponto de venda.
+              Values are collected in stores and may vary due to table updates or labeling. Confirm at the point of sale.
             </p>
           </div>
         </div>

@@ -43,12 +43,12 @@ function daysSince(iso: string): number {
 }
 
 function freshnessLabel(days: number): string {
-  if (days <= 0) return "hoje";
-  if (days === 1) return "há 1 dia";
-  if (days < 30) return `há ${days} dias`;
-  if (days < 60) return "há 1 mês";
+  if (days <= 0) return "today";
+  if (days === 1) return "1 day ago";
+  if (days < 30) return `${days} days ago`;
+  if (days < 60) return "1 month ago";
   const months = Math.floor(days / 30);
-  return `há ${months} meses`;
+  return `${months} months ago`;
 }
 
 type SortMode = "cheapest" | "savings" | "recent";
@@ -178,12 +178,12 @@ export function ProductQuickModal({
             <DialogHeader className="space-y-1.5 text-left">
               <span
                 role="note"
-                aria-label="Seção 01: Visão rápida"
+                aria-label="Section 01: Quick overview"
                 className="inline-flex w-fit items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-strong"
               >
                 <span aria-hidden="true" className="tabular-nums">01</span>
                 <span aria-hidden="true" className="opacity-40">·</span>
-                <span aria-hidden="true">Visão rápida</span>
+                <span aria-hidden="true">Quick overview</span>
               </span>
               <DialogTitle className="font-display text-[20px] font-semibold leading-tight tracking-tight text-foreground">
                 <HighlightMatch text={title} tokens={queryTokens} />
@@ -218,11 +218,11 @@ export function ProductQuickModal({
                   type="button"
                   onClick={() => setReloadTick((t) => t + 1)}
                   disabled={loading}
-                  aria-label="Atualizar preços (admin)"
+                  aria-label="Refresh prices (admin)"
                   title={
                     refreshedAt
-                      ? `Atualizado às ${refreshedAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`
-                      : "Atualizar preços (somente admin)"
+                      ? `Updated at ${refreshedAt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`
+                      : "Refresh prices (admin only)"
                   }
                   className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface text-muted-foreground shadow-sm transition hover:border-accent-strong/50 hover:text-accent-strong disabled:opacity-50"
                 >
@@ -235,8 +235,8 @@ export function ProductQuickModal({
               <ShareButton
                 url={`/produto-publico/${data.slug}`}
                 title={data.displayName}
-                text={`Confira o preço de ${data.displayName} em todos os mercados`}
-                label="Compartilhar"
+                text={`Check the price of ${data.displayName} across all stores`}
+                label="Share"
                 compact
               />
             </div>
@@ -248,7 +248,7 @@ export function ProductQuickModal({
         <div className="space-y-5 p-5">
           {loading && (
             <div className="rounded-2xl border border-border bg-surface p-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              Carregando informações do produto…
+              Loading product information…
             </div>
           )}
           {err && (
@@ -259,16 +259,16 @@ export function ProductQuickModal({
 
           {data && !loading && (
             <>
-              {/* Preço em destaque */}
+              {/* Highlighted price */}
               <div className="hairline-gold relative rounded-2xl border border-[color-mix(in_oklab,var(--color-accent)_20%,transparent)] bg-surface p-3">
                 <div
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_55%,transparent)] to-transparent"
                 />
                 <div className="grid grid-cols-3 gap-2">
-                  <Stat label="Menor" value={data.min} accent />
-                  <Stat label="Média" value={data.avg} />
-                  <Stat label="Maior" value={data.max} />
+                  <Stat label="Lowest" value={data.min} accent />
+                  <Stat label="Average" value={data.avg} />
+                  <Stat label="Highest" value={data.max} />
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <UnitPriceBadge
@@ -283,27 +283,27 @@ export function ProductQuickModal({
                 <div className="flex items-center gap-2 rounded-xl border border-[color-mix(in_oklab,var(--color-savings,var(--color-accent))_30%,transparent)] bg-savings/8 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
                   <TrendingDown className="h-4 w-4" strokeWidth={1.8} />
                   <span>
-                    Caiu{" "}
+                    Dropped{" "}
                     <span className="font-display text-[13px] font-semibold normal-case tracking-tight tabular-nums">
                       {drop}%
                     </span>{" "}
-                    desde a última leitura
+                    since the last reading
                   </span>
                 </div>
               )}
 
-              {/* Mercados */}
-              <section aria-label="Preços por mercado">
+              {/* Stores */}
+              <section aria-label="Prices by store">
                 <div className="mb-2 flex items-baseline justify-between gap-2">
                   <div className="min-w-0">
                     <span
                       role="note"
-                      aria-label="Seção 02: Preços por mercado"
+                      aria-label="Section 02: Prices by store"
                       className="inline-flex w-fit items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-strong"
                     >
                       <span aria-hidden="true" className="tabular-nums">02</span>
                       <span aria-hidden="true" className="opacity-40">·</span>
-                      <span aria-hidden="true">Por mercado</span>
+                      <span aria-hidden="true">By store</span>
                     </span>
                     <h3 className="mt-1 flex items-center gap-1.5 font-display text-[16px] font-semibold tracking-tight text-foreground">
                       <StoreIcon
@@ -311,7 +311,7 @@ export function ProductQuickModal({
                         strokeWidth={1.6}
                         aria-hidden="true"
                       />
-                      Estabelecimentos{" "}
+                      Establishments{" "}
                       <span className="font-sans text-[12px] font-medium text-muted-foreground tabular-nums">
                         ({data.markets.length})
                       </span>
@@ -320,27 +320,27 @@ export function ProductQuickModal({
 
                   {data.samples > 0 && (
                     <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                      {data.samples} amostra{data.samples > 1 ? "s" : ""}
+                      {data.samples} sample{data.samples > 1 ? "s" : ""}
                     </span>
                   )}
                 </div>
 
                 {data.markets.length === 0 ? (
                   <p className="rounded-xl border border-dashed border-border bg-surface px-3 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                    Ainda não temos preços por mercado para este item.
+                    We don't have prices by store for this item yet.
                   </p>
                 ) : (
                   <>
-                    {/* Toolbar de ordenação + filtro */}
+                    {/* Sorting + filter toolbar */}
                     <div className="mb-2 flex flex-wrap items-center gap-2 rounded-xl border border-[color-mix(in_oklab,var(--color-accent)_20%,transparent)] bg-surface/60 px-2.5 py-2">
                       <div className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                        <span>Ordenar:</span>
+                        <span>Sort:</span>
                       </div>
                       <div className="flex gap-1">
                         {([
-                          ["cheapest", "Menor preço"],
-                          ["savings", "Maior economia"],
-                          ["recent", "Mais recente"],
+                          ["cheapest", "Lowest price"],
+                          ["savings", "Biggest savings"],
+                          ["recent", "Most recent"],
                         ] as [SortMode, string][]).map(([mode, label]) => (
                           <button
                             key={mode}
@@ -434,7 +434,7 @@ export function ProductQuickModal({
                             <div className="flex min-w-0 items-center gap-3">
                               <span
                                 role="img"
-                                aria-label={`Posição ${i + 1}`}
+                                aria-label={`Position ${i + 1}`}
                                 className={
                                   "grid h-7 w-7 shrink-0 place-items-center rounded-full border font-sans text-[11px] font-semibold tabular-nums " +
                                   (isBest
@@ -450,7 +450,7 @@ export function ProductQuickModal({
                                   {isBest && (
                                     <span className="inline-flex items-center gap-1 rounded-full border border-savings/40 bg-savings/15 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.22em] text-savings">
                                       <Sparkles className="h-2.5 w-2.5" strokeWidth={2} aria-hidden="true" />
-                                      Mais barato
+                                      Cheapest
                                     </span>
                                   )}
                                   <span className="truncate">{m.marketName}</span>
@@ -463,17 +463,17 @@ export function ProductQuickModal({
                                           ? "border-savings/40 bg-savings/10 text-savings"
                                           : "border-border bg-surface text-muted-foreground",
                                     )}
-                                    title={`Última leitura ${dateFmt(m.lastSeen)}`}
+                                    title={`Last reading ${dateFmt(m.lastSeen)}`}
                                   >
                                     {isStale && <AlertTriangle className="h-2.5 w-2.5" strokeWidth={2} aria-hidden="true" />}
                                     {freshnessLabel(days)}
                                   </span>
                                 </p>
                                 <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                                  <span>{m.samples} leitura{m.samples > 1 ? "s" : ""}</span>
+                                  <span>{m.samples} reading{m.samples > 1 ? "s" : ""}</span>
                                   <span aria-hidden="true" className="text-accent-strong/50">·</span>
                                   <span className="normal-case tracking-normal">
-                                    Últ. {dateFmt(m.lastSeen)}
+                                    Last: {dateFmt(m.lastSeen)}
                                   </span>
                                   {m.city && (
                                     <>
@@ -488,7 +488,7 @@ export function ProductQuickModal({
                                   {!isBest && deltaPct > 0 && (
                                     <>
                                       <span aria-hidden="true" className="text-accent-strong/50">·</span>
-                                      <span className="text-destructive">+{deltaPct}% vs melhor</span>
+                                      <span className="text-destructive">+{deltaPct}% vs best</span>
                                     </>
                                   )}
                                 </p>
@@ -496,9 +496,9 @@ export function ProductQuickModal({
                             </div>
 
                             <div className="grid shrink-0 grid-cols-3 gap-2 text-right sm:min-w-[260px]">
-                              <MiniStat label="Menor" value={m.priceMin} highlight />
-                              <MiniStat label="Média" value={m.priceAvg} />
-                              <MiniStat label="Maior" value={m.priceMax} />
+                              <MiniStat label="Lowest" value={m.priceMin} highlight />
+                              <MiniStat label="Average" value={m.priceAvg} />
+                              <MiniStat label="Highest" value={m.priceMax} />
                             </div>
                           </li>
                         );
@@ -507,7 +507,7 @@ export function ProductQuickModal({
 
                     {visibleMarkets.length === 0 && (
                       <p className="mt-2 rounded-xl border border-dashed border-border bg-surface px-3 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                        Nenhum mercado corresponde ao filtro atual.
+                        No stores match the current filter.
                       </p>
                     )}
                   </>
@@ -516,22 +516,22 @@ export function ProductQuickModal({
 
 
 
-              {/* Ranking por cidade */}
+              {/* Ranking by city */}
               {data.citiesRanking.length > 0 && (
-                <section aria-label="Onde é mais barato por região">
+                <section aria-label="Where it is cheapest by region">
                   <div className="mb-2">
                     <span
                       role="note"
-                      aria-label="Seção 03: Onde é mais barato por região"
+                      aria-label="Section 03: Where it is cheapest by region"
                       className="inline-flex w-fit items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-strong"
                     >
                       <span aria-hidden="true" className="tabular-nums">03</span>
                       <span aria-hidden="true" className="opacity-40">·</span>
-                      <span aria-hidden="true">Por região</span>
+                      <span aria-hidden="true">By region</span>
                     </span>
                     <h3 className="mt-1 flex items-center gap-1.5 font-display text-[16px] font-semibold tracking-tight text-foreground">
                       <MapPin className="h-4 w-4 text-accent-strong" strokeWidth={1.6} aria-hidden="true" />
-                      Onde fica mais barato
+                      Where it is cheapest
                     </h3>
                   </div>
                   <ul className="grid gap-1.5 sm:grid-cols-2">
@@ -550,7 +550,7 @@ export function ProductQuickModal({
                             {c.city}{c.state ? `/${c.state}` : ""}
                           </p>
                           <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                            {c.bestMarket} · {c.marketsCount} merc.
+                            {c.bestMarket} · {c.marketsCount} stores
                           </p>
                         </div>
                         <div className="text-right">
@@ -561,7 +561,7 @@ export function ProductQuickModal({
                             tone={i === 0 ? "best" : "default"}
                           />
                           <p className="mt-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                            média <Price value={c.avgPrice} size="xs" tone="muted" />
+                            avg <Price value={c.avgPrice} size="xs" tone="muted" />
                           </p>
                         </div>
                       </li>
@@ -577,7 +577,7 @@ export function ProductQuickModal({
                   onClick={() => onOpenChange(false)}
                   className="rounded-full border border-border bg-surface px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground transition hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)]"
                 >
-                  Fechar
+                  Close
                 </button>
                 <Link
                   to="/produto-publico/$slug"
@@ -585,7 +585,7 @@ export function ProductQuickModal({
                   onClick={() => onOpenChange(false)}
                   className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--color-accent)_55%,transparent)] bg-primary px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-primary-foreground shadow-[0_1px_0_color-mix(in_oklab,var(--color-accent)_45%,transparent)_inset] transition hover:opacity-90"
                 >
-                  Ver página completa
+                  View full page
                   <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.8} />
                 </Link>
               </div>
@@ -603,7 +603,7 @@ function Stat({
   accent,
 }: {
   label: string;
-  /** Valor monetário em reais — formatado pelo componente <Price />. */
+  /** Monetary value in reais — formatted by the <Price /> component. */
   value: number | null | undefined;
   accent?: boolean;
 }) {
@@ -629,7 +629,7 @@ function MiniStat({
   highlight,
 }: {
   label: string;
-  /** Valor monetário em reais — formatado pelo componente <Price />. */
+  /** Monetary value in reais — formatted by the <Price /> component. */
   value: number | null | undefined;
   highlight?: boolean;
 }) {

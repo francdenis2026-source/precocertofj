@@ -77,7 +77,7 @@ export function FinalCTASection() {
                   color: "#F5C86A",
                 }}
               >
-                <Sparkles className="h-3 w-3" aria-hidden /> Comece agora
+                <Sparkles className="h-3 w-3" aria-hidden /> Get started now
               </span>
 
               <h2
@@ -89,9 +89,9 @@ export function FinalCTASection() {
                   textShadow: "0 2px 18px rgba(0,0,0,0.4)",
                 }}
               >
-                Encontre o preço certo em{" "}
+                Find the right price in{" "}
                 <span className="italic" style={{ color: "#F5C86A" }}>
-                  segundos
+                  seconds
                 </span>
                 .
               </h2>
@@ -100,14 +100,14 @@ export function FinalCTASection() {
                 className="max-w-xl text-[12px] leading-snug"
                 style={{ color: "rgba(245,246,250,0.82)" }}
               >
-                Compare em tempo real os preços dos mercados parceiros do seu bairro.
+                Compare real-time prices from partner markets in your neighborhood.
               </p>
 
               <form
                 onSubmit={onSubmit}
                 className="w-full"
                 role="search"
-                aria-label="Buscar preço agora"
+                aria-label="Search prices now"
               >
                 <div
                   className="flex items-center gap-1.5 rounded-xl border p-1 transition-colors focus-within:border-[color:var(--pc-home-gold)]"
@@ -123,9 +123,9 @@ export function FinalCTASection() {
                       type="search"
                       value={q}
                       onChange={(e) => setQ(e.target.value)}
-                      placeholder="Ex.: Arroz, Feijão, Leite…"
+                      placeholder="e.g. Rice, Beans, Milk…"
                       className="min-w-0 flex-1 bg-transparent py-1.5 text-[13.5px] text-slate-900 outline-none placeholder:text-slate-400"
-                      aria-label="O que você procura?"
+                      aria-label="What are you looking for?"
                       autoComplete="off"
                       disabled={loading}
                     />
@@ -140,11 +140,11 @@ export function FinalCTASection() {
                     {loading ? (
                       <>
                         <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-                        Abrindo…
+                        Opening…
                       </>
                     ) : (
                       <>
-                        Buscar
+                        Search
                         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
                       </>
                     )}
@@ -160,17 +160,17 @@ export function FinalCTASection() {
               >
                 <li className="inline-flex items-center gap-1">
                   <Zap className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
-                  Resultados instantâneos
+                  Instant results
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
                 <li className="inline-flex items-center gap-1">
                   <ShieldCheck className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
-                  Dados verificados
+                  Verified data
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
                 <li className="inline-flex items-center gap-1">
                   <Sparkles className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
-                  Mercados do seu bairro
+                  Markets in your neighborhood
                 </li>
               </ul>
             </div>

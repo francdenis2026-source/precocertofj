@@ -23,10 +23,10 @@ export function SearchDashboard() {
   if (!result || !result.groups.length) return null;
 
   const stats = [
-    { label: "Menor Preço", value: result.min ?? 0, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
-    { label: "Economia", value: (result.max ?? 0) - (result.min ?? 0), icon: <PiggyBank className="h-4 w-4" />, tone: "savings" as const },
-    { label: "Ofertados", value: result.samples ?? 0, icon: <ShoppingBag className="h-4 w-4" />, isNumber: true },
-    { label: "Produtos", value: result.groups.length ?? 0, icon: <RefreshCw className="h-4 w-4" />, isNumber: true },
+    { label: "Lowest Price", value: result.min ?? 0, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
+    { label: "Savings", value: (result.max ?? 0) - (result.min ?? 0), icon: <PiggyBank className="h-4 w-4" />, tone: "savings" as const },
+    { label: "Offers", value: result.samples ?? 0, icon: <ShoppingBag className="h-4 w-4" />, isNumber: true },
+    { label: "Products", value: result.groups.length ?? 0, icon: <RefreshCw className="h-4 w-4" />, isNumber: true },
   ];
 
   return (
