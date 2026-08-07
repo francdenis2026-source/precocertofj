@@ -143,7 +143,7 @@ function StorePage() {
   }, [groups]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-[#1E293B] pb-24 font-body">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#1E293B] pb-24 font-body selection:bg-blue-600/20">
       {/* Mercado Header - Ultra High Contrast */}
       <header className="bg-white border-b border-gray-100 shadow-sm relative overflow-hidden">
         {/* Subtle decorative background */}
@@ -376,7 +376,7 @@ function StorePage() {
          </div>
       </footer>
 
-      {/* MobileNav removed if not imported correctly or if using global layout */}
+      <MobileNav />
     </div>
   );
 }
