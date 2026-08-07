@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { saveComparisonCart, exportComparisonData } from "@/lib/comparison-actions.functions";
+import { SideBySideComparison } from "@/components/comparison/SideBySideComparison";
 import { toggleCartAlert, getStoreAlertsStatus } from "@/lib/notifications.functions";
 import { exportStoreQuotePdf } from "@/lib/store-quote-pdf";
 import { Button } from "@/components/ui/button";
