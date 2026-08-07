@@ -376,7 +376,7 @@ function StorePage() {
          </div>
       </footer>
 
-      <MobileNav />
+      {/* MobileNav removed if not imported correctly or if using global layout */}
     </div>
   );
 }
