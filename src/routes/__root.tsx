@@ -147,7 +147,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children:
-          "try{var s=localStorage.getItem('pc-theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var r=document.documentElement;r.classList.toggle('dark',d);r.dataset.theme=d?'dark':'light';r.style.colorScheme=d?'dark':'light';console.log('Theme inline boot:',d?'dark':'light');}catch(e){}",
+          "try{var s=localStorage.getItem('pc-theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var r=document.documentElement;r.classList.add(d?'dark':'light');r.classList.remove(d?'light':'dark');r.dataset.theme=d?'dark':'light';r.style.colorScheme=d?'dark':'light';}catch(e){}",
       },
       {
         children:
@@ -183,12 +183,11 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function RootComponent() {
+function RootInner() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
 
   // "Rolagem por Mouse Sofisticada" (Lenis implementation)
-  // Lenis desativado temporariamente para debugar trava de scroll
   useLayoutEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -257,8 +256,6 @@ function RootComponent() {
     void import("@/lib/route-prefetch").then((m) => m.warmMainRoutes(queryClient));
   }, [queryClient]);
 
-
-
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -274,11 +271,6 @@ function RootComponent() {
 
     removeBadge();
 
-    /* PERFORMANCE: o badge é injetado fora do React, então precisamos observar
-       o body. Mas varrer o documento inteiro a cada mutação (uma lista de 300
-       linhas dispara centenas) custava mais que o próprio render. Agora as
-       mutações são agrupadas em UM frame, e só as que adicionaram elementos
-       disparam a varredura. */
     let frame: number | null = null;
     const observer = new MutationObserver((mutations) => {
       if (frame != null) return;
@@ -304,8 +296,7 @@ function RootComponent() {
   }, []);
 
 
-  // Global guard: bloqueia números negativos em <input type="number"> (exceto quando
-  // o input declara explicitamente allow-negative via data-allow-negative).
+  // Global guard: bloqueia números negativos em <input type="number">
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -318,11 +309,9 @@ function RootComponent() {
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (!isGuardedNumber(e.target)) return;
-      // bloqueia sinal negativo, positivo explícito e notação exponencial
       if (e.key === "-" || e.key === "Subtract" || e.key === "+" || e.key === "e" || e.key === "E") {
         e.preventDefault();
       }
-      // seta pra baixo no mínimo: impede ir a negativo via teclado
       if (e.key === "ArrowDown") {
         const el = e.target;
         const n = Number(el.value);
@@ -356,7 +345,6 @@ function RootComponent() {
 
     const onBlur = (e: FocusEvent) => {
       if (!isGuardedNumber(e.target)) return;
-      // limpa "-" solitário ou strings inválidas em blur
       if (e.target.value === "-") {
         e.target.value = "";
         e.target.dispatchEvent(new Event("input", { bubbles: true }));
@@ -370,7 +358,6 @@ function RootComponent() {
       if (!isGuardedNumber(e.target)) return;
       const text = e.clipboardData?.getData("text") ?? "";
       const trimmed = text.trim();
-      // bloqueia paste com sinal negativo ou notação exponencial
       if (/^-/.test(trimmed) || /[eE]/.test(trimmed)) e.preventDefault();
     };
 
@@ -398,7 +385,6 @@ function RootComponent() {
         )
           return;
         if (event === "SIGNED_IN") {
-          // Ao autenticar, zera a cota gratuita do visitante.
           void import("@/lib/guest-quota").then(({ resetGuestQuota }) => resetGuestQuota());
         }
         router.invalidate();
@@ -409,20 +395,25 @@ function RootComponent() {
   }, [router, queryClient]);
 
   return (
+    <ConfirmProvider>
+      <MobileStickySearch />
+      <Outlet />
+      <BottomTabBar />
+      <div aria-hidden className="h-[64px] md:hidden" />
+      <IdleLogoutMonitor />
+      <UnlockConversionTracker />
+      <GuestGlobalPriceLock />
+      <Toaster />
+    </ConfirmProvider>
+  );
+}
+
+function RootComponent() {
+  const { queryClient } = Route.useRouteContext();
+  
+  return (
     <QueryClientProvider client={queryClient}>
-      <ConfirmProvider>
-        <MobileStickySearch />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <BottomTabBar />
-        {/* Compensa a altura da BottomTabBar apenas no mobile, sem afetar desktop. */}
-        <div aria-hidden className="h-[64px] md:hidden" />
-        <IdleLogoutMonitor />
-        <UnlockConversionTracker />
-        <GuestGlobalPriceLock />
-        
-        <Toaster />
-      </ConfirmProvider>
+      <RootInner />
     </QueryClientProvider>
   );
 }

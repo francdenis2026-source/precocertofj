@@ -26,7 +26,8 @@ function resolveIsDark(mode: Theme): boolean {
 function apply(mode: Theme) {
   if (typeof document === "undefined") return;
   const isDark = resolveIsDark(mode);
-  document.documentElement.classList.toggle("dark", isDark);
+  document.documentElement.classList.add(isDark ? "dark" : "light");
+  document.documentElement.classList.remove(isDark ? "light" : "dark");
   document.documentElement.dataset.theme = isDark ? "dark" : "light";
   document.documentElement.style.colorScheme = isDark ? "dark" : "light";
 }
