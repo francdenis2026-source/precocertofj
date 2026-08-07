@@ -2,6 +2,7 @@
 @import "./styles/print.css";
 
 @custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 @keyframes gradient-x {
   0% { background-position: 0% 50%; }
@@ -15,71 +16,59 @@
 }
 
 :root {
-  /* Core Brand Palette - Deep Navy & Refined Gold */
-  --pc-brand-navy: #0B1E3A;
-  --pc-brand-navy-deep: #050E1B;
+  /* Core Brand Palette - Refined Gold & Professional Grays */
   --pc-brand-gold: #D4AF37;
-  --pc-brand-gold-glow: #FFD700;
+  --pc-brand-gold-hover: #C5A028;
   
-  /* Backgrounds */
-  --pc-bg-base: #F8FAFC;
-  --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F1F5F9;
+  /* Theme: Light (Default) */
+  --bg-base: #F7F8FA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+  --border-subtle: #E5E7EB;
   
-  /* Text */
-  --pc-text-primary: #0F172A;
-  --pc-text-secondary: #475569;
-  --pc-text-tertiary: #94A3B8;
+  --text-primary: #1A1A2E;
+  --text-secondary: #6B7280;
+  --text-tertiary: #9CA3AF;
   
-  /* Interaction & Accents */
-  --pc-brand-primary: var(--pc-brand-gold);
-  --pc-brand-secondary: var(--pc-brand-navy);
-  --pc-brand-accent: #6366F1;
-  --pc-brand-glow: rgba(212, 175, 55, 0.12);
-  --pc-border-subtle: rgba(11, 30, 58, 0.08);
+  --brand-primary: var(--pc-brand-gold);
+  --brand-primary-foreground: #FFFFFF;
   
-  /* Tokens */
-  --bg-base: var(--pc-bg-base);
-  --bg-surface: var(--pc-bg-surface);
-  --bg-surface-elevated: var(--pc-bg-surface-elevated);
-  --border-subtle: var(--pc-border-subtle);
-  --brand-primary: var(--pc-brand-primary);
-  --brand-secondary: var(--pc-brand-secondary);
-  --brand-accent: var(--pc-brand-accent);
-  --brand-glow: var(--pc-brand-glow);
-  --text-primary: var(--pc-text-primary);
-  --text-secondary: var(--pc-text-secondary);
-  --text-tertiary: var(--pc-text-tertiary);
-
+  --success: #16A34A;
+  --danger: #DC2626;
+  --warning: #F59E0B;
+  
   /* Radius */
-  --pc-radius-lg: 24px;
-  --pc-radius-md: 16px;
-  --pc-radius-sm: 8px;
+  --radius-xl: 14px;
+  --radius-lg: 12px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --radius-full: 9999px;
   
   /* Shadows */
-  --pc-shadow-sm: 0 2px 4px rgba(11, 30, 58, 0.04);
-  --pc-shadow-md: 0 8px 24px -4px rgba(11, 30, 58, 0.08);
-  --pc-shadow-lg: 0 24px 48px -12px rgba(11, 30, 58, 0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
   
   /* Animation */
   --dur-fast: 150ms;
   --dur-base: 250ms;
-  --dur-slow: 400ms;
   --ease-out-smooth: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #070F1A;
-  --pc-bg-surface: #0B1E3A;
-  --pc-bg-surface-elevated: #112A4F;
-  --pc-brand-primary: #D4AF37;
-  --pc-brand-secondary: #F8FAFC;
-  --pc-brand-accent: #818CF8;
-  --pc-brand-glow: rgba(212, 175, 55, 0.2);
-  --pc-border-subtle: rgba(212, 175, 55, 0.25);
-  --pc-text-primary: #FFFFFF;
-  --pc-text-secondary: #CBD5E1;
-  --pc-text-tertiary: #94A3B8;
+  --bg-base: #0F1420;
+  --bg-surface: #171E2E;
+  --bg-surface-elevated: #1E2638;
+  --border-subtle: #232B3D;
+  
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  
+  --brand-primary: var(--pc-brand-gold);
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
 }
 
 @theme {
@@ -89,29 +78,14 @@
   --border-subtle: var(--border-subtle);
   
   --brand-primary: var(--brand-primary);
-  --brand-secondary: var(--brand-secondary);
-  --brand-accent: var(--brand-accent);
-  --brand-glow: var(--brand-glow);
-  
-  --success: #10B981;
-  --danger: #EF4444;
-  --warning: #F59E0B;
+  --brand-primary-foreground: var(--brand-primary-foreground);
   
   --text-primary: var(--text-primary);
   --text-secondary: var(--text-secondary);
   --text-tertiary: var(--text-tertiary);
 
-  --font-display: "Inter", "Outfit", "Space Grotesk", sans-serif !important;
-  --font-body: "Inter", "DM Sans", sans-serif !important;
-}
-
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-}
-html::-webkit-scrollbar {
-  display: none;
+  --font-display: "Inter", "Manrope", sans-serif !important;
+  --font-body: "Inter", "Manrope", sans-serif !important;
 }
 
 body {
@@ -121,30 +95,33 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.6;
-  letter-spacing: -0.01em;
 }
 
-h1, h2, h3, h4, .font-display {
-  font-family: var(--font-display);
-  letter-spacing: -0.025em;
-}
+h1 { @apply text-3xl font-bold tracking-tight; }
+h2 { @apply text-xl font-bold tracking-tight; }
+h3 { @apply text-lg font-semibold tracking-tight; }
 
-@utility section-title {
-  @apply text-[11px] font-black uppercase tracking-[0.25em] text-[var(--text-tertiary)] mb-8 transition-colors hover:text-[var(--brand-primary)];
-}
-
-@utility glass-card {
-  @apply rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-md shadow-md transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-lg;
-}
-
-@utility badge-gold {
-  @apply inline-flex items-center rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)];
-}
-
+/* Design System Components */
 @utility pc-card {
-  @apply rounded-[var(--pc-radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-[var(--pc-shadow-md)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-1 active:scale-[0.99];
+  @apply rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-[var(--shadow-sm)] transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-[var(--shadow-md)];
+}
+
+@utility pc-button-primary {
+  @apply inline-flex items-center justify-center rounded-[var(--radius-md)] bg-[var(--brand-primary)] px-6 py-2 text-sm font-bold text-[#1A1A2E] transition-all hover:bg-[var(--pc-brand-gold-hover)] active:scale-[0.98] disabled:opacity-50;
+}
+
+@utility pc-button-secondary {
+  @apply inline-flex items-center justify-center rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-transparent px-6 py-2 text-sm font-bold text-[var(--text-primary)] transition-all hover:bg-[var(--bg-surface-elevated)] active:scale-[0.98] disabled:opacity-50;
+}
+
+@utility pc-badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider;
+}
+
+@utility pc-stat-card {
+  @apply flex flex-col gap-1 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)];
 }
 
 @utility no-scrollbar {
@@ -155,32 +132,19 @@ h1, h2, h3, h4, .font-display {
   }
 }
 
+.pc-animate-fade-in {
+  animation: pc-fade-in var(--dur-base) var(--ease-out-smooth) forwards;
+}
+
 @keyframes pc-fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.pc-animate-fade-in {
-  animation: pc-fade-in var(--dur-base) var(--ease-out-smooth) forwards;
-}
-
-/* NEXUS-PRO:WATERMARK-HIDE:START */
-/* Overlay do badge oficial ocultado por conflito com UI custom.
-   Bloco idempotente gerenciado pela extensão Nexus Pro.
-   NÃO EDITAR manualmente — para reverter, remova o bloco inteiro. */
-#lovable-badge,
-#lovable-badge-v2,
-[id^="lovable-badge"],
-[data-testid="lovable-badge"],
-a[href*="lovable.dev/?via="],
-a[href*="lovable.dev?via="],
-a[href*="gpteng.co"],
-iframe[src*="lovable.dev/badge"] {
+/* Watermark Hide */
+#lovable-badge, #lovable-badge-v2, [id^="lovable-badge"], [data-testid="lovable-badge"], 
+a[href*="lovable.dev"], a[href*="gpteng.co"], iframe[src*="lovable.dev/badge"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
 }
-/* NEXUS-PRO:WATERMARK-HIDE:END */

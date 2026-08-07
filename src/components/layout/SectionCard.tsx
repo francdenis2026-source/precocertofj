@@ -23,26 +23,26 @@ export function SectionCard({
   return (
     <Tag
       className={cn(
-        "rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--pc-shadow-md)] overflow-hidden",
+        "pc-card overflow-hidden",
         className,
       )}
     >
       {(title || action) && (
-        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border/40 px-5 py-4.5 md:px-7">
+        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-subtle)] -mx-5 -mt-5 mb-5 px-5 py-4 bg-[var(--bg-surface-elevated)]/30">
           <div className="min-w-0">
             {title && (
-              <h2 className="text-[clamp(1.05rem,1.5vw,1.25rem)] font-semibold tracking-tight text-foreground">
+              <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">
                 {title}
-              </h2>
+              </h3>
             )}
             {description && (
-              <p className="mt-1 text-[13.5px] leading-snug text-muted-foreground">{description}</p>
+              <p className="mt-0.5 text-[12px] text-[var(--text-secondary)]">{description}</p>
             )}
           </div>
           {action && <div className="shrink-0">{action}</div>}
         </header>
       )}
-      <div className={cn("px-4 py-4 md:px-5 md:py-5", bodyClassName)}>{children}</div>
+      <div className={cn(bodyClassName)}>{children}</div>
     </Tag>
   );
 }
