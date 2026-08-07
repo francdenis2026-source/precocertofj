@@ -31,7 +31,7 @@ export function OptimizedBasketSection() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[380px] w-full rounded-[32px] bg-white/5" />
+          <Skeleton key={i} className="h-[300px] w-full rounded-[var(--radius-xl)] bg-slate-100" />
         ))}
       </div>
     );
@@ -85,7 +85,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="group relative flex flex-col h-full rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 transition-all duration-500 shadow-sm"
+      className="group relative flex flex-col h-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 transition-all duration-300 shadow-sm"
     >
       {/* Accent Header */}
       <div className={cn(
@@ -93,7 +93,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
         index === 0 ? "bg-[var(--brand-primary)]" : "bg-white/10"
       )} />
 
-      <div className="p-6 flex-1 flex flex-col">
+      <div className="p-4 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-4">
           <div className="p-2.5 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-500">
             <ShoppingBasket className="h-5 w-5" />
@@ -135,7 +135,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
             <Price value={basket.total} size="lg" className="font-black" />
           </div>
           
-          <Button asChild size="icon" className="h-10 w-10 rounded-xl bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-lg shadow-[var(--brand-primary)]/20">
+          <Button asChild size="icon" className="h-8 w-8 rounded-lg bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-lg shadow-[var(--brand-primary)]/20">
             <Link to="/cesta-basica" search={{ mode: 'compare' }}>
               <ArrowRight className="h-4 w-4" />
             </Link>
