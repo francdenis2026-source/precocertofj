@@ -239,7 +239,17 @@ function HomePage() {
               <section>
                 <PromoBanner />
               </section>
-           </aside>
+            </aside>
+        </div>
+
+        {/* Categories Section Added for Compact Navigation */}
+        <div className="mt-20">
+          <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-8 text-center">Categorias Populares</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4">
+            {CATEGORIES.map((cat, idx) => (
+              <CategoryCard key={cat.slug} {...cat} index={idx} />
+            ))}
+          </div>
         </div>
 
         <div className="mt-20 pt-12 border-t border-[var(--border-subtle)]">
