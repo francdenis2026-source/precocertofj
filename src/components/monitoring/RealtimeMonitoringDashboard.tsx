@@ -25,15 +25,22 @@ export function RealtimeMonitoringDashboard() {
   const { data: stats, isLoading, refetch, isFetching } = useQuery({
     queryKey: ["realtime-monitoring-stats"],
     queryFn: () => fetchStats(),
-    refetchInterval: 3000, // Reduced from 10s to 3s for a more "real-time" feel without over-fetching
+    refetchInterval: 60000, // Refresh every minute instead of every 3s to avoid "staying loading" feel
+    staleTime: 30000,
   });
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="pc-card animate-pulse h-48 bg-muted/20" />
-        ))}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+          <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Iniciando Varredura dos Comércios...</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="pc-card animate-pulse h-56 bg-muted/10 border-dashed border-muted" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -43,11 +50,11 @@ export function RealtimeMonitoringDashboard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-emerald-500/20">
-            <Zap className="h-3 w-3 text-emerald-500 animate-pulse" />
+            <Zap className="h-3 w-3 text-emerald-500 animate-pulse-slow" />
           </div>
           <div>
-            <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Live Insights</span>
-            <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none">Monitoramento Ativo</p>
+            <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Painel Vivo</span>
+            <p className="text-[8px] font-bold text-muted-foreground uppercase leading-none">Varredura de Comércios em Tempo Real</p>
           </div>
         </div>
         <button 
@@ -93,22 +100,27 @@ export function RealtimeMonitoringDashboard() {
                     {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
                   </h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className={cn("h-1.5 w-1.5 rounded-full animate-pulse", store.status === 'online' ? "bg-emerald-500" : "bg-rose-500")} />
-                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">{store.status}</span>
+                    <div className={cn("h-1.5 w-1.5 rounded-full", store.status === 'online' ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-rose-500")} />
+                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">{store.status === 'online' ? 'Ativo' : 'Offline'}</span>
                   </div>
                 </div>
               </div>
               
               <div className="flex flex-col items-end">
                 <div className="px-2 py-0.5 rounded-md bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
-                   <span className="text-[8px] font-black text-[var(--brand-primary)]">{store.activeSensors}S</span>
+                   <span className="text-[8px] font-black text-[var(--brand-primary)]">SCAN {store.activeSensors}</span>
                 </div>
               </div>
             </div>
 
             <div className="relative z-10 grid grid-cols-1 gap-1.5 mt-1">
-              {store.insights.slice(0, 1).map((insight: any, idx: number) => (
-                <div key={idx} className="flex items-start gap-2.5 px-3 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)]/50 border border-[var(--border-subtle)]/50 group-hover:bg-[var(--bg-surface-elevated)] group-hover:border-[var(--brand-primary)]/20 transition-colors">
+              {store.insights.map((insight: any, idx: number) => (
+                <div key={idx} className={cn(
+                  "flex items-start gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-300",
+                  idx === 0 
+                    ? "bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 shadow-inner" 
+                    : "bg-[var(--bg-surface-elevated)]/50 border border-[var(--border-subtle)]/50 group-hover:bg-[var(--bg-surface-elevated)]"
+                )}>
                   <div className={cn(
                     "mt-0.5 p-1 rounded-md",
                     insight.type === 'demand' ? "bg-amber-500/10 text-amber-500" :
@@ -118,19 +130,24 @@ export function RealtimeMonitoringDashboard() {
                     {insight.type === 'stock' && <PackageSearch className="h-2.5 w-2.5" />}
                     {insight.type === 'price' && <Activity className="h-2.5 w-2.5" />}
                   </div>
-                  <p className="text-[10px] font-bold text-[var(--text-secondary)] leading-snug">{insight.message}</p>
+                  <p className={cn(
+                    "text-[10px] font-bold leading-snug",
+                    idx === 0 ? "text-[var(--brand-primary)]" : "text-[var(--text-secondary)]"
+                  )}>
+                    {insight.message}
+                  </p>
                 </div>
               ))}
             </div>
 
             <div className="relative z-10 flex items-center justify-between pt-3 mt-1 border-t border-[var(--border-subtle)]/50">
               <div className="flex items-center gap-1">
-                <RefreshCcw className="h-2.5 w-2.5 text-muted-foreground" />
-                <span className="text-[8px] font-bold text-muted-foreground uppercase">{new Date(store.lastSync).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second: '2-digit'})}</span>
+                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-tighter">Sincronizado {new Date(store.lastSync).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
               </div>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500">
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/10">
                 <CheckCircle2 className="h-2.5 w-2.5" />
-                <span className="text-[7px] font-black uppercase tracking-tighter">Verified</span>
+                <span className="text-[7px] font-black uppercase tracking-tighter">Auditado</span>
               </div>
             </div>
           </motion.div>
