@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { searchProductPrice } from "@/lib/price-search.functions";
-import { Route } from "@/routes/precos";
+import { Route } from "@/routes/buscar";
 import { motion, AnimatePresence } from "framer-motion";
 import { PremiumOfferCard } from "./PremiumOfferCard";
 import { Skeleton } from "@/components/ui/skeleton";

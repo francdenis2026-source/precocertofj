@@ -10,7 +10,10 @@ import { SearchResultsList } from "@/components/search/SearchResultsList";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { searchProductPrice } from "@/lib/price-search.functions";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { PageLoader } from "@/components/feedback";
+
+
 
 const searchSchema = z.object({
   q: z.string().optional().default(""),
@@ -34,19 +37,23 @@ export const Route = createFileRoute("/buscar")({
 function SearchResultsPage() {
   const { q } = Route.useSearch();
   const runSearch = useServerFn(searchProductPrice);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
     queryFn: () => runSearch({ data: { query: q || "" } }),
-    enabled: !!q && q.length >= 2,
+    enabled: true, // Always enabled so we can show empty states
   });
+
+
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050B14]">
       <SiteHeader variant="solid" />
       
       <main className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
+        <div ref={anchorRef} className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
           {/* Main Content Area */}
           <div className="space-y-12">
             {q && <SearchHeroSection query={q} />}
@@ -64,4 +71,6 @@ function SearchResultsPage() {
     </div>
   );
 }
+
+
 
