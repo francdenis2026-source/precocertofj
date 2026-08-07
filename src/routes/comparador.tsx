@@ -285,7 +285,6 @@ function ComparadorPage() {
   const [sortBy, setSortBy] = useState<"price" | "availability">("price");
   const [sideBySide, setSideBySide] = useState<{ storeIds: string[] } | null>(null);
 
-
   const saveCartFn = useServerFn(saveComparisonCart);
   const toggleAlertFn = useServerFn(toggleCartAlert);
 
@@ -299,17 +298,21 @@ function ComparadorPage() {
       const PAGE = 1000;
       const acc: Comparison[] = [];
       for (let offset = 0; ; offset += PAGE) {
+        // Here we ensure database integration is pulling the latest correct data
         const { data, error } = await supabase
           .rpc("get_price_comparisons")
           .range(offset, offset + PAGE - 1);
-        if (error) throw error;
+        if (error) {
+          console.error("Database integration error:", error);
+          throw error;
+        }
         const batch = (data as unknown as Comparison[]) ?? [];
         acc.push(...batch);
         if (batch.length < PAGE) break;
       }
       return acc;
     },
-    staleTime: 30 * 60_000,
+    staleTime: 5 * 60_000, // Reduced staleTime for fresher results
   });
 
   const butcherIds = useButcherIds();

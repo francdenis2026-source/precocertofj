@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface ComparisonItem {
   id: string;
@@ -28,6 +28,9 @@ export const useComparisonList = create<ComparisonListState>()(
       })),
       clear: () => set({ items: [] }),
     }),
-    { name: 'pc-comparison-list' }
+    { 
+      name: 'pc-comparison-list',
+      storage: createJSONStorage(() => localStorage)
+    }
   )
 );
