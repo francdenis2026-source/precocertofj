@@ -151,7 +151,7 @@ function StorePage() {
             </Link>
             <div className="flex items-center gap-4">
                <ShareButton compact className="bg-transparent border-none hover:bg-black/5" />
-               <button onClick={() => exportStoreCatalog({ data: { id } })} className="p-2 hover:bg-black/5 rounded-full">
+               <button onClick={() => exportStoreCatalog({ data: { storeId: id, format: "csv" } })} className="p-2 hover:bg-black/5 rounded-full">
                  <FileDown size={20} />
                </button>
             </div>
