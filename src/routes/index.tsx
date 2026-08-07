@@ -237,8 +237,8 @@ function HomePage() {
 
       <main className="relative z-10 bg-[var(--bg-base)]">
         {/* Category Dashboard */}
-        <section className="max-w-7xl mx-auto px-4 -mt-10 mb-20 relative z-20">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+        <section className="max-w-7xl mx-auto px-4 -mt-12 mb-20 relative z-20">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6">
             {CATEGORIES.map((cat, i) => (
               <CategoryCard key={cat.slug} {...cat} index={i} />
             ))}
@@ -311,7 +311,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="rounded-[32px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]">
+          <div className="rounded-[40px] overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)] transition-all hover:shadow-[0_40px_80px_-20px_rgba(11,30,58,0.15)]">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
