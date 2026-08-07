@@ -1334,11 +1334,16 @@ function ComparadorPage() {
                             </>
                           );
                         })()}
-
-
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
+
 
       <ProductStoresDialog
         open={openStoresRow != null}
