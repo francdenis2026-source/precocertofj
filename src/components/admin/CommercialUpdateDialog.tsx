@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Terceiro lote do Comercial Vanderley processado: Creme Mococa (R$ 2,50), Ruffles (R$ 13,00), Margarina Delícia (R$ 22,00), Desodorantes Rexona (R$ 17,00) e Old Spice (R$ 15,00), Maionese Quero (R$ 3,75), Cenoura (R$ 14,99), Fanta Laranja (R$ 12,00), Sabonete Francis (R$ 3,75), Maionese Arisco (R$ 11,00) e Água Cristal (R$ 4,00). Todos os itens foram extraídos e atualizados!
+            Quarto lote do Comercial Vanderley processado: Leite Italac (R$ 16,99), Chantilly Amélia (R$ 27,00), Café 3 Corações (R$ 20,00), Vinhos Country Wine (R$ 20,00) e Saint Germain (R$ 30,00), Ketchup D'Ajuda (R$ 6,00), Amaciante Downy (R$ 10,99), Cremes Dentais Colgate e Sorriso (R$ 9,99/R$ 4,50), Sucos Teen (R$ 5,99) e Água Sanitária Cristal (R$ 4,00). Todos os itens foram atualizados!
           </DialogDescription>
         </DialogHeader>
 
