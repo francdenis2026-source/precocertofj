@@ -11,15 +11,27 @@ import {
   Download,
   AlertCircle,
   CheckCircle2,
-  XCircle
+  XCircle,
+  FileText,
+  Share2,
+  Filter,
+  ArrowUpDown
 } from "lucide-react";
 import { Price } from "@/components/ds/Price";
 import { getMultiStoreComparison, MultiComparisonResult, ComparisonItem } from "@/lib/multi-comparison.functions";
 import { saveBasket } from "@/lib/saved-baskets.functions";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+declare module "jspdf" {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+  }
+}
 
 /**
  * Enhanced Multi-Store Side-by-Side Comparison
@@ -28,48 +40,95 @@ import { toast } from "sonner";
 export function SideBySideComparison({
   storeIds,
   onClose,
+  initialData,
+  isShared = false
 }: {
   storeIds: string[];
   onClose?: () => void;
+  initialData?: MultiComparisonResult;
+  isShared?: boolean;
 }) {
   const fetchMultiStats = useServerFn(getMultiStoreComparison);
   const saveBasketFn = useServerFn(saveBasket);
   
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [filterCommonOnly, setFilterCommonOnly] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{ key: 'price' | 'savings' | 'name', order: 'asc' | 'desc' }>({
+    key: 'price',
+    order: 'asc'
+  });
 
   const q = useQuery<MultiComparisonResult>({
     queryKey: ["multi-store-comparison", storeIds],
     queryFn: () => fetchMultiStats({ data: { storeIds } }),
     staleTime: 5 * 60_000,
+    enabled: !initialData,
+    initialData: initialData,
   });
 
   const data = q.data;
 
-  // Handle saving the comparison set
-  const handleSave = async () => {
-    if (!data) return;
+  // Optimized sorting and filtering logic
+  const sortedStores = useMemo(() => {
+    if (!data) return [];
+    return [...data.stores].sort((a, b) => {
+      if (sortConfig.key === 'price') {
+        const valA = data.adjustedTotals[a.id] || Infinity;
+        const valB = data.adjustedTotals[b.id] || Infinity;
+        return sortConfig.order === 'asc' ? valA - valB : valB - valA;
+      }
+      if (sortConfig.key === 'savings') {
+        const valA = data.savingsPotential[a.id] || 0;
+        const valB = data.savingsPotential[b.id] || 0;
+        return sortConfig.order === 'asc' ? valA - valB : valB - valA;
+      }
+      return sortConfig.order === 'asc' 
+        ? a.name.localeCompare(b.name) 
+        : b.name.localeCompare(a.name);
+    });
+  }, [data, sortConfig]);
+
+  const filteredItems = useMemo(() => {
+    if (!data) return [];
+    let items = [...data.items];
+    if (filterCommonOnly) {
+      items = items.filter(item => data.stores.every(s => item.prices[s.id]));
+    }
+    return items;
+  }, [data, filterCommonOnly]);
+
+  // Handle saving the comparison set with sharing support
+  const handleSave = async (share = false) => {
+    if (!data || isShared) return;
     setIsSaving(true);
     try {
-      await saveBasketFn({
+      const saved = await saveBasketFn({
         data: {
           name: `Comparação: ${data.stores.map(s => s.name).join(", ").slice(0, 40)}...`,
           mode: "compare",
           filters: { storeIds: storeIds },
           snapshot: { storeIds: storeIds, timestamp: new Date().toISOString() },
-          share: false
+          share: share
         }
       });
-      toast.success("Conjunto de comparação salvo com sucesso!");
+      
+      if (share && saved.shareToken) {
+        const shareUrl = `${window.location.origin}/share/${saved.shareToken}`;
+        await navigator.clipboard.writeText(shareUrl);
+        toast.success("Link de compartilhamento copiado!");
+      } else {
+        toast.success("Conjunto de comparação salvo com sucesso!");
+      }
     } catch (err) {
-      toast.error("Erro ao salvar comparação. Verifique se você está logado.");
+      toast.error("Erro ao realizar ação. Verifique se você está logado.");
     } finally {
       setIsSaving(false);
     }
   };
 
   // Export as CSV
-  const handleExport = () => {
+  const handleExportCSV = () => {
     if (!data) return;
     const headers = ["Produto", ...data.stores.map(s => s.name)];
     const rows = data.items.map(item => [
@@ -82,12 +141,64 @@ export function SideBySideComparison({
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `comparativo-precos-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute("download", `comparativo-precocerto-${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     toast.success("Exportando CSV...");
+  };
+
+  // Export as PDF
+  const handleExportPDF = () => {
+    if (!data) return;
+    try {
+      const doc = new jsPDF({
+        orientation: data.stores.length > 3 ? 'landscape' : 'portrait'
+      });
+
+      doc.setFontSize(18);
+      doc.text("Relatório Comparativo - PreçoCerto Feijó", 14, 22);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 14, 30);
+      doc.text(`Baseado em ${data.commonCount} itens comuns encontrados em todos os estabelecimentos.`, 14, 35);
+
+      const tableHeaders = ["Produto", ...data.stores.map(s => s.name)];
+      const tableRows = data.items.map(item => [
+        item.name,
+        ...data.stores.map(s => item.prices[s.id] ? `R$ ${item.prices[s.id].toFixed(2)}` : "N/D")
+      ]);
+
+      // Add a summary row for totals
+      tableRows.push([
+        "TOTAL (Itens Comuns)",
+        ...data.stores.map(s => `R$ ${data.adjustedTotals[s.id]?.toFixed(2) || "0.00"}`)
+      ]);
+
+      doc.autoTable({
+        startY: 45,
+        head: [tableHeaders],
+        body: tableRows,
+        theme: 'striped',
+        headStyles: { fillColor: [11, 30, 58], textColor: 255 },
+        styles: { fontSize: 8 },
+        didParseCell: (dataCell: any) => {
+          if (dataCell.row.index === tableRows.length - 1) {
+            dataCell.cell.styles.fontStyle = 'bold';
+            dataCell.cell.styles.fillColor = [212, 175, 55];
+            dataCell.cell.styles.textColor = 0;
+          }
+        }
+      });
+
+      doc.save(`comparativo-precocerto-${new Date().toISOString().split('T')[0]}.pdf`);
+      toast.success("Exportando PDF...");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao gerar PDF.");
+    }
   };
 
   if (q.isLoading) {
@@ -109,43 +220,63 @@ export function SideBySideComparison({
     );
   }
 
-  const totalsEntries = Object.entries(data.totals);
-  const cheapestStoreId = totalsEntries.length > 0 
-    ? totalsEntries.reduce((a, b) => a[1] < b[1] ? a : b)[0]
-    : null;
+  const cheapestStoreId = sortedStores[0]?.id;
   const cheapestStore = data.stores.find(s => s.id === cheapestStoreId);
 
   return (
-    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-xl">
+    <div className="pc-card overflow-hidden border-primary/20 shadow-2xl bg-surface/50 backdrop-blur-xl max-h-[90vh] flex flex-col">
       {/* Header */}
-      <div className="border-b border-border/40 bg-primary/5 p-6">
+      <div className="border-b border-border/40 bg-primary/5 p-6 shrink-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-primary">
               <Scale className="h-6 w-6" />
-              <h3 className="text-xl font-black tracking-tight uppercase">Comparação Multi-Lojas</h3>
+              <h3 className="text-xl font-black tracking-tight uppercase">
+                {isShared ? "Comparação Compartilhada" : "Comparação Multi-Lojas"}
+              </h3>
             </div>
             <p className="text-sm text-muted-foreground font-medium">
               Análise de {data.stores.length} estabelecimentos em Feijó.
             </p>
           </div>
           
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={handleSave}
-              disabled={isSaving}
-              className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs"
-            >
-              <Save className="h-4 w-4" />
-              {isSaving ? "Salvando..." : "Salvar Conjunto"}
-            </button>
-            <button 
-              onClick={handleExport}
-              className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs"
-            >
-              <Download className="h-4 w-4" />
-              Exportar
-            </button>
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {!isShared && (
+              <>
+                <button 
+                  onClick={() => handleSave(false)}
+                  disabled={isSaving}
+                  className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs"
+                >
+                  <Save className="h-4 w-4" />
+                  Salvar
+                </button>
+                <button 
+                  onClick={() => handleSave(true)}
+                  disabled={isSaving}
+                  className="pc-button-secondary py-2 px-4 flex items-center gap-2 text-xs bg-primary/10"
+                >
+                  <Share2 className="h-4 w-4" />
+                  Link Público
+                </button>
+              </>
+            )}
+            <div className="flex items-center gap-1 bg-muted/20 rounded-xl p-1">
+              <button 
+                onClick={handleExportCSV}
+                title="Exportar CSV"
+                className="p-2 hover:bg-background rounded-lg transition-colors"
+              >
+                <Download className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={handleExportPDF}
+                title="Exportar PDF"
+                className="p-2 hover:bg-background rounded-lg transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+              </button>
+            </div>
             {onClose && (
               <button onClick={onClose} className="rounded-full p-2 hover:bg-muted transition-colors ml-2">
                 <ArrowRight className="h-5 w-5 rotate-180" />
@@ -155,7 +286,45 @@ export function SideBySideComparison({
         </div>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-6 space-y-8 overflow-y-auto no-scrollbar flex-1">
+        {/* Controls */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-muted/10 p-4 rounded-2xl border border-border/20">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <label className="text-xs font-black uppercase flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={filterCommonOnly} 
+                  onChange={e => setFilterCommonOnly(e.target.checked)}
+                  className="rounded border-border"
+                />
+                Apenas itens em comum
+              </label>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+             <span className="text-xs font-black text-muted-foreground uppercase flex items-center gap-1">
+               <ArrowUpDown className="h-3 w-3" /> Ordenar:
+             </span>
+             <select 
+              className="text-xs bg-background border-border rounded-lg px-2 py-1 outline-none"
+              value={sortConfig.key}
+              onChange={(e) => setSortConfig({ ...sortConfig, key: e.target.value as any })}
+             >
+               <option value="price">Menor Preço Total</option>
+               <option value="savings">Melhor Economia</option>
+               <option value="name">Nome da Loja</option>
+             </select>
+             <button 
+              onClick={() => setSortConfig({ ...sortConfig, order: sortConfig.order === 'asc' ? 'desc' : 'asc' })}
+              className="p-1 hover:bg-muted rounded-md"
+             >
+               <ArrowUpDown className={cn("h-4 w-4 transition-transform", sortConfig.order === 'desc' && "rotate-180")} />
+             </button>
+          </div>
+        </div>
+
         {/* Comparison Grid */}
         <div className={cn(
           "grid gap-4",
@@ -164,13 +333,15 @@ export function SideBySideComparison({
           data.stores.length === 3 ? "grid-cols-1 md:grid-cols-3" : 
           "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
         )}>
-          {data.stores.map((store) => {
+          {sortedStores.map((store) => {
             const isCheapest = store.id === cheapestStoreId;
-            const total = data.totals[store.id] || 0;
+            const total = data.adjustedTotals[store.id] || 0;
+            const savings = data.savingsPotential[store.id] || 0;
             
             return (
               <motion.div 
                 key={store.id}
+                layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={cn(
@@ -193,9 +364,15 @@ export function SideBySideComparison({
                 <div className="mb-4">
                   <Price value={total} size="xl" tone={isCheapest ? 'best' : 'default'} />
                   <p className="text-[10px] uppercase tracking-widest font-black text-muted-foreground mt-1">
-                    Custo Total ({data.commonCount} itens comuns)
+                    Custo Total ({data.commonCount} itens)
                   </p>
                 </div>
+
+                {savings > 0 && (
+                  <div className="text-savings font-black text-xs mb-3 flex items-center gap-1">
+                    Economia de <Price value={savings} size="xs" tone="best" />
+                  </div>
+                )}
 
                 {isCheapest && data.stores.length > 1 && (
                   <div className="pc-badge bg-savings text-white px-4 py-1.5 shadow-lg shadow-savings/20 font-black text-[10px] uppercase tracking-wider">
@@ -251,14 +428,14 @@ export function SideBySideComparison({
                   <table className="w-full border-separate border-spacing-y-2">
                     <thead>
                       <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-left">
-                        <th className="px-4 py-2">Produto</th>
+                        <th className="px-4 py-2 sticky left-0 bg-surface/90 backdrop-blur z-10">Produto</th>
                         {data.stores.map(s => (
                           <th key={s.id} className="px-4 py-2 text-right">{s.name}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {data.items.map((item: ComparisonItem, idx: number) => {
+                      {filteredItems.map((item: ComparisonItem, idx: number) => {
                         const isMissingAny = data.stores.some(s => !item.prices[s.id]);
                         
                         return (
@@ -266,15 +443,15 @@ export function SideBySideComparison({
                             "pc-card group transition-all hover:border-primary/30",
                             isMissingAny ? "opacity-70 bg-muted/5" : ""
                           )}>
-                            <td className="px-4 py-3 rounded-l-2xl border-y border-l border-border/40 group-hover:border-primary/20">
-                              <div className="flex items-center gap-3">
+                            <td className="px-4 py-3 rounded-l-2xl border-y border-l border-border/40 group-hover:border-primary/20 sticky left-0 bg-surface/90 backdrop-blur z-10">
+                              <div className="flex items-center gap-3 min-w-[180px]">
                                 <Package className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-bold text-sm">{item.name}</span>
-                                {isMissingAny && data.stores.length > 1 && (
-                                  <div className="group/tip relative">
-                                    <Info className="h-3 w-3 text-amber-500 cursor-help" />
-                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tip:block bg-black text-white text-[10px] p-2 rounded w-40 z-50">
-                                      Este item não foi encontrado em todas as lojas comparadas e foi removido do cálculo do total.
+                                <span className="font-bold text-sm truncate">{item.name}</span>
+                                {isMissingAny && (
+                                  <div className="group/tip relative shrink-0">
+                                    <AlertCircle className="h-3 w-3 text-amber-500 cursor-help" />
+                                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tip:block bg-black text-white text-[10px] p-2 rounded w-48 z-[60] shadow-2xl">
+                                      Este item está indisponível em algumas lojas e foi removido do cálculo do Preço Total.
                                     </div>
                                   </div>
                                 )}
@@ -297,7 +474,7 @@ export function SideBySideComparison({
                                   ) : (
                                     <span className="flex items-center justify-end gap-1 text-[10px] font-black text-destructive/60">
                                       <XCircle className="h-3 w-3" />
-                                      INDISPONÍVEL
+                                      N/D
                                     </span>
                                   )}
                                 </td>
@@ -315,9 +492,9 @@ export function SideBySideComparison({
         </AnimatePresence>
       </div>
       
-      <div className="bg-muted/10 p-6 border-t border-border/40 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-          Preços dinâmicos • Os itens ausentes em qualquer loja são excluídos da soma para garantir uma comparação justa.
+      <div className="bg-muted/10 p-4 border-t border-border/40 text-center shrink-0">
+        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+          Cálculo Inteligente • Apenas itens comuns a todas as lojas selecionadas compõem o Custo Total.
         </p>
       </div>
     </div>
