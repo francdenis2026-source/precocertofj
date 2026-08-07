@@ -17,10 +17,10 @@ type Tab = {
 };
 
 const TABS: Tab[] = [
-  { to: "/", label: "Home", Icon: Home },
-  { to: "/buscar", label: "Categories", Icon: Search, matchPrefix: "/categoria" },
-  { to: "/registrar", label: "Add", Icon: PlusCircle, matchPrefix: "/registrar" },
-  { to: "/perfil", label: "Profile", Icon: User, matchPrefix: "/perfil", requiresAuth: true },
+  { to: "/", label: "Início", Icon: Home },
+  { to: "/buscar", label: "Categorias", Icon: Search, matchPrefix: "/categoria" },
+  { to: "/registrar", label: "Adicionar", Icon: PlusCircle, matchPrefix: "/registrar" },
+  { to: "/perfil", label: "Perfil", Icon: User, matchPrefix: "/perfil", requiresAuth: true },
 ];
 
 const HIDE_ON = [
@@ -40,7 +40,7 @@ export function BottomTabBar() {
 
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label="Navegação principal"
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 flex lg:hidden",
         "border-t border-border bg-[var(--bg-surface)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-surface)]/85",
@@ -73,7 +73,7 @@ export function BottomTabBar() {
                     active
                       ? "bg-[var(--brand-primary)] text-black shadow-[0_0_20px_rgba(255,215,0,0.3)]"
                       : "text-[var(--text-secondary)] group-hover:bg-white/5",
-                    label === "Add" && !active && "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
+                    label === "Adicionar" && !active && "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                   )}
                 >
                   <Icon className={cn("h-5 w-5", active ? "h-6 w-6" : "")} strokeWidth={active ? 3 : 2} aria-hidden />

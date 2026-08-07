@@ -95,12 +95,12 @@ export function SearchEmptyState({
         </span>
         <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
           {query.trim()
-            ? `No prices for “${query.trim()}”`
-            : "No prices found"}
+            ? `Nenhum preço para “${query.trim()}”`
+            : "Nenhum preço encontrado"}
         </h2>
         <p className="pc-res-meta mt-1 max-w-md">
-          Try a shorter term, check the spelling, or loosen the filters — the product
-          may not have been scanned yet.
+          Tente um termo mais curto, verifique a ortografia ou relaxe os filtros — o produto
+          pode ainda não ter sido escaneado.
         </p>
       </div>
 
@@ -109,7 +109,7 @@ export function SearchEmptyState({
         <div className="mt-4 rounded-lg border border-border bg-muted/25 p-2.5">
           <p className="pc-res-label flex items-center gap-1.5">
             <Filter className="h-3 w-3" aria-hidden="true" />
-            Adjust filters
+            Ajustar filtros
             {activeFilterCount > 0 ? (
               <span className="rounded-full bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)] px-1.5 tabular-nums">
                 {activeFilterCount}
@@ -136,7 +136,7 @@ export function SearchEmptyState({
                 className="pc-res-store inline-flex min-h-8 items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] px-2.5 py-1 font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               >
                 <X className="h-3 w-3 shrink-0" aria-hidden="true" />
-                Clear filters
+                Limpar filtros
               </button>
             ) : null}
           </div>
@@ -147,7 +147,7 @@ export function SearchEmptyState({
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         {variants.length > 0 ? (
           <div>
-            <p className="pc-res-label">Try searching for</p>
+            <p className="pc-res-label">Tente buscar por</p>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {variants.map((t) => (
                 <li key={t}>
@@ -160,7 +160,7 @@ export function SearchEmptyState({
 
         <div>
           <p className="pc-res-label">
-            {popular.length > 0 ? "Popular searches" : "Common products"}
+            {popular.length > 0 ? "Buscas populares" : "Produtos comuns"}
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {suggestions.map((t) => (
@@ -175,7 +175,7 @@ export function SearchEmptyState({
           <div className="sm:col-span-2">
             <p className="pc-res-label flex items-center gap-1.5">
               <Clock className="h-3 w-3" aria-hidden="true" />
-              Your recent searches
+              Suas buscas recentes
             </p>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {recentTerms.map((t) => (
@@ -196,14 +196,14 @@ export function SearchEmptyState({
           className="pc-res-label inline-flex h-9 items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_55%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-3.5 text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
         >
           <X className="h-3.5 w-3.5" aria-hidden="true" />
-          New search
+          Nova busca
         </button>
         <Link
           to="/estabelecimentos"
           className="pc-res-label inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
         >
           <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
-          Explore markets
+          Explorar mercados
         </Link>
       </div>
     </section>
@@ -223,7 +223,7 @@ function TermChip({
     <button
       type="button"
       onClick={() => onSearch(term)}
-      aria-label={`Search for ${term}`}
+      aria-label={`Buscar por ${term}`}
       className={
         "pc-res-store inline-flex min-h-8 items-center gap-1.5 rounded-full border px-2.5 py-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 " +
         (emphasis

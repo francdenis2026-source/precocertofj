@@ -29,18 +29,18 @@ const currency = (n: number) =>
 const num = (n: number) => n.toLocaleString("pt-BR");
 
 function relTime(iso: string | null): string {
-  if (!iso) return "no records";
+  if (!iso) return "sem registros";
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins} min ago`;
+  if (mins < 1) return "agora mesmo";
+  if (mins < 60) return `há ${mins} min`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
+  if (hrs < 24) return `há ${hrs}h`;
   const days = Math.floor(hrs / 24);
-  if (days === 1) return "yesterday";
-  if (days < 30) return `${days}d ago`;
+  if (days === 1) return "ontem";
+  if (days < 30) return `há ${days}d`;
   const months = Math.floor(days / 30);
-  return `${months} month${months > 1 ? "s" : ""} ago`;
+  return `há ${months} ${months > 1 ? "meses" : "mês"}`;
 }
 
 /** Normaliza para busca sem acento/caixa. */
@@ -70,21 +70,21 @@ const HERO_CONFIG: Record<
   }
 > = {
   markets: {
-    eyebrow: "Collaborative network",
-    title: "Partner markets",
-    subtitle: "Active establishments in Feijó/AC with community-sourced prices.",
+    eyebrow: "Rede colaborativa",
+    title: "Mercados parceiros",
+    subtitle: "Estabelecimentos ativos em Feijó/AC com preços colhidos pela comunidade.",
     icon: ShieldCheck,
   },
   products: {
-    eyebrow: "Verified catalog",
-    title: "Registered products",
-    subtitle: "Items with brand, weight and history in at least one market.",
+    eyebrow: "Catálogo verificado",
+    title: "Produtos cadastrados",
+    subtitle: "Itens com marca, peso e histórico em pelo menos um mercado.",
     icon: Package,
   },
   savings: {
-    eyebrow: "Real savings",
-    title: "Difference between markets",
-    subtitle: "Variation between the lowest and highest price of the same product.",
+    eyebrow: "Economia real",
+    title: "Diferença entre mercados",
+    subtitle: "Variação entre o menor e o maior preço do mesmo produto.",
     icon: TrendingDown,
   },
 };
@@ -213,14 +213,14 @@ export function MetricSpotlightDialog({
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border bg-card px-3 py-2 sm:px-4">
           <span className="flex min-w-0 items-center gap-1.5 truncate text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3 w-3 shrink-0" />
-            Collaborative data from Feijó/AC
+            Dados colaborativos de Feijó/AC
           </span>
           <Link
             to={kind === "markets" ? "/estabelecimentos" : kind === "products" ? "/buscar" : "/comparador"}
             onClick={() => onOpenChange(false)}
             className="pc-metric-link inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2"
           >
-            {kind === "markets" ? "View markets" : kind === "products" ? "View catalog" : "Comparator"}
+            {kind === "markets" ? "Ver mercados" : kind === "products" ? "Ver catálogo" : "Comparador"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -236,20 +236,20 @@ function statStrip(
 ): [string, string][] {
   if (kind === "markets")
     return [
-      ["Markets", num(data.totals.establishments)],
-      ["Products", num(data.totals.products)],
-      ["Comparable", num(data.totals.productsCompared)],
+      ["Mercados", num(data.totals.establishments)],
+      ["Produtos", num(data.totals.products)],
+      ["Comparáveis", num(data.totals.productsCompared)],
     ];
   if (kind === "products")
     return [
-      ["Registered", num(data.totals.products)],
-      ["Categories", num(data.topCategories.length)],
-      ["Markets", num(data.totals.establishments)],
+      ["Cadastrados", num(data.totals.products)],
+      ["Categorias", num(data.topCategories.length)],
+      ["Mercados", num(data.totals.establishments)],
     ];
   return [
-    ["Average", `${data.totals.avgSavingsPct}%`],
-    ["Best", `${data.totals.bestSavingsPct}%`],
-    ["Compared", num(data.totals.productsCompared)],
+    ["Média", `${data.totals.avgSavingsPct}%`],
+    ["Melhor", `${data.totals.bestSavingsPct}%`],
+    ["Comparados", num(data.totals.productsCompared)],
   ];
 }
 
@@ -299,7 +299,7 @@ function SearchBar({
           onClick={() => onChange("")}
           className="pc-metric-ink shrink-0 text-[11px] font-bold uppercase tracking-wide"
         >
-          clear
+          limpar
         </button>
       )}
     </div>
@@ -314,7 +314,7 @@ function LoadMoreButton({ remaining, onClick }: { remaining: number; onClick: ()
       onClick={onClick}
       className="mt-2 w-full rounded-lg border border-border bg-muted/40 py-1.5 text-[11.5px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
     >
-      Load more ({remaining})
+      Carregar mais ({remaining})
     </button>
   );
 }
@@ -395,18 +395,18 @@ function MarketsList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length} ${filtered.length === 1 ? "market" : "markets"}`}>
-        Partner list
+      <SectionLabel count={`${filtered.length} ${filtered.length === 1 ? "mercado" : "mercados"}`}>
+        Lista de parceiros
       </SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Name, neighborhood or city…"
-        ariaLabel="Search markets"
+        placeholder="Nome, bairro ou cidade…"
+        ariaLabel="Pesquisar mercados"
       />
 
       {shown.length === 0 ? (
-        <EmptyRow>No markets found.</EmptyRow>
+        <EmptyRow>Nenhum mercado encontrado.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((s) => (
@@ -415,7 +415,7 @@ function MarketsList({
                 to="/estabelecimento/$slug"
                 params={{ slug: s.slug }}
                 onClick={onNavigate}
-                aria-label={`Open market page for ${s.name}`}
+                aria-label={`Abrir página do mercado ${s.name}`}
                 className="-mx-1 flex items-center gap-2.5 rounded-lg px-1 py-2 transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
               >
                 <StoreBadge
@@ -467,7 +467,7 @@ function CategoryBars({
   if (top.length === 0) return null;
   return (
     <>
-      <SectionLabel count={`top ${top.length}`}>Distribution by category</SectionLabel>
+      <SectionLabel count={`top ${top.length}`}>Distribuição por categoria</SectionLabel>
       <ul className="mb-3 space-y-1.5">
         {top.map((c) => (
           <li key={c.key} className="flex items-center gap-2">
@@ -512,15 +512,15 @@ function ProductsRecentList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length}`}>Latest updates</SectionLabel>
+      <SectionLabel count={`${filtered.length}`}>Últimas atualizações</SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Product or store…"
-        ariaLabel="Search price updates"
+        placeholder="Produto ou loja…"
+        ariaLabel="Pesquisar atualizações de preço"
       />
       {shown.length === 0 ? (
-        <EmptyRow>No updates found.</EmptyRow>
+        <EmptyRow>Nenhuma atualização encontrada.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((u, i) => (
@@ -533,7 +533,7 @@ function ProductsRecentList({
                   to="/buscar"
                   search={{ q: u.productName } as never}
                   onClick={onNavigate}
-                  aria-label={`Compare prices for ${u.productName}`}
+                  aria-label={`Comparar preços de ${u.productName}`}
                   className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   {u.productName}
@@ -593,15 +593,15 @@ function SavingsList({
 
   return (
     <>
-      <SectionLabel count={`${filtered.length} items`}>Biggest savings now</SectionLabel>
+      <SectionLabel count={`${filtered.length} itens`}>Maiores economias agora</SectionLabel>
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Product, category or store…"
-        ariaLabel="Search savings"
+        placeholder="Produto, categoria ou loja…"
+        ariaLabel="Pesquisar economias"
       />
       {shown.length === 0 ? (
-        <EmptyRow>No savings found.</EmptyRow>
+        <EmptyRow>Nenhuma economia encontrada.</EmptyRow>
       ) : (
         <ul className="divide-y divide-border">
           {shown.map((s, i) => (
@@ -625,7 +625,7 @@ function SavingsList({
                     to="/produto/$slug"
                     params={{ slug: s.catalogSlug }}
                     onClick={onNavigate}
-                    aria-label={`View comparison for ${s.displayName}`}
+                    aria-label={`Ver comparação de ${s.displayName}`}
                     className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                   >
                     {s.displayName}
@@ -636,7 +636,7 @@ function SavingsList({
                   </div>
                 )}
                 <div className="truncate text-[11px] text-muted-foreground">
-                  {s.storeCount} stores · lowest at{" "}
+                  {s.storeCount} lojas · menor preço em{" "}
                   {s.cheapestStoreSlug && s.cheapestStore ? (
                     <Link
                       to="/estabelecimento/$slug"
@@ -667,7 +667,7 @@ function SavingsList({
                   to="/produto/$slug"
                   params={{ slug: s.catalogSlug }}
                   onClick={onNavigate}
-                  aria-label={`Open comparison for ${s.displayName}`}
+                  aria-label={`Abrir comparação de ${s.displayName}`}
                   className="pc-metric-ink-hover grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />

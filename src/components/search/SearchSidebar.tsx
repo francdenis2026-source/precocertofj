@@ -48,10 +48,10 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
   async function handleClearAll() {
     if (!onClearRecent || recent.length === 0) return;
     const ok = await confirm({
-      title: "Clear search history?",
-      description: "Recent searches saved in this browser will be removed. This action cannot be undone.",
-      confirmLabel: "Clear all",
-      cancelLabel: "Cancel",
+      title: "Limpar histórico de buscas?",
+      description: "As buscas recentes salvas neste navegador serão removidas. Esta ação não pode ser desfeita.",
+      confirmLabel: "Limpar tudo",
+      cancelLabel: "Cancelar",
       tone: "danger",
     });
     if (ok) onClearRecent();
@@ -70,23 +70,23 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       {/* Últimas buscas */}
       <SidebarSection
         icon={<HistoryIcon className="h-4 w-4" />}
-        title="Recent searches"
+        title="Buscas recentes"
         action={
           recent.length > 0 && onClearRecent ? (
             <button
               type="button"
               onClick={handleClearAll}
               className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[13px] font-medium text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-              aria-label="Clear search history"
+              aria-label="Limpar histórico de buscas"
             >
-              <Trash2 className="h-3.5 w-3.5" /> Clear
+              <Trash2 className="h-3.5 w-3.5" /> Limpar
             </button>
           ) : undefined
         }
       >
         {recent.length === 0 ? (
           <p className="px-1 text-[14px] leading-relaxed text-foreground/70">
-            Your recent searches will appear here.
+            Suas buscas recentes aparecerão aqui.
           </p>
         ) : (
           <ul className="space-y-0.5">
@@ -104,8 +104,8 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                     type="button"
                     onClick={() => onRemoveRecent(t)}
                     className="grid h-8 w-8 flex-none place-items-center rounded-md text-foreground/60 opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold group-hover:opacity-100"
-                    aria-label={`Remove "${t}" from history`}
-                    title="Remove from history"
+                    aria-label={`Remover "${t}" do histórico`}
+                    title="Remover do histórico"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -120,18 +120,18 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       {/* Populares */}
       <SidebarSection
         icon={<Flame className="h-4 w-4" />}
-        title="Popular searches"
+        title="Buscas populares"
         action={
           useReal ? (
             <span
-              title="Aggregated from the last 30 days"
+              title="Agregado dos últimos 30 dias"
               className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[12.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
             >
               <span className="relative inline-flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-navy/60 opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-navy" />
               </span>
-              Live
+              Ao vivo
             </span>
           ) : undefined
         }
@@ -157,13 +157,13 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       {/* Mercados parceiros */}
       <SidebarSection
         icon={<StoreIcon className="h-4 w-4" />}
-        title="Partner markets"
+        title="Mercados parceiros"
         action={
           <Link
             to="/estabelecimentos"
             className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[13px] font-medium text-gold-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
-            All <ArrowRight className="h-3 w-3" />
+            Todos <ArrowRight className="h-3 w-3" />
           </Link>
         }
       >
@@ -209,7 +209,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
             ))}
             {list.length === 0 && (
               <p className="px-1 text-[14px] text-foreground/70">
-                No markets available.
+                Nenhum mercado disponível.
               </p>
             )}
           </ul>

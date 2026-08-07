@@ -45,14 +45,14 @@ const brl = (n: number) =>
 const relative = (iso: string) => {
   const diffMs = Date.now() - new Date(iso).getTime();
   const d = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (d <= 0) return "today";
-  if (d === 1) return "1 day ago";
-  if (d < 7) return `${d} days ago`;
+  if (d <= 0) return "hoje";
+  if (d === 1) return "há 1 dia";
+  if (d < 7) return `há ${d} dias`;
   const w = Math.floor(d / 7);
-  if (w === 1) return "1 week ago";
-  if (w < 5) return `${w} weeks ago`;
+  if (w === 1) return "há 1 semana";
+  if (w < 5) return `há ${w} semanas`;
   const m = Math.floor(d / 30);
-  return m <= 1 ? "1 month ago" : `${m} months ago`;
+  return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
 /** Encurta nomes longos preservando palavras — ideal para letreiro no mobile. */
@@ -178,13 +178,13 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                     background: "color-mix(in oklab, #10b981 12%, transparent)",
                     color: "var(--pc-live)",
                   }}
-                  aria-label="Open live panel with the latest verified prices"
+                  aria-label="Abrir painel ao vivo com os últimos preços verificados"
                 >
                   <span className="relative inline-flex h-2 w-2">
                     <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                   </span>
-                  Live
+                  Ao vivo
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-lg overflow-hidden p-0">
@@ -195,14 +195,14 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
                     <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
-                      Live panel
+                      Painel ao vivo
                     </span>
                   </div>
                   <DialogTitle className={`${serif} text-left text-2xl`} style={{ color: P.heading, letterSpacing: "-0.02em" }}>
-                    Latest verified prices
+                    Últimos preços verificados
                   </DialogTitle>
                   <DialogDescription className="text-left">
-                    {lastUpdateLabel ? `Last updated ${lastUpdateLabel}` : "Recent collections in Feijó"}
+                    {lastUpdateLabel ? `Última atualização ${lastUpdateLabel}` : "Coletas recentes em Feijó"}
                     {typeof live?.checkedToday === "number" && live.checkedToday > 0
                       ? ` · ${live.checkedToday} hoje`
                       : ""}
@@ -242,7 +242,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                                 </div>
                                 <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
                                   <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
-                                    {p.marketName ?? "Multiple stores"}
+                                    {p.marketName ?? "Vários mercados"}
                                   </span>
                                   <span className="text-muted-foreground">·</span>
                                   <span className="text-muted-foreground">{relative(p.when)}</span>
@@ -264,7 +264,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                     className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-[13px] font-bold uppercase tracking-[0.12em] transition-transform hover:scale-[1.01]"
                     style={{ background: P.gold, color: "#0a1631" }}
                   >
-                    View all results
+                    Ver todos os resultados
                     <ArrowRight className="h-4 w-4" aria-hidden />
                   </Link>
                 </div>
@@ -276,7 +276,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
               >
                 <Radio className="h-3 w-3" aria-hidden />
-                Last updated {lastUpdateLabel}
+                Última atualização {lastUpdateLabel}
               </span>
             )}
             {typeof live?.checkedToday === "number" && live.checkedToday > 0 && (
@@ -288,9 +288,9 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                   background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
                   color: "var(--pc-price)",
                 }}
-                aria-label={`Open panel: ${live.checkedToday} prices checked today`}
+                aria-label={`Abrir painel: ${live.checkedToday} preços verificados hoje`}
               >
-                {live.checkedToday} prices checked today
+                {live.checkedToday} preços verificados hoje
               </button>
             )}
           </div>
@@ -299,7 +299,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
             className="mb-1 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ color: P.goldSoft }}
           >
-            Newly added
+            Adicionados recentemente
           </div>
           <h2
             id="recent-products-heading"
@@ -311,7 +311,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               letterSpacing: "-0.02em",
             }}
           >
-            Prices checked over the last few days
+            Preços verificados nos últimos dias
           </h2>
         </div>
         <Link
@@ -319,7 +319,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
           className="hidden text-[11px] font-bold uppercase tracking-[0.16em] transition-colors hover:opacity-80 sm:inline-flex"
           style={{ color: "var(--pc-price)" }}
         >
-          See more →
+          Ver mais →
         </Link>
       </div>
 
@@ -425,14 +425,14 @@ function SpotlightCard({
           { duration: 6000 },
         );
       } else {
-        toast("Removed from favorites", {
+        toast("Removido dos favoritos", {
           description: location ? `${args.name} · ${location}` : args.name,
           duration: 3500,
         });
       }
     },
     onError: (e: unknown) =>
-      toast.error(e instanceof Error ? e.message : "Failed to favorite."),
+      toast.error(e instanceof Error ? e.message : "Falha ao favoritar."),
     onSettled: () => setPendingKey(null),
   });
 
@@ -552,7 +552,7 @@ function SpotlightCard({
               <div className="mt-1 flex items-center gap-1.5 text-[11px]">
                 <Store className="h-3 w-3 shrink-0 text-[var(--market-accent)]" aria-hidden />
                 <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
-                  {p.marketName ?? "Multiple stores"}
+                  {p.marketName ?? "Vários mercados"}
                 </span>
               </div>
             </div>

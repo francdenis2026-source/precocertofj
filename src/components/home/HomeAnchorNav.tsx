@@ -14,12 +14,12 @@ const P = {
 };
 
 const ANCHORS = [
-  { id: "hero", label: "Home" },
-  { id: "beneficios", label: "Benefits" },
-  { id: "pilares", label: "Pillars" },
-  { id: "recentes", label: "Recent" },
-  { id: "parceiros", label: "Partners" },
-  { id: "prova-social", label: "Testimonials" },
+  { id: "hero", label: "Início" },
+  { id: "beneficios", label: "Benefícios" },
+  { id: "pilares", label: "Pilares" },
+  { id: "recentes", label: "Recentes" },
+  { id: "parceiros", label: "Parceiros" },
+  { id: "prova-social", label: "Depoimentos" },
 ] as const;
 
 export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
@@ -124,13 +124,13 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
     document.body.removeChild(ta);
   };
 
-  const activeLabel = ANCHORS.find((a) => a.id === active)?.label ?? "Home";
+  const activeLabel = ANCHORS.find((a) => a.id === active)?.label ?? "Início";
 
   const shareLink = async () => {
     const url = buildShareUrl();
     const shareData: ShareData = {
       title: `PreçoCerto — ${activeLabel}`,
-      text: `Check out "${activeLabel}" on PreçoCerto`,
+      text: `Confira "${activeLabel}" no PreçoCerto`,
       url,
     };
     try {
@@ -156,7 +156,7 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
 
   return (
     <nav
-      aria-label="Page sections"
+      aria-label="Seções da página"
       className="sticky top-[56px] z-30 border-b"
       style={{
         background: `color-mix(in oklab, ${P.paper} 94%, transparent)`,
@@ -218,7 +218,7 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
               type="search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search…"
+              placeholder="Pesquisar…"
               className="min-w-0 flex-1 bg-transparent text-[12px] font-medium outline-none placeholder:text-slate-400"
               style={{ color: P.heading }}
               tabIndex={showMini ? 0 : -1}
@@ -232,15 +232,15 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
           onClick={shareLink}
           aria-label={
             canShare
-              ? `Share link for section ${activeLabel}`
-              : `Copy link for section ${activeLabel}`
+              ? `Compartilhar link da seção ${activeLabel}`
+              : `Copiar link da seção ${activeLabel}`
           }
           title={
             copied
-              ? "Link copied"
+              ? "Link copiado"
               : canShare
-                ? `Share — ${activeLabel}`
-                : `Copy link — ${activeLabel}`
+                ? `Compartilhar — ${activeLabel}`
+                : `Copiar link — ${activeLabel}`
           }
           className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-all active:scale-[0.97]"
           style={{
@@ -257,7 +257,7 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
             <Link2 className="h-3.5 w-3.5" strokeWidth={2.4} />
           )}
           <span className="hidden sm:inline">
-            {copied ? "Copied" : canShare ? "Share" : "Copy link"}
+            {copied ? "Copiado" : canShare ? "Compartilhar" : "Copiar link"}
           </span>
         </button>
 

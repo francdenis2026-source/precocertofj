@@ -43,16 +43,16 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "PricePal — Your Intelligent Shopping Assistant" },
+      { title: "PricePal — Seu assistente inteligente de compras" },
       {
         name: "description",
         content:
-          "PricePal tracks real supermarket prices in Feijó, ranks the best basket for you, and shows exactly where to shop to save more.",
+          "O PricePal acompanha os preços reais dos supermercados de Feijó, monta a melhor cesta para você e mostra exatamente onde comprar para economizar.",
       },
-      { property: "og:title", content: "PricePal — Your Intelligent Shopping Assistant" },
+      { property: "og:title", content: "PricePal — Seu assistente inteligente de compras" },
       {
         property: "og:description",
-        content: "Live supermarket price intelligence for Feijó. Compare stores, build a smart basket, and save on every trip.",
+        content: "Inteligência de preços em tempo real para Feijó. Compare mercados, monte uma cesta inteligente e economize em cada compra.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/")({
 function formatDate(iso: string): string {
   if (!iso) return "—";
   const date = new Date(iso);
-  return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+  return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 }
 
 function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: any) => void }) {
@@ -89,7 +89,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
           addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
         }}
         className="absolute right-3 top-3 z-10 rounded-xl bg-[var(--bg-surface-elevated)] p-2 text-[var(--brand-primary)] opacity-0 transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] focus-visible:opacity-100 group-hover:opacity-100"
-        aria-label={`Add ${p.name} to comparison`}
+        aria-label={`Adicionar ${p.name} à comparação`}
       >
         <PlusCircle className="h-4 w-4" />
       </button>
@@ -167,7 +167,7 @@ function HomePage() {
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--brand-primary)]" aria-hidden="true" />
               <span className="text-[13px] font-medium text-[var(--text-secondary)]">
-                Live price intelligence for Feijó, Acre
+                Inteligência de preços ao vivo em Feijó, Acre
               </span>
             </motion.div>
 
@@ -177,8 +177,8 @@ function HomePage() {
               transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
               className="text-balance text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
             >
-              Shop smarter.{" "}
-              <span className="text-[var(--brand-primary)]">Spend less.</span>
+              Compre melhor.{" "}
+              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </motion.h1>
 
             <motion.p
@@ -187,8 +187,8 @@ function HomePage() {
               transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="mx-auto mt-6 max-w-xl text-pretty text-[18px] leading-relaxed text-[var(--text-secondary)]"
             >
-              PricePal tracks real supermarket prices across your city, builds the cheapest
-              basket for you, and tells you exactly where to buy.
+              O PricePal acompanha os preços reais dos supermercados da sua cidade, monta a
+              cesta mais barata para você e diz exatamente onde comprar.
             </motion.p>
 
             <motion.div
@@ -215,10 +215,10 @@ function HomePage() {
 
           {/* Trust bar */}
           <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
-            <TrustStat label="Price records" value={stats?.priceRecords} />
-            <TrustStat label="Products tracked" value={stats?.totalItems} />
-            <TrustStat label="Average savings" value={economy?.avgSavingsPct} suffix="%" />
-            <TrustStat label="Partner stores" value={stats?.establishments} />
+            <TrustStat label="Registros de preço" value={stats?.priceRecords} />
+            <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
+            <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
+            <TrustStat label="Mercados parceiros" value={stats?.establishments} />
           </div>
         </div>
       </section>
@@ -228,32 +228,32 @@ function HomePage() {
         <section aria-labelledby="how-it-works" className="mb-24">
           <SectionHeading
             id="how-it-works"
-            kicker="Why PricePal"
-            title="An assistant, not just a price list"
-            description="Every price is audited, timestamped and ranked so you can trust the recommendation before you leave home."
+            kicker="Por que o PricePal"
+            title="Um assistente, não apenas uma lista de preços"
+            description="Cada preço é auditado, datado e ranqueado para você confiar na recomendação antes de sair de casa."
           />
           <div className="grid gap-6 md:grid-cols-3">
             <ValueCard
               Icon={ShieldCheck}
-              title="Verified prices"
-              body="Each entry is sourced from a registered store and stamped with the date it was collected."
+              title="Preços verificados"
+              body="Cada registro vem de um mercado cadastrado e traz a data em que foi coletado."
             />
             <ValueCard
               Icon={LineChart}
-              title="Real price history"
-              body="Track how a product moves over time and know whether today's offer is genuinely a deal."
+              title="Histórico real de preços"
+              body="Acompanhe a variação do produto ao longo do tempo e saiba se a oferta de hoje vale mesmo a pena."
             />
             <ValueCard
               Icon={Zap}
-              title="Optimised baskets"
-              body="Add your list and PricePal computes the cheapest split across stores, including a single-stop option."
+              title="Cestas otimizadas"
+              body="Adicione sua lista e o PricePal calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
             />
           </div>
         </section>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
            <div className="space-y-24 lg:col-span-8">
-              <section id="baskets-section" aria-label="Smart basket">
+              <section id="baskets-section" aria-label="Cesta inteligente">
                 <OptimizedBasketSection />
               </section>
 
@@ -261,19 +261,19 @@ function HomePage() {
                 <div className="mb-8 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
                   <div className="min-w-0">
                     <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-[var(--brand-primary)]">
-                      Live monitoring
+                      Monitoramento ao vivo
                     </p>
                     <h2
                       id="live-prices"
                       className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
                     >
-                      Latest prices near you
+                      Últimos preços perto de você
                     </h2>
                   </div>
                   <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
                     {[
-                      { id: "recent", label: "Newest" },
-                      { id: "price", label: "Cheapest" },
+                      { id: "recent", label: "Recentes" },
+                      { id: "price", label: "Mais baratos" },
                     ].map((s) => (
                       <button
                         key={s.id}
@@ -302,7 +302,7 @@ function HomePage() {
            <aside className="space-y-12 lg:col-span-4">
               <section aria-labelledby="partners">
                  <h2 id="partners" className="mb-6 text-[15px] font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
-                   Partner stores
+                   Mercados parceiros
                  </h2>
                  <div className="grid grid-cols-2 gap-3">
                    <RegisteredStoresCarousel />
@@ -318,9 +318,9 @@ function HomePage() {
         <section aria-labelledby="categories" className="mt-24">
           <SectionHeading
             id="categories"
-            kicker="Browse"
-            title="Shop by category"
-            description="Standardised across every partner store, so comparisons stay apples-to-apples."
+            kicker="Explorar"
+            title="Compre por categoria"
+            description="Padronizadas em todos os mercados parceiros, para uma comparação justa."
           />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {CATEGORIES.map((cat, idx) => (
@@ -332,9 +332,9 @@ function HomePage() {
         <section aria-labelledby="realtime" className="mt-24 border-t border-[var(--border-subtle)] pt-16">
           <SectionHeading
             id="realtime"
-            kicker="Live panel"
-            title="Store monitoring in real time"
-            description="A rotating view of what each registered store is offering right now."
+            kicker="Painel vivo"
+            title="Monitoramento dos mercados em tempo real"
+            description="Uma visão rotativa do que cada mercado cadastrado está ofertando agora."
           />
           <div className="mx-auto max-w-4xl">
             <RealtimeMonitoringDashboard />
@@ -355,20 +355,20 @@ function HomePage() {
           <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]/40" />
           <div className="relative flex flex-col items-center px-6 py-20 text-center md:py-28">
             <h2 className="max-w-2xl text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.025em] text-[var(--text-primary)]">
-              Real transparency for every trip to the store
+              Transparência real em cada ida ao mercado
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-[18px] leading-relaxed text-[var(--text-secondary)]">
-              Join shoppers in Feijó who check PricePal before they buy.
+              Junte-se a quem, em Feijó, consulta o PricePal antes de comprar.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="pc-button-primary">
                 <Link to="/buscar">
-                  Start saving <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  Começar a economizar <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
               <Button asChild variant="ghost" className="pc-button-secondary">
                 <Link to="/estabelecimentos">
-                  <Store className="h-4 w-4" aria-hidden="true" /> Browse stores
+                  <Store className="h-4 w-4" aria-hidden="true" /> Ver mercados
                 </Link>
               </Button>
             </div>
@@ -429,7 +429,7 @@ function TrustStat({ label, value, suffix = "" }: { label: string; value?: numbe
   return (
     <div className="rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-6 text-center">
       <p className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)]">
-        {display === null ? "—" : `${display.toLocaleString("en-US")}${suffix}`}
+        {display === null ? "—" : `${display.toLocaleString("pt-BR")}${suffix}`}
       </p>
       <p className="mt-2 text-[14px] text-[var(--text-tertiary)]">{label}</p>
     </div>

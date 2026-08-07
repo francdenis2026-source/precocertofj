@@ -39,8 +39,8 @@ export function UnitPriceBadge({
   });
   if (!u) return null;
   const ariaLabel = u.isPack && u.perPackLabel
-    ? `Unit price: ${u.label}, ${u.perPackLabel}${u.converted ? `, converted from ${u.sourceLabel}` : ""}`
-    : `Unit price: ${u.label}${u.converted ? `, converted from ${u.sourceLabel}` : ""}`;
+    ? `Preço unitário: ${u.label}, ${u.perPackLabel}${u.converted ? `, convertido de ${u.sourceLabel}` : ""}`
+    : `Preço unitário: ${u.label}${u.converted ? `, convertido de ${u.sourceLabel}` : ""}`;
   return (
     <span
       className={
@@ -53,7 +53,7 @@ export function UnitPriceBadge({
       {u.label}
       {showConverted && u.converted ? (
         <span
-          aria-label={`converted from ${u.sourceLabel}`}
+          aria-label={`convertido de ${u.sourceLabel}`}
           className="ml-1 rounded-[3px] bg-accent-strong/15 px-1 py-[1px] font-sans text-[11px] font-semibold uppercase tracking-wide text-accent-ink"
         >
           conv.

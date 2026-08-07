@@ -43,7 +43,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
       <button
         type="button"
         onClick={() => onOpen(store)}
-        aria-label={`View details for ${store.name}`}
+        aria-label={`Ver detalhes de ${store.name}`}
         className="flex flex-1 flex-col text-left outline-none"
       >
         {/* Hero band */}
@@ -141,7 +141,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
             <p className="num font-display text-[12px] font-semibold text-foreground leading-none">
               {store.productCount}
               <span className="ml-0.5 font-display text-[11px] italic font-normal text-muted-foreground">
-                items
+                itens
               </span>
             </p>
             <ChevronRight className="h-3 w-3 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
@@ -154,7 +154,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
         to="/loja/$id"
         params={{ id: store.id }}
         search={{ q: "", from: "" }}
-        aria-label={`View prices for ${store.name}`}
+        aria-label={`Ver preços de ${store.name}`}
         style={{
           borderTop: "1px solid transparent",
           backgroundImage:
@@ -164,7 +164,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
         }}
         className="bg-primary/[0.04] px-2 py-1 text-center font-display text-[11px] italic tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground hover:not-italic focus-visible:bg-primary focus-visible:text-primary-foreground focus-visible:outline-none"
       >
-        View prices <span className="not-italic">→</span>
+        Ver preços <span className="not-italic">→</span>
       </Link>
     </motion.div>
   );

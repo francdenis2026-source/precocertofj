@@ -48,7 +48,7 @@ export function QuickFilterBar<T extends string>({
   return (
     <div
       role={multi ? "group" : "radiogroup"}
-      aria-label={ariaLabel ?? label ?? "Filters"}
+      aria-label={ariaLabel ?? label ?? "Filtros"}
       className={cn("flex flex-wrap items-center gap-1.5", className)}
     >
       {label && (

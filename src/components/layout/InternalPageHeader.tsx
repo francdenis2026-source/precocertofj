@@ -77,7 +77,7 @@ export function InternalPageHeader({
       </div>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
-          aria-label="Navigation trail"
+          aria-label="Trilha de navegação"
           className="mb-1.5 flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground"
         >
           {breadcrumbs.map((c, i) => (

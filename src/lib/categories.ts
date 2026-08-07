@@ -30,17 +30,17 @@ export type Category = {
 };
 
 export const CATEGORIES: Category[] = [
-  { slug: "grocery", label: "Grocery", value: "Mercearia", Icon: ShoppingBasket },
-  { slug: "butcher", label: "Meat & Poultry", value: "Açougue", Icon: Beef },
-  { slug: "produce", label: "Fresh Produce", value: "Hortifruti", Icon: Apple },
-  { slug: "beverages", label: "Beverages", value: "Bebidas", Icon: Wine },
-  { slug: "dairy", label: "Dairy", value: "Laticínios", Icon: Milk },
-  { slug: "bakery", label: "Bakery", value: "Padaria", Icon: Croissant },
-  { slug: "cleaning", label: "Cleaning", value: "Limpeza", Icon: Droplets },
-  { slug: "personal-care", label: "Personal Care", value: "Higiene", Icon: Sparkles },
-  { slug: "baby", label: "Baby", value: "Infantil", Icon: Baby },
-  { slug: "pharmacy", label: "Pharmacy", value: "Farmácia", Icon: Cross },
-  { slug: "other", label: "Other", value: "Outros", Icon: Package },
+  { slug: "grocery", label: "Mercearia", value: "Mercearia", Icon: ShoppingBasket },
+  { slug: "butcher", label: "Açougue", value: "Açougue", Icon: Beef },
+  { slug: "produce", label: "Hortifruti", value: "Hortifruti", Icon: Apple },
+  { slug: "beverages", label: "Bebidas", value: "Bebidas", Icon: Wine },
+  { slug: "dairy", label: "Laticínios", value: "Laticínios", Icon: Milk },
+  { slug: "bakery", label: "Padaria", value: "Padaria", Icon: Croissant },
+  { slug: "cleaning", label: "Limpeza", value: "Limpeza", Icon: Droplets },
+  { slug: "personal-care", label: "Higiene", value: "Higiene", Icon: Sparkles },
+  { slug: "baby", label: "Infantil", value: "Infantil", Icon: Baby },
+  { slug: "pharmacy", label: "Farmácia", value: "Farmácia", Icon: Cross },
+  { slug: "other", label: "Outros", value: "Outros", Icon: Package },
 ];
 
 export function categoryBySlug(slug: string): Category | undefined {
@@ -52,8 +52,8 @@ export function categoryByValue(value: string): Category | undefined {
   return CATEGORIES.find((c) => c.value.toLowerCase() === needle);
 }
 
-/** English display name for a stored catalog category, with a safe fallback. */
+/** Nome de exibição em português para uma categoria do catálogo. */
 export function categoryLabel(value: string | null | undefined): string {
-  if (!value) return "Other";
+  if (!value) return "Outros";
   return categoryByValue(value)?.label ?? value;
 }

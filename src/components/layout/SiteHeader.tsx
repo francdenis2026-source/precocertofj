@@ -28,10 +28,10 @@ type Props = {
 };
 
 const NAV_LINKS = [
-  { to: "/precos", label: "Compare Prices" },
-  { to: "/estabelecimentos", label: "Stores" },
-  { to: "/cesta", label: "Smart Basket" },
-  { to: "/planos", label: "Pricing" },
+  { to: "/precos", label: "Comparar Preços" },
+  { to: "/estabelecimentos", label: "Lojas" },
+  { to: "/cesta", label: "Cesta Inteligente" },
+  { to: "/planos", label: "Planos" },
 ] as const;
 
 export function SiteHeader({ variant = "solid", showNav = true, showBack = true }: Props) {
@@ -70,7 +70,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
         {/* Brand */}
         <Link
           to="/"
-          aria-label="PricePal — home"
+          aria-label="PricePal — início"
           className="group flex shrink-0 items-center gap-3 rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
         >
           <img
@@ -99,7 +99,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
         {/* Navigation & Actions */}
         <div className="flex shrink-0 items-center gap-2 md:gap-4">
           {showNav && (
-            <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+            <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
               {NAV_LINKS.map((l) => (
                 <Link
                   key={l.to}
@@ -147,7 +147,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-[var(--radius-lg)]">
-                  <DropdownMenuLabel>My account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {isAdmin && (
                     <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })}>
@@ -155,24 +155,24 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+                    <LayoutDashboard className="mr-2 h-4 w-4" /> Painel
                   </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })}>
-                    <UserIcon className="mr-2 h-4 w-4" /> Profile
+                    <UserIcon className="mr-2 h-4 w-4" /> Perfil
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => void signOut()} className="text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" /> Sign out
+                    <LogOut className="mr-2 h-4 w-4" /> Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <>
                 <Link to="/login" className="pc-button-ghost hidden sm:inline-flex">
-                  Sign in
+                  Entrar
                 </Link>
                 <Link to="/cadastro" className="pc-button-primary">
-                  Get started
+                  Começar
                 </Link>
               </>
             )}
@@ -182,7 +182,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                 <SheetTrigger asChild>
                   <Button
                     variant="ghost"
-                    aria-label="Open menu"
+                    aria-label="Abrir menu"
                     className="h-11 w-11 rounded-[var(--radius-md)] p-0 text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] lg:hidden"
                   >
                     <Menu className="h-5 w-5" />
@@ -209,7 +209,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                         onClick={() => setMenuOpen(false)}
                         className="mt-2 flex h-12 items-center rounded-[var(--radius-md)] px-4 text-[16px] font-medium text-[var(--brand-primary)] hover:bg-[var(--bg-surface-elevated)]"
                       >
-                        Sign in
+                        Entrar
                       </Link>
                     )}
                   </nav>

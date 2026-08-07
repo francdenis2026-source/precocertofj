@@ -3,11 +3,11 @@ import { Home, Search, ShoppingBasket, Store, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { to: "/", label: "Home", Icon: Home },
-  { to: "/buscar", label: "Search", Icon: Search },
-  { to: "/cesta", label: "Basket", Icon: ShoppingBasket },
-  { to: "/estabelecimentos", label: "Stores", Icon: Store },
-  { to: "/perfil", label: "Account", Icon: User },
+  { to: "/", label: "Início", Icon: Home },
+  { to: "/buscar", label: "Pesquisar", Icon: Search },
+  { to: "/cesta", label: "Cesta", Icon: ShoppingBasket },
+  { to: "/estabelecimentos", label: "Lojas", Icon: Store },
+  { to: "/perfil", label: "Conta", Icon: User },
 ] as const;
 
 /**
@@ -17,7 +17,7 @@ const ITEMS = [
 export function MobileBottomNav() {
   return (
     <nav
-      aria-label="Primary"
+      aria-label="Principal"
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 lg:hidden",
         "border-t border-[var(--border-subtle)]",

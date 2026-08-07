@@ -58,7 +58,7 @@ function formatBRL(n: number): string {
 }
 
 function storeName(s: ProductStoreEntry): string {
-  return (s.store_name ?? s.marketName ?? "Store").trim();
+  return (s.store_name ?? s.marketName ?? "Mercado").trim();
 }
 
 /**
@@ -198,7 +198,7 @@ export function ProductStoresDialog({
           <DialogHeader className="space-y-1">
             <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
               <StoreIcon className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
-              Comparison by store
+              Comparação por mercado
             </p>
             <DialogTitle className="line-clamp-2 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
               {productName}
@@ -222,7 +222,7 @@ export function ProductStoresDialog({
 
         {valid.length === 0 ? (
           <div className="px-5 pb-5 pt-2 text-center text-sm text-muted-foreground">
-            No store has registered a price for this product yet.
+            Nenhum mercado registrou preço para este produto ainda.
           </div>
         ) : isVisitor ? (
           <VisitorLockPanel storeCount={valid.length} minPrice={stats.min} />
@@ -230,12 +230,12 @@ export function ProductStoresDialog({
           <div className="px-3 pb-4 pt-1 sm:px-5">
             {stats.min != null && stats.avg != null ? (
               <div className="mb-3 grid grid-cols-3 gap-2">
-                <StatMini label="Lowest" amount={stats.min} accent="savings" />
-                <StatMini label="Average" amount={stats.avg} />
+                <StatMini label="Menor" amount={stats.min} accent="savings" />
+                <StatMini label="Média" amount={stats.avg} />
                 <StatMini
-                  label="Difference"
+                  label="Diferença"
                   value={spreadPct != null ? `${spreadPct.toFixed(0)}%` : "—"}
-                  hint="between lowest and highest"
+                  hint="entre menor e maior"
                 />
               </div>
             ) : null}
@@ -243,51 +243,51 @@ export function ProductStoresDialog({
             {/* Controles de ordenação + filtro */}
             <div
               role="toolbar"
-              aria-label="Sort and filter stores"
+              aria-label="Ordenar e filtrar mercados"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
               <span className="mr-1 flex items-center gap-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 <ArrowDownUp className="h-3 w-3" strokeWidth={2.2} />
-                Sort
+                Ordenar
               </span>
               <SortChip
                 active={sortKey === "price-asc"}
                 onClick={() => setSortKey("price-asc")}
-                label="Lowest price"
+                label="Menor preço"
               />
 
               <SortChip
                 active={sortKey === "price-desc"}
                 onClick={() => setSortKey("price-desc")}
-                label="Highest price"
+                label="Maior preço"
               />
               <SortChip
                 active={sortKey === "confidence-desc"}
                 onClick={() => setSortKey("confidence-desc")}
                 icon={<ShieldCheck className="h-3 w-3" strokeWidth={2.2} />}
-                label="Highest confidence"
+                label="Maior confiança"
               />
               <SortChip
                 active={sortKey === "distance-asc"}
                 onClick={() => setSortKey("distance-asc")}
                 disabled={!hasDistance}
                 icon={<MapPin className="h-3 w-3" strokeWidth={2.2} />}
-                label={hasDistance ? "Nearest" : "Nearest (unavailable)"}
+                label={hasDistance ? "Mais próximo" : "Mais próximo (indisponível)"}
                 title={
                   hasDistance
-                    ? "Sort by proximity"
-                    : "Enable location in Profile to see distance"
+                    ? "Ordenar por proximidade"
+                    : "Ative a localização no Perfil para ver a distância"
                 }
               />
             </div>
 
             <div
               role="group"
-              aria-label="Filter by confidence level"
+              aria-label="Filtrar por nível de confiança"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
               <span className="mr-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Confidence
+                Confiança
               </span>
               {(["", "alta", "media", "baixa"] as const).map((level) => (
                 <FilterChip
@@ -295,7 +295,7 @@ export function ProductStoresDialog({
                   active={confFilter === level}
                   onClick={() => setConfFilter(level)}
                   label={
-                    level === "" ? "All" : level === "alta" ? "High" : level === "media" ? "Medium" : "Low"
+                    level === "" ? "Todas" : level === "alta" ? "Alta" : level === "media" ? "Média" : "Baixa"
                   }
                   tone={level || undefined}
                 />
@@ -304,13 +304,13 @@ export function ProductStoresDialog({
 
             {/* Região viva anunciando resultados após ordenação/filtro */}
             <p className="sr-only" aria-live="polite" aria-atomic="true">
-              {sorted.length} store{sorted.length === 1 ? "" : "s"} listed
-              {confFilter ? ` — filter: confidence ${confFilter}` : ""}.
+              {sorted.length} mercado{sorted.length === 1 ? "" : "s"} listado{sorted.length === 1 ? "" : "s"}
+              {confFilter ? ` — filtro: confiança ${confFilter}` : ""}.
             </p>
 
             {sorted.length === 0 ? (
               <p className="rounded-lg border border-dashed border-border bg-muted/30 px-3 py-4 text-center text-xs text-muted-foreground">
-                No stores match this filter. Adjust the criteria above.
+                Nenhum mercado corresponde a este filtro. Ajuste os critérios acima.
               </p>
             ) : (
               <ul className="divide-y divide-border/70 rounded-xl border border-border bg-card">
@@ -348,7 +348,7 @@ export function ProductStoresDialog({
                           <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                             {isCheapest ? (
                               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
-                                Lowest price
+                                Menor preço
                               </span>
                             ) : stats.min != null && stats.min > 0 ? (
                               <span className="inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
@@ -358,7 +358,7 @@ export function ProductStoresDialog({
                                   tone="muted"
                                   prefix="+R$"
                                 />{" "}
-                                vs. lowest
+                                vs. menor preço
                               </span>
                             ) : null}
                             <ConfidenceDot level={confidence} />
@@ -397,7 +397,7 @@ export function ProductStoresDialog({
                 onClick={() => onOpenChange(false)}
                 className="mt-3 flex items-center justify-between rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-primary transition hover:bg-primary/10"
               >
-                See full details and history
+                Ver detalhes completos e histórico
                 <span aria-hidden>→</span>
               </Link>
             ) : null}
@@ -487,7 +487,7 @@ function ConfidenceDot({ level }: { level: "alta" | "media" | "baixa" }) {
       : level === "media"
         ? "bg-accent/15 text-accent"
         : "bg-destructive/15 text-destructive";
-  const label = level === "alta" ? "High confidence" : level === "media" ? "Medium confidence" : "Low confidence";
+  const label = level === "alta" ? "Alta confiança" : level === "media" ? "Confiança média" : "Baixa confiança";
   return (
     <span
       className={cn(
@@ -588,22 +588,22 @@ function VisitorLockPanel({
             <Lock className="h-5 w-5" strokeWidth={2} />
           </span>
           <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
-            Prices by store
+            Preços por mercado
           </p>
           <h3 className="mt-1 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
-            Sign in to see the price at each store
+            Entre para ver o preço em cada mercado
           </h3>
           <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">
-            {storeCount} store{storeCount > 1 ? "s" : ""} already registered this product
+            {storeCount} mercado{storeCount > 1 ? "s" : ""} já cadastraram este produto
             {minPrice != null ? (
               <>
-                {" "}— starting at{" "}
+                {" "}— a partir de{" "}
                 <Price value={minPrice} size="sm" />.
               </>
             ) : (
               "."
             )}{" "}
-            Create your free account to unlock the full comparison — 30 days, no card required.
+            Crie sua conta gratuita para desbloquear a comparação completa — 30 dias, sem cartão.
           </p>
 
           <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
@@ -613,18 +613,18 @@ function VisitorLockPanel({
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--color-primary)_60%,transparent)] transition hover:brightness-110"
             >
               <LogIn className="h-3.5 w-3.5" strokeWidth={2.2} />
-              Sign in / Sign up
+              Entrar / Cadastrar
             </Link>
             <Link
               to="/assinar"
               className="inline-flex items-center justify-center rounded-full border border-primary/40 bg-background px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary transition hover:bg-primary/5"
             >
-              See plans
+              Ver planos
             </Link>
           </div>
           <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             <X className="mr-1 inline h-3 w-3 text-savings" strokeWidth={2.4} />
-            No card · 30 days free
+            Sem cartão · 30 dias grátis
           </p>
         </div>
       </div>

@@ -19,11 +19,11 @@ function relative(iso: string): string {
   const t = new Date(iso).getTime();
   if (!Number.isFinite(t)) return "—";
   const days = Math.max(0, Math.floor((Date.now() - t) / 86_400_000));
-  if (days <= 0) return "today";
-  if (days === 1) return "yesterday";
-  if (days < 30) return `${days} days ago`;
-  if (days < 60) return "over 1 month ago";
-  return `${Math.floor(days / 30)} months ago`;
+  if (days <= 0) return "hoje";
+  if (days === 1) return "ontem";
+  if (days < 30) return `${days} dias atrás`;
+  if (days < 60) return "há mais de 1 mês";
+  return `${Math.floor(days / 30)} meses atrás`;
 }
 
 export function QuickCompareStrip({ markets }: { markets: QuickCompareMarket[] }) {
@@ -41,42 +41,42 @@ export function QuickCompareStrip({ markets }: { markets: QuickCompareMarket[] }
 
   return (
     <section
-      aria-label="Quick comparison across stores"
+      aria-label="Comparação rápida entre mercados"
       className="rounded-2xl border border-border bg-card p-3 md:p-4"
     >
       <header className="mb-2 flex items-center justify-between gap-2">
         <h2 className="font-display text-sm font-bold text-foreground md:text-base">
-          Quick comparison
+          Comparação rápida
         </h2>
         <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-          <Store className="h-3 w-3" strokeWidth={2} /> {markets.length} stores
+          <Store className="h-3 w-3" strokeWidth={2} /> {markets.length} mercados
         </span>
       </header>
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         <Cell
           tone="savings"
           icon={<TrendingDown className="h-3 w-3" strokeWidth={2.4} />}
-          label="Lowest price"
+          label="Menor preço"
           value={fmt(cheapest.priceMin)}
           hint={cheapest.marketName}
         />
         <Cell
           tone="muted"
           icon={<TrendingUp className="h-3 w-3" strokeWidth={2.4} />}
-          label="Highest price"
+          label="Maior preço"
           value={fmt(priciest.priceMax)}
           hint={priciest.marketName}
         />
         <Cell
           tone="accent"
-          label="Spread"
+          label="Diferença"
           value={`${spread.toFixed(0)}%`}
-          hint={`savings up to ${fmt(priciest.priceMax - cheapest.priceMin)}`}
+          hint={`economia de até ${fmt(priciest.priceMax - cheapest.priceMin)}`}
         />
         <Cell
           tone="muted"
           icon={<Clock className="h-3 w-3" strokeWidth={2.4} />}
-          label="Updated"
+          label="Atualizado"
           value={relative(recent.lastSeen)}
           hint={recent.marketName}
         />

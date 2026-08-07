@@ -22,7 +22,7 @@ export function SimilarProductsSection({ query }: { query: string }) {
     <section className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" /> Smart Alternatives
+          <Sparkles className="h-5 w-5 text-primary" /> Alternativas Inteligentes
         </h2>
       </div>
 

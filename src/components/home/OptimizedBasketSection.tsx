@@ -45,13 +45,13 @@ export function OptimizedBasketSection() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
             <Sparkles className="h-3.5 w-3.5" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">PricePal exclusive</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exclusivo PricePal</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)] leading-tight">
-            Baskets that go <span className="text-[var(--brand-primary)]">further</span>
+            Cestas que rendem <span className="text-[var(--brand-primary)]">mais</span>
           </h2>
           <p className="text-[var(--text-secondary)] text-xs max-w-sm">
-            The cheapest combinations across Feijó stores today.
+            As combinações mais baratas nas lojas de Feijó hoje.
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export function OptimizedBasketSection() {
           to="/cesta-basica"
           className="group inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline"
         >
-          Customise my basket
+          Personalizar minha cesta
           <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
@@ -72,7 +72,7 @@ export function OptimizedBasketSection() {
 
       <div className="flex items-center justify-center gap-4 py-4 px-6 rounded-2xl bg-white/5 border border-white/10 text-white/40 text-[10px] font-bold uppercase tracking-widest text-center">
         <Info className="h-4 w-4 text-[var(--brand-primary)] shrink-0" />
-        <span>Based on the most purchased items in Brazil. Prices updated on {new Date(data.lastUpdate).toLocaleDateString('en-GB')}.</span>
+        <span>Baseado nos itens mais comprados no Brasil. Preços atualizados em {new Date(data.lastUpdate).toLocaleDateString('pt-BR')}.</span>
       </div>
     </div>
   );
@@ -125,7 +125,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
         <div className="space-y-1 mb-4">
           <div className="flex items-center gap-2.5 text-[var(--text-secondary)] text-[12px] font-medium">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
-            <span>{basket.itemsCount} of {basket.totalItems} items</span>
+            <span>{basket.itemsCount} de {basket.totalItems} itens</span>
           </div>
         </div>
 

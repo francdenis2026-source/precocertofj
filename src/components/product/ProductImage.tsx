@@ -137,7 +137,7 @@ export function ProductImage({
             className="rounded-full bg-muted-foreground/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
             aria-live="polite"
           >
-            {src ? "No image" : "Photo coming soon"}
+            {src ? "Sem imagem" : "Foto em breve"}
           </span>
         </div>
       )}

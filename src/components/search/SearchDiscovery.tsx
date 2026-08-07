@@ -27,14 +27,14 @@ import {
 
 
 const CATEGORIES: { label: string; q: string; Icon: LucideIcon }[] = [
-  { label: "Rice", q: "arroz", Icon: Wheat },
-  { label: "Beans", q: "feijão", Icon: Bean },
-  { label: "Coffee", q: "café", Icon: Coffee },
-  { label: "Milk", q: "leite", Icon: Milk },
-  { label: "Oil", q: "óleo", Icon: Droplet },
-  { label: "Sugar", q: "açúcar", Icon: Candy },
-  { label: "Flour", q: "farinha", Icon: Wheat },
-  { label: "Pasta", q: "macarrão", Icon: CookingPot },
+  { label: "Arroz", q: "arroz", Icon: Wheat },
+  { label: "Feijão", q: "feijão", Icon: Bean },
+  { label: "Café", q: "café", Icon: Coffee },
+  { label: "Leite", q: "leite", Icon: Milk },
+  { label: "Óleo", q: "óleo", Icon: Droplet },
+  { label: "Açúcar", q: "açúcar", Icon: Candy },
+  { label: "Farinha", q: "farinha", Icon: Wheat },
+  { label: "Macarrão", q: "macarrão", Icon: CookingPot },
 ];
 
 const POPULAR: string[] = [
@@ -128,15 +128,15 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
       <section
-        aria-label="Popular categories"
+        aria-label="Categorias populares"
         className="relative shrink-0 rounded-xl border border-brand-gold/30 bg-brand-gold/[0.06] p-2 dark:bg-brand-gold/[0.08]"
 
       >
         <SectionHeader
           icon={<SearchIcon className="h-3 w-3" strokeWidth={2.75} />}
           tone="gold"
-          eyebrow="Categories"
-          title="What do you want to compare today?"
+          eyebrow="Categorias"
+          title="O que você quer comparar hoje?"
         />
         <div className="mt-1.5 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-0.5 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-8">
           {CATEGORIES.map((c) => (
@@ -164,14 +164,14 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* ============ POPULARES — tinta ÂMBAR (calor/tendência) ============ */}
       <section
-        aria-label="Popular searches"
+        aria-label="Buscas populares"
         className="relative flex min-h-0 flex-col overflow-hidden rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
       >
         <SectionHeader
           icon={<Flame className="h-3 w-3" strokeWidth={2.75} />}
           tone="amber"
-          eyebrow="Popular"
-          title="Most searched terms right now"
+          eyebrow="Populares"
+          title="Termos mais buscados agora"
         />
         <div className="mt-1.5 flex min-h-0 flex-1 flex-wrap content-start gap-1 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
 
@@ -191,7 +191,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* ============ RECENTES — tinta ÍNDIGO (histórico) ============ */}
       <section
-        aria-label="Recent searches"
+        aria-label="Buscas recentes"
         className="relative flex min-h-0 flex-col overflow-hidden rounded-xl border-[var(--brand-primary)]/25 bg-[var(--brand-primary)]/[0.05] p-2 dark:border-[var(--brand-primary)]/25 dark:bg-[var(--brand-primary)]/[0.06]"
 
       >
@@ -199,8 +199,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
           <SectionHeader
             icon={<HistoryIcon className="h-3 w-3" strokeWidth={2.75} />}
             tone="indigo"
-            eyebrow="Recent"
-            title="Your recent searches"
+            eyebrow="Recentes"
+            title="Suas buscas recentes"
           />
           {recent.length > 0 && (
             <button
@@ -208,14 +208,14 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               onClick={clearRecent}
               className="shrink-0 rounded-md px-1.5 py-0.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              Clear
+              Limpar
             </button>
           )}
         </div>
         <div className="mt-1.5 min-h-0 flex-1 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
           {recent.length === 0 ? (
             <p className="text-[13px] leading-snug text-muted-foreground">
-              No searches yet — new ones will appear here so you can reopen them with one click.
+              Nenhuma busca ainda — novas buscas aparecerão aqui para você reabrir com um clique.
             </p>
           ) : (
             <div className="flex flex-wrap content-start gap-1">
@@ -236,7 +236,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
                     type="button"
                     onClick={() => removeRecent(t)}
                     className="grid h-4.5 w-4.5 place-items-center rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                    aria-label={`Remove ${t}`}
+                    aria-label={`Remover ${t}`}
                   >
                     <XIcon className="h-2.5 w-2.5" />
                   </button>
@@ -253,45 +253,45 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* ============ SINAL DE VIDA — tinta ESMERALDA (métricas) ============ */}
       <section
-        aria-label="Platform activity signal"
+        aria-label="Sinal de atividade da plataforma"
         className="relative shrink-0 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-2 dark:border-emerald-400/25 dark:bg-emerald-400/[0.06]"
       >
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
           <SectionHeader
             icon={<Clock className="h-3 w-3" strokeWidth={2.75} />}
             tone="emerald"
-            eyebrow={`Last ${stats.data?.windowDays ?? 30} days`}
-            title="Activity signal"
+            eyebrow={`Últimos ${stats.data?.windowDays ?? 30} dias`}
+            title="Sinal de atividade"
           />
           <span className="min-w-0 truncate text-[12.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
-              ? "Data unavailable"
+              ? "Dados indisponíveis"
               : stats.data?.generatedAt
-                ? `Updated ${updatedLabel(stats.data.generatedAt)}`
-                : "Updating…"}
+                ? `Atualizado ${updatedLabel(stats.data.generatedAt)}`
+                : "Atualizando…"}
           </span>
         </div>
         <div className="mt-1.5 grid grid-cols-3 gap-1.5">
           <StatCell
             tone="emerald"
             icon={<TrendingDown className="h-3 w-3" aria-hidden />}
-            label="Prices dropping"
+            label="Preços caindo"
             value={statsOk ? int(stats.data!.priceDrops7d ?? 0) : "—"}
-            hint={`${stats.data?.windowDays ?? 30} days`}
+            hint={`${stats.data?.windowDays ?? 30} dias`}
           />
           <StatCell
             tone="emerald"
             icon={<Sparkles className="h-3 w-3" aria-hidden />}
-            label="Tracked"
+            label="Monitorados"
             value={statsOk ? int(stats.data!.products ?? 0) : "—"}
-            hint="public price"
+            hint="preço público"
           />
           <StatCell
             tone="emerald"
             icon={<Flame className="h-3 w-3" aria-hidden />}
-            label="Average savings"
+            label="Economia média"
             value={statsOk ? brl(stats.data!.estimatedSavings ?? 0) : "—"}
-            hint="per product"
+            hint="por produto"
           />
         </div>
       </section>

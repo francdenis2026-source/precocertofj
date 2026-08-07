@@ -116,7 +116,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
               )}
             >
               <Trophy className="h-3 w-3" strokeWidth={3} />
-              {rank}{rank === 1 ? "st" : rank === 2 ? "nd" : rank === 3 ? "rd" : "th"} place
+              {rank}º lugar
             </span>
           )}
           <div className="absolute -bottom-8 left-6">
@@ -143,7 +143,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <SheetTitle className="font-display text-[22px] font-extrabold leading-tight text-foreground">
-                {store?.name ?? "Market"}
+                {store?.name ?? "Mercado"}
               </SheetTitle>
               <SheetDescription className="flex items-center gap-1.5 text-[12.5px] text-muted-foreground">
                 <MapPin className="h-3.5 w-3.5 text-accent" />
@@ -168,7 +168,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                   className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase text-muted-foreground transition hover:border-primary/40 hover:text-primary"
                 >
                   <Download className="h-3.5 w-3.5" />
-                  Export CSV
+                  Exportar CSV
                 </button>
                 <Link
                   to="/loja/$id"
@@ -176,9 +176,9 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                   search={{ q: "", from: "" }}
                   onClick={() => onOpenChange(false)}
                   className="inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-primary transition hover:bg-primary hover:text-primary-foreground"
-                  aria-label="Open market page"
+                  aria-label="Abrir página do mercado"
                 >
-                  Open market
+                  Abrir mercado
                   <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                 </Link>
               </div>
@@ -193,18 +193,18 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             <StatBox
               icon={<Package className="h-3.5 w-3.5" />}
               value={String(store?.productCount ?? "—")}
-              label="products"
+              label="produtos"
             />
             <StatBox
               icon={<Trophy className="h-3.5 w-3.5" />}
               value={rank ? `${rank}º` : "—"}
-              label={wins ? `${wins} wins` : "no ranking"}
+              label={wins ? `${wins} vitórias` : "sem ranking"}
               highlight={!!rank && rank <= 3}
             />
             <StatBox
               icon={<Clock className="h-3.5 w-3.5" />}
               value={fmtDate(store?.lastUpdate ?? null)}
-              label="last update"
+              label="última atualização"
             />
           </div>
 
@@ -213,7 +213,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             <div className="flex items-center justify-between">
               <p className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-savings">
                 <TrendingDown className="h-3 w-3" strokeWidth={3} />
-                Lowest price at this market
+                Menor preço neste mercado
               </p>
               {lowest?.category && (
                 <span className="rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
@@ -224,13 +224,13 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
 
             {catalogQuery.isLoading && (
               <p className="mt-3 text-[13px] text-muted-foreground">
-                Searching for offers…
+                Buscando ofertas…
               </p>
             )}
 
             {!catalogQuery.isLoading && !lowest && (
               <p className="mt-3 text-[13px] text-muted-foreground">
-                No prices registered yet.
+                Nenhum preço registrado ainda.
               </p>
             )}
 
@@ -277,10 +277,10 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             <div>
               <div className="mb-2 flex items-baseline justify-between">
                 <p className="text-[11px] font-black uppercase tracking-[0.18em] text-muted-foreground">
-                  Top 5 · 30-day trend
+                  Top 5 · tendência de 30 dias
                 </p>
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  ↘ dropping · ↗ rising
+                  ↘ caindo · ↗ subindo
                 </span>
               </div>
               <ul className="overflow-hidden rounded-2xl border border-border bg-surface">
@@ -336,7 +336,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                           width={72}
                           height={28}
                           tone="savings"
-                          ariaLabel={`Price trend for ${p.productName} over the last 30 days`}
+                          ariaLabel={`Tendência de preço de ${p.productName} nos últimos 30 dias`}
                         />
                         <span className="num shrink-0 font-display text-[13.5px] font-black text-foreground">
                           <Price value={p.price} size="sm" />
@@ -356,7 +356,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             cheapest.length > 1 && (
               <div>
                 <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-muted-foreground">
-                  Other low prices
+                  Outros preços baixos
                 </p>
                 <ul className="overflow-hidden rounded-2xl border border-border bg-surface">
                   {cheapest.slice(1).map((p) => (
@@ -394,7 +394,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               className="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3.5 text-[13.5px] font-black text-primary-foreground shadow-[0_10px_24px_-10px_oklch(0.36_0.11_155_/_0.65)] transition hover:bg-accent hover:text-accent-foreground"
             >
-              View full catalog
+              Ver catálogo completo
               <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
             </Link>
           )}

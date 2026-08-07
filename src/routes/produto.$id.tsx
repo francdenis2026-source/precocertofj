@@ -25,7 +25,7 @@ import { Price } from "@/components/ds/Price";
 export const Route = createFileRoute("/produto/$id")({
   head: () => ({
     meta: [
-      { title: "Product details — PreçoCerto" },
+      { title: "Detalhes do produto — PreçoCerto" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -93,15 +93,15 @@ function ProductDetailPage() {
     <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
       <Breadcrumbs
         items={[
-          { label: "Search", to: "/buscar" },
-          { label: data?.name ?? "Product" },
+          { label: "Buscar", to: "/buscar" },
+          { label: data?.name ?? "Produto" },
         ]}
       />
       <div className="mx-auto max-w-xl px-4 pt-4 sm:px-6">
         <header className="mb-5 flex items-center justify-between">
           <Link
             to="/historico/scans"
-            aria-label="Back"
+            aria-label="Voltar"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface text-foreground transition hover:bg-secondary"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
@@ -109,12 +109,12 @@ function ProductDetailPage() {
           <div className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5">
             <Package className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
             <span className="font-mono text-[12.5px] font-medium uppercase tracking-widest text-muted-foreground">
-              Product
+              Produto
             </span>
           </div>
           <button
             onClick={handleShare}
-            aria-label="Share"
+            aria-label="Compartilhar"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface text-foreground transition hover:bg-secondary"
           >
             {copied ? (
@@ -140,9 +140,9 @@ function ProductDetailPage() {
         {data === null && (
           <div className="rounded-3xl border border-border bg-surface p-8 text-center">
             <Package className="mx-auto mb-3 h-8 w-8 text-muted-foreground" strokeWidth={1.5} />
-            <p className="font-display text-base font-semibold">Product not found</p>
+            <p className="font-display text-base font-semibold">Produto não encontrado</p>
             <p className="mt-1 font-sans text-sm text-muted-foreground">
-              The item may have been removed from your catalog.
+              O item pode ter sido removido do seu catálogo.
             </p>
           </div>
         )}
@@ -168,14 +168,14 @@ function ProductDetailPage() {
                     className="mt-3"
                     onClick={() => setHistoryOpen(true)}
                   >
-                    <History className="mr-1 h-3.5 w-3.5" /> Compare across markets
+                    <History className="mr-1 h-3.5 w-3.5" /> Comparar entre mercados
                   </Button>
                 </div>
               </div>
               <div className="mt-4 flex items-baseline justify-between border-t border-border pt-4">
                 <div>
                   <p className="font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
-                    Your registered price
+                    Preço registrado
                   </p>
                   <Price as="p" value={data.currentPrice} size="lg" className="mt-1" />
                 </div>
@@ -193,7 +193,7 @@ function ProductDetailPage() {
                       <TrendingDown className="h-3 w-3" strokeWidth={2.5} />
                     )}
                     {priceVsAvg > 0 ? "+" : ""}
-                    {priceVsAvg.toFixed(1)}% vs average
+                    {priceVsAvg.toFixed(1)}% vs. média
                   </div>
                 )}
               </div>
@@ -207,7 +207,7 @@ function ProductDetailPage() {
                   <div className="flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 text-savings" strokeWidth={2.5} />
                     <p className="font-mono text-[12.5px] font-bold uppercase tracking-widest text-savings">
-                      Cheapest found
+                      Mais barato encontrado
                     </p>
                   </div>
                   <div className="mt-3 flex items-end justify-between gap-3">
@@ -217,7 +217,7 @@ function ProductDetailPage() {
                         <span className="truncate">{data.cheapest.marketName}</span>
                       </p>
                       <p className="mt-0.5 font-mono text-[12.5px] text-muted-foreground">
-                        Seen on {fmtDate(data.cheapest.when)}
+                        Visto em {fmtDate(data.cheapest.when)}
                       </p>
                     </div>
                     <div className="text-right">
@@ -228,10 +228,10 @@ function ProductDetailPage() {
                     <div className="mt-4 flex items-center gap-2 rounded-xl bg-surface/80 px-3 py-2 backdrop-blur">
                       <TrendingDown className="h-3.5 w-3.5 text-savings" strokeWidth={2.5} />
                       <p className="font-sans text-xs text-foreground">
-                        Savings of{" "}
+                        Economia de{" "}
                         <Price value={savings.diff} size="sm" tone="savings" />{" "}
                         <span className="text-muted-foreground">
-                          ({savings.pct.toFixed(0)}% below average)
+                          ({savings.pct.toFixed(0)}% abaixo da média)
                         </span>
                       </p>
                     </div>
@@ -242,7 +242,7 @@ function ProductDetailPage() {
               <section className="rounded-3xl border border-dashed border-border bg-surface p-5 text-center">
                 <MapPin className="mx-auto mb-2 h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
                 <p className="font-sans text-sm text-muted-foreground">
-                  No comparable scans for this product yet.
+                  Nenhum escaneamento comparável para este produto ainda.
                 </p>
               </section>
             )}
@@ -252,7 +252,7 @@ function ProductDetailPage() {
               <div className="mb-4 flex items-center gap-1.5">
                 <BarChart3 className="h-3.5 w-3.5 text-primary" strokeWidth={2.5} />
                 <p className="font-mono text-[12.5px] font-bold uppercase tracking-widest text-muted-foreground">
-                  Price range · {data.history.samples} scan
+                  Faixa de preço · {data.history.samples} escaneamento
                   {data.history.samples === 1 ? "" : "s"}
                 </p>
               </div>
@@ -260,15 +260,15 @@ function ProductDetailPage() {
               {/* Min (primary), Avg (secondary), Max (tertiary) */}
               <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2">
                 <PriceStat
-                  label="Minimum"
+                  label="Mínimo"
                   value={data.history.min}
                   tone="savings"
                   icon={<TrendingDown className="h-3.5 w-3.5" strokeWidth={2.5} />}
                   highlight
                 />
-                <PriceStat label="Average" value={data.history.avg} tone="primary" />
+                <PriceStat label="Média" value={data.history.avg} tone="primary" />
                 <PriceStat
-                  label="Maximum"
+                  label="Máximo"
                   value={data.history.max}
                   tone="muted"
                   icon={<TrendingUp className="h-3 w-3" strokeWidth={2} />}
@@ -309,10 +309,10 @@ function ProductDetailPage() {
               <section>
                 <div className="mb-2.5 flex items-center justify-between px-1">
                   <p className="font-mono text-[12.5px] font-bold uppercase tracking-widest text-muted-foreground">
-                    By establishment
+                    Por estabelecimento
                   </p>
                   <p className="font-mono text-[12.5px] text-muted-foreground">
-                    {data.markets.length} location{data.markets.length === 1 ? "" : "s"}
+                    {data.markets.length} local{data.markets.length === 1 ? "" : "is"}
                   </p>
                 </div>
                 <ul className="space-y-2">
@@ -341,7 +341,7 @@ function ProductDetailPage() {
                             {m.marketName}
                           </p>
                           <p className="font-mono text-[12.5px] text-muted-foreground">
-                            {m.samples} scan{m.samples > 1 ? "s" : ""} · last{" "}
+                            {m.samples} escaneamento{m.samples > 1 ? "s" : ""} · último{" "}
                             {fmtDate(m.lastSeen)}
                           </p>
                         </div>
@@ -354,7 +354,7 @@ function ProductDetailPage() {
                           />
                           {isBest && (
                             <p className="font-mono text-[12.5px] font-semibold uppercase tracking-widest text-savings">
-                              best price
+                              melhor preço
                             </p>
                           )}
                         </div>
