@@ -125,23 +125,22 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   background-color: var(--brand-primary);
-  color: #0B1E3A;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.75rem 1.5rem;
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 0.875rem 1.75rem;
   border-radius: var(--radius-md);
   transition: all var(--dur-base) var(--ease-smooth);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(197, 160, 45, 0.2);
   &:hover {
-    filter: brightness(1.1);
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px -5px var(--pc-brand-gold-glow);
+    filter: brightness(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(197, 160, 45, 0.3);
   }
   &:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 }
 
