@@ -140,7 +140,6 @@ function OnboardingPage() {
                 if (raw.length > 7) masked = `(${raw.slice(0, 2)}) ${raw.slice(2, 7)}-${raw.slice(7)}`;
                 setPhone(masked);
               }}
-              value={phone}
               placeholder="(68) 90000-0000"
               inputMode="tel"
               autoComplete="tel"
