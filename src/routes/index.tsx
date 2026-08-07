@@ -83,6 +83,48 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
+function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: any) => void }) {
+  const { addItem } = useComparisonList();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: i * 0.1 }}
+      onClick={() => onSelect({ 
+        name: p.name, 
+        minPrice: p.price, 
+        cheapestStore: p.marketName,
+        updatedAt: p.when
+      })}
+      className="pc-card group cursor-pointer flex gap-4 items-center relative"
+    >
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
+        }}
+        className="absolute top-3 right-3 p-2 rounded-xl bg-primary/10 text-primary opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-black z-10"
+        aria-label={`Adicionar ${p.name} à comparação`}
+      >
+        <PlusCircle className="h-4 w-4" />
+      </button>
+      <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
+        <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
+          <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+        </div>
+        <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
+        <div className="mt-1">
+          <Price value={p.price} size="lg" className="font-black" />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function HomePage() {
   const navigate = useNavigate();
   const { user } = useSession();
