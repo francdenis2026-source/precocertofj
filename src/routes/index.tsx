@@ -272,6 +272,12 @@ function HomePage() {
                 <PromoBanner />
               </section>
            </aside>
+          <div className="mt-20 pt-12 border-t border-[var(--border-subtle)]">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-8 text-center">Monitoramento em Tempo Real</h2>
+            <div className="max-w-4xl mx-auto">
+              <RealtimeMonitoringDashboard />
+            </div>
+          </div>
         </div>
         <ComparisonStickyBar />
       </main>
