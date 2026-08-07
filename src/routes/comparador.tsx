@@ -1248,7 +1248,7 @@ function ComparadorPage() {
                           const allMarketNames = new Set<string>();
                           selectedRows.forEach(r => (r.stores || []).forEach(s => allMarketNames.add(s.store_name)));
 
-                          const results = Array.from(allMarketNames).map(market => {
+                          const finalResults = Array.from(allMarketNames).map(market => {
                             let total = 0;
                             let itemsCount = 0;
                             let establishmentId = "";
@@ -1265,7 +1265,7 @@ function ComparadorPage() {
                             return { market, total, itemsCount, establishmentId };
                           }).filter(r => r.itemsCount === productCount);
 
-                          if (results.length === 0) {
+                          if (finalResults.length === 0) {
                             return (
                               <tr>
                                 <td colSpan={3} className="px-3 py-4 text-center italic text-muted-foreground">
@@ -1275,11 +1275,11 @@ function ComparadorPage() {
                             );
                           }
 
-                          const bestTotal = Math.min(...results.map(r => r.total));
+                          const bestTotal = Math.min(...finalResults.map(r => r.total));
 
                           return (
                             <>
-                              {results
+                              {finalResults
                                 .sort((a, b) => a.total - b.total)
                                 .slice(0, 3)
                                 .map(res => {
@@ -1295,7 +1295,7 @@ function ComparadorPage() {
                                       <td className="px-2 py-1.5 text-right">
                                         <button 
                                           onClick={() => {
-                                            const other = results.find(r => r.market !== res.market) || results[0];
+                                            const other = finalResults.find(r => r.market !== res.market) || finalResults[0];
                                             setSideBySide({
                                               storeAId: res.establishmentId,
                                               storeAName: res.market,
@@ -1311,12 +1311,12 @@ function ComparadorPage() {
                                     </tr>
                                   );
                                 })}
-                              {results.length >= 2 && (
+                              {finalResults.length >= 2 && (
                                 <tr>
                                   <td colSpan={3} className="p-2">
                                     <button 
                                       onClick={() => {
-                                        const top2 = results.sort((a, b) => a.total - b.total).slice(0, 2);
+                                        const top2 = [...finalResults].sort((a, b) => a.total - b.total).slice(0, 2);
                                         setSideBySide({
                                           storeAId: top2[0].establishmentId,
                                           storeAName: top2[0].market,
@@ -1334,6 +1334,7 @@ function ComparadorPage() {
                             </>
                           );
                         })()}
+
                       </tbody>
                     </table>
                   </div>
