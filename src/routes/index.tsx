@@ -186,6 +186,18 @@ function HomePage() {
           </p>
           <div className="max-w-2xl mx-auto">
             <SmartSearchBar onFocusChange={setIsSearchFocused} />
+            <div className="flex flex-wrap justify-center gap-2 mt-6">
+              {CATEGORIES.slice(0, 4).map((cat) => (
+                <Link
+                  key={cat.slug}
+                  to="/buscar"
+                  search={{ q: cat.label } as any}
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-white/60 hover:bg-[var(--brand-primary)]/10 hover:text-[var(--brand-primary)] hover:border-[var(--brand-primary)]/20 transition-all backdrop-blur-md"
+                >
+                  {cat.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
