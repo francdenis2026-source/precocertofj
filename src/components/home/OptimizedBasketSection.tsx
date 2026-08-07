@@ -64,8 +64,8 @@ export function OptimizedBasketSection() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {data.baskets.map((basket, idx) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {data.baskets.slice(0, 2).map((basket, idx) => (
           <BasketCard key={basket.id} basket={basket} index={idx} />
         ))}
       </div>
@@ -85,7 +85,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="group relative flex flex-col h-full rounded-[32px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 transition-all duration-500 shadow-2xl"
+      className="group relative flex flex-col h-full rounded-[24px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 transition-all duration-500 shadow-sm"
     >
       {/* Accent Header */}
       <div className={cn(
