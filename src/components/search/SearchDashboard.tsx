@@ -14,7 +14,7 @@ export function SearchDashboard() {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+          <Skeleton key={i} className="h-24 w-full rounded-[var(--radius-lg)] bg-[var(--bg-surface)] border border-[var(--border-subtle)]" />
         ))}
       </div>
     );
@@ -23,15 +23,15 @@ export function SearchDashboard() {
   if (!result || !result.groups.length) return null;
 
   const stats = [
-    { label: "Melhor Preço", value: result.min ?? 0, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
+    { label: "Menor Preço", value: result.min ?? 0, icon: <TrendingDown className="h-4 w-4" />, tone: "best" as const },
     { label: "Economia", value: (result.max ?? 0) - (result.min ?? 0), icon: <PiggyBank className="h-4 w-4" />, tone: "savings" as const },
     { label: "Ofertados", value: result.samples ?? 0, icon: <ShoppingBag className="h-4 w-4" />, isNumber: true },
     { label: "Produtos", value: result.groups.length ?? 0, icon: <RefreshCw className="h-4 w-4" />, isNumber: true },
   ];
 
   return (
-    <div className="bg-[#F7F8FA] dark:bg-[#0E1B31] border border-[var(--border-subtle)] rounded-[20px] p-5 shadow-sm overflow-hidden">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-gray-200 dark:divide-gray-800">
+    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] p-6 shadow-[var(--pc-shadow-md)]">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x md:divide-[var(--border-subtle)]">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -40,23 +40,26 @@ export function SearchDashboard() {
             transition={{ delay: i * 0.1 }}
             className={cn(
               "flex flex-col gap-1.5",
-              i > 0 && "pl-6"
+              i > 0 && "md:pl-8"
             )}
           >
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280]">
-              {stat.label}
-            </span>
             <div className="flex items-center gap-2">
+              <div className="text-[var(--text-tertiary)]">{stat.icon}</div>
+              <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+                {stat.label}
+              </span>
+            </div>
+            <div className="mt-1">
               {stat.isNumber ? (
-                <div className="text-[20px] font-bold tracking-tight text-[#1A1A2E] dark:text-white leading-none">
+                <div className="text-2xl font-bold tracking-tight text-[var(--text-primary)] leading-none">
                   {stat.value}
                 </div>
               ) : (
                 <Price 
                   value={stat.value} 
-                  size="md" 
+                  size="lg" 
                   tone={stat.tone} 
-                  className="text-[20px] font-bold text-[#1A1A2E] dark:text-white leading-none" 
+                  className="text-2xl font-bold text-[var(--text-primary)] leading-none" 
                 />
               )}
             </div>

@@ -130,16 +130,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "preload",
         as: "style",
-        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400..700&family=DM+Sans:wght@400..700&family=Space+Grotesk:wght@600..700&family=IBM+Plex+Mono:wght@400..700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Manrope:wght@400;500;700;800&display=swap",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400..700&family=DM+Sans:wght@400..700&family=Space+Grotesk:wght@600..700&family=IBM+Plex+Mono:wght@400..700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Manrope:wght@400;500;700;800&display=swap",
       },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap",
-      },
+
 
 
 

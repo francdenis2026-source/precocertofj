@@ -59,16 +59,8 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
 
 
   return (
-    <aside
-      className="pc-sidebar-typo sticky top-24 space-y-5 font-sans antialiased subpixel-antialiased"
-      style={{
-        fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "tnum" 1',
-        textRendering: "optimizeLegibility",
-        letterSpacing: "normal",
-        WebkitFontSmoothing: "antialiased",
-        MozOsxFontSmoothing: "grayscale",
-      }}
-    >
+    <aside className="sticky top-24 space-y-6">
+
 
       {/* Atalhos de cortes de açougue */}
       <AcougueCutsBar variant="compact" />
@@ -103,7 +95,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[14.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="min-w-0 flex-1 truncate rounded-lg px-2 py-2 text-left text-[14px] font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--brand-primary)]"
                 >
                   {t}
                 </button>
@@ -150,9 +142,9 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               <button
                 type="button"
                 onClick={() => onPickQuery(p)}
-                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[14.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                className="group flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left text-[14px] font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--brand-primary)]"
               >
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold text-[12.5px] font-bold tabular-nums text-brand-navy shadow-sm">
+                <span className="grid h-6 w-6 place-items-center rounded-lg bg-[var(--brand-primary)] text-[11px] font-black tabular-nums text-black shadow-sm">
                   {i + 1}
                 </span>
                 <span className="truncate">{p}</span>
@@ -239,18 +231,19 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-border/60 pt-5">
-      <header className="mb-3 flex items-center justify-between gap-2">
+    <section className="pc-card">
+      <header className="mb-4 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink">
+          <span className="grid h-8 w-8 flex-none place-items-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
             {icon}
           </span>
-          <h3 className="truncate text-[13px] font-medium text-foreground">
+          <h3 className="truncate text-[11px] font-black uppercase tracking-[0.15em] text-[var(--text-secondary)]">
             {title}
           </h3>
         </div>
         {action}
       </header>
+
       {children}
     </section>
   );

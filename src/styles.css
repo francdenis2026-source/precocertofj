@@ -2,6 +2,7 @@
 @import "./styles/print.css";
 
 @custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 @keyframes gradient-x {
   0% { background-position: 0% 50%; }
@@ -15,136 +16,158 @@
 }
 
 :root {
-  /* Core Brand Palette - Deep Navy & Refined Gold */
-  --pc-brand-navy: #0B1E3A;
-  --pc-brand-navy-deep: #050E1B;
+  /* Brand Tokens */
   --pc-brand-gold: #D4AF37;
-  --pc-brand-gold-glow: #FFD700;
+  --pc-brand-gold-glow: rgba(212, 175, 55, 0.4);
   
-  /* Backgrounds */
-  --pc-bg-base: #F8FAFC;
-  --pc-bg-surface: #FFFFFF;
-  --pc-bg-surface-elevated: #F1F5F9;
+  /* Theme: Light */
+  --bg-base: #F7F8FA;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F3F6;
+  --border-subtle: #E5E7EB;
   
-  /* Text */
-  --pc-text-primary: #0F172A;
-  --pc-text-secondary: #475569;
-  --pc-text-tertiary: #94A3B8;
+  --text-primary: #1A1A2E;
+  --text-secondary: #4B5563;
+  --text-tertiary: #9CA3AF;
   
-  /* Interaction & Accents */
-  --pc-brand-primary: var(--pc-brand-gold);
-  --pc-brand-secondary: var(--pc-brand-navy);
-  --pc-brand-accent: #6366F1;
-  --pc-brand-glow: rgba(212, 175, 55, 0.12);
-  --pc-border-subtle: rgba(11, 30, 58, 0.08);
+  --brand-primary: var(--pc-brand-gold);
+  --brand-secondary: #0B1E3A;
   
-  /* Tokens */
-  --bg-base: var(--pc-bg-base);
-  --bg-surface: var(--pc-bg-surface);
-  --bg-surface-elevated: var(--pc-bg-surface-elevated);
-  --border-subtle: var(--pc-border-subtle);
-  --brand-primary: var(--pc-brand-primary);
-  --brand-secondary: var(--pc-brand-secondary);
-  --brand-accent: var(--pc-brand-accent);
-  --brand-glow: var(--pc-brand-glow);
-  --text-primary: var(--pc-text-primary);
-  --text-secondary: var(--pc-text-secondary);
-  --text-tertiary: var(--pc-text-tertiary);
-
+  --success: #10B981;
+  --danger: #EF4444;
+  
   /* Radius */
-  --pc-radius-lg: 24px;
-  --pc-radius-md: 16px;
-  --pc-radius-sm: 8px;
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 8px;
   
   /* Shadows */
-  --pc-shadow-sm: 0 2px 4px rgba(11, 30, 58, 0.04);
-  --pc-shadow-md: 0 8px 24px -4px rgba(11, 30, 58, 0.08);
-  --pc-shadow-lg: 0 24px 48px -12px rgba(11, 30, 58, 0.12);
+  --pc-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --pc-shadow-md: 0 12px 24px -8px rgba(11, 30, 58, 0.08);
+  --pc-shadow-lg: 0 32px 64px -16px rgba(11, 30, 58, 0.12);
   
   /* Animation */
-  --dur-fast: 150ms;
-  --dur-base: 250ms;
-  --dur-slow: 400ms;
-  --ease-out-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-base: 0.2s;
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 :root[data-theme='dark'] {
-  --pc-bg-base: #070F1A;
-  --pc-bg-surface: #0B1E3A;
-  --pc-bg-surface-elevated: #112A4F;
-  --pc-brand-primary: #D4AF37;
-  --pc-brand-secondary: #F8FAFC;
-  --pc-brand-accent: #818CF8;
-  --pc-brand-glow: rgba(212, 175, 55, 0.2);
-  --pc-border-subtle: rgba(212, 175, 55, 0.25);
-  --pc-text-primary: #FFFFFF;
-  --pc-text-secondary: #CBD5E1;
-  --pc-text-tertiary: #94A3B8;
+  --bg-base: #0B0E14;
+  --bg-surface: #131720;
+  --bg-surface-elevated: #1C2331;
+  --border-subtle: #242D3D;
+  
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-tertiary: #6B7280;
 }
 
 @theme {
+  --font-sans: "Inter", "Manrope", sans-serif;
+  --font-display: "Manrope", "Inter", sans-serif;
+  
   --bg-base: var(--bg-base);
   --bg-surface: var(--bg-surface);
   --bg-surface-elevated: var(--bg-surface-elevated);
   --border-subtle: var(--border-subtle);
   
-  --brand-primary: var(--brand-primary);
-  --brand-secondary: var(--brand-secondary);
-  --brand-accent: var(--brand-accent);
-  --brand-glow: var(--brand-glow);
-  
-  --success: #10B981;
-  --danger: #EF4444;
-  --warning: #F59E0B;
-  
   --text-primary: var(--text-primary);
   --text-secondary: var(--text-secondary);
   --text-tertiary: var(--text-tertiary);
-
-  --font-display: "Inter", "Outfit", "Space Grotesk", sans-serif !important;
-  --font-body: "Inter", "DM Sans", sans-serif !important;
-}
-
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-}
-html::-webkit-scrollbar {
-  display: none;
+  
+  --brand-primary: var(--brand-primary);
+  --brand-secondary: var(--brand-secondary);
 }
 
 body {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
 
-h1, h2, h3, h4, .font-display {
+/* Base Headings */
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  letter-spacing: -0.025em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-@utility section-title {
-  @apply text-[11px] font-black uppercase tracking-[0.25em] text-[var(--text-tertiary)] mb-8 transition-colors hover:text-[var(--brand-primary)];
-}
-
-@utility glass-card {
-  @apply rounded-[var(--pc-radius)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-md shadow-md transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-lg;
-}
-
-@utility badge-gold {
-  @apply inline-flex items-center rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)];
-}
-
+/* Utilities */
 @utility pc-card {
-  @apply rounded-[var(--pc-radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-[var(--pc-shadow-sm)] transition-all duration-[var(--dur-base)] ease-[var(--ease-out-smooth)] hover:shadow-[var(--pc-shadow-md)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-1 active:scale-[0.99];
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--pc-shadow-sm);
+  transition: all var(--dur-base) var(--ease-smooth);
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--pc-shadow-lg);
+    border-color: rgba(212, 175, 55, 0.2);
+  }
+}
+
+@utility pc-stat-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--pc-shadow-sm);
+}
+
+@utility pc-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--brand-primary);
+  color: #0B1E3A;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all var(--dur-base) var(--ease-smooth);
+  font-size: 0.75rem;
+  &:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px -5px var(--pc-brand-gold-glow);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@utility pc-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: all var(--dur-base) var(--ease-smooth);
+  font-size: 0.75rem;
+  &:hover {
+    background-color: var(--border-subtle);
+  }
+}
+
+@utility pc-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 @utility no-scrollbar {
@@ -155,32 +178,10 @@ h1, h2, h3, h4, .font-display {
   }
 }
 
-@keyframes pc-fade-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.pc-animate-fade-in {
-  animation: pc-fade-in var(--dur-base) var(--ease-out-smooth) forwards;
-}
-
-/* NEXUS-PRO:WATERMARK-HIDE:START */
-/* Overlay do badge oficial ocultado por conflito com UI custom.
-   Bloco idempotente gerenciado pela extensão Nexus Pro.
-   NÃO EDITAR manualmente — para reverter, remova o bloco inteiro. */
-#lovable-badge,
-#lovable-badge-v2,
-[id^="lovable-badge"],
-[data-testid="lovable-badge"],
-a[href*="lovable.dev/?via="],
-a[href*="lovable.dev?via="],
-a[href*="gpteng.co"],
-iframe[src*="lovable.dev/badge"] {
+/* Watermark Hide */
+#lovable-badge, #lovable-badge-v2, [id^="lovable-badge"], [data-testid="lovable-badge"], 
+a[href*="lovable.dev"], a[href*="gpteng.co"], iframe[src*="lovable.dev/badge"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
 }
-/* NEXUS-PRO:WATERMARK-HIDE:END */
