@@ -54,7 +54,8 @@ export function filterAndSortComparisonRows<T extends ComparisonSearchRow>(
   category: string,
 ): T[] {
   const tokens = tokenizeQuery(query);
-  const tokenMatchers = tokens.map((token) => buildTokenMatcher(token, "strict"));
+  const isLoose = query.length > 0 && query.length < 6;
+  const tokenMatchers = tokens.map((token) => buildTokenMatcher(token, isLoose ? "loose" : "strict"));
   const synonymGroup = resolveSynonymGroup(tokens, buildSynonymIndex(), query);
   let filtered = rows;
 

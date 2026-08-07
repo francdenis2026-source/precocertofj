@@ -185,7 +185,7 @@ function ComparadorPage() {
   const butcherIds = useButcherIds();
   const filteredRows = useMemo(() => {
     if (!allComparisons) return [];
-    let rows = applyButcherFilter(allComparisons, butcherIds, { requireMinStores: 2 });
+    let rows = applyButcherFilter(allComparisons, butcherIds, { requireMinStores: 1 });
     return filterAndSortComparisonRows(rows, q, cat) as unknown as Comparison[];
   }, [allComparisons, q, cat, butcherIds]);
 
