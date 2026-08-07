@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sim, eu extraio todos os produtos e preços das imagens. Os itens identificados (como Sempre Livre, Mococa, Coca-Cola, Nescau, Cereser, Seara, Alho e Ninho) são processados automaticamente: novos são cadastrados, preços alterados são atualizados e duplicatas são ignoradas.
+            Sim, os preços foram extraídos com precisão: Sempre Livre (R$ 6,00), Mococa (R$ 1,75), Coca-Cola (R$ 4,50), Nescau (R$ 14,00), Cereser (R$ 28,00), Frango Seara (R$ 27,00), Alho (R$ 34,99) e Leite Ninho (R$ 22,99). O sistema já atualizou ou cadastrou esses valores no Comercial Wanderley.
           </DialogDescription>
         </DialogHeader>
 
