@@ -140,7 +140,7 @@ function StorePage() {
   }, [groups]);
 
   return (
-    <div className="min-h-screen bg-[#F1F3F6] text-[#1A1A1A] pb-24 font-body selection:bg-[#2563EB]/20">
+    <div className="min-h-screen bg-gray-50 text-gray-900 pb-24 font-body selection:bg-blue-600/20">
       {/* Mercado Livre Style Header */}
       <header className="bg-[#FFE600] text-[#1A1A1A] pt-4 pb-2 px-4 shadow-sm">
         <div className="max-w-6xl mx-auto flex flex-col gap-3">
@@ -172,8 +172,8 @@ function StorePage() {
             </div>
             
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-black truncate leading-tight tracking-tight uppercase">{store.name}</h1>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[12px] font-bold opacity-70">
+              <h1 className="text-xl font-black truncate leading-tight tracking-tight uppercase text-black">{store.name}</h1>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[12px] font-bold text-black/60">
                 <span className="flex items-center gap-1">
                   <Star size={12} className="fill-current text-blue-700" />
                   4.8 <span className="opacity-60">(1.2k avaliações)</span>
@@ -237,19 +237,19 @@ function StorePage() {
       <main className="max-w-6xl mx-auto px-4 pt-6 space-y-10">
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Itens</p>
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
+             <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Total Itens</p>
              <p className="text-xl font-black text-blue-700">{products.length}</p>
            </div>
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Último Update</p>
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
+             <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Último Update</p>
              <p className="text-xl font-black text-[#1A1A1A] flex items-center gap-2">
                {formatDate(products[0]?.lastDate).split('/')[0]} <span className="text-sm opacity-30">Hoje</span>
              </p>
            </div>
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 col-span-2">
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 col-span-2">
              <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Performance</p>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Performance</p>
                 <TrendingDown size={14} className="text-green-500" />
              </div>
              <p className="text-sm font-bold text-green-600">Preços mais baixos que a média da cidade</p>
@@ -282,7 +282,7 @@ function StorePage() {
                   <h2 className="text-lg font-black text-[#1A1A1A] flex items-center gap-2 uppercase tracking-tight">
                     <span className="w-1.5 h-6 bg-blue-600 rounded-full" />
                     {group.label} 
-                    <span className="text-[10px] text-gray-400 font-bold ml-1">({group.items.length})</span>
+                    <span className="text-[10px] text-gray-500 font-bold ml-1">({group.items.length})</span>
                   </h2>
                   {group.items.length > 8 && (
                     <button className="text-[11px] font-black text-blue-600 uppercase tracking-wider flex items-center gap-1 hover:underline">
@@ -315,10 +315,10 @@ function StorePage() {
                Este estabelecimento é um parceiro do PreçoCerto. Os valores são coletados diariamente para garantir a melhor economia para sua casa em Feijó-AC.
              </p>
              <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                <span className="flex items-center gap-2 text-xs font-bold text-gray-400">
+                <span className="flex items-center gap-2 text-xs font-bold text-gray-600">
                   <MapPin size={14} /> {store.neighborhood}, {store.city} - {store.state}
                 </span>
-                <span className="flex items-center gap-2 text-xs font-bold text-gray-400">
+                <span className="flex items-center gap-2 text-xs font-bold text-gray-600">
                   <Calendar size={14} /> Atualizado {formatDate(products[0]?.lastDate)}
                 </span>
              </div>
@@ -345,7 +345,7 @@ function ProductCard({ p, storeId, allItems }: { p: PublicStoreProduct; storeId:
     <Link 
       to="/loja/$id/produto/$slug" 
       params={{ id: storeId, slug: p.slug }}
-      className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-blue-600/30 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300 flex flex-col active:scale-[0.98]"
+      className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-blue-600/30 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300 flex flex-col active:scale-[0.98]"
     >
       <div className="relative aspect-[4/3] bg-gray-50 p-4 flex items-center justify-center">
         {p.imageUrl ? (
@@ -367,7 +367,7 @@ function ProductCard({ p, storeId, allItems }: { p: PublicStoreProduct; storeId:
           <h3 className="text-[13px] font-bold text-[#333] leading-tight line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors">
             {p.productName}
           </h3>
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider truncate mb-2">
+          <p className="text-[10px] font-bold text-gray-600 uppercase tracking-wider truncate mb-2">
             {p.brand || 'Marca Local'}
           </p>
         </div>
@@ -381,7 +381,7 @@ function ProductCard({ p, storeId, allItems }: { p: PublicStoreProduct; storeId:
               </span>
             </div>
             {p.pricePerUnit && (
-              <span className="text-[9px] font-bold text-gray-400 mt-0.5">
+              <span className="text-[9px] font-bold text-gray-600 mt-0.5">
                 {p.unitLabel} {p.pricePerUnit.toFixed(2).replace('.', ',')}
               </span>
             )}
