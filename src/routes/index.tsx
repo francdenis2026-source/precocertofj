@@ -108,8 +108,15 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
       >
         <PlusCircle className="h-4 w-4" />
       </button>
-      <div className="h-14 w-14 shrink-0 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] flex items-center justify-center">
-        <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
+      <div className="h-20 w-20 shrink-0 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] flex items-center justify-center overflow-hidden border border-[var(--border-subtle)]">
+        <img 
+          src={`https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=200&h=200&market=${p.marketName}&product=${p.name}`} 
+          alt={p.name}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=F1F5F9&color=C5A02D&bold=true`;
+          }}
+        />
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between mb-1">
