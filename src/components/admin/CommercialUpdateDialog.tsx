@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Décimo lote do Comercial Vanderley processado: Desodorantes Davene e Francis (R$ 9,00 a R$ 10,00), Avon e Brut (R$ 7,00 a R$ 8,00), Herbíssimo creme (R$ 6,00 a R$ 7,00), Refrigerantes Cruzeiro 2L (R$ 5,00), Toscana e Linguiça Mister Pig (R$ 23,99 a R$ 34,00), Cafés Caboquinho e Todo Dia (R$ 10,00 a R$ 11,00), Tomate KG (R$ 13,99), Fanta Uva 350ml (R$ 4,00), Nescau 770g (R$ 22,00), Suco Teen 200g (R$ 5,99), Temperos Arisco e Nero (R$ 5,75 a R$ 7,50) e Sobrecoxa Friato 1kg (R$ 18,00). Todos os preços atualizados!
+            Décimo primeiro lote do Comercial Vanderley processado: Leite Moça Integral e Mistura Láctea Mococa (R$ 4,75 a R$ 8,00), Sobrecoxa Sadia 1kg (R$ 18,99), Corote e Skarloff Ice (R$ 7,00 a R$ 7,50), Mingau Nutribom (R$ 6,00), Tomate KG (R$ 13,99), Ovos Brancos 30un (R$ 25,00), Incenso Super Wierook (R$ 10,00) e Cremes Dentais Colgate (R$ 11,00 a R$ 14,00). Preços atualizados no sistema!
           </DialogDescription>
         </DialogHeader>
 
