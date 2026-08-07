@@ -9,12 +9,15 @@ import {
   CheckCircle2, 
   RefreshCcw,
   TrendingUp,
-  PackageSearch
+  PackageSearch,
+  Zap
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { getRealtimeMonitoringStats } from "@/lib/monitoring.functions";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
+import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 
 export function RealtimeMonitoringDashboard() {
   const fetchStats = useServerFn(getRealtimeMonitoringStats);
