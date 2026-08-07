@@ -7,13 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
  * plan-related React Query caches so every surface (admin, /planos,
  * checkout, /assinar, /admin/gestao) reflects updates in real time.
  */
-export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number; queryClient?: QueryClient }) {
-  const enabled = opts?.enabled ?? true;
-  const throttleMs = opts?.throttleMs ?? 500;
-  
-  // Get query client from context if not provided
-  const contextQc = useQueryClient();
-  const qc = opts?.queryClient ?? contextQc;
+export function usePlansRealtime(opts: { queryClient: QueryClient; enabled?: boolean; throttleMs?: number }) {
+  const { queryClient: qc, enabled = true, throttleMs = 500 } = opts;
   const qcRef = useRef(qc);
   qcRef.current = qc;
 
