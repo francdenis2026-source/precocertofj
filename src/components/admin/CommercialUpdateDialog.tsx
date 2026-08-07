@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Com certeza! Consegui extrair todos os preços com precisão: Dubon (R$ 13,99), Stella Artois (R$ 8,00), Skarloff (R$ 7,50), Nescau (R$ 12,00), Milk Shake Apti (R$ 17,00), Creme Amélia (R$ 27,00), Phebo (R$ 5,00), Geleia Olé (R$ 9,75), Goiabada (R$ 8,00), Colgate (R$ 11,00) e Bebida Mococa (R$ 1,75). Todos os valores já estão refletidos no Comercial Vanderley.
+            Mais itens identificados no Comercial Vanderley: Macarrão Dallas (R$ 4,50), Manteiga Cabeça de Touro (R$ 38,00), Vinho Pérgola (R$ 48,00), Açúcar Barralcool (R$ 3,50), Peito de Frango Friato (R$ 25,00), Bolos Dona Benta (R$ 10,00), Guaraná Baré (R$ 7,00), Sabonetes Francis (R$ 5,00) e Albany (R$ 2,50), e Miojo (R$ 1,50). Todos processados e atualizados!
           </DialogDescription>
         </DialogHeader>
 
