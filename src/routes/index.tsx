@@ -96,7 +96,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
         cheapestStore: p.marketName,
         updatedAt: p.when
       })}
-      className="pc-card group cursor-pointer flex gap-4 items-center relative"
+      className="pc-card group cursor-pointer flex gap-3 p-3 items-center relative overflow-hidden"
     >
       <button 
         onClick={(e) => {
@@ -108,17 +108,24 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
       >
         <PlusCircle className="h-4 w-4" />
       </button>
-      <div className="h-14 w-14 shrink-0 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] flex items-center justify-center">
-        <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
+      <div className="h-20 w-20 shrink-0 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] flex items-center justify-center overflow-hidden border border-[var(--border-subtle)]">
+        <img 
+          src={`https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=200&h=200&market=${p.marketName}&product=${p.name}`} 
+          alt={p.name}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=F1F5F9&color=C5A02D&bold=true`;
+          }}
+        />
       </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
-          <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+        <div className="flex items-center justify-between mb-0.5">
+          <span className="text-[9px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
+          <span className="text-[8px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
         </div>
-        <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
-        <div className="mt-1">
-          <Price value={p.price} size="lg" className="font-black" />
+        <h4 className="font-bold text-[14px] leading-tight truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
+        <div className="mt-0.5">
+          <Price value={p.price} size="md" className="font-black" />
         </div>
       </div>
     </motion.div>
@@ -167,7 +174,7 @@ function HomePage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.15 }}
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[1px]"
+            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[2px]"
           />
         </div>
 

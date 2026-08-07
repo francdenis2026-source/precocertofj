@@ -89,13 +89,13 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
     >
       {/* Accent Header */}
       <div className={cn(
-        "h-2 w-full",
+        "h-1 w-full",
         index === 0 ? "bg-[var(--brand-primary)]" : "bg-white/10"
       )} />
 
-      <div className="p-4 flex-1 flex flex-col">
+      <div className="p-3 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2.5 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-500">
+          <div className="p-2 rounded-lg bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:scale-110 transition-transform duration-500">
             <ShoppingBasket className="h-5 w-5" />
           </div>
           {basket.economyPct > 10 && (
@@ -105,11 +105,11 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
           )}
         </div>
 
-        <h3 className="text-lg font-black text-[var(--text-primary)] mb-1 group-hover:text-[var(--brand-primary)] transition-colors">
+        <h3 className="text-md font-black text-[var(--text-primary)] mb-0.5 group-hover:text-[var(--brand-primary)] transition-colors">
           {basket.name}
         </h3>
         
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center overflow-hidden border border-[var(--border-subtle)]">
             {basket.logoUrl ? (
               <img src={basket.logoUrl} alt={basket.marketName} className="h-full w-full object-cover" />
@@ -122,17 +122,17 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
           </span>
         </div>
 
-        <div className="space-y-2 mb-6">
+        <div className="space-y-1 mb-4">
           <div className="flex items-center gap-2.5 text-[var(--text-secondary)] text-[12px] font-medium">
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
             <span>{basket.itemsCount} de {basket.totalItems} itens</span>
           </div>
         </div>
 
-        <div className="mt-auto pt-4 border-t border-[var(--border-subtle)] flex items-end justify-between">
+        <div className="mt-auto pt-3 border-t border-[var(--border-subtle)] flex items-end justify-between">
           <div>
             <p className="text-[9px] font-black text-[var(--text-tertiary)] uppercase tracking-[0.2em] mb-0.5">Total</p>
-            <Price value={basket.total} size="lg" className="font-black" />
+            <Price value={basket.total} size="md" className="font-black" />
           </div>
           
           <Button asChild size="icon" className="h-8 w-8 rounded-lg bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-lg shadow-[var(--brand-primary)]/20">
