@@ -252,26 +252,27 @@ function HomePage() {
                       ))}
                     </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {filteredProducts.map((p, i) => (
-                    <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
-                  ))}
-                </div>
-              </section>
-           </div>
-           
-           <aside className="space-y-12">
-              <section>
-                 <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Nossos Parceiros</h2>
-                 <div className="grid grid-cols-2 gap-3">
-                   <RegisteredStoresCarousel />
-                 </div>
-              </section>
-              <section>
-                <PromoBanner />
-              </section>
-           </aside>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {filteredProducts.map((p, i) => (
+                      <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
+                    ))}
+                  </div>
+                </section>
+             </div>
+             
+             <aside className="space-y-12">
+                <section>
+                   <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-6">Nossos Parceiros</h2>
+                   <div className="grid grid-cols-2 gap-3">
+                     <RegisteredStoresCarousel />
+                   </div>
+                </section>
+                <section>
+                  <PromoBanner />
+                </section>
+             </aside>
+          </div>
+
           <div className="mt-20 pt-12 border-t border-[var(--border-subtle)]">
             <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-8 text-center">Monitoramento em Tempo Real</h2>
             <div className="max-w-4xl mx-auto">
