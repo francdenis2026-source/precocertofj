@@ -272,9 +272,10 @@ function HomePage() {
                 Monitoramento ao vivo
               </h2>
               <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)]">
-                Preços de todos os comércios
+                Preços reais em toda a nossa Feijó
               </h3>
             </div>
+
             
             <div className="flex items-center gap-2 bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)]">
               <button 
