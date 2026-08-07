@@ -35,6 +35,7 @@ export const Route = createFileRoute("/buscar")({
 function SearchResultsPage() {
   const { q } = Route.useSearch();
   const runSearch = useServerFn(searchProductPrice);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const { data: result, isLoading } = useQuery({
     queryKey: ["price-search", q],
@@ -48,7 +49,7 @@ function SearchResultsPage() {
       <SiteHeader variant="solid" />
       
       <main className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
+        <div ref={anchorRef} className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
           {/* Main Content Area */}
           <div className="space-y-12">
             {q && <SearchHeroSection query={q} />}
@@ -66,4 +67,5 @@ function SearchResultsPage() {
     </div>
   );
 }
+
 
