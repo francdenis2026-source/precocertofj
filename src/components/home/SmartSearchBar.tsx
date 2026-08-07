@@ -136,11 +136,11 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
       const v = value.trim();
       if (!v) return;
       setOpen(false);
-      onFocusChange?.(false);
+      if (onFocusChange) onFocusChange(false);
       inputRef.current?.blur();
       navigate({ to: "/buscar", search: { q: v } as any });
     },
-    [navigate],
+    [navigate, onFocusChange],
   );
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
