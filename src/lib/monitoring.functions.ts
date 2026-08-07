@@ -14,6 +14,7 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       return {
         storeId: store.id,
         storeName: store.name,
+        storeLogoUrl: store.logo_url,
         status: random(0) > 0.05 ? 'online' : 'offline',
         activeSensors: Math.floor(random(1) * 10) + 5,
         lastSync: new Date().toISOString(),
