@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, BarChart3, Search as SearchIcon, Store, X, ChevronLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight, BarChart3, Search as SearchIcon, Store, X, ChevronLeft } from "lucide-react";
 import { PageHeader } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 
