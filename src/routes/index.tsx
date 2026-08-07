@@ -323,21 +323,22 @@ function HomePage() {
                   >
                     <PlusCircle className="h-4 w-4" />
                   </button>
-                <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
-                  <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
-                    <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+                  <div className="h-16 w-16 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center">
+                    <span className="text-xl font-black text-[var(--brand-primary)]">{(p.name || "?").charAt(0)}</span>
                   </div>
-                  <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
-                  <div className="mt-1">
-                    <Price value={p.price} size="lg" className="font-black" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)]">{p.marketName}</span>
+                      <span className="text-[10px] font-bold text-[var(--text-tertiary)]">{formatDate(p.when)}</span>
+                    </div>
+                    <h4 className="font-bold text-[15px] truncate group-hover:text-[var(--brand-primary)] transition-colors">{p.name}</h4>
+                    <div className="mt-1">
+                      <Price value={p.price} size="lg" className="font-black" />
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
           
           <div className="mt-20">
