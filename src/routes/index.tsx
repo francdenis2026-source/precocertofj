@@ -161,13 +161,13 @@ function HomePage() {
       <SiteHeader variant="overlay" />
       
       {/* Refactored Hero Section */}
-      <section className="relative flex flex-col items-center justify-center pt-24 pb-20 px-4 min-h-[60vh]">
+      <section className="relative flex flex-col items-center justify-center pt-20 pb-16 px-4 min-h-[50vh]">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[var(--bg-base)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-transparent opacity-95 dark:from-slate-950 dark:via-slate-950" />
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.25 }}
-            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[2px]"
+            animate={{ opacity: 0.15 }}
+            className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center blur-[1px]"
           />
         </div>
 
@@ -178,11 +178,11 @@ function HomePage() {
               Inteligência em Feijó
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6 text-[var(--text-primary)]">
-            Economia inteligente para <span className="text-[var(--brand-primary)]">sua rotina.</span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-[var(--text-primary)]">
+            Economia para <span className="text-[var(--brand-primary)]">nossa Feijó.</span>
           </h1>
-          <p className="text-lg text-[var(--text-secondary)] mb-10 max-w-xl mx-auto font-medium">
-            Compare preços em tempo real nos mercados da nossa cidade e economize de verdade.
+          <p className="text-base text-[var(--text-secondary)] mb-8 max-w-lg mx-auto font-medium">
+            Preços atualizados nos mercados da cidade para você economizar de verdade.
           </p>
           <div className="max-w-2xl mx-auto">
             <SmartSearchBar onFocusChange={setIsSearchFocused} />
