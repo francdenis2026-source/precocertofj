@@ -130,31 +130,8 @@ function HomePage() {
   const { user } = useSession();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [sort, setSort] = useState<"recent" | "price" | "near">("recent");
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [sort, setSort] = useState<"recent" | "price">("recent");
 
-  useEffect(() => {
-    if (sort === "near" && !userLocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => {
-          console.error("Erro ao obter localização:", err);
-          setSort("recent");
-        }
-      );
-    }
-  }, [sort, userLocation]);
-
-  useEffect(() => {
-    const handler = (e: any) => setSelectedProduct(e.detail);
-    window.addEventListener('open-quick-view', handler);
-    window.addEventListener('internal-open-quick-view', handler);
-    return () => {
-      window.removeEventListener('open-quick-view', handler);
-      window.removeEventListener('internal-open-quick-view', handler);
-    };
-  }, []);
-  
   const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
   
   const recentProductsFn = useServerFn(getRecentProducts);
@@ -170,20 +147,11 @@ function HomePage() {
     
     if (sort === "price") {
       list.sort((a, b) => a.price - b.price);
-    } else if (sort === "near" && userLocation) {
-      const getDist = (p: any) => {
-        if (!p.lat || !p.lng) return 999999;
-        return Math.sqrt(
-          Math.pow(p.lat - userLocation.lat, 2) + 
-          Math.pow(p.lng - userLocation.lng, 2)
-        );
-      };
-      list.sort((a, b) => getDist(a) - getDist(b));
-    } else if (sort === "recent") {
+    } else {
       list.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
     }
     
-    return list.slice(0, 6);
+    return list.slice(0, 4);
   }, [rawRecentProducts, sort]);
 
   return (
@@ -215,7 +183,7 @@ function HomePage() {
             Compare preços em tempo real nos mercados da nossa cidade e economize de verdade.
           </p>
           <div className="max-w-2xl mx-auto">
-            <SmartSearchBar />
+            <SmartSearchBar onFocusChange={setIsSearchFocused} />
           </div>
         </div>
       </section>
@@ -353,14 +321,13 @@ function CategoryCard({ slug, label, Icon, index }: { slug: string; label: strin
       transition={{ delay: 0.1 + (index * 0.05), duration: 0.5 }}
     >
       <Link 
-        to="/categoria/$slug" 
-        params={{ slug: slug as any }}
-        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[var(--pc-radius-lg)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300 hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
+        to="/buscar" 
+        search={{ q: label } as any}
+        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-[var(--radius-lg)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-md)] transition-all duration-300 hover:shadow-[var(--pc-shadow-lg)] hover:-translate-y-2 hover:border-[var(--brand-primary)]/40 overflow-hidden"
       >
-        {/* Glow Hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
-        <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-[var(--pc-brand-navy)] transition-all duration-300 shadow-inner">
+        <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all duration-300 shadow-inner">
           <Icon className="h-7 w-7" />
         </div>
         
