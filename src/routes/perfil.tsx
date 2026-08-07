@@ -8,7 +8,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 import {
   Award, MapPin, Settings, LogOut, Sparkles, Heart,
   Hash, Loader2, Check, User, Phone, ShoppingBag, Trash2, ExternalLink, Camera,
-  Download, Database
+  Download, Database, BarChart3, TrendingUp, Store, ChevronRight
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +25,8 @@ import { maskCpf, maskPhone, maskCep, stripCpf, isValidCpf } from "@/lib/cpf";
 import { toast } from "sonner";
 import { downloadFullDatabase } from "@/lib/database-export.functions";
 import { organizeAllProducts } from "@/lib/catalog-organization.functions";
+import { getAdminMetrics } from "@/lib/admin-metrics.functions";
+import { getPendingClassification, updateProductClassification } from "@/lib/catalog-review.functions";
 
 export const Route = createFileRoute("/perfil")({
   head: () => ({
@@ -338,7 +340,7 @@ function Perfil() {
                     : "carregando"
                 }
               />
-              <AdminExportPanel />
+              <AdminPanel />
 
             </div>
 
@@ -808,55 +810,8 @@ function MyStoreQuotesPanel() {
 }
 
 function AdminExportPanel() {
-  const exportFn = useServerFn(downloadFullDatabase);
-  const [loading, setLoading] = useState(false);
-  const { data: roleData } = useQuery({
-    queryKey: ['my-roles'],
-    queryFn: async () => {
-      const { data } = await supabase.from('user_roles').select('role').eq('role', 'admin').maybeSingle();
-      return data;
-    }
-  });
-
-  if (!roleData) return null;
-
-  async function handleExport() {
-    setLoading(true);
-    try {
-      const result = await exportFn();
-      if ('error' in result) throw new Error(result.error as string);
-      
-      const blob = new Blob([result.content], { type: result.mimeType });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = result.filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      toast.success("Banco de dados exportado com sucesso!");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Falha na exportação");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const organizeFn = useServerFn(organizeAllProducts);
-  const [organizing, setOrganizing] = useState(false);
-
-  async function handleOrganize() {
-    setOrganizing(true);
-    try {
-      const res = await organizeFn();
-      toast.success(`Produtos organizados! ${res.updatedCount} itens reclassificados.`);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Falha na organização");
-    } finally {
-      setOrganizing(false);
-    }
-  }
+  // Removido - agora faz parte do AdminPanel
+  return null;
 }
 
 function AdminMetricsPanel() {
