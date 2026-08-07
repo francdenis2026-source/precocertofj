@@ -229,8 +229,29 @@ function HomePage() {
               </section>
               <section>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Novidades Recentes</h2>
-                  <Link to="/buscar" className="text-[10px] font-black uppercase tracking-wider text-[var(--brand-primary)] hover:underline">Ver tudo →</Link>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                      <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Monitoramento Ativo</h2>
+                      <h3 className="text-xl font-black">Preços em Feijó</h3>
+                    </div>
+                    <div className="flex bg-[var(--bg-surface-elevated)] p-1 rounded-xl border border-[var(--border-subtle)] w-fit">
+                      {[
+                        { id: "recent", label: "Novos" },
+                        { id: "price", label: "Baratos" },
+                      ].map((s) => (
+                        <button
+                          key={s.id}
+                          onClick={() => setSort(s.id as any)}
+                          className={cn(
+                            "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all",
+                            sort === s.id ? "bg-[var(--brand-primary)] text-white shadow-sm" : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                          )}
+                        >
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {filteredProducts.map((p, i) => (
