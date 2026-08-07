@@ -96,12 +96,12 @@ function CestaPage() {
   const totalItems = items.reduce((s, it) => s + it.quantity, 0);
 
   return (
-    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <div className="mx-auto max-w-2xl px-4 md:px-6">
+    <div className="min-h-[100svh] bg-[var(--bg-base)] pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
+      <div className="mx-auto max-w-4xl px-4 md:px-6">
         <PageHeader
-          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Minha cesta" }]}
+          breadcrumbs={[{ label: "Painel", to: "/app" }, { label: "Minha cesta" }]}
           title="Minha cesta"
-          description="Produtos selecionados para comparar entre mercados."
+          description="Acompanhe o valor total e veja onde sua compra sai mais barata."
           actions={
             <div className="flex items-center gap-2">
               <Button
@@ -109,99 +109,101 @@ function CestaPage() {
                 size="sm"
                 onClick={handleRefreshPrices}
                 disabled={isFetching || items.length === 0}
-                aria-label="Atualizar preços da cesta"
+                className="rounded-xl border-[var(--border-subtle)] bg-[var(--bg-surface)]"
               >
                 <RefreshCw
                   className={`mr-1.5 h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`}
                   strokeWidth={2.2}
                 />
-                Atualizar preços
+                Atualizar
               </Button>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[13px] font-semibold text-primary">
-                <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.2} />
-                {totalItems} {totalItems === 1 ? "item" : "itens"}
-              </span>
+              {items.length > 0 && (
+                <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[var(--brand-primary)]/10 px-4 text-[13px] font-black uppercase tracking-wider text-[var(--brand-primary)]">
+                  {totalItems} {totalItems === 1 ? "item" : "itens"}
+                </span>
+              )}
             </div>
           }
         />
 
-        <SectionCard
-          title="Itens na cesta"
-          description="Toque em um produto para ver detalhes; use a lixeira para remover."
-          bodyClassName="p-0"
-        >
-          {isLoading ? (
-            <div className="p-4">
-              <LoadingSkeleton rows={4} />
-            </div>
-          ) : items.length === 0 ? (
-            <div className="p-4">
-              <EmptyState
-                icon={ShoppingBag}
-                title="Cesta vazia"
-                description="Adicione produtos a partir da home para comparar preços entre mercados."
-                action={
-                  <Button asChild variant="default" size="sm">
-                    <Link to="/">Explorar produtos</Link>
-                  </Button>
-                }
-              />
-            </div>
-          ) : (
-            <ul className="divide-y divide-border/60">
-              {items.map((it) => (
-                <li key={it.id} className="flex items-center gap-3 px-4 py-3">
-                  <ProductImage
-                    src={it.imageUrl}
-                    alt={it.displayName}
-                    width={64}
-                    height={64}
-                    fallbackIcon={Package}
-                    fallbackLabel={it.displayName}
-                    className="h-16 w-16 shrink-0 rounded-xl bg-gradient-to-br from-muted to-background"
-                    imageClassName="object-contain p-1"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      to="/produto-publico/$slug"
-                      params={{ slug: it.catalogId || "" }}
-                      className="line-clamp-2 text-[14px] font-semibold leading-tight text-foreground hover:underline"
-                    >
-                      {it.displayName}
-                    </Link>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[13px] text-muted-foreground">
-                      {it.brand && <span className="truncate">{it.brand}</span>}
-                      <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-[12px] text-foreground">
-                        x{it.quantity}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => requestRemove(it.id, it.displayName)}
-                    disabled={removeMutation.isPending}
-                    aria-label={`Remover ${it.displayName} da cesta`}
-                    className="shrink-0 rounded-full border border-destructive/30 p-2 text-destructive transition hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50"
-                  >
-                    <Trash2 className="h-4 w-4" strokeWidth={2} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </SectionCard>
-
-        {items.length > 0 && (
-          <div className="mt-4 flex flex-col items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
-            <p className="text-[13.5px] text-muted-foreground">
-              Compare os preços da sua cesta em cada mercado cadastrado.
+        {isLoading ? (
+          <div className="space-y-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-24 animate-pulse rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]" />
+            ))}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="rounded-[32px] border border-dashed border-border bg-[var(--bg-surface)] p-12 text-center">
+            <ShoppingBag
+              className="mx-auto h-12 w-12 text-muted-foreground opacity-20"
+              aria-hidden
+            />
+            <h3 className="mt-4 font-display text-lg font-bold text-foreground">Sua cesta está vazia</h3>
+            <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">
+              Adicione produtos para comparar o valor total entre os mercados de Feijó.
             </p>
-            <Button asChild variant="default" size="sm">
-              <Link to="/lista">
-                Ver melhores preços
-                <ArrowRight className="ml-1.5 h-4 w-4" />
-              </Link>
+            <Button asChild className="mt-6 rounded-xl px-8" size="lg">
+              <Link to="/app/produtos">Buscar produtos</Link>
             </Button>
+          </div>
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            <div className="space-y-4">
+               <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Itens Selecionados</h2>
+               <div className="space-y-3">
+                 {items.map((it) => (
+                   <div key={it.id} className="pc-card flex items-center gap-4 p-4 md:p-5">
+                      <ProductImage
+                        src={it.imageUrl}
+                        alt={it.displayName}
+                        width={64}
+                        height={64}
+                        fallbackIcon={Package}
+                        fallbackLabel={it.displayName}
+                        className="h-16 w-16 shrink-0 rounded-2xl bg-white p-1 shadow-sm"
+                        imageClassName="object-contain"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <Link
+                          to="/produto-publico/$slug"
+                          params={{ slug: it.catalogId || "" }}
+                          className="line-clamp-2 font-display text-base font-bold text-foreground hover:text-[var(--brand-primary)] transition-colors"
+                        >
+                          {it.displayName}
+                        </Link>
+                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                          {it.brand && <span>{it.brand}</span>}
+                          {it.brand && <span aria-hidden>·</span>}
+                          <span className="text-[var(--brand-primary)]">Qtd: {it.quantity}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => requestRemove(it.id, it.displayName)}
+                        disabled={removeMutation.isPending}
+                        className="rounded-full p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                   </div>
+                 ))}
+               </div>
+            </div>
+
+            <div className="space-y-6">
+               <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Resumo</h2>
+               <div className="pc-card sticky top-24 space-y-4 p-6">
+                 <div className="space-y-2">
+                   <p className="text-[13px] text-muted-foreground">Compare os preços da sua cesta em cada mercado cadastrado para economizar.</p>
+                 </div>
+                 <Button asChild className="w-full rounded-xl" size="lg">
+                    <Link to="/lista">
+                      Ver Melhores Preços
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                 </Button>
+               </div>
+            </div>
           </div>
         )}
       </div>
