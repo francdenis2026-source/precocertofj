@@ -207,7 +207,7 @@ function StorePage() {
              </div>
 
              <div className="flex flex-col gap-2">
-               <ShareButton size="lg" title={store.name} className="bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-2xl" />
+               <ShareButton size="md" title={store.name} className="bg-white/5 border-white/10 text-white hover:bg-white/10 rounded-2xl" />
                <button onClick={() => window.print()} className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/70 font-bold text-sm hover:text-white hover:bg-white/10 transition-all">
                  <FileDown size={18} /> Exportar
                </button>
