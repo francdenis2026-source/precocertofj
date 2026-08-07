@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sexto lote do Comercial Vanderley processado: Sal Nota 10 (R$ 2,00), Temperos Sazón (R$ 6,00), Refrigerante Cruzeirense 2L (R$ 5,00), Chocolates Hershey's e Io-Io, Cebola Roxa (R$ 12,00/kg), Leite Moça Lata e Caixinha (R$ 7,99/R$ 8,00), Cerveja Skol Caixa (R$ 50,00), Mistura Láctea Triângulo (R$ 2,75) e Café 3 Corações Extraforte (R$ 20,00). Todos os itens foram atualizados!
+            Sétimo lote do Comercial Vanderley processado: Macarrão Sandella (R$ 2,00), Sabonete Albany (R$ 2,50), Absorvente Sempre Livre (R$ 10,00 - R$ 20,00), Ketchup Nero e Olé (R$ 6,50 / R$ 6,00), Fanta Laranja e Uva (R$ 4,00), Laranja KG (R$ 13,99), Vinho Galitos (R$ 29,00), Ovos Brancos 1/2 dúzia (R$ 5,00), Sopão Sandella e Yolle (R$ 8,75 / R$ 7,00) e Sobrecoxa Seara (R$ 18,00). Todos os itens foram atualizados!
           </DialogDescription>
         </DialogHeader>
 
