@@ -110,7 +110,7 @@ const ComparisonCard = memo(({ item, onClick }: { item: Comparison, onClick: () 
         />
         {item.savings_pct > 0 && (
           <div className="absolute top-4 right-4 z-10">
-            <SavingsBadge pct={item.savings_pct} variant="solid" size="lg" />
+            <SavingsBadge pct={item.savings_pct} variant="solid" size="md" />
           </div>
         )}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
