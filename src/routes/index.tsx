@@ -279,6 +279,25 @@ function HomePage() {
         </div>
 
         <ComparisonStickyBar />
+
+        {/* Footer Hero Section */}
+        <section className="mt-32 relative h-[400px] w-full rounded-[var(--radius-xl)] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent z-10" />
+          <img 
+            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
+            alt="Interior do Supermercado" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-4">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Economia inteligente, de verdade.</h2>
+            <p className="text-lg text-white/80 max-w-xl mx-auto font-medium mb-8">
+              Trazemos a transparência que Feijó precisava para o seu bolso.
+            </p>
+            <Button asChild size="lg" className="pc-button-primary">
+              <Link to="/buscar">Começar a Economizar</Link>
+            </Button>
+          </div>
+        </section>
       </main>
 
       {selectedProduct && (
