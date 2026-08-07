@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, ArrowRight, MapPin, Search as SearchIcon, Store } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Search as SearchIcon, Store, ChevronLeft } from "lucide-react";
+import { PageHeader } from "@/components/layout";
+import { Button } from "@/components/ui/button";
 
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
