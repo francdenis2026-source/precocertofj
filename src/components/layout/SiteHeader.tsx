@@ -216,22 +216,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </Sheet>
           )}
 
-          {/* Busca compacta no topo — aparece na homepage apenas após rolar o hero */}
-          <AnimatePresence>
-            {showNav && scrolled && (
-              <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -20, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="hidden md:block"
-              >
-                <div className="w-64 xl:w-80">
-                  <SmartSearchBar compact />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Removed legacy duplicate search implementation */}
+
 
           {!isOverlay && canShowBack && (
             <BackButton
