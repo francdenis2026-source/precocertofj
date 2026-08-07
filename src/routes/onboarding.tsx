@@ -120,9 +120,11 @@ function OnboardingPage() {
           <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
             <Input
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={(e) => setFullName(e.target.value.toLocaleUpperCase("pt-BR"))}
               placeholder="Ex.: Maria Silva"
               autoComplete="name"
+              autoCapitalize="characters"
+              className="uppercase placeholder:normal-case"
               autoFocus
             />
           </FieldRow>
@@ -139,13 +141,20 @@ function OnboardingPage() {
 
           <div className="grid grid-cols-2 gap-3">
             <FieldRow icon={<MapPin className="h-4 w-4" />} label="Cidade">
-              <Input value={city} onChange={(e) => setCity(e.target.value)} />
+              <Input
+                value={city}
+                onChange={(e) => setCity(e.target.value.toLocaleUpperCase("pt-BR"))}
+                autoCapitalize="characters"
+                className="uppercase"
+              />
             </FieldRow>
             <FieldRow icon={<MapPin className="h-4 w-4" />} label="Bairro">
               <Input
                 value={neighborhood}
-                onChange={(e) => setNeighborhood(e.target.value)}
+                onChange={(e) => setNeighborhood(e.target.value.toLocaleUpperCase("pt-BR"))}
                 placeholder="Ex.: Centro"
+                autoCapitalize="characters"
+                className="uppercase placeholder:normal-case"
               />
             </FieldRow>
           </div>
