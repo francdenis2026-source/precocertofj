@@ -25,15 +25,22 @@ export function RealtimeMonitoringDashboard() {
   const { data: stats, isLoading, refetch, isFetching } = useQuery({
     queryKey: ["realtime-monitoring-stats"],
     queryFn: () => fetchStats(),
-    refetchInterval: 3000, // Reduced from 10s to 3s for a more "real-time" feel without over-fetching
+    refetchInterval: 60000, // Refresh every minute instead of every 3s to avoid "staying loading" feel
+    staleTime: 30000,
   });
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="pc-card animate-pulse h-48 bg-muted/20" />
-        ))}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+          <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Iniciando Varredura dos Comércios...</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="pc-card animate-pulse h-56 bg-muted/10 border-dashed border-muted" />
+          ))}
+        </div>
       </div>
     );
   }
