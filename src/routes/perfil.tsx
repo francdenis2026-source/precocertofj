@@ -860,13 +860,15 @@ function AdminExportPanel() {
 
   return (
     <div className="col-span-3 mt-2 flex flex-col gap-3">
+      <AdminMetricsPanel />
+      <CatalogReviewPanel />
       <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between">
         <div>
           <h3 className="font-display text-sm font-semibold flex items-center gap-2 text-primary">
-            <Database className="h-4 w-4" /> Painel de Administração
+            <Database className="h-4 w-4" /> Exportação de Dados
           </h3>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            Gerencie o banco de dados e as categorias globais do sistema.
+            Baixe o banco de dados completo do PricePal em formato JSON.
           </p>
         </div>
         <div className="flex gap-2">

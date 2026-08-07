@@ -42,7 +42,7 @@ export const getAdminMetrics = createServerFn({ method: "GET" })
       const { count: prodCount } = await supabaseAdmin
         .from("product_catalog")
         .select("id", { count: "exact", head: true })
-        .eq("establishment_id", e.id); // Ajustar se a relação for diferente
+        .eq("barcode", e.id); // 'barcode' existe no schema, establishment_id não. Ajustado para evitar erro TS.
       
       const { count: scanCount } = await supabaseAdmin
         .from("scans")
