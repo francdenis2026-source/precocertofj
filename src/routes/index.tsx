@@ -65,13 +65,14 @@ export const Route = createFileRoute("/")({
 });
 
 const CATEGORIES = [
-  { slug: "supermercados", label: "Mercados", Icon: Store },
-  { slug: "padarias", label: "Padarias", Icon: Coffee },
-  { slug: "acougues", label: "Açougues", Icon: Utensils },
+  { slug: "mercearia", label: "Mercearia", Icon: ShoppingCart },
+  { slug: "acougue", label: "Açougue", Icon: Utensils },
   { slug: "hortifruti", label: "Hortifruti", Icon: Apple },
   { slug: "bebidas", label: "Bebidas", Icon: Milk },
   { slug: "limpeza", label: "Limpeza", Icon: Droplets },
   { slug: "higiene", label: "Higiene", Icon: Smile },
+  { slug: "padaria", label: "Padaria", Icon: Coffee },
+  { slug: "laticinios", label: "Laticínios", Icon: Scale },
 ];
 
 function formatDate(iso: string): string {
@@ -372,7 +373,7 @@ function CategoryCard({ slug, label, Icon, index }: { slug: string; label: strin
     >
       <Link 
         to="/buscar" 
-        search={{ q: label } as any}
+        search={{ c: label } as any}
         className="group relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[var(--brand-primary)]/40 overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

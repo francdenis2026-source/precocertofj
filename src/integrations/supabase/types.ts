@@ -3734,6 +3734,15 @@ export type Database = {
           product_name: string
         }[]
       }
+      search_scans_unaccented_v2: {
+        Args: { _category?: string; _limit?: number; _q: string }
+        Returns: {
+          created_at: string
+          market_name: string
+          price_captured: number
+          product_name: string
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       unaccent: { Args: { "": string }; Returns: string }
