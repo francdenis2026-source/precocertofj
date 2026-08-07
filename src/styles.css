@@ -214,13 +214,17 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 1rem;
+  padding: 1.5rem;
   box-shadow: var(--pc-shadow-sm);
-  transition: all var(--dur-base) var(--ease-smooth);
+  transition: transform var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    background-color var(--dur-base) var(--ease-smooth);
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     box-shadow: var(--pc-shadow-lg);
-    border-color: var(--brand-primary);
+    border-color: var(--border-strong);
+    background-color: var(--bg-surface-elevated);
   }
 }
 
