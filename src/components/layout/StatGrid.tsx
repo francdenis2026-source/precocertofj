@@ -35,7 +35,7 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
               {Icon && <Icon className="h-4 w-4 text-[var(--text-tertiary)]" />}
             </div>
             
-            <div className="mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            <div className="mt-2 text-2xl md:text-3xl font-black tracking-tight text-[var(--text-primary)]">
               {s.value}
             </div>
 
