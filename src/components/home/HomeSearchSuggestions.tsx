@@ -169,7 +169,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           }
         } catch (e: any) {
           if (ctrl.signal.aborted) return;
-          setErr(e?.message ?? "Failed to load suggestions");
+          setErr(e?.message ?? "Falha ao carregar sugestões");
           setItems([]);
         } finally {
           if (!ctrl.signal.aborted) setLoading(false);
@@ -339,14 +339,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-rose-500/10 text-rose-500">
               <Search className="h-7 w-7" aria-hidden="true" />
             </div>
-            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">Oops! We couldn't search right now</p>
-            <p className="mb-6 text-sm text-[var(--text-secondary)]">An error occurred while loading suggestions. It could be your connection or a temporary issue.</p>
+            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">Ops! Não foi possível pesquisar agora</p>
+            <p className="mb-6 text-sm text-[var(--text-secondary)]">Ocorreu um erro ao carregar as sugestões. Pode ser sua conexão ou um problema temporário.</p>
             <button 
               onClick={() => window.location.reload()}
               autoFocus
               className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:brightness-110 active:scale-95 transition-all shadow-md focus-visible:ring-4 focus-visible:ring-[var(--brand-primary)]/20 outline-none"
             >
-              Try Again
+              Tentar novamente
             </button>
           </motion.div>
         ) : items.length === 0 ? (
@@ -360,14 +360,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
               <Search className="h-7 w-7" aria-hidden="true" />
             </div>
-            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">“{q}” not found</p>
-            <p className="mb-6 text-sm text-[var(--text-secondary)]">We didn't find exact matches for this term in our current catalog.</p>
+            <p className="mb-2 text-base font-bold text-[var(--text-primary)]">“{q}” não encontrado</p>
+            <p className="mb-6 text-sm text-[var(--text-secondary)]">Não encontramos correspondências exatas para este termo em nosso catálogo atual.</p>
             <button
               onClick={() => handlePick({ id: "q", displayName: q, minPrice: null, market: null, brand: null, category: null, imageUrl: null, isFuzzy: false, similarity: 0 })}
               autoFocus
               className="inline-flex items-center gap-2 rounded-lg border border-[var(--brand-primary)] px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/5 active:scale-95 transition-all focus-visible:ring-4 focus-visible:ring-[var(--brand-primary)]/20 outline-none"
             >
-              Search globally
+              Pesquisar globalmente
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </motion.div>
@@ -376,7 +376,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             ref={listRef}
             id={LISTBOX_ID}
             role="listbox"
-            aria-label="Product suggestions"
+            aria-label="Sugestões de produtos"
             className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           >
             {items.map((s, i) => (
@@ -491,7 +491,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       <div className="flex flex-col items-end">
                         {i === 0 && items.length > 1 && (
                           <span className="mb-1 rounded-full bg-[var(--brand-primary)]/20 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-[var(--brand-primary)] animate-pulse">
-                            Best Price
+                            Melhor preço
                           </span>
                         )}
                         <span
@@ -518,7 +518,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                           (active === i ? " text-[var(--text-primary)]/70" : " text-[var(--text-tertiary)]")
                         }
                       >
-                        at {s.market}
+                        em {s.market}
                       </span>
                     ) : null}
                   </span>
@@ -536,14 +536,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           <span className="truncate text-muted-foreground">
 
             {blocked ? (
-              "Sign up to see unlimited prices."
+              "Cadastre-se para ver preços ilimitados."
             ) : (
               <>
                 <kbd className="rounded border border-border bg-background px-1 font-sans">↑</kbd>{" "}
                 <kbd className="rounded border border-border bg-background px-1 font-sans">↓</kbd>{" "}
 
-                navigate ·{" "}
-                <CornerDownLeft className="inline h-3 w-3 align-[-2px]" aria-hidden /> open
+                navegar ·{" "}
+                <CornerDownLeft className="inline h-3 w-3 align-[-2px]" aria-hidden /> abrir
               </>
             )}
           </span>
@@ -555,7 +555,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
           >
 
-            View all
+            Ver tudo
             <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
           </button>
         </div>

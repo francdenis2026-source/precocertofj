@@ -24,8 +24,8 @@ export const Route = createFileRoute("/buscar")({
     const q = (ctx as any).search?.q || "";
     return {
       meta: [
-        { title: `Results for "${q}" — PreçoCerto` },
-        { name: "description", content: `Find the lowest price for ${q} in Feijó's markets.` },
+        { title: `Resultados para "${q}" — PreçoCerto` },
+        { name: "description", content: `Encontre o menor preço de ${q} nos mercados de Feijó.` },
       ],
     };
   },
@@ -81,8 +81,8 @@ function SearchResultsPage() {
               {/* If no query or no results, show a centered search state or message */}
               {!q && !c ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
-                   <h2 className="text-2xl font-black text-foreground mb-2">What are you looking for today?</h2>
-                   <p className="text-muted-foreground max-w-md">Search for specific products to find the lowest price across Feijó's markets.</p>
+                   <h2 className="text-2xl font-black text-foreground mb-2">O que você está procurando hoje?</h2>
+                   <p className="text-muted-foreground max-w-md">Busque produtos específicos para encontrar o menor preço nos mercados de Feijó.</p>
                 </div>
               ) : result && result.groups.length > 0 ? (
                 <div className="space-y-8 pt-4">
@@ -90,8 +90,8 @@ function SearchResultsPage() {
                 </div>
               ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                 <p className="text-lg font-bold text-foreground">No results found for "{q || c}"</p>
-                 <p className="text-muted-foreground">Try a different search term or check the suggestions alongside.</p>
+                 <p className="text-lg font-bold text-foreground">Nenhum resultado encontrado para "{q || c}"</p>
+                 <p className="text-muted-foreground">Tente um termo de busca diferente ou confira as sugestões ao lado.</p>
               </div>
             )}
             </>

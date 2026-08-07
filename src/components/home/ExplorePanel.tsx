@@ -36,25 +36,25 @@ const brl = (n: number) =>
 
 const relative = (iso: string) => {
   const d = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
-  if (d <= 0) return "today";
-  if (d === 1) return "yesterday";
-  if (d < 7) return `${d}d ago`;
+  if (d <= 0) return "hoje";
+  if (d === 1) return "ontem";
+  if (d < 7) return `há ${d}d`;
   const w = Math.floor(d / 7);
-  if (w < 5) return `${w}w ago`;
+  if (w < 5) return `há ${w}sem`;
   const m = Math.floor(d / 30);
-  return m <= 1 ? "1mo ago" : `${m}mo ago`;
+  return m <= 1 ? "há 1mês" : `há ${m}meses`;
 };
 
 const BENEFITS = [
-  { Icon: Wallet, title: "Real savings", desc: "Lowest price of the week in seconds." },
-  { Icon: Zap, title: "Real time", desc: "Continuous updates from the community." },
-  { Icon: MapPin, title: "Built for Feijó", desc: "Markets and neighborhoods across the city." },
-  { Icon: ShieldCheck, title: "Verified data", desc: "Automatic curation and auditing." },
+  { Icon: Wallet, title: "Economia real", desc: "O menor preço da semana em segundos." },
+  { Icon: Zap, title: "Tempo real", desc: "Atualizações contínuas da comunidade." },
+  { Icon: MapPin, title: "Feito para Feijó", desc: "Mercados e bairros de toda a cidade." },
+  { Icon: ShieldCheck, title: "Dados verificados", desc: "Curadoria e auditoria automáticas." },
 ];
 
 const QUOTES = [
-  { quote: "I compare in 10 seconds and save nearly R$ 80 a month.", name: "Maria dos Santos", role: "Downtown", initials: "MS" },
-  { quote: "I use it every Saturday before the market. Avoids checkout surprises.", name: "João Ferreira", role: "Segundo Distrito", initials: "JF" },
+  { quote: "Eu comparo em 10 segundos e economizo quase R$ 80 por mês.", name: "Maria dos Santos", role: "Centro", initials: "MS" },
+  { quote: "Uso todo sábado antes de ir ao mercado. Evita surpresas no caixa.", name: "João Ferreira", role: "Segundo Distrito", initials: "JF" },
 ];
 
 
@@ -171,7 +171,7 @@ const PriceRow = memo(function PriceRow({
         data-best={best ? "1" : undefined}
         aria-label={
           best
-            ? `${p.name} — best offer now, ${brl(p.price)}${hasDrop ? `, ${p.dropPct}% drop from ${brl(p.previousPrice!)}` : ""}`
+            ? `${p.name} — melhor oferta agora, ${brl(p.price)}${hasDrop ? `, queda de ${p.dropPct}% em relação a ${brl(p.previousPrice!)}` : ""}`
             : undefined
         }
         className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--bg-surface-elevated)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] ${flash ? "pc-live-flash" : ""}`}
@@ -196,7 +196,7 @@ const PriceRow = memo(function PriceRow({
                 }}
                 aria-hidden
               >
-                BEST
+                MELHOR
               </span>
             ) : null}
             <span className="truncate">{p.name}</span>
@@ -209,7 +209,7 @@ const PriceRow = memo(function PriceRow({
               className={`${serif} italic transition-[filter] group-hover:brightness-110`}
               style={{ color: "var(--pc-home-onhero-gold)" }}
             >
-              {p.marketName ?? "Partner market"}
+              {p.marketName ?? "Mercado parceiro"}
             </span>
             <span className="mx-1 opacity-60">·</span>
             {relative(p.when)}
@@ -223,13 +223,13 @@ const PriceRow = memo(function PriceRow({
                       border: "1px solid #334155",
                     }}
                 >
-                  new
+                  novo
                 </span>
               </>
             ) : p.stores > 1 ? (
               <>
                 <span className="mx-1 opacity-60">·</span>
-                {p.stores} markets
+                {p.stores} mercados
               </>
             ) : null}
           </p>
@@ -245,7 +245,7 @@ const PriceRow = memo(function PriceRow({
             <span
               className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1 whitespace-nowrap`}
               style={{ color: "var(--pc-home-onhero-fg-70)" }}
-              aria-label={`Previous price ${brl(p.previousPrice!)}, ${p.dropPct}% drop`}
+              aria-label={`Preço anterior ${brl(p.previousPrice!)}, queda de ${p.dropPct}%`}
             >
               {/* Preço antigo aparece só em hover/focus — evita ruído em repouso. */}
               <Price
@@ -463,8 +463,8 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         <section aria-labelledby="explore-prices" className="flex min-h-0 flex-1 flex-col">
           <SectionHead
             id="explore-prices"
-            kicker="Live"
-            title="Verified prices"
+            kicker="Ao vivo"
+            title="Preços verificados"
             accent={liveAccent}
             aside={
               <Link
@@ -473,15 +473,15 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
                 className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
                 style={{ color: liveAccent }}
               >
-                See more <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
               </Link>
             }
           />
 
           <p className={`${tc.meta} mt-1.5`} style={{ color: fg70 }}>
-            {live?.lastUpdate ? `Last update ${relative(live.lastUpdate)}` : "Recent price checks in Feijó"}
+            {live?.lastUpdate ? `Última atualização ${relative(live.lastUpdate)}` : "Consultas de preço recentes em Feijó"}
             {typeof live?.checkedToday === "number" && live.checkedToday > 0
-              ? ` · ${live.checkedToday} today`
+              ? ` · ${live.checkedToday} hoje`
               : ""}
           </p>
 
@@ -513,9 +513,9 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         <Zone accent={benefitAccent} bg="#1e293b">
           <section aria-labelledby="explore-benefits">
             <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${benefitAccent} 32%, transparent)` }}>
-              <Kicker accent={benefitAccent}>Benefits</Kicker>
+              <Kicker accent={benefitAccent}>Benefícios</Kicker>
               <span className={tc.meta} style={{ color: fg70 }}>
-                Why use it
+                Por que usar
               </span>
             </div>
             <ul className="mt-2.5 grid grid-cols-2 gap-x-4 gap-y-2.5">
@@ -547,7 +547,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         <Zone accent={proofAccent} bg="#1e293b" className="flex min-h-0 flex-col">
           <section aria-labelledby="explore-proof" className="flex min-h-0 flex-1 flex-col">
             <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${proofAccent} 32%, transparent)` }}>
-              <Kicker accent={proofAccent}>Social proof</Kicker>
+              <Kicker accent={proofAccent}>Prova social</Kicker>
               <span
                 className={`${tc.num} inline-flex shrink-0 items-center gap-1`}
                 style={{ color: proofAccent }}

@@ -36,12 +36,12 @@ export function computeConfidence(input: {
     avgPrice < minPrice - 0.01 ||
     maxPrice < minPrice - 0.01;
 
-  if (divergent) reasons.push("divergent data between stores");
-  if (storeCount <= 1) reasons.push("only 1 store with price");
-  else if (storeCount === 2) reasons.push("only 2 stores compared");
-  if (!hasSize) reasons.push("size/weight not provided");
-  if (spread > 1.5) reasons.push(`very high price variation (${Math.round(spread * 100)}%)`);
-  else if (spread > 0.6) reasons.push(`high price variation (${Math.round(spread * 100)}%)`);
+  if (divergent) reasons.push("dados divergentes entre mercados");
+  if (storeCount <= 1) reasons.push("apenas 1 mercado com preço");
+  else if (storeCount === 2) reasons.push("apenas 2 mercados comparados");
+  if (!hasSize) reasons.push("tamanho/peso não informado");
+  if (spread > 1.5) reasons.push(`variação de preço muito alta (${Math.round(spread * 100)}%)`);
+  else if (spread > 0.6) reasons.push(`variação de preço alta (${Math.round(spread * 100)}%)`);
 
   let level: ConfidenceLevel = "alta";
   if (divergent || storeCount <= 1 || spread > 1.5) level = "baixa";
@@ -55,19 +55,19 @@ const STYLES: Record<
   { label: string; className: string; Icon: typeof ShieldCheck }
 > = {
   alta: {
-    label: "High confidence",
+    label: "Alta confiança",
     className:
       "border-savings/40 bg-savings/10 text-savings",
     Icon: ShieldCheck,
   },
   media: {
-    label: "Partial confidence",
+    label: "Confiança parcial",
     className:
       "border-accent-strong/40 bg-accent/10 text-accent-strong",
     Icon: HelpCircle,
   },
   baixa: {
-    label: "Low confidence",
+    label: "Baixa confiança",
     className:
       "border-destructive/40 bg-destructive/10 text-destructive",
     Icon: AlertTriangle,
@@ -102,7 +102,7 @@ export function ConfidenceBadge({
       }
     >
       <Icon className={compact ? "h-2.5 w-2.5" : "h-3 w-3"} strokeWidth={2.2} />
-      {level === "alta" ? "high conf." : level === "media" ? "partial conf." : "low conf."}
+      {level === "alta" ? "confiança alta" : level === "media" ? "confiança parcial" : "confiança baixa"}
     </span>
   );
 }

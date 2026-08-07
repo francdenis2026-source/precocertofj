@@ -65,7 +65,7 @@ export function ProductListCard({
         </div>
         {(formattedDate || onAlert || onHistory) && (
           <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span title={absoluteDate}>{formattedDate ? `Updated ${formattedDate}` : ""}</span>
+            <span title={absoluteDate}>{formattedDate ? `Atualizado em ${formattedDate}` : ""}</span>
             <div className="flex items-center gap-1">
               {onAlert ? (
                 <button
@@ -75,10 +75,10 @@ export function ProductListCard({
                     onAlert();
                   }}
                   className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  title="Create price drop alert"
-                  aria-label={`Create price alert for ${name}`}
+                  title="Criar alerta de queda de preço"
+                  aria-label={`Criar alerta de preço para ${name}`}
                 >
-                  <Bell className="h-3 w-3" /> Alert
+                  <Bell className="h-3 w-3" /> Alerta
                 </button>
               ) : null}
               {onHistory ? (
@@ -89,9 +89,9 @@ export function ProductListCard({
                     onHistory();
                   }}
                   className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  aria-label={`View price history for ${name}`}
+                  aria-label={`Ver histórico de preços de ${name}`}
                 >
-                  <History className="h-3 w-3" /> History
+                  <History className="h-3 w-3" /> Histórico
                 </button>
               ) : null}
             </div>

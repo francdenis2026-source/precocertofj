@@ -33,7 +33,7 @@ export function PriceHero({
   className?: string;
   eyebrow?: string;
 }) {
-  const label = eyebrow ?? (isMulti ? "Lowest price" : "Price");
+  const label = eyebrow ?? (isMulti ? "Menor preço" : "Preço");
   /* Escala única de preço do design system (evita text-lg/2xl ad-hoc). */
   const numeralSize: PriceSize = ({ sm: "md", md: "lg", lg: "xl" } as const)[size];
 
@@ -52,7 +52,7 @@ export function PriceHero({
         <Price as="p" value={Number(minPrice)} size={numeralSize} className="mt-0.5" />
         {cheapestStore && (
           <p className="mt-1 truncate text-[11px] text-muted-foreground">
-            at{" "}
+            em{" "}
             <span className="font-medium text-foreground" title={cheapestStore}>
               {shortenStoreName(cheapestStore)}
             </span>
@@ -64,7 +64,7 @@ export function PriceHero({
           {avgPrice != null && Number.isFinite(Number(avgPrice)) && (
             <>
               <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Average
+                Média
               </p>
               <Price value={Number(avgPrice)} size="sm" tone="strike" as="p" />
             </>

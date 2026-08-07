@@ -74,12 +74,12 @@ export function PriceRankingPanel({
         "rounded-2xl border border-border bg-card p-4 shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_8%,transparent)] sm:p-5",
         className,
       )}
-      aria-label={`Price ranking for ${productName}`}
+      aria-label={`Ranking de preços para ${productName}`}
     >
       <header className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-            Price ranking · {ranked.length} store{ranked.length > 1 ? "s" : ""}
+            Ranking de preços · {ranked.length} mercado{ranked.length > 1 ? "s" : ""}
           </p>
           <h3 className="mt-1 font-display text-[15px] font-semibold leading-snug text-foreground sm:text-base">
             {productName}
@@ -93,7 +93,7 @@ export function PriceRankingPanel({
         {!single && diff > 0 && (
           <span className="inline-flex items-center gap-1 rounded-full border border-savings/30 bg-savings/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-savings">
             <ArrowDown className="h-3 w-3" strokeWidth={2.4} />
-            save <Price value={diff} size="xs" tone="savings" /> ({diffPct.toFixed(0)}%)
+            economize <Price value={diff} size="xs" tone="savings" /> ({diffPct.toFixed(0)}%)
           </span>
         )}
       </header>
@@ -102,7 +102,7 @@ export function PriceRankingPanel({
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <div className="rounded-xl border border-savings/30 bg-savings/[0.07] px-3 py-2.5">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Lowest price in the area
+            Menor preço na região
           </p>
           <Price as="p" value={min} size="lg" tone="best" className="mt-1" />
           <p className="mt-1 flex items-center gap-1 truncate text-[11.5px] font-medium text-foreground" title={cheapest.store_name}>
@@ -112,11 +112,11 @@ export function PriceRankingPanel({
         </div>
         <div className="rounded-xl border border-border bg-muted/30 px-3 py-2.5">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            Highest price in the area
+            Maior preço na região
           </p>
           <Price as="p" value={single ? null : max} size="lg" tone="muted" className="mt-1" />
           <p className="mt-1 truncate text-[11.5px] font-medium text-muted-foreground" title={priciest.store_name}>
-            {single ? "only 1 store with this item" : shortenStoreName(priciest.store_name)}
+            {single ? "apenas 1 mercado com este item" : shortenStoreName(priciest.store_name)}
           </p>
         </div>
       </div>
@@ -138,7 +138,7 @@ export function PriceRankingPanel({
                   ? {
                       type: "button" as const,
                       onClick: () => onOpenStore(s),
-                      "aria-label": `View ${productName} at ${s.store_name}`,
+                      "aria-label": `Ver ${productName} em ${s.store_name}`,
                     }
                   : {})}
                 className={cn(
@@ -172,20 +172,20 @@ export function PriceRankingPanel({
                   <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
                     {isMin && (
                       <span className="font-semibold uppercase tracking-wider text-savings">
-                        lowest price
+                        menor preço
                       </span>
                     )}
                     {isMax && !isMin && (
                       <span className="inline-flex items-center gap-0.5 font-semibold uppercase tracking-wider">
-                        <TrendingUp className="h-2.5 w-2.5" /> highest price
+                        <TrendingUp className="h-2.5 w-2.5" /> maior preço
                       </span>
                     )}
                     {!isMin && overMin > 0 && (
                       <span className="inline-flex items-baseline gap-1">
-                        <Price value={overMin} size="xs" tone="muted" prefix="+R$" /> vs. lowest
+                        <Price value={overMin} size="xs" tone="muted" prefix="+R$" /> vs. menor preço
                       </span>
                     )}
-                    {seen && <span className="hidden sm:inline">· updated {seen}</span>}
+                    {seen && <span className="hidden sm:inline">· atualizado {seen}</span>}
                   </span>
                 </span>
                 <Price
@@ -202,7 +202,7 @@ export function PriceRankingPanel({
 
       <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
         <p className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-          <StoreIcon className="h-3 w-3" /> Area average:{" "}
+          <StoreIcon className="h-3 w-3" /> Média da região:{" "}
           <Price value={avg} size="xs" tone="muted" />
         </p>
         {ranked.length > initialVisible && (
@@ -211,7 +211,7 @@ export function PriceRankingPanel({
             onClick={() => setExpanded((v) => !v)}
             className="rounded-full border border-border bg-background px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-foreground transition hover:border-primary/40 hover:text-primary"
           >
-            {expanded ? "Show less" : `Show all ${ranked.length} stores`}
+            {expanded ? "Mostrar menos" : `Mostrar todos os ${ranked.length} mercados`}
           </button>
         )}
       </div>

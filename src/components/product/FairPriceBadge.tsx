@@ -49,7 +49,7 @@ export function FairPriceBadge({
       )}
       title={
         s.diffPct !== null
-          ? `${s.label} · ${s.diffPct >= 0 ? "+" : ""}${s.diffPct.toFixed(0)}% vs average`
+          ? `${s.label} · ${s.diffPct >= 0 ? "+" : ""}${s.diffPct.toFixed(0)}% vs média`
           : s.label
       }
     >

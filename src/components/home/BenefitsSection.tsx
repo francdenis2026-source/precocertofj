@@ -11,10 +11,10 @@ const P = {
 const serif = "font-editorial";
 
 const BENEFITS = [
-  { icon: <Wallet className="h-4 w-4" strokeWidth={2} />, title: "Real savings", desc: "Lowest price of the week in seconds." },
-  { icon: <Zap className="h-4 w-4" strokeWidth={2} />, title: "Real time", desc: "Continuous updates from the community." },
-  { icon: <MapPin className="h-4 w-4" strokeWidth={2} />, title: "Built for Feijó", desc: "Markets and neighborhoods across the city." },
-  { icon: <ShieldCheck className="h-4 w-4" strokeWidth={2} />, title: "Verified data", desc: "Automatic curation and auditing." },
+  { icon: <Wallet className="h-4 w-4" strokeWidth={2} />, title: "Economia real", desc: "O menor preço da semana em segundos." },
+  { icon: <Zap className="h-4 w-4" strokeWidth={2} />, title: "Tempo real", desc: "Atualizações contínuas da comunidade." },
+  { icon: <MapPin className="h-4 w-4" strokeWidth={2} />, title: "Feito para Feijó", desc: "Mercados e bairros de toda a cidade." },
+  { icon: <ShieldCheck className="h-4 w-4" strokeWidth={2} />, title: "Dados verificados", desc: "Curadoria e auditoria automáticas." },
 ];
 
 export function BenefitsSection() {
@@ -23,14 +23,14 @@ export function BenefitsSection() {
       <header className="mb-2.5 flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2.5 min-w-0">
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: P.gold }}>
-            Benefits
+            Benefícios
           </p>
           <h2
             id="benefits-title"
             className={`${serif} leading-tight truncate`}
             style={{ color: P.heading, fontSize: "clamp(1.05rem, 1.8vw, 1.35rem)", letterSpacing: "-0.01em" }}
           >
-            Why use PreçoCerto
+            Por que usar o PreçoCerto
           </h2>
         </div>
       </header>
