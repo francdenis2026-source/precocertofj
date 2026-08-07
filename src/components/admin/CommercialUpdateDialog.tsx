@@ -74,7 +74,7 @@ export function CommercialUpdateDialog({
             Carga Comercial - {establishmentName}
           </DialogTitle>
           <DialogDescription>
-            Sim, o Filé de Peito (Seara 1kg) também foi identificado nas fotos com o preço de R$ 27,00. Assim como o alho (R$ 34,99), ele já foi processado e atualizado no banco de dados do Comercial Wanderley.
+            Perfeito! Pode enviar as imagens. Vou processar cada uma e te informar exatamente quais itens foram cadastrados ou atualizados no Comercial Vanderley. Como todas são desse comércio, manterei o foco total na extração de dados e preços para ele.
           </DialogDescription>
         </DialogHeader>
 
