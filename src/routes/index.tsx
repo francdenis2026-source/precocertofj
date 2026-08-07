@@ -370,7 +370,7 @@ function HomePage() {
               </table>
             </div>
             <div className="p-6 bg-[var(--bg-surface-elevated)]/30 border-t border-[var(--border-subtle)] text-center">
-              <Link to="/precos" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline flex items-center justify-center gap-2">
+              <Link to="/buscar" search={{ q: "" }} className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline flex items-center justify-center gap-2">
                 Ver catálogo completo <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>

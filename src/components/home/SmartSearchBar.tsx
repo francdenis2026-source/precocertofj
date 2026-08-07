@@ -43,7 +43,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
   const abortRef = React.useRef<AbortController | null>(null);
 
   const term = q.trim();
-  const canQuery = term.length >= 2;
+  const canQuery = term.length >= 1;
+
 
   const { data: trending } = useQuery({
     queryKey: ["search", "trending", "home"],
