@@ -446,8 +446,7 @@ function EstablishmentPage() {
             </div>
           </div>
         </div>
-
-        
+        <div className="space-y-8">
           {hasButcher && (
             <div className="flex items-center gap-2 p-1 bg-[#F1F5F9] rounded-2xl w-fit">
               {(isButcherStore
@@ -541,8 +540,70 @@ function EstablishmentPage() {
                   ))}
                 </div>
               )}
+
+              <div className="mt-8">
+                <div className="flex items-baseline justify-between mb-4">
+                  <h2 className="text-sm font-black text-[#0F172A] uppercase tracking-widest">
+                    Produtos ({filtered.length})
+                  </h2>
+                </div>
+
+                {filtered.length > 0 ? (
+                  <>
+                    {view === "grid" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.slice(0, limit).map((p) => (
+                          <ProductTile
+                            key={p.slug}
+                            product={p}
+                            onOpen={() => openQuickView(p)}
+                            onAlert={() => createAlert(p)}
+                            onHistory={() => setHistoryFor(p)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="bg-white rounded-3xl border border-[#E5EAF1] overflow-hidden">
+                        <div className="grid grid-cols-[1fr_100px_100px] gap-4 px-6 py-4 bg-[#F8FAFC] border-b border-[#E5EAF1] text-[10px] font-black uppercase tracking-widest text-[#64748B]">
+                          <span>Produto</span>
+                          <span className="text-center">Unidade</span>
+                          <span className="text-right">Preço</span>
+                        </div>
+                        <div className="divide-y divide-[#E5EAF1]">
+                          {filtered.slice(0, limit).map((p) => (
+                            <ProductRow
+                              key={p.slug}
+                              product={p}
+                              onOpen={() => openQuickView(p)}
+                              onAlert={() => createAlert(p)}
+                              onHistory={() => setHistoryFor(p)}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {filtered.length > limit && (
+                      <Button
+                        onClick={() => setLimit((l) => l + 30)}
+                        variant="outline"
+                        className="w-full mt-8 h-12 rounded-2xl border-[#E5EAF1] text-[#0F172A] font-bold"
+                      >
+                        Ver mais {filtered.length - limit} produtos
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <EmptyState
+                    icon={Search}
+                    title="Nada encontrado"
+                    message="Tente ajustar sua busca ou categoria."
+                  />
+                )}
+              </div>
             </div>
           )}
+        </div>
         {tab === "catalogo" && (
           <div className="mt-8">
             <div className="flex items-baseline justify-between mb-4">
