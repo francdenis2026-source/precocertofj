@@ -22,6 +22,7 @@ import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection
 import { ComparisonStickyBar } from "@/components/home/ComparisonStickyBar";
 import { RealtimeMonitoringDashboard } from "@/components/monitoring/RealtimeMonitoringDashboard";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
