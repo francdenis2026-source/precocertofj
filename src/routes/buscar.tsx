@@ -79,7 +79,7 @@ function SearchResultsPage() {
         </aside>
 
         {/* Main Content: Resultados */}
-        <main className="flex-1 bg-[var(--bg-base)] overflow-y-auto p-8 md:p-12 space-y-12 no-scrollbar">
+        <main className="flex-1 bg-[var(--bg-base)] overflow-y-auto p-4 md:p-12 space-y-12 no-scrollbar">
           <div ref={anchorRef} className="[overflow-anchor:none]">
             {isPending && !result ? (
               <div className="space-y-12" aria-busy="true">
