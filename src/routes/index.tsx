@@ -151,7 +151,7 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Hero */}
-      <section className="relative isolate min-h-[450px] md:min-h-[550px] flex items-center overflow-hidden px-4 pb-12 pt-16 md:px-8 md:pb-16">
+      <section className="relative isolate min-h-[480px] md:min-h-[580px] flex items-center overflow-hidden px-4 pb-12 pt-16 md:px-8 md:pb-16">
         {/* Background Image Container */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <img 
@@ -163,7 +163,7 @@ function HomePage() {
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
         </div>
 
-        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center pt-8">
           <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -202,7 +202,7 @@ function HomePage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-20 w-full lg:max-w-md ml-auto"
+            className="relative z-20 w-full lg:max-w-md ml-auto -mt-4 lg:-mt-12"
           >
             <div className="bg-[var(--bg-surface)]/10 backdrop-blur-md border border-[var(--border-subtle)] rounded-3xl p-6 shadow-2xl">
               <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Encontre o melhor preço</h2>
