@@ -302,10 +302,10 @@ function CadastroPage() {
                 className="group relative mt-1 inline-flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13.5px] font-bold !text-white shadow-lg transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
                 style={{
                   background: allValid && !loading
-                    ? `linear-gradient(135deg, ${PC_EMERALD_LIGHT} 0%, ${PC_EMERALD} 50%, ${PC_EMERALD_DEEP} 100%)`
+                    ? `linear-gradient(135deg, var(--brand-primary-soft) 0%, var(--brand-primary) 100%)`
                     : `linear-gradient(135deg, #6b7896, #4a5670)`,
                   boxShadow: allValid && !loading
-                    ? `0 12px 26px -12px rgba(15,27,61,0.55), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px ${PC_GOLD}55`
+                    ? `0 12px 26px -12px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.14)`
                     : "0 6px 16px -8px rgba(15,27,61,0.35)",
                   fontFamily: PC_DISPLAY,
                   letterSpacing: "0.01em",
