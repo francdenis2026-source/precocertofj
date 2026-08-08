@@ -175,8 +175,6 @@ function OnboardingPage() {
       </form>
     </LoginShell>
   );
-
-  );
 }
 
 function FieldRow({
