@@ -17,6 +17,7 @@ import { getRealtimeMonitoringStats } from "@/lib/monitoring.functions";
 import { cn } from "@/lib/utils";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
+import { useMyProfile } from "@/hooks/useMyProfile";
 
 export function RealtimeMonitoringDashboard() {
   const { session, isLoading: isAuthLoading } = useMyProfile();
