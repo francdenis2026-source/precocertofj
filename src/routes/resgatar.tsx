@@ -394,10 +394,10 @@ function RedeemPage() {
           ) : (
             <>
               <h1
-                className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+                className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-[var(--text-primary)]"
                 style={{ fontFamily: PC_DISPLAY }}
               >
-                Ativar meu <span className="text-[color:var(--pc-home-gold)]">código</span>
+                Ativar meu <span className="text-[var(--brand-accent)]">código</span>
               </h1>
               <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
                 Cole o código do e-mail — formato{" "}
@@ -410,7 +410,7 @@ function RedeemPage() {
               <form onSubmit={handleSubmit} noValidate className="mt-3 flex flex-col">
                   <label
                     htmlFor="license-code"
-                    className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/80"
+                    className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-[var(--text-secondary)]"
                   >
                     Código de licença
 
