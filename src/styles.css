@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6 {
 @utility t-small {
   font-size: 0.9375rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 @utility t-caption {
   font-size: 0.8125rem;
