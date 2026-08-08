@@ -831,74 +831,89 @@ function PriceHistorySheet({
         </SheetHeader>
 
         {isLoading && (
-          <div className="mt-6 flex items-center justify-center">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-[var(--brand-primary)]" />
+            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Consultando registros...</p>
           </div>
         )}
 
         {!isLoading && (!history || history.length === 0) && (
-          <p className="mt-6 text-sm text-muted-foreground">
-            Nenhuma alteração registrada ainda.
-          </p>
+          <div className="mt-6 text-center py-12">
+            <div className="h-16 w-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
+               <HistoryIcon className="h-8 w-8 text-muted-foreground/50" />
+            </div>
+            <p className="text-sm font-semibold text-muted-foreground">
+              Ainda não temos registros de alteração de preço para este produto nesta loja.
+            </p>
+          </div>
         )}
 
         {!isLoading && history && history.length > 0 && (
-          <ol className="mt-6 space-y-3">
-            {history.map((h) => {
-              const trend =
-                h.change_pct == null
-                  ? "flat"
-                  : h.change_pct > 0.01
-                    ? "up"
-                    : h.change_pct < -0.01
-                      ? "down"
-                      : "flat";
-              return (
-                <li
-                  key={h.id}
-                  className="flex items-start justify-between gap-3 rounded-lg border border-border p-3"
-                >
-                  <div className="min-w-0">
-                    <Price as="div" value={h.price} size="sm" />
-                    <div className="text-[12.5px] text-muted-foreground">
-                      {new Date(h.captured_at).toLocaleString("pt-BR")}
+          <div className="mt-8 space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+               <div className="p-4 rounded-3xl bg-emerald-500/5 border border-emerald-500/10">
+                 <p className="text-[10px] font-black uppercase tracking-wider text-emerald-600 mb-1">Menor Valor</p>
+                 <Price value={Math.min(...history.map(h => h.price))} size="md" className="font-black text-emerald-700 dark:text-emerald-400" />
+               </div>
+               <div className="p-4 rounded-3xl bg-rose-500/5 border border-rose-500/10">
+                 <p className="text-[10px] font-black uppercase tracking-wider text-rose-600 mb-1">Maior Valor</p>
+                 <Price value={Math.max(...history.map(h => h.price))} size="md" className="font-black text-rose-700 dark:text-rose-400" />
+               </div>
+            </div>
+
+            <ol className="relative space-y-0 after:absolute after:left-[17px] after:top-2 after:h-[calc(100%-16px)] after:w-0.5 after:bg-border/40">
+              {history.map((h, idx) => {
+                const trend =
+                  h.change_pct == null
+                    ? "flat"
+                    : h.change_pct > 0.001
+                      ? "up"
+                      : h.change_pct < -0.001
+                        ? "down"
+                        : "flat";
+                return (
+                  <li
+                    key={h.id}
+                    className="group relative pl-12 pb-8 last:pb-0"
+                  >
+                    <div className={cn(
+                      "absolute left-0 top-1 z-10 grid h-9 w-9 place-items-center rounded-full border-2 bg-background transition-colors",
+                      idx === 0 ? "border-[var(--brand-primary)]" : "border-border"
+                    )}>
+                      {trend === "down" ? (
+                        <TrendingDown className="h-4 w-4 text-emerald-500" />
+                      ) : trend === "up" ? (
+                        <TrendingUp className="h-4 w-4 text-rose-500" />
+                      ) : (
+                        <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
+                      )}
                     </div>
-                    <div className="mt-1 text-[12.5px] text-muted-foreground">
-                      {h.source === "edit"
-                        ? `Editado por ${h.changed_by_email ?? "administrador"}`
-                        : "Registro automático"}
-                    </div>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    {h.previous_price != null && (
-                      <Price as="div" value={h.previous_price} size="xs" tone="strike" />
-                    )}
-                    {h.change_pct != null && (
-                      <div
-                        className={`mt-0.5 inline-flex items-center gap-1 text-[12.5px] font-medium ${
-                          trend === "down"
-                            ? "text-emerald-600 dark:text-emerald-400"
-                            : trend === "up"
-                              ? "text-red-600 dark:text-red-400"
-                              : "text-muted-foreground"
-                        }`}
-                      >
-                        {trend === "down" ? (
-                          <ArrowDown className="h-3 w-3" />
-                        ) : trend === "up" ? (
-                          <ArrowUp className="h-3 w-3" />
-                        ) : (
-                          <Minus className="h-3 w-3" />
+                    
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center justify-between">
+                        <Price value={h.price} size="md" className="font-black" />
+                        {h.change_pct != null && h.change_pct !== 0 && (
+                          <div className={cn(
+                            "flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider",
+                            trend === "down" ? "bg-emerald-500/10 text-emerald-600" : "bg-rose-500/10 text-rose-600"
+                          )}>
+                            {h.change_pct > 0 ? "+" : ""}{h.change_pct.toFixed(1)}%
+                          </div>
                         )}
-                        {h.change_pct > 0 ? "+" : ""}
-                        {h.change_pct.toFixed(1)}%
                       </div>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+                      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        {new Date(h.captured_at).toLocaleString("pt-BR", { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                      <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-tight italic mt-1">
+                        {h.source === "edit" ? "Atualizado via sistema" : "Captura automatizada"}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
         )}
       </SheetContent>
     </Sheet>
