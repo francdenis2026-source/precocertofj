@@ -74,24 +74,24 @@ export function ItemPriceStrip({
               <div className="flex items-center gap-1">
                 {isCheapest ? (
                   <Crown
-                    className="h-3 w-3 text-accent-strong"
+                    className="h-3 w-3 text-[var(--brand-accent)]"
                     strokeWidth={2}
                     aria-hidden="true"
                   />
                 ) : null}
-                <span className="truncate font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                <span className="truncate font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
                   {r.establishmentName}
                 </span>
               </div>
               <p
                 className={
                   "mt-0.5 font-display text-[13px] font-bold leading-tight tabular-nums " +
-                  (isCheapest ? "text-accent-strong" : "text-foreground")
+                  (isCheapest ? "text-[var(--brand-accent)]" : "text-[var(--text-primary)]")
                 }
               >
                 <Price value={r.price} size="sm" />
               </p>
-              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-tertiary)]">
                 {isCheapest ? "menor" : `+${pctVsMin.toFixed(0)}%`}
               </p>
             </>
@@ -99,10 +99,10 @@ export function ItemPriceStrip({
           const base =
             "min-w-[112px] max-w-[132px] shrink-0 rounded-lg border p-1.5 text-left transition ";
           const skin = isActive
-            ? "border-primary bg-primary/5 shadow-sm"
+            ? "border-[var(--brand-primary)] bg-[var(--brand-primary)]/5 shadow-[var(--shadow-sm)]"
             : isCheapest
-              ? "border-accent-strong/50 bg-accent/10"
-              : "border-border bg-background hover:border-primary/40";
+              ? "border-[var(--brand-accent)]/50 bg-[var(--brand-accent)]/10"
+              : "border-[var(--border-subtle)] bg-[var(--bg-base)] hover:border-[var(--brand-primary)]/40";
           if (!onPick) {
             return (
               <div key={r.establishmentId} role="listitem" className={base + skin}>
