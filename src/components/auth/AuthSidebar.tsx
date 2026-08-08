@@ -107,17 +107,17 @@ export const AuthSidebar: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="flex items-center gap-4 p-4 rounded-[var(--radius-2xl)] bg-white/5 border border-white/10 backdrop-blur-sm"
+          className="flex items-center gap-4 p-4 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm"
         >
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
               <Clock className="w-5 h-5 text-emerald-500" />
             </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[var(--pc-brand-navy-deep)] rounded-full animate-pulse" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[var(--bg-surface)] rounded-full animate-pulse" />
           </div>
           <div className="flex-1">
             <div className="text-[11px] text-emerald-500 font-bold uppercase tracking-wider">Atualizado em tempo real</div>
-            <div className="text-[10px] text-slate-400">
+            <div className="text-[10px] text-[var(--text-tertiary)]">
               Última sincronização há poucos segundos · {currentTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
             </div>
           </div>
