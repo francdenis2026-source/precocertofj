@@ -28,6 +28,7 @@ import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
 import { ComparisonStickyBar } from "@/components/home/ComparisonStickyBar";
 import { useComparisonList } from "@/hooks/use-comparison-list";
+import { RealtimeMonitoringDashboard } from "@/components/monitoring/RealtimeMonitoringDashboard";
 import { useMyProfile } from "@/hooks/useMyProfile";
 
 export const Route = createFileRoute("/")({
