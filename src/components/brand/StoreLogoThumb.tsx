@@ -52,8 +52,8 @@ export function StoreLogoThumb({
   return (
     <span
       className={cn(
-        "grid shrink-0 place-items-center overflow-hidden rounded-md border p-1",
-        monoSrc ? "border-current/25 bg-transparent" : "border-border/70 bg-white",
+        "grid shrink-0 place-items-center overflow-hidden rounded-lg border p-1",
+        monoSrc ? "border-current/10 bg-transparent" : "border-[var(--border-subtle)] bg-white",
         className,
       )}
     >

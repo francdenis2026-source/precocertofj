@@ -36,13 +36,13 @@ export function RealtimeMonitoringDashboard() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-3 p-4 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
           <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Iniciando Varredura dos Comércios...</span>
+          <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">Iniciando Varredura dos Comércios...</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="pc-card animate-pulse h-56 bg-muted/10 border-dashed border-muted" />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="pc-card animate-pulse h-36 bg-[var(--bg-surface-elevated)]/50 border-[var(--border-subtle)]" />
           ))}
         </div>
       </div>
@@ -54,8 +54,8 @@ export function RealtimeMonitoringDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
 
-          <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-emerald-500/20">
-            <Zap className="h-3 w-3 text-emerald-500 animate-pulse-slow" />
+          <div className="flex h-5 w-5 items-center justify-center rounded-lg bg-[var(--brand-primary)]/10">
+            <Zap className="h-3 w-3 text-[var(--brand-primary)] animate-pulse-slow" />
           </div>
           <div>
             <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Buscar Produtos</span>
@@ -93,10 +93,10 @@ export function RealtimeMonitoringDashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="group relative flex flex-col gap-2 p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-sm)] hover:shadow-[var(--pc-shadow-md)] hover:-translate-y-1 transition-all duration-300 overflow-hidden min-h-[140px]"
+            className="group relative flex flex-col gap-2 p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-sm)] hover:shadow-[var(--pc-shadow-md)] transition-all duration-300 overflow-hidden min-h-[130px]"
           >
-            {/* Background Accent */}
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-24 h-24 bg-[var(--brand-primary)]/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+            {/* Subtle Gradient Accent */}
+            <div className="absolute top-0 right-0 -mr-6 -mt-6 w-16 h-16 bg-[var(--brand-primary)]/10 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500" />
             
             <div className="flex items-center justify-between relative z-10">
               <div className="flex items-center gap-3 overflow-hidden">
@@ -120,8 +120,8 @@ export function RealtimeMonitoringDashboard() {
                     {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
                   </h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <div className={cn("h-1.5 w-1.5 rounded-full", store.status === 'online' ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-rose-500")} />
-                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">{store.status === 'online' ? 'Ativo' : 'Offline'}</span>
+                    <div className={cn("h-1 w-1 rounded-full", store.status === 'online' ? "bg-emerald-500" : "bg-rose-500")} />
+                    <span className="text-[7px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">{store.status === 'online' ? 'Ao vivo' : 'Offline'}</span>
                   </div>
                 </div>
               </div>
@@ -130,8 +130,8 @@ export function RealtimeMonitoringDashboard() {
 
             <div className="relative z-10 flex-1 flex flex-col justify-center">
               {store.insights.slice(0, 1).map((insight: any, idx: number) => (
-                <div key={idx} className="bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 px-2 py-1.5 rounded-lg">
-                  <p className="text-[9px] font-bold leading-tight text-[var(--brand-primary)] line-clamp-3">
+                <div key={idx} className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] px-2 py-1.5 rounded-lg">
+                  <p className="text-[9px] font-medium leading-tight text-[var(--text-secondary)] line-clamp-3">
                     {insight.message}
                   </p>
                 </div>

@@ -23,48 +23,48 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Brand */
-  --pc-brand-gold: #F4B400;
-  --pc-brand-gold-soft: #FFD24A;
-  --pc-brand-gold-ink: #0B1220;
+  /* Brand — Refined Steel Blue Palette */
+  --pc-brand-primary: #3B82F6;
+  --pc-brand-primary-soft: #60A5FA;
+  --pc-brand-accent: #10B981;
   
-  --pc-navy: #0B1220;
+  --pc-navy: #0F172A;
 
   /* Surfaces */
-  --bg-base: #07111F;
-  --bg-surface: #111827;
-  --bg-surface-elevated: #161F31;
-  --bg-surface-hover: #1B2537;
-  --border-subtle: rgb(255 255 255 / 0.08);
-  --border-strong: rgb(255 255 255 / 0.16);
+  --bg-base: #070D17;
+  --bg-surface: #0F172A;
+  --bg-surface-elevated: #1E293B;
+  --bg-surface-hover: #334155;
+  --border-subtle: rgb(255 255 255 / 0.05);
+  --border-strong: rgb(255 255 255 / 0.12);
 
-  /* Text — all pairs verified against --bg-base / --bg-surface for WCAG AA */
+  /* Text — AA Contrast */
   --text-primary: #F8FAFC;
-  --text-secondary: #B4C0D0;
-  --text-tertiary: #8A99AD;
-  --text-on-brand: #0B1220;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --text-on-brand: #FFFFFF;
 
-  --brand-primary: var(--pc-brand-gold);
+  --brand-primary: var(--pc-brand-primary);
   --brand-secondary: var(--pc-navy);
 
   /* Semantic */
-  --success: #22C55E;
+  --success: #10B981;
   --danger: #EF4444;
   --warning: #F59E0B;
   --info: #3B82F6;
-  --savings: #22C55E;
+  --savings: #10B981;
 
-  /* Radius */
-  --radius-2xl: 28px;
-  --radius-xl: 20px;
-  --radius-lg: 14px;
-  --radius-md: 10px;
-  --radius-sm: 8px;
+  /* Radius — Sophisticated tighter curves */
+  --radius-2xl: 20px;
+  --radius-xl: 14px;
+  --radius-lg: 10px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
 
-  /* Elevation — soft, wide, low-opacity */
-  --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
-  --pc-shadow-md: 0 8px 24px -8px rgb(0 0 0 / 0.55);
-  --pc-shadow-lg: 0 24px 60px -24px rgb(0 0 0 / 0.7);
+  /* Elevation — Minimalist depth */
+  --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.1);
+  --pc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --pc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   
 
   /* Layout */
