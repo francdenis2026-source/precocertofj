@@ -222,6 +222,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Utilities */
 @utility pc-card {
   background-color: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: 1.5rem;
