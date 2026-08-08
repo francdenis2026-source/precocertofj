@@ -245,7 +245,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute left-0 right-0 bottom-[calc(100%+12px)] z-[60] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-left shadow-[0_28px_70px_-24px_rgba(11,30,58,0.45)] min-w-[300px] lg:min-w-[400px]"
+            className="absolute left-0 right-0 top-[calc(100%+12px)] z-[60] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-left shadow-[0_28px_70px_-24px_rgba(11,30,58,0.45)] min-w-[300px] lg:min-w-[400px]"
           >
             {!canQuery ? (
               <div className="p-4">

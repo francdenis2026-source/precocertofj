@@ -202,9 +202,9 @@ function HomePage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-20 w-full lg:max-w-md ml-auto -mt-4 lg:-mt-12"
+            className="relative z-20 w-full lg:max-w-md ml-auto mt-4 lg:mt-8"
           >
-            <div className="bg-[var(--bg-surface)]/10 backdrop-blur-md border border-[var(--border-subtle)] rounded-3xl p-6 shadow-2xl">
+            <div className="bg-[var(--bg-surface)]/10 backdrop-blur-md border border-[var(--border-subtle)] rounded-3xl p-6 shadow-2xl relative">
               <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Encontre o melhor preço</h2>
               <SmartSearchBar />
               <p className="mt-4 text-xs text-[var(--text-tertiary)] text-center">
