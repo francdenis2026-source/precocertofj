@@ -132,13 +132,14 @@ function HomePage() {
                 <span className="flex h-2 w-2 rounded-full bg-[var(--brand-primary)] shadow-[0_0_8px_var(--brand-primary)] animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">Inteligência Local · Feijó · Acre</span>
               </div>
-              <h1 className="t-hero text-white mb-6">
+              <h1 className="t-hero text-white mb-6 drop-shadow-2xl">
                 Compre melhor.<br/>
-                <span className="text-[var(--brand-primary)] drop-shadow-sm">Gaste menos.</span>
+                <span className="text-[var(--brand-accent)] drop-shadow-sm">Gaste menos.</span>
               </h1>
-              <p className="text-white/80 t-body mb-10 max-w-2xl leading-relaxed">
+              <p className="text-slate-100 t-body mb-10 max-w-2xl leading-relaxed font-medium drop-shadow-md">
                 Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
               </p>
+
 
               <div className="relative max-w-2xl">
                 <SmartSearchBar />
