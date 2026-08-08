@@ -251,8 +251,9 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]"
+              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] sm:max-w-2xl sm:mx-auto"
             >
+
               <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-4 flex items-center justify-between">
                  <div className="flex items-center gap-3">
                     <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
@@ -318,7 +319,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                     id={LISTBOX_ID}
                     role="listbox"
                     aria-label="Sugestões de produtos"
-                    className="max-h-[480px] overflow-y-auto overscroll-contain py-1"
+                    className="max-h-[min(480px,70vh)] overflow-y-auto overscroll-contain py-1 no-scrollbar"
+
                   >
                     {items.map((s, i) => (
                       <li key={s.id} role="none">
