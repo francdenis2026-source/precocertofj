@@ -150,7 +150,7 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Hero */}
-      <section className="relative isolate min-h-[650px] md:min-h-[750px] flex items-center overflow-hidden px-4 pb-20 pt-32 md:px-8 md:pb-28">
+      <section className="relative isolate min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden px-4 pb-12 pt-24 md:px-8 md:pb-16">
         {/* Background Image Container */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <img 
