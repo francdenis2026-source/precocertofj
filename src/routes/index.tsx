@@ -394,6 +394,7 @@ function HomePage() {
         />
       )}
 
+      <Footer />
       <MobileBottomNav />
     </div>
   );
