@@ -148,7 +148,7 @@ export function SmartLogoImage({
     targetFill,
     enabled: inView,
   });
-  if (!src || failed) return null;
+  if (!src || failed || (ready && !presentation.scale)) return null;
 
   return (
     <img
