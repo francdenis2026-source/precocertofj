@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import * as ReactWindow from "react-window";
+import { AutoSizer } from "react-virtualized-auto-sizer";
 import {
   Beef,
   ChevronRight,
@@ -22,6 +22,7 @@ import {
   Star,
   ArrowUpDown,
 } from "lucide-react";
+
 
 
 
