@@ -218,10 +218,10 @@ function HomePage() {
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-10">
         {/* Trust bar integrated into hero flow */}
         <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <TrustStat label="Registros de preço" value={stats?.priceRecords} />
-          <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
-          <TrustStat label="Economia média" value={economy?.avgSavingsPct || 15.1} suffix="%" />
-          <TrustStat label="Mercados parceiros" value={stats?.establishments} />
+          <TrustStat label="Preços Verificados" value={stats?.priceRecords} />
+          <TrustStat label="Itens no Catálogo" value={stats?.totalItems} />
+          <TrustStat label="Economia Direta" value={economy?.avgSavingsPct || 15.1} suffix="%" />
+          <TrustStat label="Lojas Conectadas" value={stats?.establishments} />
         </div>
 
         {/* Value props */}
@@ -262,8 +262,8 @@ function HomePage() {
                 className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]"
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Produtos frescos de qualidade premium"
+                  src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
+                  alt="Análise técnica de preços e tecnologia"
                   className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
@@ -458,10 +458,10 @@ function TrustStat({ label, value, suffix = "" }: { label: string; value?: numbe
       {/* Tooltip explicativo discreto */}
       <div className="absolute inset-x-0 -bottom-8 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none">
         <span className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-md text-[10px] text-[var(--text-secondary)] whitespace-nowrap shadow-sm">
-          {label === "Registros de preço" && "Total de etiquetas verificadas"}
-          {label === "Produtos monitorados" && "Itens únicos catalogados"}
-          {label === "Economia média" && "Desconto médio na cesta"}
-          {label === "Mercados parceiros" && "Lojas ativas em Feijó"}
+          {label === "Preços Verificados" && "Etiquetas reais conferidas hoje"}
+          {label === "Itens no Catálogo" && "Total de produtos identificados"}
+          {label === "Economia Direta" && "Sua economia potencial média"}
+          {label === "Lojas Conectadas" && "Estabelecimentos ativos em Feijó"}
         </span>
       </div>
     </div>
