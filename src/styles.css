@@ -20,28 +20,27 @@
  * PreçoCerto design system — TypeClear Professional Edition.
  */
 :root,
-:root[data-theme='light'],
-:root[data-theme='dark'] {
-  color-scheme: dark;
+:root[data-theme='light'] {
+  color-scheme: light;
 
-  /* --- Design Tokens: Colors --- */
-  --brand-primary: #3B82F6; /* Azure Blue */
+  /* --- Design Tokens: Colors (Light Professional Theme) --- */
+  --brand-primary: #2563EB; /* Vibrant Blue */
   --brand-primary-soft: #60A5FA;
-  --brand-accent: #EAB308; /* Premium Gold */
-  --brand-accent-soft: #FDE047;
+  --brand-accent: #D97706; /* Deep Amber/Gold */
+  --brand-accent-soft: #F59E0B;
   
-  --bg-base: #070D17;
-  --bg-surface: #0F172A;
-  --bg-surface-elevated: #1E293B;
-  --bg-surface-hover: #334155;
+  --bg-base: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+  --bg-surface-hover: #E2E8F0;
   
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
   --text-tertiary: #64748B;
   --text-on-brand: #FFFFFF;
 
-  --border-subtle: rgb(255 255 255 / 0.05);
-  --border-strong: rgb(255 255 255 / 0.12);
+  --border-subtle: rgb(0 0 0 / 0.05);
+  --border-strong: rgb(0 0 0 / 0.1);
 
   --success: #10B981;
   --danger: #EF4444;
@@ -53,7 +52,6 @@
   --font-display: "Manrope", "Inter", sans-serif;
   
   /* --- Design Tokens: Spacing & Radius --- */
-  --spacing-unit: 4px;
   --radius-2xl: 24px;
   --radius-xl: 16px;
   --radius-lg: 12px;
@@ -61,14 +59,32 @@
   --radius-sm: 4px;
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
   /* Motion */
   --dur-base: 0.2s;
   --dur-slow: 0.4s;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --brand-primary: #3B82F6;
+  --brand-primary-soft: #60A5FA;
+  --brand-accent: #EAB308;
+  --brand-accent-soft: #FDE047;
+  --bg-base: #0F172A;
+  --bg-surface: #1E293B;
+  --bg-surface-elevated: #334155;
+  --bg-surface-hover: #475569;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --text-on-brand: #FFFFFF;
+  --border-subtle: rgb(255 255 255 / 0.1);
+  --border-strong: rgb(255 255 255 / 0.2);
 }
 
 @theme {
