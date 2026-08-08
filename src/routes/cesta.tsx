@@ -122,7 +122,7 @@ function CestaPage() {
                 variant="outline"
                 onClick={handleRefreshPrices}
                 disabled={isFetching || items.length === 0}
-                className="h-12 rounded-2xl bg-[var(--bg-surface)] border-[var(--border-subtle)] px-6 font-black uppercase tracking-widest text-[12px]"
+                className="h-12 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border-[var(--border-subtle)] px-6 font-black uppercase tracking-widest text-[12px]"
               >
                 <RefreshCw
                   className={cn("mr-2 h-4 w-4", isFetching && "animate-spin")}
@@ -130,7 +130,7 @@ function CestaPage() {
                 Sincronizar
               </Button>
               {items.length > 0 && (
-                <div className="h-12 flex items-center px-6 rounded-2xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 font-black uppercase tracking-widest text-[12px]">
+                <div className="h-12 flex items-center px-6 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 font-black uppercase tracking-widest text-[12px]">
                   {totalItems} {totalItems === 1 ? "Item" : "Itens"}
                 </div>
               )}
@@ -162,7 +162,7 @@ function CestaPage() {
               <div className="lg:col-span-12 animate-in fade-in slide-in-from-top-4 duration-700">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 rounded-[var(--radius-2xl)] bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-soft)] text-[var(--text-on-brand)] shadow-[var(--shadow-lg)] shadow-[var(--brand-primary)]/20 border border-white/10">
                   <div className="flex items-center gap-6">
-                    <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md">
+                    <div className="h-16 w-16 rounded-[var(--radius-2xl)] bg-white/20 flex items-center justify-center backdrop-blur-md">
                       <TrendingDown size={32} className="text-white" />
                     </div>
                     <div className="space-y-1">
@@ -198,7 +198,7 @@ function CestaPage() {
                <div className="grid gap-4">
                  {items.map((it) => (
                    <div key={it.id} className="group relative flex items-center gap-6 p-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/40 transition-all duration-300">
-                      <div className="h-24 w-24 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)]/50 p-2 border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
+                      <div className="h-24 w-24 shrink-0 rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/50 p-2 border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
                         <ProductImage
                           name={it.displayName}
                           alt={it.displayName}

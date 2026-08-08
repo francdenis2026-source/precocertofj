@@ -356,13 +356,13 @@ function Perfil() {
                   <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Inteligência Financeira</h3>
                   <p className="text-[18px] font-black tracking-tight mt-1">Sua Economia no PreçoCerto</p>
                 </div>
-                <div className="h-12 w-12 rounded-2xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] flex items-center justify-center border border-[var(--brand-primary)]/20 shadow-sm">
+                <div className="h-12 w-12 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] flex items-center justify-center border border-[var(--brand-primary)]/20 shadow-[var(--shadow-sm)]">
                   <BarChart3 size={24} />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-6 rounded-xl bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
+                <div className="p-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
                   <p className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mb-2">Potencial de Economia</p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-black text-emerald-500">{s ? fmtBrl(s.potentialSavings || 0) : "—"}</span>
@@ -374,7 +374,7 @@ function Perfil() {
                   </div>
                 </div>
 
-                <div className="p-6 rounded-xl bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
+                <div className="p-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
                   <p className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mb-2">Monitoramento de Itens</p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-black text-[var(--brand-primary)]">{s ? s.favoritesCount : "0"}</span>
