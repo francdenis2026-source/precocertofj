@@ -1,6 +1,6 @@
 import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
 import {
@@ -12,26 +12,23 @@ import {
   Store,
   Zap,
   TrendingDown,
+  CheckCircle2,
+  Search,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { Footer } from "@/components/brand/Footer";
 import { Button } from "@/components/ui/button";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat, getRecentProducts } from "@/lib/products-public.functions";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
-import { CATEGORIES } from "@/lib/categories";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
-import { ProductQuickView } from "@/components/product/ProductQuickView";
-import { ProductImage } from "@/components/ds/ProductImage";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
-import { PromoBanner } from "@/components/promo/PromoBanner";
 import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
 import { ComparisonStickyBar } from "@/components/home/ComparisonStickyBar";
 import { useComparisonList } from "@/hooks/use-comparison-list";
-import { RealtimeMonitoringDashboard } from "@/components/monitoring/RealtimeMonitoringDashboard";
+import { useMyProfile } from "@/hooks/useMyProfile";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -46,16 +43,16 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "PreçoCerto — Seu assistente inteligente de compras" },
+      { title: "PreçoCerto — Compare Preços de Supermercados" },
       {
         name: "description",
         content:
-          "O PreçoCerto acompanha os preços reais dos supermercados de Feijó, monta a melhor cesta para você e mostra exatamente onde comprar para economizar.",
+          "Economize nas compras de mercado em Feijó. Compare preços reais, monte sua cesta e descubra onde é mais barato.",
       },
       { property: "og:title", content: "PreçoCerto — Seu assistente inteligente de compras" },
       {
         property: "og:description",
-        content: "Inteligência de preços em tempo real para Feijó. Compare mercados, monte uma cesta inteligente e economize em cada compra.",
+        content: "Inteligência de preços em tempo real. Compare mercados, monte sua cesta e economize.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -67,57 +64,18 @@ export const Route = createFileRoute("/")({
 function formatDate(iso: string): string {
   if (!iso) return "—";
   const date = new Date(iso);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) return "Hoje";
+  if (diffDays === 1) return "Ontem";
   return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 }
 
-function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: any) => void }) {
-  const { addItem } = useComparisonList();
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ delay: Math.min(i * 0.06, 0.3), duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      onClick={() => onSelect({ 
-        name: p.name, 
-        minPrice: p.price, 
-        cheapestStore: p.marketName,
-        updatedAt: p.when
-      })}
-      className="pc-card group relative flex cursor-pointer items-center gap-4 !p-4"
-    >
-      <button 
-        onClick={(e) => {
-          e.stopPropagation();
-          addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
-        }}
-        className="absolute right-3 top-3 z-10 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] p-2 text-[var(--brand-primary)] opacity-0 transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] focus-visible:opacity-100 group-hover:opacity-100 shadow-[var(--shadow-sm)]"
-        aria-label={`Adicionar ${p.name} à comparação`}
-      >
-        <PlusCircle className="h-4 w-4" />
-      </button>
-      <div className="hidden">
-        {/* Imagem removida conforme solicitação do usuário */}
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center gap-2">
-          <span className="truncate text-[11px] md:text-[13px] font-medium text-[var(--brand-primary)]">{p.marketName}</span>
-          <span className="shrink-0 text-[11px] md:text-[13px] text-[var(--text-tertiary)]">· {formatDate(p.when)}</span>
-        </div>
-        <h3 className="truncate text-[14px] md:text-[16px] font-semibold leading-snug tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
-          {p.name}
-        </h3>
-        <div className="mt-1">
-          <Price value={p.price} size="sm" className="font-semibold" />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 function HomePage() {
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [sort, setSort] = useState<"recent" | "price">("recent");
+  const { session } = useMyProfile();
 
   const loaderData = useLoaderData({ from: "/" }) as { stats: any; economy: any; };
   const stats = loaderData?.stats;
@@ -126,7 +84,7 @@ function HomePage() {
   const recentProductsFn = useServerFn(getRecentProducts);
   const { data: rawRecentProducts } = useQuery({
     queryKey: ["home-live-prices"],
-    queryFn: () => recentProductsFn({ data: { limit: 12 } }),
+    queryFn: () => recentProductsFn({ data: { limit: 10 } }),
     staleTime: 60_000,
   });
 
@@ -138,367 +96,230 @@ function HomePage() {
     } else {
       list.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
     }
-    return list.slice(0, 6);
+    return list.slice(0, 8);
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-dvh w-full overflow-x-hidden bg-[var(--bg-base)] pb-20 text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 lg:pb-0">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <SiteHeader variant="overlay" />
 
-      {/* Modern Hero Section */}
-      <section className="relative isolate flex flex-col items-center justify-center pt-24 pb-20 overflow-hidden">
-        {/* Immersive Background */}
+      {/* Hero Section - Compact & Powerful */}
+      <section className="relative pt-32 pb-20 overflow-hidden border-b border-[var(--border-subtle)]">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/80 via-[var(--bg-base)]/60 to-[var(--bg-base)] z-10" />
-          <motion.img 
-            initial={{ scale: 1.1, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[var(--bg-base)] z-10" />
+          <img 
             src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
-            alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.7] saturate-[1.2]"
+            alt=""
+            className="h-full w-full object-cover"
           />
         </div>
 
-        <div className="mx-auto max-w-[1280px] px-4 md:px-8 w-full flex flex-col items-center text-center">
+        <div className="mx-auto max-w-[1280px] px-4 md:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-3xl"
+            className="max-w-3xl mx-auto"
           >
-            <h1 className="t-hero text-balance mb-5 leading-[1] tracking-tighter text-white">
+            <h1 className="t-hero text-white mb-6">
               Compre melhor.<br/>
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </h1>
-            <p className="mt-4 max-w-xl mx-auto text-pretty text-[16px] md:text-[20px] leading-relaxed text-slate-200">
+            <p className="text-slate-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
               Compare preços reais dos mercados da sua cidade e descubra onde sua compra fica mais barata.
             </p>
-          </motion.div>
 
-          <div className="relative z-50 w-full max-w-3xl mt-8 px-4 md:px-0">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            >
+            <div className="relative max-w-2xl mx-auto">
               <SmartSearchBar />
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-[12px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
-                 <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)] animate-pulse" />
-                    Preços verificados
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-accent)]" />
-                    Mercados locais
-                 </div>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-[11px] font-bold text-white uppercase tracking-[0.2em]">
+                <span className="flex items-center gap-2">✓ Preços verificados</span>
+                <span className="flex items-center gap-2">● Atualizações frequentes</span>
+                <span className="flex items-center gap-2">📍 Mercados locais</span>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 relative z-0 w-full overflow-hidden">
-        {/* Platform Stats Section */}
-        <section className="relative -mt-10 md:-mt-16 mb-12 md:mb-20 z-20">
-          <div className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-[var(--border-subtle)] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-xl shadow-[var(--shadow-lg)]">
-              <StatCard label="Preços Verificados" value={stats?.priceRecords || "3.064"} icon={ShieldCheck} />
-              <StatCard label="Itens no Catálogo" value={stats?.totalItems || "20.262"} icon={Zap} />
-              <StatCard label="Economia Média" value={`${economy?.avgSavingsPct || "15.1"}%`} icon={TrendingDown} />
-              <StatCard label="Lojas Conectadas" value={stats?.establishments || "12"} icon={Store} />
-            </div>
+      {/* Metrics Bar - Compact container */}
+      <div className="mx-auto max-w-[1280px] px-4 -mt-8 relative z-20">
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-subtle)]">
+            <StatItem label="Preços verificados" value={stats?.priceRecords || "3.064"} />
+            <StatItem label="Produtos" value={stats?.totalItems || "2.262"} />
+            <StatItem label="Economia média" value={`${economy?.avgSavingsPct || "15.1"}%`} />
+            <StatItem label="Lojas parceiras" value={stats?.establishments || "11"} />
           </div>
-        </section>
-
-        {/* Value props - Hidden on very small mobile for compactness */}
-        <section aria-labelledby="how-it-works" className="mb-12 hidden sm:block">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7">
-              <SectionHeading
-                id="how-it-works"
-                kicker="Por que o PreçoCerto"
-                title="Um assistente, não apenas uma lista de preços"
-                description="Cada preço é auditado, datado e ranqueado para você confiar na recomendação antes de sair de casa."
-              />
-              <div className="grid gap-6 md:grid-cols-1">
-                <ValueCard
-                  Icon={ShieldCheck}
-                  title="Preços verificados"
-                  body="Cada registro vem de um mercado cadastrado e traz a data em que foi coletado."
-                />
-                <ValueCard
-                  Icon={LineChart}
-                  title="Histórico real de preços"
-                  body="Acompanhe a variação do produto ao longo do tempo e saiba se a oferta de hoje vale mesmo a pena."
-                />
-                <ValueCard
-                  Icon={Zap}
-                  title="Cestas otimizadas"
-                  body="Adicione sua lista e o PreçoCerto calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
-                />
-              </div>
-            </div>
-            
-            <div className="lg:col-span-5 relative hidden lg:block">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-slate-900 shadow-[var(--shadow-lg)]"
-              >
-                <img 
-                  src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Análise técnica de preços e tecnologia"
-                  onLoad={(e) => {
-                    if (e.currentTarget.naturalWidth > 0) {
-                      e.currentTarget.style.opacity = "1";
-                    } else {
-                      e.currentTarget.style.display = "none";
-                    }
-                  }}
-                  className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-all duration-700 opacity-0"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
-                
-                {/* Floating detail for premium feel */}
-                <div className="absolute top-4 right-4 bg-[var(--brand-primary)]/10 backdrop-blur-md border border-[var(--brand-primary)]/20 px-3 py-1.5 rounded-full">
-                  <span className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-wider">Qualidade Auditada</span>
-                </div>
-              </motion.div>
-              
-              {/* Decorative background element */}
-              <div className="absolute -bottom-6 -left-6 -z-10 h-32 w-32 bg-[var(--brand-primary)]/5 blur-3xl rounded-full" />
-            </div>
-          </div>
-        </section>
-
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-           <div className="space-y-16 lg:col-span-8">
-              <section id="baskets-section" aria-label="Cesta inteligente" className="scroll-mt-24">
-                <OptimizedBasketSection />
-              </section>
-
-              <section aria-labelledby="live-prices" className="scroll-mt-24">
-                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
-                  <div className="min-w-0">
-                    <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
-                      Monitoramento ao vivo
-                    </p>
-                    <h2
-                      id="live-prices"
-                      className="text-[28px] font-bold tracking-tight text-[var(--text-primary)]"
-                    >
-                      Últimos preços registrados
-                    </h2>
-                  </div>
-                  <div className="flex w-fit rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm">
-                    {[
-                      { id: "recent", label: "Recentes" },
-                      { id: "price", label: "Menor Preço" },
-                    ].map((s) => (
-                      <button
-                        key={s.id}
-                        onClick={() => setSort(s.id as any)}
-                        aria-pressed={sort === s.id}
-                        className={cn(
-                          "min-h-10 rounded-[var(--radius-md)] px-5 text-[12px] font-bold uppercase tracking-wider transition-all",
-                          sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
-                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
-                        )}
-                      >
-                        {s.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                  {filteredProducts.map((p, i) => (
-                    <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
-                  ))}
-                </div>
-              </section>
-           </div>
-           
-           <aside className="lg:col-span-4">
-              <div className="sticky top-28 space-y-10">
-                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-xl p-8 shadow-sm">
-                   <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
-                     Mercados Parceiros
-                   </h2>
-                    <div className="flex flex-col gap-4">
-                      <RegisteredStoresCarousel />
-                    </div>
-                 </section>
-
-                 
-                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-lg transition-transform hover:scale-[1.02] duration-300">
-                   <PromoBanner />
-                 </section>
-              </div>
-            </aside>
         </div>
+      </div>
 
-        <section id="realtime" aria-labelledby="realtime" className="mt-20 border-t border-[var(--border-subtle)] pt-20">
-          <div className="mx-auto max-w-7xl">
-            <RealtimeMonitoringDashboard />
+      <main className="mx-auto max-w-[1280px] px-4 py-20 space-y-24">
+        {/* Why Use PreçoCerto */}
+        <section className="text-center max-w-4xl mx-auto">
+          <h2 className="t-h2 mb-4">Por que usar o PreçoCerto?</h2>
+          <p className="text-[var(--text-secondary)] mb-12">Compare com confiança antes de comprar.</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <BenefitCard 
+              icon={ShieldCheck} 
+              title="Preços verificados" 
+              desc="Cada preço informa mercado e data da atualização."
+            />
+            <BenefitCard 
+              icon={LineChart} 
+              title="Histórico de preços" 
+              desc="Veja se uma promoção realmente vale a pena."
+            />
+            <BenefitCard 
+              icon={Zap} 
+              title="Cesta inteligente" 
+              desc="Descubra a combinação mais barata para sua lista."
+            />
           </div>
         </section>
 
-        <ComparisonStickyBar />
-
-        {/* Closing CTA */}
-        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 min-h-[300px] flex items-center justify-center">
-          <div className="absolute inset-0 -z-10 bg-slate-900">
-            <img
-              src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000"
-              alt="Corredor de supermercado moderno e organizado"
-              aria-hidden="true"
-              loading="lazy"
-              onLoad={(e) => {
-                if (e.currentTarget.naturalWidth > 0) {
-                  e.currentTarget.style.opacity = "1";
-                } else {
-                  e.currentTarget.style.display = "none";
-                }
-              }}
-              className="h-full w-full object-cover saturate-[1.2] brightness-[0.8] blur-[1px] opacity-0 transition-opacity duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
-          </div>
-          
-          <div className="relative flex flex-col items-center px-6 py-16 text-center md:py-20">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-6 rounded-full bg-[var(--brand-primary)]/10 px-4 py-1.5 border border-[var(--brand-primary)]/20"
-            >
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--brand-primary)]">Economia Inteligente</span>
-            </motion.div>
-            <h2 className="max-w-2xl text-balance text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-tight tracking-[-0.025em] text-[var(--text-primary)]">
-              Transparência real em cada ida ao mercado
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-[var(--text-secondary)]">
-              Junte-se a quem, em Feijó, consulta o PreçoCerto antes de comprar.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="rounded-xl px-8 font-bold shadow-lg shadow-[var(--brand-primary)]/20 active:scale-95 transition-transform" asChild>
-                <Link to="/cadastro" search={{ redirect: "/" }}>Começar a economizar</Link>
-              </Button>
+        {/* How It Works */}
+        <section className="bg-[var(--bg-surface-elevated)] -mx-4 px-4 py-16 rounded-[40px]">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="t-h3 mb-12 uppercase tracking-widest text-[var(--text-secondary)]">Como funciona</h2>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
+              <Step number="1" title="Busque" desc="Encontre o produto ou monte sua lista." />
+              <div className="hidden md:block text-[var(--border-strong)]">→</div>
+              <Step number="2" title="Compare" desc="Veja os preços disponíveis nos mercados locais." />
+              <div className="hidden md:block text-[var(--border-strong)]">→</div>
+              <Step number="3" title="Economize" desc="Escolha onde sua compra fica mais barata." />
             </div>
           </div>
+        </section>
+
+        {/* Smart Baskets */}
+        <section>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <h2 className="t-h2 mb-2">Sua lista. O menor preço possível.</h2>
+              <p className="text-[var(--text-secondary)]">O PreçoCerto calcula automaticamente onde comprar cada item para economizar mais.</p>
+            </div>
+            <Button asChild className="pc-button-primary rounded-full px-8">
+              <Link to="/cesta">Montar minha cesta</Link>
+            </Button>
+          </div>
+          <OptimizedBasketSection />
+        </section>
+
+        {/* Partner Markets - faiza horizontal */}
+        <section className="border-y border-[var(--border-subtle)] py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+            <h2 className="t-h3 font-bold">Compare preços nos mercados da sua cidade</h2>
+            <Link to="/estabelecimentos" className="text-[var(--brand-primary)] font-bold flex items-center gap-2 hover:underline">
+              Ver todos os mercados <ArrowRight size={16} />
+            </Link>
+          </div>
+          <RegisteredStoresCarousel />
+        </section>
+
+        {/* Recent Prices - Table format */}
+        <section>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-4 border-b border-[var(--border-subtle)]">
+            <h2 className="t-h2">Últimos preços registrados</h2>
+            <div className="flex gap-2 p-1 bg-[var(--bg-surface-elevated)] rounded-xl">
+              <button 
+                onClick={() => setSort("recent")}
+                className={cn("px-4 py-2 text-xs font-bold rounded-lg transition-all", sort === "recent" ? "bg-[var(--brand-primary)] text-white shadow-md" : "text-[var(--text-secondary)]")}
+              >
+                Recentes
+              </button>
+              <button 
+                onClick={() => setSort("price")}
+                className={cn("px-4 py-2 text-xs font-bold rounded-lg transition-all", sort === "price" ? "bg-[var(--brand-primary)] text-white shadow-md" : "text-[var(--text-secondary)]")}
+              >
+                Menor preço
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-[var(--text-tertiary)] text-[11px] font-bold uppercase tracking-widest border-b border-[var(--border-subtle)]">
+                  <th className="py-4 px-2">Produto</th>
+                  <th className="py-4 px-2">Mercado</th>
+                  <th className="py-4 px-2">Preço</th>
+                  <th className="py-4 px-2">Atualizado</th>
+                  <th className="py-4 px-2 text-right">Ação</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--border-subtle)]">
+                {filteredProducts.map((p: any) => (
+                  <tr key={`${p.name}-${p.when}`} className="group hover:bg-[var(--bg-surface-elevated)]/50 transition-colors">
+                    <td className="py-4 px-2 font-bold">{p.name}</td>
+                    <td className="py-4 px-2 text-[var(--text-secondary)] text-sm">{p.marketName}</td>
+                    <td className="py-4 px-2"><Price value={p.price} size="sm" /></td>
+                    <td className="py-4 px-2 text-[var(--text-tertiary)] text-xs">{formatDate(p.when)}</td>
+                    <td className="py-4 px-2 text-right">
+                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-[var(--brand-primary)]">
+                        <PlusCircle size={18} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-8 text-center">
+             <Link to="/precos" className="pc-button-secondary rounded-full">Ver mais preços →</Link>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="relative overflow-hidden rounded-[40px] bg-slate-950 text-white py-16 px-8 text-center">
+          <div className="absolute inset-0 -z-10 opacity-30">
+            <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          </div>
+          <h2 className="t-h2 mb-4">Economia inteligente</h2>
+          <h3 className="text-xl font-bold mb-6 text-[var(--brand-primary)]">Antes de comprar, compare.</h3>
+          <p className="text-slate-300 max-w-xl mx-auto mb-8">Veja onde sua lista fica mais barata e economize em cada ida ao mercado.</p>
+          <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-xl shadow-[var(--brand-primary)]/20">
+            <Link to="/cadastro">Começar a economizar</Link>
+          </Button>
         </section>
       </main>
 
-      {selectedProduct && (
-        <ProductQuickView 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-        />
-      )}
-
       <Footer />
-      <MobileBottomNav />
+      <ComparisonStickyBar />
     </div>
   );
 }
 
-function StatCard({ label, value, icon: Icon }: { label: string; value: string | number; icon: any }) {
+function StatItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-[var(--bg-surface-hover)] md:border-r md:border-[var(--border-subtle)] last:border-0">
-      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--brand-primary)_12%,transparent)] text-[var(--brand-primary)]">
-        <Icon className="h-6 w-6" />
+    <div className="px-6 py-8 text-center">
+      <div className="text-3xl font-black text-[var(--brand-primary)] mb-1">{value}</div>
+      <div className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">{label}</div>
+    </div>
+  );
+}
+
+function BenefitCard({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
+  return (
+    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl text-left h-full flex flex-col justify-center min-h-[160px] hover:border-[var(--brand-primary)]/30 transition-colors group">
+      <div className="flex items-center gap-4 mb-3">
+        <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Icon size={20} />
+        </div>
+        <h3 className="font-bold text-lg">{title}</h3>
       </div>
-      <div className="text-[28px] font-extrabold tracking-tight text-[var(--text-primary)]">
-        {value}
+      <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{desc}</p>
+    </div>
+  );
+}
+
+function Step({ number, title, desc }: { number: string; title: string; desc: string }) {
+  return (
+    <div className="flex flex-col items-center max-w-[200px]">
+      <div className="h-12 w-12 rounded-full bg-[var(--brand-primary)] text-white flex items-center justify-center font-black text-xl mb-4 shadow-lg shadow-[var(--brand-primary)]/20">
+        {number}
       </div>
-      <div className="mt-1 text-[13px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">
-        {label}
-      </div>
+      <h3 className="font-bold mb-2">{title}</h3>
+      <p className="text-xs text-[var(--text-tertiary)] font-medium leading-relaxed">{desc}</p>
     </div>
-  );
-}
-
-function SectionHeading({
-  id,
-  kicker,
-  title,
-  description,
-}: {
-  id: string;
-  kicker: string;
-  title: string;
-  description?: string;
-}) {
-  return (
-    <div className="mb-10 max-w-2xl">
-      <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-[var(--brand-primary)]">{kicker}</p>
-      <h2 id={id} className="text-[clamp(1.5rem,3vw,2.25rem)] font-semibold tracking-[-0.025em] text-[var(--text-primary)]">
-        {title}
-      </h2>
-      {description && (
-        <p className="mt-4 text-[17px] leading-relaxed text-[var(--text-secondary)]">{description}</p>
-      )}
-    </div>
-  );
-}
-
-function ValueCard({ Icon, title, body }: { Icon: any; title: string; body: string }) {
-  return (
-    <div className="pc-card pc-lift">
-      <span className="mb-5 grid h-11 w-11 place-items-center rounded-[var(--radius-md)] bg-[color-mix(in_oklab,var(--brand-primary)_14%,transparent)] text-[var(--brand-primary)]">
-        <Icon className="h-5 w-5" aria-hidden="true" />
-      </span>
-      <h3 className="mb-2 text-[18px] font-semibold tracking-[-0.015em] text-[var(--text-primary)]">{title}</h3>
-      <p className="text-[15px] leading-relaxed text-[var(--text-secondary)]">{body}</p>
-    </div>
-  );
-}
-
-function TrustStat({ label, value, suffix = "" }: { label: string; value?: number | null; suffix?: string }) {
-  const display = typeof value === "number" && Number.isFinite(value) ? value : null;
-  return (
-    <div className="group relative rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-6 text-center transition-all hover:border-[var(--brand-primary)]/30 hover:shadow-lg">
-      <p className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
-        {display === null ? "—" : `${display.toLocaleString("pt-BR")}${suffix}`}
-      </p>
-      <p className="mt-2 text-[14px] font-medium text-[var(--text-tertiary)]">{label}</p>
-      
-      {/* Tooltip explicativo discreto */}
-      <div className="absolute inset-x-0 -bottom-8 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none">
-        <span className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-md text-[10px] text-[var(--text-secondary)] whitespace-nowrap shadow-sm">
-          {label === "Preços Verificados" && "Etiquetas reais conferidas hoje"}
-          {label === "Itens no Catálogo" && "Total de produtos identificados"}
-          {label === "Economia Direta" && "Sua economia potencial média"}
-          {label === "Lojas Conectadas" && "Estabelecimentos ativos em Feijó"}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function CategoryCard({ label, value, Icon, index }: { label: string; value: string; Icon: any; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ delay: Math.min(index * 0.04, 0.3), duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <Link 
-        to="/buscar" 
-        search={{ c: value } as any}
-        className="group relative flex min-h-[128px] flex-col items-center justify-center gap-3 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--brand-primary)]/40 hover:shadow-[var(--pc-shadow-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
-      >
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <span className="relative z-10 grid h-12 w-12 place-items-center rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] transition-all duration-300 group-hover:bg-[var(--brand-primary)] group-hover:text-[var(--text-on-brand)]">
-          <Icon className="h-6 w-6" aria-hidden="true" />
-        </span>
-        <h3 className="relative z-10 text-center text-[15px] font-medium text-[var(--text-primary)]">{label}</h3>
-      </Link>
-    </motion.div>
   );
 }
