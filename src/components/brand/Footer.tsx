@@ -1,75 +1,75 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { Facebook, Instagram, Twitter, Linkedin, Globe } from "lucide-react";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">
-      <div className="mx-auto max-w-[1440px] px-4 py-16 md:px-8">
-        <div className="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-8">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Info */}
           <div className="col-span-2 lg:col-span-2">
-            <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-              <Logo variant="on-light" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-4">
+              <Logo variant="on-light" className="[&_img]:h-7 [&_img]:w-7 [&_span]:text-[18px]" />
             </Link>
-            <p className="max-w-xs text-[15px] leading-relaxed mb-8">
-              O PreçoCerto é a maior plataforma de inteligência de compras e economia doméstica de Feijó.
+            <p className="max-w-xs text-[14px] leading-relaxed mb-6">
+              A maior plataforma de inteligência de compras de Feijó. Compare preços e economize de verdade.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <SocialLink Icon={Instagram} />
               <SocialLink Icon={Facebook} />
               <SocialLink Icon={Twitter} />
             </div>
           </div>
 
-          {/* Column 1 */}
+          {/* PreçoCerto */}
           <div>
-            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">PreçoCerto</h4>
-            <ul className="space-y-4 text-[15px]">
-              <li><FooterLink to="/sobre">Sobre nós</FooterLink></li>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">PreçoCerto</h4>
+            <ul className="space-y-3 text-[14px]">
+              <li><FooterLink to="/sobre">Sobre</FooterLink></li>
               <li><FooterLink to="/como-funciona">Como funciona</FooterLink></li>
               <li><FooterLink to="/contato">Contato</FooterLink></li>
             </ul>
           </div>
 
-          {/* Column 2 */}
+          {/* Produto */}
           <div>
-            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">Produto</h4>
-            <ul className="space-y-4 text-[15px]">
-              <li><FooterLink to="/precos">Comparar Preços</FooterLink></li>
-              <li><FooterLink to="/cesta">Cesta Inteligente</FooterLink></li>
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">Produto</h4>
+            <ul className="space-y-3 text-[14px]">
+              <li><FooterLink to="/precos">Comparar preços</FooterLink></li>
+              <li><FooterLink to="/cesta">Cesta inteligente</FooterLink></li>
               <li><FooterLink to="/estabelecimentos">Mercados</FooterLink></li>
-              <li><FooterLink to="/planos">Planos Premium</FooterLink></li>
+              <li><FooterLink to="/planos">Planos</FooterLink></li>
             </ul>
           </div>
 
-          {/* Column 3 */}
+          {/* Legal */}
           <div>
-            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">Legal</h4>
-            <ul className="space-y-4 text-[15px]">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">Legal</h4>
+            <ul className="space-y-3 text-[14px]">
               <li><FooterLink to="/privacidade">Privacidade</FooterLink></li>
-              <li><FooterLink to="/termos">Termos de Uso</FooterLink></li>
+              <li><FooterLink to="/termos">Termos</FooterLink></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <div className="flex items-center gap-2 text-[12px] font-bold tracking-widest text-[var(--text-primary)]">
+            <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[var(--text-primary)]">
               SKAES NET TECHNOLOGY
               <span className="h-1 w-1 rounded-full bg-[var(--brand-primary)]" />
               FRANC D'NIS
             </div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
-              Feijó · Acre · Brasil
+            <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--text-tertiary)] font-medium">
+              Feijó · AC · {year}
             </p>
           </div>
 
-          <div className="text-[13px] font-medium text-[var(--text-tertiary)] flex items-center gap-2">
-            <span>© {year} PreçoCerto. Todos os direitos reservados.</span>
+          <div className="text-[12px] font-medium text-[var(--text-tertiary)]">
+            <span>© PreçoCerto. Todos os direitos reservados.</span>
           </div>
         </div>
       </div>
@@ -90,8 +90,8 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
 
 function SocialLink({ Icon }: { Icon: any }) {
   return (
-    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] hover:border-[var(--brand-primary)]">
-      <Icon className="h-4.5 w-4.5" />
+    <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)]">
+      <Icon className="h-4 w-4" />
     </button>
   );
 }

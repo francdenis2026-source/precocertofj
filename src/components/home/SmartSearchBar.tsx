@@ -169,14 +169,14 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)] bg-[var(--bg-surface)] pl-4 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.01]",
-          compact ? "h-12" : "h-14 sm:h-[80px]",
+          "group relative flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md pl-4 pr-1.5 shadow-2xl transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-white md:focus-within:scale-[1.01]",
+          compact ? "h-12" : "h-14 sm:h-16",
           open ? "z-[101]" : "z-auto",
           "touch-none"
         )}
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-primary-soft)] text-white shadow-md transition-transform duration-500 group-focus-within:scale-105">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-primary)] text-white shadow-md transition-transform duration-500 group-focus-within:scale-105">
           <Search
             aria-hidden="true"
             className={cn(
@@ -200,15 +200,15 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="O que você quer economizar hoje?"
+          placeholder="Busque arroz, café, carne, leite..."
           aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-bold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
-            compact ? "text-[15px]" : "text-base sm:text-xl",
+            "flex-1 min-w-0 bg-transparent outline-none font-bold text-white group-focus-within:text-[var(--text-primary)] placeholder:text-white/70 group-focus-within:placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
+            compact ? "text-[15px]" : "text-base sm:text-lg",
           )}
         />
         {q && (
@@ -227,11 +227,11 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-4 sm:px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_4px_12px_rgba(37,99,235,0.2)] transition-all hover:bg-[var(--brand-primary-soft)] hover:shadow-[0_8px_20px_rgba(37,99,235,0.3)] active:scale-[0.98]",
-            compact ? "h-9 text-[10px]" : "h-11 sm:h-16 text-[12px] sm:text-[15px]",
+            "shrink-0 rounded-lg bg-[var(--brand-primary)] px-4 sm:px-6 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-lg transition-all hover:bg-[var(--brand-primary-soft)] active:scale-[0.98]",
+            compact ? "h-9 text-[10px]" : "h-10 sm:h-12 text-[12px] sm:text-[14px]",
           )}
         >
-          {compact ? <Search size={16} /> : "Pesquisar"}
+          {compact ? <Search size={16} /> : "Comparar preços"}
         </button>
       </form>
 
@@ -382,16 +382,16 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                         </button>
                       </li>
                     ))}
-                    <li className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
-                      <span className="flex items-center gap-2">
-                        <CornerDownLeft className="h-3 w-3 text-[var(--brand-primary)]" /> <span className="text-[var(--text-secondary)]">Enter</span> para buscar
+                    <li className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-2.5 text-[9px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)]">
+                      <span className="flex items-center gap-1.5">
+                        <CornerDownLeft className="h-3 w-3 text-[var(--brand-primary)]" /> <span>Enter</span> para buscar
                       </span>
                       <span className="flex items-center gap-2">
-                        <span className="flex gap-0.5">
-                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1.5 py-0.5">↑</span>
-                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1.5 py-0.5">↓</span>
+                        <span className="flex gap-0.5 opacity-50">
+                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1 py-0.5">↑</span>
+                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1 py-0.5">↓</span>
                         </span>
-                        para navegar
+                        navegar
                       </span>
                     </li>
                   </ul>
