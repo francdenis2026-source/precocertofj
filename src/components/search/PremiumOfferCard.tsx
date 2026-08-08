@@ -4,7 +4,7 @@ import { Clock, Store, ArrowRight, ShoppingBag } from "lucide-react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { addToCart } from "@/lib/cart.functions";
+import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   const bestPrice = group.prices[0];
   const navigate = useNavigate();
   const runAdd = useServerFn(addToCart);
+  const runRemove = useServerFn(removeFromCart);
   const qc = useQueryClient();
   
   // Swipe logic
@@ -27,16 +28,72 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
 
   const handleDragEnd = async (_: any, info: any) => {
     if (info.offset.x > 100) {
+      if (typeof window !== 'undefined' && window.navigator.vibrate) {
+        window.navigator.vibrate(50);
+      }
+      
       const tid = toast.loading("Adicionando à cesta...");
       try {
-        await runAdd({ data: { catalogId: group.catalogId || undefined, slug: group.productName } });
+        const result = await runAdd({ data: { catalogId: group.catalogId || undefined, slug: group.productName } });
+        const itemId = result.itemId;
         qc.invalidateQueries({ queryKey: ["cart"] });
-        toast.success(`${group.productName} na cesta!`, { id: tid });
+        
+        toast.success(`${group.productName} na cesta!`, {
+          id: tid,
+          action: {
+            label: "Desfazer",
+            onClick: async () => {
+              try {
+                await runRemove({ data: { itemId } });
+                qc.invalidateQueries({ queryKey: ["cart"] });
+                toast.success("Item removido da cesta");
+              } catch (err) {
+                toast.error("Erro ao desfazer");
+              }
+            }
+          }
+        });
       } catch (e: any) {
         toast.error(e.message || "Erro ao adicionar", { id: tid });
       }
     }
   };
+
+  const handleManualAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (typeof window !== 'undefined' && window.navigator.vibrate) {
+      window.navigator.vibrate(40);
+    }
+    
+    const tid = toast.loading("Adicionando à cesta...");
+    try {
+      const result = await runAdd({ data: { catalogId: group.catalogId || undefined, slug: group.productName } });
+      const itemId = result.itemId;
+      qc.invalidateQueries({ queryKey: ["cart"] });
+      
+      toast.success(`${group.productName} na cesta!`, {
+        id: tid,
+        action: {
+          label: "Desfazer",
+          onClick: async () => {
+            try {
+              await runRemove({ data: { itemId } });
+              qc.invalidateQueries({ queryKey: ["cart"] });
+              toast.success("Item removido da cesta");
+            } catch (err) {
+              toast.error("Erro ao desfazer");
+            }
+          }
+        }
+      });
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao adicionar", { id: tid });
+    }
+  };
+
+  const savings = group.avg && bestPrice.price < group.avg ? group.avg - bestPrice.price : 0;
   
   return (
     <div className="relative overflow-hidden rounded-[var(--radius-xl)]">
@@ -61,6 +118,8 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 touch-pan-y"
+        role="listitem"
+        aria-label={`Produto: ${group.productName}, Preço: ${bestPrice.price}. Deslize para a direita ou clique no botão para adicionar à cesta.`}
       >
         <Link 
           to="/loja/$id/produto/$slug" 
@@ -98,12 +157,28 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
 
             <div className="pt-3 md:pt-5 border-t border-[var(--border-subtle)] flex items-end justify-between gap-4">
               <div className="flex flex-col gap-0.5">
-                <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">Menor Preço Local</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">Menor Preço Local</span>
+                  {savings > 0 && (
+                    <span className="text-[9px] font-black text-[var(--brand-primary)] bg-[var(--brand-primary)]/10 px-1.5 py-0.5 rounded-sm">
+                      POUPE R$ {savings.toFixed(2).replace('.', ',')}
+                    </span>
+                  )}
+                </div>
                 <Price value={bestPrice.price} size="lg" className="text-[18px] md:text-[22px] font-black text-[var(--text-primary)] tracking-tight" />
               </div>
               
-              <div className="h-8 md:h-10 px-3 md:px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white group-hover:border-[var(--brand-primary)] transition-all duration-300">
-                <span className="hidden sm:inline">Detalhes</span> <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleManualAdd}
+                  className="h-8 md:h-10 w-8 md:w-10 rounded-xl bg-[var(--brand-primary)] text-white flex items-center justify-center hover:bg-[var(--brand-primary)]/90 transition-all duration-300 shadow-sm"
+                  aria-label="Adicionar à cesta"
+                >
+                  <ShoppingBag size={16} />
+                </button>
+                <div className="h-8 md:h-10 px-3 md:px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] group-hover:bg-[var(--bg-surface-elevated)] group-hover:text-[var(--text-primary)] transition-all duration-300">
+                  <span className="hidden sm:inline">Detalhes</span> <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
             </div>
           </div>

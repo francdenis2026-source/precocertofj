@@ -1,10 +1,11 @@
 import { usePriceSearch } from "@/lib/use-price-search";
 import { Route } from "@/routes/buscar";
 import { motion, AnimatePresence } from "framer-motion";
-import { PremiumOfferCard } from "./PremiumOfferCard";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
+
+const PremiumOfferCard = lazy(() => import("./PremiumOfferCard").then(m => ({ default: m.PremiumOfferCard })));
 
 const ITEMS_PER_PAGE = 20;
 
@@ -81,7 +82,9 @@ export function SearchResultsList() {
                   ease: [0.16, 1, 0.3, 1] 
                 }}
               >
-                <PremiumOfferCard group={group} isBest={i === 0 && !q} />
+                <Suspense fallback={<div className="h-[180px] w-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse" />}>
+                  <PremiumOfferCard group={group} isBest={i === 0 && !q} />
+                </Suspense>
               </motion.div>
             ))}
           </AnimatePresence>
