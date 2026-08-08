@@ -122,8 +122,8 @@ function HomePage() {
                 Inteligência Local · Feijó · Acre
               </div>
               <h1 className="t-h1 text-white mb-6">
-                Compre melhor.<br/>
-                <span className="text-primary">Gaste menos.</span>
+                Compre melhor e <br/>
+                <span className="text-primary">economize agora.</span>
               </h1>
               <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
                 Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
