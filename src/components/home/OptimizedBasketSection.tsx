@@ -60,7 +60,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="group relative flex flex-col h-full rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 hover:shadow-lg transition-all duration-500 min-h-[220px]"
+      className="group relative flex flex-col h-full rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden hover:border-[var(--brand-primary)]/40 hover:shadow-2xl hover:shadow-[var(--brand-primary)]/5 transition-all duration-500 min-h-[220px]"
     >
       <div className={cn(
         "h-1.5 w-full",

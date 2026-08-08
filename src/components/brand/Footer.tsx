@@ -10,7 +10,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-navy text-white/70 overflow-hidden">
+    <footer className="bg-[var(--navy-900)] text-white/70 overflow-hidden">
       <div className="pc-shell pt-16 pb-8">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5 mb-16">
           {/* Brand Info */}
