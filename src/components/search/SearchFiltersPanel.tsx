@@ -32,8 +32,8 @@ export function SearchFiltersPanel({ isOpen, onToggle }: { isOpen: boolean; onTo
 
   return (
     <aside className={cn(
-      "space-y-8 md:block h-fit",
-      !isOpen && "hidden md:block"
+      "space-y-8 md:block h-fit hidden",
+      isOpen && "block"
     )}>
       <div className="flex items-center justify-between px-2">
         <div className="space-y-1">
