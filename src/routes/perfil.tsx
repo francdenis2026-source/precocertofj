@@ -8,7 +8,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 import {
   Award, MapPin, Settings, LogOut, Sparkles, Heart,
   Hash, Loader2, Check, User, Phone, ShoppingBag, Trash2, ExternalLink, Camera,
-  Download, Database, BarChart3, TrendingUp, Store, ChevronRight
+  Download, Database, BarChart3, TrendingUp, Store, ChevronRight, Cpu
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -1019,6 +1019,23 @@ function AdminPanel() {
 
   return (
     <div className="col-span-3 mt-2 flex flex-col gap-3">
+      <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+            <Cpu className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-display text-sm font-semibold text-indigo-900 dark:text-indigo-300">Integração de Agentes (MCP)</h3>
+            <p className="text-[11px] text-muted-foreground">Conecte fontes de dados externas ao assistente inteligente.</p>
+          </div>
+        </div>
+        <button 
+          onClick={() => toast.info("Integração MCP ativa. Use o chat para configurar servidores.")}
+          className="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold transition-all hover:bg-indigo-700 active:scale-95"
+        >
+          Configurar
+        </button>
+      </div>
       <AdminMetricsPanel />
       <CatalogReviewPanel />
       <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex items-center justify-between">
