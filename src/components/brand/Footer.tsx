@@ -12,7 +12,7 @@ export function Footer() {
           {/* Brand Info */}
           <div className="col-span-2 lg:col-span-2">
             <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-              <Logo variant="light" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
+              <Logo variant="on-light" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
             </Link>
             <p className="max-w-xs text-[15px] leading-relaxed mb-8">
               O PreçoCerto é a maior plataforma de inteligência de compras e economia doméstica de Feijó.
