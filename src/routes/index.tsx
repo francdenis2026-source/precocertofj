@@ -276,13 +276,13 @@ function HomePage() {
 
         {/* Final CTA */}
         <section className="relative overflow-hidden rounded-[40px] bg-[var(--navy-900)] text-white py-24 px-8 text-center shadow-2xl shadow-navy/20">
-          <div className="absolute inset-0 z-0 opacity-10">
+          <div className="absolute inset-0 z-0 opacity-20">
             <img 
               src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
               alt="" 
               className="w-full h-full object-cover" 
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--navy-900)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--navy-900)]/40 to-[var(--navy-900)]" />
           </div>
           <div className="relative z-10 max-w-2xl mx-auto">
             <div className="t-kicker mb-4 text-[var(--brand-primary)]">Junte-se à Economia Real</div>
