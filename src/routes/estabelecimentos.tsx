@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import * as ReactWindow from "react-window";
-import { AutoSizer } from "react-virtualized-auto-sizer";
+import { FixedSizeList as List } from "react-window";
+import AutoSizer, { type Size } from "react-virtualized-auto-sizer";
+
 import {
   Beef,
   ChevronRight,
