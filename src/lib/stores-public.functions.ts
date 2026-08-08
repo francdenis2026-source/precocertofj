@@ -44,7 +44,12 @@ export type PublicStoreProduct = {
   historyCount: number;
   imageUrl: string | null;
   barcode: string | null;
+  /** Porcentagem de economia vs o preço médio no mercado local. */
+  savingsPercent: number;
+  /** Indica se é o menor preço encontrado para este item entre todas as lojas da cidade. */
+  isLowestPrice: boolean;
 };
+
 
 export type PublicStoreCatalog = {
   store: PublicStore;
