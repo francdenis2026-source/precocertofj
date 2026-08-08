@@ -89,7 +89,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
         onClick={onClick}
         onKeyDown={handleKeyDown}
         className={cn(
-          "group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elev-1 transition-all duration-200 hover:border-primary/50 hover:shadow-elev-3",
+          "group relative flex flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)] transition-all duration-200 hover:border-[var(--brand-primary)]/50 hover:shadow-[var(--shadow-lg)]",
           interactive &&
             "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           className,
@@ -119,7 +119,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
               className="relative z-10 max-h-full max-w-[82%] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.06]"
             />
           ) : (
-            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
+            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-[var(--radius-2xl)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] ring-1 ring-[var(--brand-primary)]/20 shadow-[var(--shadow-sm)]">
               <span className="font-display text-xl font-bold tracking-tight">
                 {initials || <Store className="h-7 w-7" aria-hidden />}
               </span>
@@ -178,7 +178,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
       onClick={onClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group flex items-center gap-3 rounded-2xl border border-border bg-card shadow-elev-1 transition-shadow hover:shadow-elev-2",
+        "group flex items-center gap-3 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)] transition-shadow hover:shadow-[var(--shadow-md)]",
         compact ? "p-2.5" : "p-3",
         interactive &&
           "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -188,7 +188,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
     >
       <div
         className={cn(
-          "flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted/50 ring-1 ring-border/60",
+          "flex shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] ring-1 ring-[var(--border-subtle)]/60 shadow-[var(--shadow-sm)]",
           compact ? "h-11 w-11" : "h-14 w-14",
         )}
       >

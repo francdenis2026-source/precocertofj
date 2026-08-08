@@ -71,7 +71,7 @@ export function PriceRankingPanel({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-border bg-card p-4 shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_8%,transparent)] sm:p-5",
+        "rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)] sm:p-5",
         className,
       )}
       aria-label={`Ranking de preços para ${productName}`}
@@ -100,7 +100,7 @@ export function PriceRankingPanel({
 
       {/* Menor x Maior — explícitos */}
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <div className="rounded-xl border border-savings/30 bg-savings/[0.07] px-3 py-2.5">
+        <div className="rounded-[var(--radius-xl)] border border-savings/30 bg-savings/[0.07] px-3 py-2.5">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Menor preço na região
           </p>
@@ -110,7 +110,7 @@ export function PriceRankingPanel({
             {shortenStoreName(cheapest.store_name)}
           </p>
         </div>
-        <div className="rounded-xl border border-border bg-muted/30 px-3 py-2.5">
+        <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-3 py-2.5">
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Maior preço na região
           </p>
@@ -122,7 +122,7 @@ export function PriceRankingPanel({
       </div>
 
       {/* Lista ordenada do menor para o maior */}
-      <ol className="mt-3 divide-y divide-border rounded-xl border border-border">
+      <ol className="mt-3 divide-y divide-[var(--border-subtle)] rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
         {visible.map((s, idx) => {
           const price = Number(s.price);
           const isMin = idx === 0;

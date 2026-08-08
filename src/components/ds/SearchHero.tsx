@@ -72,7 +72,7 @@ export const SearchHero = forwardRef<HTMLElement, SearchHeroProps>(function Sear
     <section
       ref={ref}
       className={cn(
-        "relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card px-4 py-5 shadow-elev-1 sm:px-6 sm:py-7",
+        "relative isolate overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)]/60 bg-[var(--bg-surface)] px-4 py-5 shadow-[var(--shadow-sm)] sm:px-6 sm:py-7",
         className,
       )}
       {...rest}

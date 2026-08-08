@@ -42,7 +42,7 @@ export function QuickCompareStrip({ markets }: { markets: QuickCompareMarket[] }
   return (
     <section
       aria-label="Comparação rápida entre mercados"
-      className="rounded-2xl border border-border bg-card p-3 md:p-4"
+      className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 md:p-4 shadow-[var(--shadow-sm)]"
     >
       <header className="mb-2 flex items-center justify-between gap-2">
         <h2 className="font-display text-sm font-bold text-foreground md:text-base">
@@ -111,7 +111,7 @@ function Cell({
         ? "text-accent-strong"
         : "text-foreground";
   return (
-    <div className={`rounded-xl border ${toneCls} px-2.5 py-2`}>
+    <div className={`rounded-[var(--radius-xl)] border ${toneCls} px-2.5 py-2`}>
       <p className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {icon}
         {label}

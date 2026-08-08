@@ -46,7 +46,7 @@ export function SignupCTA({ context = "generic", className = "", compact = false
 
   return (
     <div
-      className={`flex flex-col gap-2 rounded-2xl border border-dashed border-border bg-muted/30 p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4 ${className}`}
+      className={`flex flex-col gap-2 rounded-[var(--radius-2xl)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4 ${className}`}
     >
       <div className="flex items-start gap-2.5">
         <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">

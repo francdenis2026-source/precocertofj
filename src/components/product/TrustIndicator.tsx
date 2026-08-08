@@ -132,7 +132,7 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
       <PopoverContent
         side="top"
         align="center"
-        className="w-72 rounded-xl border-border bg-card p-3 text-xs shadow-lg"
+        className="w-72 rounded-[var(--radius-xl)] border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-xs shadow-[var(--shadow-lg)]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-2">
