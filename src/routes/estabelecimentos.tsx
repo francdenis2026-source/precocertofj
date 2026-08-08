@@ -110,8 +110,19 @@ function EstablishmentsPage() {
     if (term) {
       list = list.filter(e => normalizeSearchText(e.name).includes(term) || normalizeSearchText(e.neighborhood || "").includes(term));
     }
+    
+    // Sort
+    list.sort((a, b) => {
+      if (search.sort === "name") return a.name.localeCompare(b.name);
+      if (search.sort === "neighborhood") return (a.neighborhood || "").localeCompare(b.neighborhood || "");
+      if (search.sort === "items") return b.productsCount - a.productsCount;
+      if (search.sort === "savings") return b.maxSavings - a.maxSavings;
+      return 0; // relevance or default
+    });
+    
     return list;
-  }, [data, search.kind, search.q]);
+  }, [data, search.kind, search.q, search.sort]);
+
 
   const selected = useMemo(() => {
     return filtered.find(e => e.id === search.sel) || filtered[0] || null;
