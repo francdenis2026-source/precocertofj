@@ -70,7 +70,7 @@
 }
 
 :root[data-theme='dark'] {
-  color-scheme: dark;
+  color-scheme: light dark;
   --brand-primary: #3B82F6;
   --brand-primary-soft: #60A5FA;
   --brand-accent: #EAB308;
