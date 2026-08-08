@@ -768,7 +768,7 @@ function ComparisonMatrix({
               return (
                 <td
                   key={p.id}
-                  className={"px-2 py-3 align-top", isRec && "bg-brand-accent/[0.08]")}
+                  className={cn("px-2 py-3 align-top", isRec && "bg-brand-accent/[0.08]")}
                 >
                   <button
                     type="button"
