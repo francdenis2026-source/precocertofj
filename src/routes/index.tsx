@@ -431,6 +431,22 @@ function HomePage() {
   );
 }
 
+function StatCard({ label, value, icon: Icon }: { label: string; value: string | number; icon: any }) {
+  return (
+    <div className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-[var(--bg-surface-hover)] md:border-r md:border-[var(--border-subtle)] last:border-0">
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--brand-primary)_12%,transparent)] text-[var(--brand-primary)]">
+        <Icon className="h-6 w-6" />
+      </div>
+      <div className="text-[28px] font-extrabold tracking-tight text-[var(--text-primary)]">
+        {value}
+      </div>
+      <div className="mt-1 text-[13px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">
+        {label}
+      </div>
+    </div>
+  );
+}
+
 function SectionHeading({
   id,
   kicker,
