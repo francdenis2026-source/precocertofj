@@ -24,6 +24,7 @@ import { Price } from "@/components/ds/Price";
 import { CATEGORIES } from "@/lib/categories";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
+import { ProductImage } from "@/components/ds/ProductImage";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { PromoBanner } from "@/components/promo/PromoBanner";
 import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
@@ -95,14 +96,11 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
         <PlusCircle className="h-4 w-4" />
       </button>
       <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]">
-        <img 
-          src={`https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=200&h=200&market=${p.marketName}&product=${p.name}`} 
+        <ProductImage 
+          src={null} // Forçando ilustração representativa para produtos sem imagem confirmada
+          name={p.name}
           alt={p.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          onError={(e) => {
-             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=111827&color=F4B400&bold=true`;
-          }}
+          className="h-full w-full"
         />
       </div>
       <div className="min-w-0 flex-1">

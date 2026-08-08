@@ -110,7 +110,7 @@ function ProductImageBase({
           role="img"
           aria-label={alt}
           className={cn(
-            "flex h-full w-full flex-col items-center justify-center text-center",
+            "flex h-full w-full flex-col items-center justify-center text-center transition-all duration-300",
             gap,
             padded,
           )}
@@ -118,7 +118,7 @@ function ProductImageBase({
         >
           <ProductCategoryIcon
             category={category}
-            className={cn("opacity-90", iconSize)}
+            className={cn("opacity-90 transition-transform duration-500", iconSize)}
             aria-hidden="true"
           />
           {size !== "sm" && (
@@ -127,7 +127,6 @@ function ProductImageBase({
                 "line-clamp-2 select-none font-medium leading-tight tracking-tight",
                 textSize,
               )}
-              style={{ color: fg }}
             >
               {displayLabel}
             </span>
