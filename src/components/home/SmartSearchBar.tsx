@@ -330,7 +330,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                           onMouseEnter={() => setActive(i)}
                           onClick={() => go(s.displayName)}
                           className={cn(
-                            "group/item relative flex w-full items-center gap-4 border-l-[4px] px-6 py-4.5 text-left transition-all duration-300",
+                            "group/item relative flex w-full items-center gap-4 border-l-[4px] px-6 py-4 text-left transition-all duration-300",
                             active === i
                               ? "border-l-[var(--brand-primary)] bg-gradient-to-r from-[var(--brand-primary)]/10 to-transparent scale-[1.01] translate-x-1"
                               : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]/50",
