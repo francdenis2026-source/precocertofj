@@ -41,7 +41,7 @@ export function OptimizedBasketSection() {
     <div className="space-y-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-subtle)] pb-8">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-[var(--radius-xl)] bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
             <Sparkles className="h-4 w-4" />
             <span className="text-[11px] font-black uppercase tracking-[0.25em]">Cesta Inteligente</span>
           </div>
@@ -55,7 +55,7 @@ export function OptimizedBasketSection() {
 
         <Link 
           to="/cesta"
-          className="group inline-flex h-12 items-center gap-3 px-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[12px] font-black uppercase tracking-widest text-[var(--text-primary)] hover:border-[var(--brand-primary)] transition-all shadow-sm"
+          className="group inline-flex h-12 items-center gap-3 px-6 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[12px] font-black uppercase tracking-widest text-[var(--text-primary)] hover:border-[var(--brand-primary)] transition-all shadow-[var(--shadow-sm)]"
         >
           Minha Cesta
           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -92,11 +92,11 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
 
       <div className="p-8 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-6">
-          <div className="h-14 w-14 rounded-2xl bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] flex items-center justify-center border border-[var(--border-subtle)] group-hover:scale-110 transition-transform duration-500 shadow-sm">
+          <div className="h-14 w-14 rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)] text-[var(--brand-primary)] flex items-center justify-center border border-[var(--border-subtle)] group-hover:scale-110 transition-transform duration-500 shadow-[var(--shadow-sm)]">
             <ShoppingBasket className="h-7 w-7" />
           </div>
           {basket.economyPct > 10 && (
-            <div className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20">
+            <div className="px-3 py-1.5 rounded-[var(--radius-xl)] bg-emerald-500 text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-[var(--shadow-lg)] shadow-emerald-500/20">
               -{basket.economyPct}% OFF
             </div>
           )}
@@ -132,7 +132,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
             <Price value={basket.total} size="lg" className="text-2xl font-black tracking-tighter" />
           </div>
           
-          <Button asChild className="h-12 w-12 rounded-2xl bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-xl shadow-[var(--brand-primary)]/20 transition-all hover:scale-105 active:scale-95 p-0">
+          <Button asChild className="h-12 w-12 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-[var(--shadow-xl)] shadow-[var(--brand-primary)]/20 transition-all hover:scale-105 active:scale-95 p-0">
             <Link to="/cesta" search={{ mode: 'compare' }}>
               <ArrowRight className="h-5 w-5" />
             </Link>

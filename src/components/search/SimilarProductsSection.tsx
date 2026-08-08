@@ -28,9 +28,9 @@ export function SimilarProductsSection({ query }: { query: string }) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {alternates.map((item) => (
-          <div key={item.productName} className="group bg-card border border-border/60 rounded-2xl p-4 hover:border-primary/30 transition-all cursor-pointer">
+          <div key={item.productName} className="group bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-2xl)] p-4 hover:border-[var(--brand-primary)]/30 transition-all cursor-pointer shadow-[var(--shadow-sm)]">
              <div className="flex gap-3">
-               <div className="h-16 w-16 bg-muted/20 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
+               <div className="h-16 w-16 bg-[var(--bg-surface-elevated)] rounded-[var(--radius-xl)] flex items-center justify-center overflow-hidden shrink-0 border border-[var(--border-subtle)]">
                  <ProductImage name={item.productName} alt={item.productName} size="md" />
                </div>
                <div className="min-w-0 flex-1 space-y-1">

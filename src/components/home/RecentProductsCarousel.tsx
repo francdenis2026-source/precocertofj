@@ -109,7 +109,7 @@ export function RecentProductsCarousel() {
         <div className="mb-2 h-4 w-52 animate-pulse rounded-full bg-muted" />
         <div className="flex gap-3 overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-[240px] w-[180px] shrink-0 animate-pulse rounded-2xl bg-muted/50" />
+            <div key={i} className="h-[240px] w-[180px] shrink-0 animate-pulse rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/50"
           ))}
         </div>
       </section>
@@ -193,7 +193,7 @@ export function RecentProductsCarousel() {
                     }
                   }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-xl cursor-pointer active:scale-[0.98]"
+                  className="group/card relative block h-full overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)] transition-all duration-500 hover:-translate-y-1.5 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-[var(--shadow-xl)] cursor-pointer active:scale-[0.98]"
                 >
                   <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[var(--brand-primary)]/5 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
 
@@ -210,7 +210,7 @@ export function RecentProductsCarousel() {
                     )}
                   </header>
 
-                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-xl bg-[var(--bg-base)] p-3 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:shadow-inner">
+                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-base)] p-3 transition-all duration-700 ease-out group-hover/card:scale-105 group-hover/card:shadow-inner">
                     <ProductImage
                       src={cmp?.image_url ?? p.imageUrl}
                       alt={p.displayName}
