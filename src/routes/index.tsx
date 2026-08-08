@@ -351,16 +351,16 @@ function HomePage() {
         <ComparisonStickyBar />
 
         {/* Closing CTA */}
-        <section className="relative mt-28 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)]">
+        <section className="relative mt-28 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
           <img
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000"
-            alt=""
+            alt="Produtos de supermercado realistas"
             aria-hidden="true"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover opacity-30"
+            className="absolute inset-0 h-full w-full object-cover saturate-[1.2] brightness-[0.4]"
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-[var(--bg-base)]/80 to-[var(--bg-base)]/40" />
-          <div className="relative flex flex-col items-center px-6 py-20 text-center md:py-28">
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-[var(--bg-base)]/60 to-transparent" />
+          <div className="relative flex flex-col items-center px-6 py-24 text-center md:py-32">
             <h2 className="max-w-2xl text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.025em] text-[var(--text-primary)]">
               Transparência real em cada ida ao mercado
             </h2>
