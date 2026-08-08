@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
-import { Price } from "@/components/ds/Price";
+import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MapPin, Package, ChevronRight, TrendingDown } from "lucide-react";
 
-export interface MarketCardProps {
+interface MarketCardProps {
   id: string;
   name: string;
-  neighborhood: string;
+  neighborhood?: string | null;
   productsCount: number;
   logoUrl?: string | null;
   maxSavings?: number;
@@ -21,73 +21,53 @@ export function MarketCard({
   neighborhood,
   productsCount,
   logoUrl,
-  maxSavings = 0,
-  kind = "mercado",
+  maxSavings,
+  kind,
   className
 }: MarketCardProps) {
-  const KINDS: Record<string, string> = {
-    mercado: "Supermercado",
-    farmacia: "Farmácia",
-    padaria: "Padaria",
-    acougue: "Açougue"
-  };
-
   return (
-    <Link
-      to="/estabelecimento/$slug"
-      params={{ slug: id }} // Simplificado, ideal usar slugifyEstablishment
-      className={cn(
-        "group block bg-[var(--bg-surface)] rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-xl)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2",
-        className
-      )}
-    >
-      <div className="flex gap-5">
-        <div className="h-20 w-20 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] p-3 border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
-          <StoreLogoThumb src={logoUrl} name={name} className="h-full w-full object-contain" />
+    <article className={cn(
+      "group flex flex-col bg-white rounded-[32px] border border-[#E5EAF1] p-6 shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#2563EB]/5 hover:-translate-y-1.5",
+      className
+    )}>
+      <div className="flex items-center gap-4 mb-8">
+        <div className="h-16 w-16 shrink-0 rounded-2xl bg-[#F8FAFC] border border-[#E5EAF1] p-2 flex items-center justify-center shadow-inner overflow-hidden group-hover:scale-105 transition-transform duration-500">
+          {name.includes("Contamigos") ? (
+            <ContamigosLogo size="sm" hideName />
+          ) : (
+            <StoreLogoThumb 
+              src={logoUrl} 
+              name={name} 
+              className="h-full w-full border-none p-0 bg-transparent brightness-95 contrast-110"
+              imgClassName="object-contain"
+              initialsClassName="text-[#0F172A] font-bold text-xs"
+            />
+          )}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <span className="bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border border-[var(--brand-primary)]/20">
-              {KINDS[kind || "mercado"] || "Estabelecimento"}
-            </span>
-            {maxSavings > 0 && (
-              <span className="text-[10px] font-black text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                <TrendingDown className="inline h-3 w-3 mr-1" />
-                -{maxSavings}%
-              </span>
-            )}
+        <div className="min-w-0">
+          <h3 className="text-xl font-black text-[#0F172A] leading-tight truncate group-hover:text-[#2563EB] transition-colors">{name}</h3>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">{kind || "Estabelecimento"}</span>
+            <span className="h-1 w-1 rounded-full bg-[#E5EAF1]" />
+            <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">{neighborhood || "Centro"}</span>
           </div>
-          <h3 className="text-xl font-black tracking-tight text-[var(--text-primary)] leading-tight mb-1 truncate group-hover:text-[var(--brand-primary)] transition-colors">
-            {name}
-          </h3>
-          <p className="flex items-center gap-1.5 text-[12px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
-            <MapPin className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
-            {neighborhood || "Feijó, AC"}
-          </p>
         </div>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-[var(--border-subtle)] flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)]">
-              <Package className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[14px] font-black text-[var(--text-primary)] leading-none">{productsCount}</div>
-              <div className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mt-1">Produtos</div>
-            </div>
+      <div className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-2xl border border-[#E5EAF1]">
+        <div>
+          <div className="text-[10px] font-black uppercase tracking-widest text-[#94A3B8] mb-0.5">
+            {productsCount > 0 ? "Produtos" : "Status"}
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Online</span>
+          <div className="text-lg font-black text-[#0F172A]">
+            {productsCount > 0 ? productsCount : "Catálogo sendo atualizado"}
           </div>
         </div>
         
-        <div className="h-10 w-10 rounded-full bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all shadow-inner">
-          <ChevronRight className="h-5 w-5" />
-        </div>
+        <Button asChild size="sm" className="rounded-full px-6 font-bold shadow-lg shadow-[#2563EB]/10 bg-[#2563EB] hover:bg-[#1D4ED8]">
+          <Link to="/loja/$id" params={{ id }}>Ver preços</Link>
+        </Button>
       </div>
-    </Link>
+    </article>
   );
 }
