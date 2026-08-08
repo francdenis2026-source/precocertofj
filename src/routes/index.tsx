@@ -152,7 +152,6 @@ function HomePage() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden px-4 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-[var(--brand-primary)] opacity-[0.09] blur-[140px]" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
         </div>
 
