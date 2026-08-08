@@ -403,7 +403,7 @@ function Field({
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
     : good
       ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
-      : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
+      : "border-[var(--border-subtle)] hover:border-[var(--border-strong)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/10";
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">
