@@ -118,7 +118,7 @@ function EstablishmentsPage() {
 
   return (
     <IsolatedPage className="bg-base" contentClassName="!pb-0 font-sans">
-      <header className="sticky top-0 z-10 border-b border-subtle bg-surface/80 backdrop-blur-md px-6 py-4">
+      <header className="sticky top-0 z-50 border-b border-subtle bg-base/80 backdrop-blur-md px-6 py-4">
         <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <BackButton fallbackTo="/" variant="ghost" className="text-tertiary hover:text-primary" />
