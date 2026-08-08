@@ -128,7 +128,7 @@ export function IllustratedEmptyState({
       role="status"
       aria-live="polite"
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 text-center animate-in fade-in-0 slide-in-from-bottom-1 duration-300 shadow-2xl backdrop-blur-md",
+        "flex flex-col items-center justify-center rounded-[var(--radius-2xl)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 text-center animate-in fade-in-0 slide-in-from-bottom-1 duration-[var(--dur-base)] shadow-[var(--shadow-lg)] backdrop-blur-md",
         compact ? "px-4 py-6" : "px-6 py-10",
         className,
       )}
@@ -136,14 +136,14 @@ export function IllustratedEmptyState({
       <EmptyIllustration kind={kind} className={compact ? "h-14" : "h-20"} />
       <p
         className={cn(
-          "mt-3 font-sans font-semibold tracking-tight leading-snug text-foreground",
+          "mt-3 font-sans font-semibold tracking-tight leading-snug text-[var(--text-primary)]",
           compact ? "text-[15px]" : "text-[17px] sm:text-[18px]",
         )}
       >
         {title}
       </p>
       {message && (
-        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/85">
+        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
           {message}
         </p>
       )}

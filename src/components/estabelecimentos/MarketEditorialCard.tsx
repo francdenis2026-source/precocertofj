@@ -104,12 +104,12 @@ export function MarketEditorialCard({
         params={{ slug }}
         aria-label={`Ver preços de ${name}`}
         className={cn(
-          "group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200",
-          "hover:-translate-y-[2px] hover:shadow-[0_14px_32px_-22px_color-mix(in_oklab,var(--pc-home-navy)_55%,transparent)]",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)] transition-all duration-[var(--dur-base)]",
+          "hover:-translate-y-[2px] hover:shadow-[var(--shadow-md)]",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)]",
           isCheapest
-            ? "border-brand-gold/70 ring-1 ring-brand-gold/25"
-            : "border-border/70 hover:border-brand-gold/60",
+            ? "border-[var(--brand-accent)]/70 ring-1 ring-[var(--brand-accent)]/25"
+            : "border-[var(--border-subtle)] hover:border-[var(--brand-accent)]/60",
         )}
       >
         {/* Cabeçalho compacto: marca + identificação */}

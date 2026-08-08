@@ -52,7 +52,7 @@ export function ItemPriceStrip({
         </p>
         {spread > 0 ? (
           <span
-            className="rounded-full border border-accent-strong/40 bg-accent/10 px-1.5 py-[1px] font-mono text-[11px] uppercase tracking-[0.16em] text-accent-strong"
+            className="rounded-full border border-[var(--brand-accent)]/40 bg-[var(--brand-accent)]/10 px-1.5 py-[1px] font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--brand-accent)]"
             title="Diferença entre a mais barata e a mais cara"
           >
             variação {spread.toFixed(0)}%
