@@ -24,9 +24,9 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   const baseClasses = "relative flex items-center justify-center gap-2 w-full min-h-[54px] rounded-2xl font-bold transition-all duration-300 active:scale-[0.98] overflow-hidden";
   
   const variants = {
-    primary: "bg-[var(--brand-primary)] text-[var(--pc-brand-navy)] hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] shadow-lg",
-    secondary: "bg-[var(--pc-brand-navy)] text-white hover:bg-slate-800 shadow-md",
-    outline: "bg-transparent border-2 border-[var(--border-subtle)] text-slate-600 hover:bg-slate-50",
+    primary: "bg-[var(--brand-primary)] text-[var(--text-on-brand)] hover:shadow-[0_12px_24px_-8px_rgba(37,99,235,0.4)] shadow-lg",
+    secondary: "bg-[var(--bg-surface-elevated)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] shadow-md",
+    outline: "bg-transparent border-2 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)]",
   };
 
   return (
@@ -61,7 +61,7 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
             key="success"
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="absolute flex items-center gap-2 text-[var(--pc-brand-navy)]"
+            className="absolute flex items-center gap-2 text-[var(--text-on-brand)]"
           >
             <CheckCircle2 className="w-5 h-5" />
             <span>Sucesso</span>
