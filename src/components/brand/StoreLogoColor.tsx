@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { colorLogoSrc } from "@/lib/store-logo-mono";
 
@@ -21,16 +22,29 @@ export type StoreLogoColorProps = {
  * fallback.
  */
 export function StoreLogoColor({ src, name, className, eager = false }: StoreLogoColorProps) {
+  const [failed, setFailed] = useState(false);
   const light = colorLogoSrc(src, "light");
   const dark = colorLogoSrc(src, "dark");
-  if (!light || !dark) return null;
+  if (!light || !dark || failed) return null;
 
-  const common = cn("h-full w-full object-contain", className);
+  const common = cn("h-full w-full object-contain transition-opacity duration-300", className);
   const loading = eager ? ("eager" as const) : ("lazy" as const);
+
+  const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (e.currentTarget.naturalWidth === 0) setFailed(true);
+  };
 
   return (
     <>
-      <img src={light} alt={name} loading={loading} decoding="async" className={cn(common, "dark:hidden")} />
+      <img
+        src={light}
+        alt={name}
+        loading={loading}
+        decoding="async"
+        className={cn(common, "dark:hidden")}
+        onError={() => setFailed(true)}
+        onLoad={handleError}
+      />
       <img
         src={dark}
         alt=""
@@ -38,6 +52,8 @@ export function StoreLogoColor({ src, name, className, eager = false }: StoreLog
         loading={loading}
         decoding="async"
         className={cn(common, "hidden dark:block")}
+        onError={() => setFailed(true)}
+        onLoad={handleError}
       />
     </>
   );
