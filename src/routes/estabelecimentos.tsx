@@ -128,8 +128,8 @@ function EstablishmentsPage() {
         )}
 
         {data?.items?.[0] && (
-          <div className="mb-12 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-60">
-            <Clock className="h-3 w-3" />
+          <div className="mb-12 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
+            <Clock className="h-3.5 w-3.5 text-[#2563EB]" />
             <span>Última verificação global realizada hoje</span>
           </div>
         )}

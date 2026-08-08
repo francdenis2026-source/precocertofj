@@ -139,15 +139,15 @@ function HomePage() {
 
       {/* Metrics Bar - Compact container */}
       <div className="mx-auto max-w-[1280px] px-4 -mt-12 relative z-20 mb-20">
-        <div className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden p-2">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border-base)]">
-            <StatItem label="Produtos cadastrados" value={stats?.totalItems?.toLocaleString('pt-BR') || "..."} />
-            <StatItem label="Preços monitorados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
-            <StatItem label="Estabelecimentos" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Produtos cadastrados" value={stats?.totalItems ? stats.totalItems.toLocaleString('pt-BR') : "..."} />
+            <StatItem label="Preços monitorados" value={stats?.priceRecords ? stats.priceRecords.toLocaleString('pt-BR') : "..."} />
+            <StatItem label="Estabelecimentos" value={stats?.establishments ? stats.establishments.toLocaleString('pt-BR') : "..."} />
           </div>
           {stats?.generatedAt && (
-            <div className="mt-6 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-60">
-              <Clock className="h-3 w-3" />
+            <div className="mt-4 pb-4 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-80">
+              <Clock className="h-3.5 w-3.5 text-primary" />
               <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
             </div>
           )}
