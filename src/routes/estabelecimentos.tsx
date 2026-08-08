@@ -211,48 +211,80 @@ function EstablishmentsPage() {
                             );
                         })}
                     </div>
+                    <div className="flex flex-wrap gap-2">
+                        <select 
+                            value={search.sort}
+                            onChange={e => updateSearch({ sort: e.target.value })}
+                            className="bg-surface border-subtle text-secondary text-xs font-bold rounded-full px-4 py-2 focus:ring-brand-accent focus:border-brand-accent"
+                            aria-label="Ordenar estabelecimentos"
+                        >
+                            <option value="relevance">Mais relevantes</option>
+                            <option value="name">Nome (A-Z)</option>
+                            <option value="neighborhood">Bairro</option>
+                            <option value="items">Mais produtos</option>
+                            <option value="savings">Melhor economia</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 no-scrollbar">
+                <div className="h-[500px] w-full pr-2">
                     {isLoading ? (
                         Array.from({ length: 5 }).map((_, i) => (
-                            <div key={i} className="h-20 bg-surface-elevated rounded-2xl animate-pulse" />
+                            <div key={i} className="h-20 bg-surface-elevated rounded-2xl animate-pulse mb-3" />
                         ))
                     ) : filtered.length === 0 ? (
                         <div className="p-12 text-center text-tertiary bg-surface rounded-3xl border border-dashed border-subtle">Nenhum mercado encontrado</div>
-                    ) : filtered.map((e) => {
-                        const meta = kindMeta(e.kind);
-                        const active = search.sel === e.id;
-                        return (
-                            <button 
-                                key={e.id} 
-                                onClick={() => updateSearch({ sel: e.id })} 
-                                className={cn(
-                                    "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300",
-                                    active 
-                                        ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
-                                        : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"
-                                )}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <StoreLogoThumb src={e.logoUrl} name={e.name} className="h-14 w-14 rounded-xl shadow-inner bg-surface-elevated border border-subtle" />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-bold text-primary group-hover:text-brand-accent transition-colors">{e.name}</div>
-                                        <div className="text-[12px] text-secondary font-medium flex items-center gap-1.5 mt-0.5">
-                                            <span className={cn("px-2 py-0.5 rounded-md border text-[10px] font-bold uppercase", meta.color)}>{meta.label}</span>
-                                            <span className="opacity-20">·</span>
-                                            <span className="truncate">{e.neighborhood || "Feijó"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-sm font-black text-brand-accent">{e.productsCount}</div>
-                                        <div className="text-[10px] text-tertiary font-bold uppercase">Itens</div>
-                                    </div>
-                                </div>
-                            </button>
-                        );
-                    })}
+                    ) : (
+                        <AutoSizer>
+                            {({ height, width }) => (
+                                <ReactWindow.FixedSizeList
+                                    height={height}
+                                    width={width}
+                                    itemCount={filtered.length}
+                                    itemSize={92}
+                                    className="no-scrollbar"
+                                >
+                                    {({ index, style }) => {
+                                        const e = filtered[index];
+                                        const meta = kindMeta(e.kind);
+                                        const active = search.sel === e.id;
+                                        return (
+                                            <div style={{ ...style, paddingBottom: 12 }}>
+                                                <button 
+                                                    onClick={() => updateSearch({ sel: e.id })} 
+                                                    className={cn(
+                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300 h-[80px] flex items-center",
+                                                        active 
+                                                            ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
+                                                            : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"
+                                                    )}
+                                                    aria-pressed={active}
+                                                    aria-label={`Selecionar ${e.name}`}
+                                                >
+                                                    <div className="flex items-center gap-4 w-full">
+                                                        <StoreLogoThumb src={e.logoUrl} name={e.name} className="h-10 w-10 rounded-xl shadow-inner bg-surface-elevated border border-subtle" />
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="font-bold text-primary group-hover:text-brand-accent transition-colors text-sm truncate">{e.name}</div>
+                                                            <div className="text-[10px] text-secondary font-medium flex items-center gap-1.5 mt-0.5">
+                                                                <span className={cn("px-1.5 py-0.5 rounded-md border text-[8px] font-bold uppercase shrink-0", meta.color)}>{meta.label}</span>
+                                                                <span className="truncate">{e.neighborhood || "Feijó"}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right shrink-0">
+                                                            <div className="text-xs font-black text-brand-accent">{e.productsCount}</div>
+                                                            <div className="text-[8px] text-tertiary font-bold uppercase">Itens</div>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        );
+                                    }}
+                                </ReactWindow.FixedSizeList>
+                            )}
+                        </AutoSizer>
+                    )}
                 </div>
+
             </div>
 
             {/* Right Column: Detail */}
