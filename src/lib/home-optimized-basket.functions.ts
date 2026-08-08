@@ -29,7 +29,7 @@ export const getOtimizedBaskets = createServerFn({ method: "GET" })
     // Busca a comparação padrão (Feijó inteira, sem filtros de raio)
     const comparison = await getBasketComparison({ data: {} });
     
-    // Filtra mercados com pelo menos 50% de cobertura para não exibir cestas "falsamente" baratas
+    // Filtra mercados com pelo menos 50% de cobertura
     const validStores = comparison.stores
       .filter(s => s.coverage >= 0.5)
       .sort((a, b) => a.total - b.total);

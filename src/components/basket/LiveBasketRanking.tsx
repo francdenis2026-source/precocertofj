@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -162,6 +163,7 @@ export function LiveBasketRanking({
   value?: LiveBasketFilters;
   onChange?: (next: LiveBasketFilters) => void;
 }) {
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const fetchComparison = useServerFn(getBasketComparison);
   const fetchSparklines = useServerFn(getBasketSparklines);
@@ -493,22 +495,23 @@ export function LiveBasketRanking({
               <Radio className={cn("h-3 w-3", pulse && "animate-pulse text-gold-ink")} aria-hidden />
               {query.isFetching ? "Atualizando…" : "Ao vivo"}
             </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-7 gap-1 px-2 text-xs">
-                  <Download className="h-3.5 w-3.5" aria-hidden />
-                  <span className="hidden sm:inline">Exportar</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={() => handleExport("csv")} className="gap-2 text-xs">
-                  <FileSpreadsheet className="h-3.5 w-3.5" aria-hidden /> Ranking em CSV
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleExport("pdf")} className="gap-2 text-xs">
-                  <FileText className="h-3.5 w-3.5" aria-hidden /> Ranking em PDF
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-7 gap-1 px-2 text-xs border-[var(--brand-primary)]/20 text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/10"
+              onClick={() => {
+                toast.info("Recurso Premium", {
+                  description: "A exportação de rankings é exclusiva para assinantes PreçoCerto+.",
+                  action: {
+                    label: "Ver Planos",
+                    onClick: () => navigate({ to: "/planos" })
+                  }
+                });
+              }}
+            >
+              <Download className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Exportar</span>
+            </Button>
             {isControlled && (
               <Button
                 variant="outline"

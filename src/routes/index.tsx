@@ -205,6 +205,48 @@ function HomePage() {
           <OptimizedBasketSection />
         </section>
 
+        {/* Cesta Básica Premium / Veredito */}
+        <section className="bg-[var(--bg-surface)] border border-[var(--brand-primary)]/10 rounded-[40px] p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+            <Sparkles size={120} className="text-[var(--brand-primary)]" />
+          </div>
+          <div className="max-w-3xl">
+            <h2 className="t-h2 mb-4">Veredito da Cesta Básica</h2>
+            <p className="text-[var(--text-secondary)] mb-8 text-lg">
+              Acompanhe qual mercado tem o menor custo total para os 15 itens essenciais hoje em Feijó.
+            </p>
+            <div className="flex flex-wrap gap-4 mb-10">
+              <div className="bg-[var(--bg-surface-elevated)] px-6 py-4 rounded-2xl border border-[var(--border-subtle)]">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Itens Monitorados</p>
+                <p className="text-2xl font-black text-[var(--brand-primary)]">15 Essenciais</p>
+              </div>
+              <div className="bg-[var(--bg-surface-elevated)] px-6 py-4 rounded-2xl border border-[var(--border-subtle)]">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Atualização</p>
+                <p className="text-2xl font-black text-[var(--brand-primary)]">Tempo Real</p>
+              </div>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/20 mb-8">
+              <h4 className="font-bold text-[var(--brand-primary)] mb-2 flex items-center gap-2">
+                <ShieldCheck size={18} />
+                Recurso PreçoCerto+
+              </h4>
+              <p className="text-sm text-[var(--text-secondary)]">
+                O ranking detalhado e a exportação do Veredito da Cesta Básica são exclusivos para assinantes ou através do uso de créditos.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button asChild className="pc-button-primary rounded-full px-8 h-12">
+                <Link to="/planos">Assinar PreçoCerto+</Link>
+              </Button>
+              <Button variant="outline" asChild className="rounded-full px-8 h-12 border-[var(--border-subtle)]">
+                <Link to="/cesta-basica">Ver Veredito Geral</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
         {/* Partner Markets - faiza horizontal */}
         <section className="border-y border-[var(--border-subtle)] py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
@@ -283,8 +325,14 @@ function HomePage() {
           </Button>
         </section>
 
-        {/* Monitoramento em Tempo Real - Apenas se não houver erro de permissão */}
+        {/* Monitoramento em Tempo Real - Administradores e Parceiros */}
         <section id="monitoramento" className="pt-20 border-t border-[var(--border-subtle)]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div>
+              <h2 className="t-h2 mb-2">Monitoramento Profissional</h2>
+              <p className="text-[var(--text-secondary)]">Visão estratégica do mercado em tempo real para parceiros e administradores.</p>
+            </div>
+          </div>
           <RealtimeMonitoringDashboard />
         </section>
       </main>

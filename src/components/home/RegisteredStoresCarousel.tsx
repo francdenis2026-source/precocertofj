@@ -18,11 +18,11 @@ export function RegisteredStoresCarousel() {
 
   if (isLoading || !stores || stores.length === 0) {
     return (
-      <>
+      <div className="flex gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-[var(--radius-lg)] animate-pulse bg-slate-100 dark:bg-slate-800" />
+          <div key={i} className="h-10 w-24 rounded-lg animate-pulse bg-slate-100 dark:bg-slate-800" />
         ))}
-      </>
+      </div>
     );
   }
 
