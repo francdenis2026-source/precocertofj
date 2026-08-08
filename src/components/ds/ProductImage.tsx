@@ -61,7 +61,11 @@ function ProductImageBase({
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Prioridade de carregamento para LCP e conexões lentas
+  const priority = size === "lg";
   const showImage = Boolean(src) && !failed;
+
 
   const label = name ?? alt;
   const category = useMemo(
@@ -97,8 +101,10 @@ function ProductImageBase({
         <img
           src={src!}
           alt={alt}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
+
           onError={() => setFailed(true)}
           onLoad={(e) => {
             setIsLoaded(true);

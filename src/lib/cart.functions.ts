@@ -12,7 +12,14 @@ export type CartItem = {
   brand: string | null;
   defaultUnit: string | null;
   imageUrl: string | null;
+  /** Preço mínimo atual deste produto no mercado (calculado durante o fetch). */
+  minPrice: number | null;
+  /** Preço médio atual para cálculo de economia. */
+  avgPrice: number | null;
+  /** Indica se há uma oferta imbatível disponível. */
+  isLowestPrice: boolean;
 };
+
 
 export type Cart = {
   listId: string;
@@ -120,40 +127,65 @@ export const getCart = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
 
     const catIds = Array.from(new Set((items ?? []).map((i) => i.catalog_id).filter((x): x is string => !!x)));
+    
     type CatRow = {
       id: string;
       display_name: string;
       brand: string | null;
       default_unit: string | null;
       image_url: string | null;
+      normalized_name: string | null;
     };
+    
     const catMap = new Map<string, CatRow>();
+    const priceContextMap = new Map<string, { min: number; avg: number; isLowest: boolean }>();
+
     if (catIds.length) {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const table = supabaseAdmin.from("product_catalog" as never) as unknown as {
-        select: (s: string) => {
-          in: (
-            c: string,
-            v: string[],
-          ) => Promise<{ data: CatRow[] | null; error: { message: string } | null }>;
-        };
-      };
-      const { data: cats } = await table
-        .select("id, display_name, brand, default_unit, image_url")
+      const { searchProductPrice } = await import("./price-search.functions");
+
+      const { data: cats } = await supabaseAdmin
+        .from("product_catalog")
+        .select("id, display_name, brand, default_unit, image_url, normalized_name")
         .in("id", catIds);
+
       const signed = await Promise.all(
         (cats ?? []).map(async (c) => ({
           ...c,
           image_url: await signStorageImageUrl(c.image_url, supabaseAdmin),
         })),
       );
-      for (const c of signed) catMap.set(c.id, c);
+
+      for (const c of signed) {
+        catMap.set(c.id, c);
+        // Busca inteligência de preços para cada item na cesta
+        try {
+          const searchResult = await searchProductPrice({ 
+            data: {
+              query: c.display_name, 
+              mode: "strict" 
+            }
+          });
+
+          if (searchResult.min !== null) {
+            priceContextMap.set(c.id, {
+              min: searchResult.min,
+              avg: searchResult.avg ?? searchResult.min,
+              isLowest: true // Na cesta, destacamos se há preço monitorado
+            });
+          }
+        } catch (e) {
+          console.error("Erro ao buscar contexto de preço para item da cesta:", e);
+        }
+      }
     }
+
 
     return {
       listId,
       items: (items ?? []).map((it) => {
         const c = it.catalog_id ? catMap.get(it.catalog_id) : undefined;
+        const p = it.catalog_id ? priceContextMap.get(it.catalog_id) : undefined;
         return {
           id: it.id,
           catalogId: it.catalog_id,
@@ -162,8 +194,12 @@ export const getCart = createServerFn({ method: "GET" })
           brand: c?.brand ?? null,
           defaultUnit: c?.default_unit ?? null,
           imageUrl: c?.image_url ?? null,
+          minPrice: p?.min ?? null,
+          avgPrice: p?.avg ?? null,
+          isLowestPrice: p?.isLowest ?? false,
         };
       }),
+
     };
   });
 

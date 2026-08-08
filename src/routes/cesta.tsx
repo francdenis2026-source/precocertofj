@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { ProductImage } from "@/components/ds/ProductImage";
-import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw, ChevronLeft } from "lucide-react";
+import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw, ChevronLeft, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { getCart, removeFromCart, type Cart } from "@/lib/cart.functions";
 import { cn } from "@/lib/utils";
@@ -165,11 +165,26 @@ function CestaPage() {
                         </Link>
                         <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">
                           {it.brand && <span className="text-[var(--text-secondary)]">{it.brand}</span>}
-                          <div className="flex items-center gap-1.5 text-[var(--brand-primary)]">
+                          
+                          {it.minPrice && (
+                            <div className="flex items-center gap-1.5 text-[var(--success)] bg-[var(--success)]/5 px-2 py-1 rounded-lg border border-[var(--success)]/10">
+                              <TrendingDown size={14} />
+                              <span>A partir de <Price value={it.minPrice} size="sm" className="inline-block ml-0.5" /></span>
+                            </div>
+                          )}
+
+                          {it.minPrice && it.avgPrice && it.avgPrice > it.minPrice && (
+                            <div className="flex items-center gap-1.5 text-[var(--brand-primary)] bg-[var(--brand-primary)]/5 px-2 py-1 rounded-lg border border-[var(--brand-primary)]/10">
+                              <span>-{Math.round(((it.avgPrice - it.minPrice) / it.avgPrice) * 100)}% de economia</span>
+                            </div>
+                          )}
+
+                          <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
                             <Package size={14} />
-                            <span>Quantidade: {it.quantity}</span>
+                            <span>Qtd: {it.quantity}</span>
                           </div>
                         </div>
+
                       </div>
                       <div className="flex items-center gap-4">
                         <button
