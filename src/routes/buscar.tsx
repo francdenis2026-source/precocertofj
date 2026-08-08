@@ -9,7 +9,10 @@ import { SearchSidebar } from "@/components/search/SearchSidebar";
 import { SearchFiltersPanel } from "@/components/search/SearchFiltersPanel";
 import { usePriceSearch } from "@/lib/use-price-search";
 import { useState, useRef } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Search, Info } from "lucide-react";
+import { Footer } from "@/components/brand/Footer";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+
 
 
 
@@ -46,66 +49,24 @@ function SearchResultsPage() {
   const { data: result, isPending } = usePriceSearch(q, c);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] [overflow-anchor:none]">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30">
       <SiteHeader variant="solid" />
 
-      
-      <main className="mx-auto max-w-[1600px] px-4 py-20 md:px-8">
-        <div ref={anchorRef} className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr,400px]">
-          {/* Main Content Area */}
-          <div className="space-y-16 min-h-[640px] [overflow-anchor:none]">
-            {isPending && !result ? (
-              <div className="space-y-8" aria-busy="true">
-                <Skeleton className="h-[320px] w-full rounded-[40px]" />
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-24 w-full rounded-2xl" />
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton key={i} className="h-[400px] w-full rounded-3xl" />
-                  ))}
-                </div>
-              </div>
-            ) : (
-            <>
-              {/* Show Hero and Stats Dashboard only if there's a result and a query or category */}
-              {(q || c) && result && result.groups.length > 0 && (
-                <div className="space-y-6">
-                  <SearchHeroSection query={q || c || ""} isCategory={!!c} />
-                  <SearchDashboard />
-                </div>
-              )}
-
-              {/* If no query or no results, show a centered search state or message */}
-              {!q && !c ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                   <h2 className="text-2xl font-black text-foreground mb-2">O que você está procurando hoje?</h2>
-                   <p className="text-muted-foreground max-w-md">Busque produtos específicos para encontrar o menor preço nos mercados de Feijó.</p>
-                </div>
-              ) : result && result.groups.length > 0 ? (
-                <div className="space-y-8 pt-4">
-                  <SearchResultsList />
-                </div>
-              ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                 <p className="text-lg font-bold text-foreground">Nenhum resultado encontrado para "{q || c}"</p>
-                 <p className="text-muted-foreground">Tente um termo de busca diferente ou confira as sugestões ao lado.</p>
-              </div>
-            )}
-            </>
-            )}
-          </div>
-
-          {/* Sidebar Area */}
-          <div className="hidden lg:block space-y-10">
+      <main className="mx-auto w-full max-w-[1600px] flex flex-col md:flex-row min-h-[calc(100vh-80px)]">
+        {/* Sidebar: Filtros e Categorias */}
+        <aside className="w-full md:w-[400px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex flex-col shrink-0">
+          <div className="p-8 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] sticky top-0 z-20">
+            <div className="flex flex-col mb-6">
+              <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Filtros Avançados</h2>
+              <p className="text-[18px] font-black tracking-tight mt-1">Refinar Busca</p>
+            </div>
             <SearchFiltersPanel isOpen={true} onToggle={() => {}} />
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-8 space-y-10 no-scrollbar">
             <SearchSidebar 
               recent={recentQueries} 
               onPickQuery={(query) => {
-                // Navegação client-side, sem recarregar a página e sem
-                // empilhar histórico — a rota não remonta, então não há salto.
                 navigate({
                   to: "/buscar",
                   search: { q: query },
@@ -115,9 +76,66 @@ function SearchResultsPage() {
               }}
             />
           </div>
-        </div>
+        </aside>
+
+        {/* Main Content: Resultados */}
+        <main className="flex-1 bg-[var(--bg-base)] overflow-y-auto p-8 md:p-12 space-y-12 no-scrollbar">
+          <div ref={anchorRef} className="[overflow-anchor:none]">
+            {isPending && !result ? (
+              <div className="space-y-12" aria-busy="true">
+                <div className="h-64 w-full rounded-[40px] bg-[var(--bg-surface)] animate-pulse border border-[var(--border-subtle)]" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-32 bg-[var(--bg-surface)] animate-pulse rounded-[var(--radius-2xl)] border border-[var(--border-subtle)]" />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-12">
+                {/* Hero e Dashboard */}
+                {(q || c) && result && result.groups.length > 0 && (
+                  <div className="space-y-8">
+                    <SearchHeroSection query={q || c || ""} isCategory={!!c} />
+                    <SearchDashboard />
+                  </div>
+                )}
+
+                {/* Lista de Resultados */}
+                {!q && !c ? (
+                  <div className="flex flex-col items-center justify-center py-32 text-center px-6">
+                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)]">
+                      <Search size={40} className="text-[var(--text-tertiary)]" />
+                    </div>
+                    <h2 className="text-3xl font-black mb-4 uppercase tracking-tight">O que você procura hoje?</h2>
+                    <p className="text-[var(--text-secondary)] font-bold text-lg max-w-lg">
+                      Compare preços em tempo real nos maiores mercados de Feijó e economize agora.
+                    </p>
+                  </div>
+                ) : result && result.groups.length > 0 ? (
+                  <div className="space-y-10">
+                    <SearchResultsList />
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-32 text-center px-6">
+                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)] text-[var(--danger)]">
+                      <Info size={40} />
+                    </div>
+                    <h2 className="text-3xl font-black mb-4 uppercase tracking-tight">Sem resultados</h2>
+                    <p className="text-[var(--text-secondary)] font-bold text-lg max-w-lg">
+                      Não encontramos "{q || c}" no momento. Tente outros termos ou navegue pelas categorias.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </main>
       </main>
+
+      <Footer />
+      <MobileBottomNav />
     </div>
+
   );
 }
 
