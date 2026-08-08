@@ -161,9 +161,12 @@ export const getCart = createServerFn({ method: "GET" })
         // Busca inteligência de preços para cada item na cesta
         try {
           const searchResult = await searchProductPrice({ 
-            query: c.display_name, 
-            mode: "strict" 
+            data: {
+              query: c.display_name, 
+              mode: "strict" 
+            }
           });
+
           if (searchResult.min !== null) {
             priceContextMap.set(c.id, {
               min: searchResult.min,
