@@ -339,7 +339,7 @@ function HomePage() {
             </aside>
         </div>
 
-        <section aria-labelledby="realtime" className="mt-24 border-t border-[var(--border-subtle)] pt-16">
+        <section aria-labelledby="realtime" className="mt-16 border-t border-[var(--border-subtle)] pt-12">
           <SectionHeading
             id="realtime"
             kicker="Painel vivo"
