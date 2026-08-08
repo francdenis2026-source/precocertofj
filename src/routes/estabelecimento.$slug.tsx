@@ -94,10 +94,14 @@ const storeQuery = (id: string) =>
     staleTime: 60_000,
   });
 
-const historyQuery = (id: string) =>
+const historyQuery = (id: string, productName?: string) =>
   queryOptions({
-    queryKey: ["public-store-history", id],
-    queryFn: () => getPublicPriceHistory({ data: { storeId: id, limit: 100 } }),
+    queryKey: ["public-store-history", id, productName],
+    queryFn: () =>
+      getPublicPriceHistory({
+        data: { establishmentId: id, productName: productName || "", limit: 100 },
+      }),
+    enabled: !!productName,
     staleTime: 5 * 60_000,
   });
 const SEARCH_DEFAULTS = {

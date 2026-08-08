@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import {
   Bell,
   BellRing,
+  CheckCircle2,
   Mail,
   MapPin,
   Smartphone,
