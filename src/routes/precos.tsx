@@ -312,7 +312,7 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
   
   return (
     <article className="group relative flex flex-col bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-[var(--shadow-lg)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2">
-      <div className="aspect-square bg-[var(--bg-surface-elevated)]/30 p-8 flex items-center justify-center relative overflow-hidden">
+      <div className="aspect-square bg-white p-8 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface-elevated)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <ProductImage 
           name={group.productName} 
