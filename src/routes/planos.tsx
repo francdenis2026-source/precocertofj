@@ -218,9 +218,9 @@ function PlansPage() {
               breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
               description={
                 <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span>Assinatura mensal a partir de <strong className="text-foreground">R$ 29,90</strong> — economize até 30% no anual.</span>
-                  <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
-                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-gold-ink" aria-hidden />
+                  <span>Assinatura mensal a partir de <strong className="text-primary">R$ 29,90</strong> — economize até 30% no anual.</span>
+                  <span className="inline-flex items-center gap-1 text-[11.5px] text-secondary">
+                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-accent" aria-hidden />
                     Pix instantâneo · Ativação imediata
                   </span>
                 </span>
@@ -233,7 +233,7 @@ function PlansPage() {
                 onClick={() => setOpenSheet("compare")}
                 className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
               >
-                <Sparkles className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
+                <Sparkles className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
                 Comparar
               </button>
               <button
@@ -241,7 +241,7 @@ function PlansPage() {
                 onClick={() => setOpenSheet("faq")}
                 className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
               >
-                <ChevronDown className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
+                <ChevronDown className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
                 Perguntas
               </button>
               <Link
@@ -306,7 +306,7 @@ function PlansPage() {
                   >
                     {(isRecommended || savings) && (
                       <span
-                        className={
+                        className={cn(
                           "text-[10px] font-bold uppercase tracking-widest text-tertiary",
                           "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
                           isRecommended
@@ -337,7 +337,7 @@ function PlansPage() {
                         </span>
                         {plan.original_price_cents != null &&
                           plan.original_price_cents > plan.price_cents && (
-                            <span className="text-[12px] text-muted-foreground line-through">
+                            <span className="text-[12px] text-secondary line-through">
                               {centsToBRL(plan.original_price_cents)}
                             </span>
                           )}
@@ -371,7 +371,7 @@ function PlansPage() {
                       }}
                       disabled={buying === plan.id}
                       data-loading={buying === plan.id ? "true" : undefined}
-                      className={
+                      className={cn(
                         "inline-flex items-center justify-center gap-2 pc-focus mt-3 h-11 w-full px-3 rounded-xl transition-all font-bold text-sm",
                         isRecommended
                           ? "bg-brand-accent text-bg-base hover:bg-brand-accent-soft shadow-lg shadow-brand-accent/10"
@@ -394,11 +394,11 @@ function PlansPage() {
 
         {/* Modal: Comparar recursos */}
         <Dialog open={openSheet === "compare"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-3xl border-border/70 bg-card p-0">
-            <DialogHeader className="border-b border-border/70 px-5 py-3">
+          <DialogContent className="max-w-3xl border-subtle/70 bg-surface p-0">
+            <DialogHeader className="border-b border-subtle/70 px-5 py-3">
               <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Documento oficial</span>
               <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Comparar <span className="italic text-[var(--pc-gold-ink)]">recursos</span>
+                Comparar <span className="italic text-var(--brand-accent)">recursos</span>
               </DialogTitle>
               <DialogDescription className={"text-sm text-secondary"}>
                 Diferenças reais entre a degustação e os planos pagos.
@@ -407,12 +407,12 @@ function PlansPage() {
             <div className="max-h-[70svh] overflow-y-auto px-5 py-3">
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-border/70">
+                  <tr className="border-b border-subtle/70">
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")}>Recurso</th>
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Degustação</th>
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Mensal</th>
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Trimestral</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-var(--brand-accent)")}>Anual</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -426,16 +426,16 @@ function PlansPage() {
                     ["Prioridade de suporte", false, false, true, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
-                      <th className={cn(tc.cell, "py-2 text-left font-medium text-foreground")}>
+                      <th className={cn(tc.cell, "py-2 text-left font-medium text-primary")}>
                         {label as string}
                       </th>
                       {cols.map((c, j) => (
                         <td key={j} className="py-2 text-center">
                           {typeof c === "boolean" ? (
                             c ? (
-                              <Check className="mx-auto h-4 w-4 text-[var(--pc-gold-ink)]" aria-label="Incluído" />
+                              <Check className="mx-auto h-4 w-4 text-var(--brand-accent)" aria-label="Incluído" />
                             ) : (
-                              <Minus className="mx-auto h-4 w-4 text-muted-foreground/60" aria-label="Não incluído" />
+                              <Minus className="mx-auto h-4 w-4 text-secondary/60" aria-label="Não incluído" />
                             )
                           ) : (
                             <span className={cn(tc.num, "tabular-nums")}>{c}</span>
@@ -447,7 +447,7 @@ function PlansPage() {
                 </tbody>
               </table>
               <p className={cn("text-sm text-secondary", "mt-3 flex items-center gap-1.5")}>
-                <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
+                <ShieldCheck className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
                 Ativação imediata após confirmação de pagamento pelo Mercado Pago.
               </p>
             </div>
@@ -456,11 +456,11 @@ function PlansPage() {
 
         {/* Modal: Perguntas frequentes */}
         <Dialog open={openSheet === "faq"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-2xl border-border/70 bg-card p-0">
-            <DialogHeader className="border-b border-border/70 px-5 py-3">
+          <DialogContent className="max-w-2xl border-subtle/70 bg-surface p-0">
+            <DialogHeader className="border-b border-subtle/70 px-5 py-3">
               <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Ajuda rápida</span>
               <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Perguntas <span className="italic text-[var(--pc-gold-ink)]">frequentes</span>
+                Perguntas <span className="italic text-var(--brand-accent)">frequentes</span>
               </DialogTitle>
               <DialogDescription className={"text-sm text-secondary"}>
                 As dúvidas que mais recebemos sobre planos, pagamento e cota de IA.
@@ -469,23 +469,23 @@ function PlansPage() {
             <div className="max-h-[70svh] overflow-y-auto px-5 py-2">
               <Accordion type="single" collapsible className="w-full">
                 {buildFaq(trialDays).map((f, i) => (
-                  <AccordionItem key={i} value={`q-${i}`} className="border-border/60">
+                  <AccordionItem key={i} value={`q-${i}`} className="border-subtle/60">
                     <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
                       {f.q}
                     </AccordionTrigger>
-                    <AccordionContent className={cn("text-sm text-secondary", "leading-relaxed text-foreground/85")}>
+                    <AccordionContent className={cn("text-sm text-secondary", "leading-relaxed text-primary/85")}>
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
                 ))}
               </Accordion>
-              <div className="mt-2 flex items-center justify-between border-t border-border/60 py-2">
+              <div className="mt-2 flex items-center justify-between border-t border-subtle/60 py-2">
                 <p className={"text-sm text-secondary"}>Não encontrou sua resposta?</p>
                 <Link
                   to="/fale-conosco"
                   className={cn(
                     tc.chip,
-                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-subtle px-3 py-1 text-secondary hover:border-brand-accent hover:text-var(--brand-accent)",
                   )}
                 >
                   Fale conosco →
@@ -498,35 +498,35 @@ function PlansPage() {
         {/* Barra inferior: confiança + atalhos mobile (em fluxo, sempre visível) */}
         <div
           data-testid="planos-cta-bar"
-          className={
+          className={cn(
             "pc-shell",
             "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
           )}
         >
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-1">
-            <p className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-              <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-subtle bg-surface px-3.5 py-2 shadow-elev-1">
+            <p className="inline-flex items-center gap-1.5 text-[11.5px] text-secondary">
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
               Pagamento seguro Mercado Pago · Cancele quando quiser
             </p>
             <div className="flex items-center gap-1.5 md:hidden">
               <button
                 type="button"
                 onClick={() => setOpenSheet("compare")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-var(--brand-accent)"
               >
-                <Sparkles className="h-3 w-3 text-gold-ink" aria-hidden />
+                <Sparkles className="h-3 w-3 text-brand-accent" aria-hidden />
                 Comparar
               </button>
               <button
                 type="button"
                 onClick={() => setOpenSheet("faq")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-var(--brand-accent)"
               >
                 FAQ
               </button>
               <Link
                 to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-gold-ink hover:underline"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-brand-accent hover:underline"
               >
                 Código →
               </Link>
@@ -654,18 +654,18 @@ function ComparisonCell({ value }: { value: string | boolean | undefined }) {
   if (value === true) {
     return (
       <span className="inline-flex items-center justify-center">
-        <Check className="h-4 w-4 text-gold-ink" strokeWidth={2.5} aria-label="Incluído" />
+        <Check className="h-4 w-4 text-brand-accent" strokeWidth={2.5} aria-label="Incluído" />
       </span>
     );
   }
   if (value === false || value === undefined) {
     return (
-      <span className="inline-flex items-center justify-center text-muted-foreground/50">
+      <span className="inline-flex items-center justify-center text-secondary/50">
         <Minus className="h-3.5 w-3.5" aria-label="Não incluído" />
       </span>
     );
   }
-  return <span className="text-[13px] font-semibold text-foreground">{value}</span>;
+  return <span className="text-[13px] font-semibold text-primary">{value}</span>;
 }
 
 function ComparisonMatrix({
@@ -683,13 +683,13 @@ function ComparisonMatrix({
   const rows = planFeatureMatrix(plans);
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-elev-1">
+    <div className="overflow-x-auto rounded-xl border border-subtle bg-surface shadow-elev-1">
       <table className="w-full min-w-[580px] border-collapse text-left">
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-subtle">
             <th
               scope="col"
-              className="sticky left-0 z-[1] w-[34%] bg-card px-4 py-3.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+              className="sticky left-0 z-[1] w-[34%] bg-surface px-4 py-3.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-secondary"
             >
               Recursos
             </th>
@@ -699,26 +699,26 @@ function ComparisonMatrix({
                 <th
                   key={p.id}
                   scope="col"
-                  className={
+                  className={cn(
                     "px-3 py-3.5 text-center align-top",
-                    isRec && "relative bg-brand-gold/[0.08]",
+                    isRec && "relative bg-brand-accent/[0.08]",
                   )}
                 >
                   {isRec && (
                     <span
                       aria-hidden
-                      className="absolute inset-x-0 top-0 h-[3px] bg-brand-gold"
+                      className="absolute inset-x-0 top-0 h-[3px] bg-brand-accent"
                     />
                   )}
                   {isRec && (
-                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                       <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
                     </span>
                   )}
-                  <div className="font-display text-[14px] font-semibold text-foreground">
+                  <div className="font-display text-[14px] font-semibold text-primary">
                     {p.name}
                   </div>
-                  <div className="mt-0.5 text-[11.5px] text-muted-foreground">
+                  <div className="mt-0.5 text-[11.5px] text-secondary">
                     {p.price_cents === 0
                       ? "Grátis"
                       : `${centsToBRL(p.price_cents)}${
@@ -740,7 +740,7 @@ function ComparisonMatrix({
             >
               <th
                 scope="row"
-                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-3 text-left text-[13px] font-medium text-foreground"
+                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-3 text-left text-[13px] font-medium text-primary"
               >
                 {row.label}
               </th>
@@ -749,9 +749,9 @@ function ComparisonMatrix({
                 return (
                   <td
                     key={p.id}
-                    className={
+                    className={cn(
                       "px-3 py-2.5 text-center",
-                      isRec && "bg-brand-gold/[0.06]",
+                      isRec && "bg-brand-accent/[0.06]",
                     )}
                   >
                     <ComparisonCell value={row.values[p.slug]} />
@@ -761,25 +761,25 @@ function ComparisonMatrix({
             </tr>
           ))}
           {/* Linha final: CTAs */}
-          <tr className="border-t border-border">
-            <th scope="row" className="sticky left-0 z-[1] bg-card px-4 py-3" />
+          <tr className="border-t border-subtle">
+            <th scope="row" className="sticky left-0 z-[1] bg-surface px-4 py-3" />
             {plans.map((p) => {
               const isRec = p.slug === recommendedSlug;
               const isFree = p.price_cents === 0;
               return (
                 <td
                   key={p.id}
-                  className={"px-2 py-3 align-top", isRec && "bg-brand-gold/[0.08]")}
+                  className={"px-2 py-3 align-top", isRec && "bg-brand-accent/[0.08]")}
                 >
                   <button
                     type="button"
                     onClick={() => onBuy(p)}
                     disabled={buying === p.id}
-                    className={
-                      "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-wait disabled:opacity-70",
+                    className={cn(
+                      "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent disabled:cursor-wait disabled:opacity-70",
                       isRec
-                        ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105"
-                        : "border border-border bg-background text-foreground hover:border-brand-gold hover:text-gold-ink",
+                        ? "bg-brand-accent text-brand-navy shadow-elev-1 hover:brightness-105"
+                        : "border border-subtle bg-base text-primary hover:border-brand-accent hover:text-brand-accent",
                     )}
                   >
                     {buying === p.id
