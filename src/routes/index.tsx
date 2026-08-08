@@ -338,21 +338,6 @@ function HomePage() {
             </aside>
         </div>
 
-        {/* Categories */}
-        <section aria-labelledby="categories" className="mt-24">
-          <SectionHeading
-            id="categories"
-            kicker="Explorar"
-            title="Compre por categoria"
-            description="Padronizadas em todos os mercados parceiros, para uma comparação justa."
-          />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {CATEGORIES.map((cat, idx) => (
-              <CategoryCard key={cat.slug} label={cat.label} value={cat.value} Icon={cat.Icon} index={idx} />
-            ))}
-          </div>
-        </section>
-
         <section aria-labelledby="realtime" className="mt-24 border-t border-[var(--border-subtle)] pt-16">
           <SectionHeading
             id="realtime"
