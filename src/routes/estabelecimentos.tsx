@@ -37,7 +37,7 @@ import { useSession } from "@/hooks/useSession";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { normalizeSearchText } from "@/lib/text-normalize";
-import { tc } from "@/lib/typeclear";
+
 import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
