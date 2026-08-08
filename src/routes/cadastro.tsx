@@ -161,7 +161,7 @@ function CadastroPage() {
   return (
     <div
       className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
-      style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
+      style={{ background: "var(--bg-base)", fontFamily: "var(--font-sans)", color: "var(--text-primary)" }}
     >
       <div
         className="pointer-events-none absolute inset-0"
@@ -182,7 +182,7 @@ function CadastroPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative z-10 grid w-full max-w-[880px] grid-cols-1 overflow-hidden rounded-[var(--radius-2xl)] border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[880px] grid-cols-1 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-lg)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]"
       >
         {/* LEFT — Hero unificado (login/cadastro compartilham a mesma arte) */}
         <div className="hidden md:block">
