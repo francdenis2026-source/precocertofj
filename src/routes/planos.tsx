@@ -331,12 +331,11 @@ function PlansPage() {
                       <div className="flex items-baseline gap-2">
                         <span
                           className={cn(
-                            "font-editorial leading-none tracking-tight text-foreground",
+                            "font-display leading-none tracking-tight text-primary",
                             isRecommended
-                              ? "text-[34px] font-medium lg:text-[40px]"
-                              : "text-[30px] font-normal lg:text-[34px]",
+                              ? "text-[34px] font-bold lg:text-[40px]"
+                              : "text-[30px] font-bold lg:text-[34px]",
                           )}
-                          style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
                         >
                           {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                         </span>
