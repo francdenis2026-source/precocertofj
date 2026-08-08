@@ -303,9 +303,9 @@ function PlansPage() {
                     aria-pressed={isSelected}
                     aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
                     className={cn(
-                      "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-5",
-                      isRecommended ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
-                      isSelected && "ring-2 ring-brand-gold/50",
+                      "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-5 rounded-3xl",
+                      isRecommended ? "bg-surface-elevated border-brand-accent/30" : "bg-surface border-subtle",
+                      isSelected && "ring-2 ring-brand-accent/50",
                     )}
                   >
                     {(isRecommended || savings) && (
