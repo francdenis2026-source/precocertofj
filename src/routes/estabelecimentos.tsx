@@ -126,6 +126,13 @@ function EstablishmentsPage() {
           </div>
         )}
 
+        {data?.items?.[0] && (
+          <div className="mb-12 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-60">
+            <Clock className="h-3 w-3" />
+            <span>Última verificação global realizada hoje</span>
+          </div>
+        )}
+
         {/* Toolbar */}
         <div className="bg-white rounded-[24px] p-4 shadow-sm border border-[#E5EAF1] mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative w-full md:max-w-md">

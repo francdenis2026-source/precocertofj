@@ -144,6 +144,12 @@ function HomePage() {
             <StatItem label="Preços monitorados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
             <StatItem label="Estabelecimentos" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
           </div>
+          {stats?.generatedAt && (
+            <div className="mt-6 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-60">
+              <Clock className="h-3 w-3" />
+              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          )}
         </div>
       </div>
 
