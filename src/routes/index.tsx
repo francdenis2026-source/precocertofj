@@ -150,7 +150,7 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Hero */}
-      <section className="relative isolate min-h-[650px] md:min-h-[750px] flex items-center overflow-hidden px-4 pb-20 pt-32 md:px-8 md:pb-28">
+      <section className="relative isolate min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden px-4 pb-12 pt-24 md:px-8 md:pb-16">
         {/* Background Image Container */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <img 
@@ -213,7 +213,7 @@ function HomePage() {
 
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8">
         {/* Trust bar integrated into hero flow - moved from inside section to below it if needed, or kept inside */}
-        <div className="mb-24 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="mb-16 grid grid-cols-2 gap-4 md:grid-cols-4">
           <TrustStat label="Registros de preço" value={stats?.priceRecords} />
           <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
           <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
@@ -221,7 +221,7 @@ function HomePage() {
         </div>
 
         {/* Value props */}
-        <section aria-labelledby="how-it-works" className="mb-24">
+        <section aria-labelledby="how-it-works" className="mb-16">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
               <SectionHeading
@@ -277,7 +277,7 @@ function HomePage() {
         </section>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-           <div className="space-y-24 lg:col-span-8">
+           <div className="space-y-16 lg:col-span-8">
               <section id="baskets-section" aria-label="Cesta inteligente">
                 <OptimizedBasketSection />
               </section>
@@ -339,7 +339,7 @@ function HomePage() {
             </aside>
         </div>
 
-        <section aria-labelledby="realtime" className="mt-24 border-t border-[var(--border-subtle)] pt-16">
+        <section aria-labelledby="realtime" className="mt-16 border-t border-[var(--border-subtle)] pt-12">
           <SectionHeading
             id="realtime"
             kicker="Painel vivo"
@@ -354,7 +354,7 @@ function HomePage() {
         <ComparisonStickyBar />
 
         {/* Closing CTA */}
-        <section className="relative mt-28 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
+        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
           <img
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000"
             alt="Produtos de supermercado realistas"
