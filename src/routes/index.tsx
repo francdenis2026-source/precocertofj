@@ -233,28 +233,57 @@ function HomePage() {
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8">
         {/* Value props */}
         <section aria-labelledby="how-it-works" className="mb-24">
-          <SectionHeading
-            id="how-it-works"
-            kicker="Por que o PreçoCerto"
-            title="Um assistente, não apenas uma lista de preços"
-            description="Cada preço é auditado, datado e ranqueado para você confiar na recomendação antes de sair de casa."
-          />
-          <div className="grid gap-6 md:grid-cols-3">
-            <ValueCard
-              Icon={ShieldCheck}
-              title="Preços verificados"
-              body="Cada registro vem de um mercado cadastrado e traz a data em que foi coletado."
-            />
-            <ValueCard
-              Icon={LineChart}
-              title="Histórico real de preços"
-              body="Acompanhe a variação do produto ao longo do tempo e saiba se a oferta de hoje vale mesmo a pena."
-            />
-            <ValueCard
-              Icon={Zap}
-              title="Cestas otimizadas"
-              body="Adicione sua lista e o PreçoCerto calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
-            />
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <SectionHeading
+                id="how-it-works"
+                kicker="Por que o PreçoCerto"
+                title="Um assistente, não apenas uma lista de preços"
+                description="Cada preço é auditado, datado e ranqueado para você confiar na recomendação antes de sair de casa."
+              />
+              <div className="grid gap-6 md:grid-cols-1">
+                <ValueCard
+                  Icon={ShieldCheck}
+                  title="Preços verificados"
+                  body="Cada registro vem de um mercado cadastrado e traz a data em que foi coletado."
+                />
+                <ValueCard
+                  Icon={LineChart}
+                  title="Histórico real de preços"
+                  body="Acompanhe a variação do produto ao longo do tempo e saiba se a oferta de hoje vale mesmo a pena."
+                />
+                <ValueCard
+                  Icon={Zap}
+                  title="Cestas otimizadas"
+                  body="Adicione sua lista e o PreçoCerto calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
+                />
+              </div>
+            </div>
+            
+            <div className="lg:col-span-5 relative hidden lg:block">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]"
+              >
+                <img 
+                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1000" 
+                  alt="Produtos frescos de qualidade premium"
+                  className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
+                
+                {/* Floating detail for premium feel */}
+                <div className="absolute top-6 right-6 bg-[var(--brand-primary)]/10 backdrop-blur-md border border-[var(--brand-primary)]/20 px-4 py-2 rounded-full">
+                  <span className="text-[12px] font-bold text-[var(--brand-primary)] uppercase tracking-wider">Qualidade Auditada</span>
+                </div>
+              </motion.div>
+              
+              {/* Decorative background element */}
+              <div className="absolute -bottom-6 -left-6 -z-10 h-32 w-32 bg-[var(--brand-primary)]/5 blur-3xl rounded-full" />
+            </div>
           </div>
         </section>
 
