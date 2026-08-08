@@ -6,7 +6,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-base)] text-[var(--text-tertiary)]">
+    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">
       <div className="mx-auto max-w-[1440px] px-4 py-16 md:px-8">
         <div className="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Info */}
