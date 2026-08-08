@@ -16,10 +16,7 @@
 }
 
 /*
- * PreçoCerto design system — dark only.
- * Both :root and [data-theme='light'] resolve to the same values on purpose:
- * the product ships a single, refined dark surface. Legacy components that
- * still toggle the theme attribute therefore render identically.
+ * PreçoCerto design system — TypeClear Professional Edition.
  */
 :root,
 :root[data-theme='light'],
@@ -325,17 +322,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Glass — simple semi-transparent background without heavy blur */
 @utility pc-glass {
-  background-color: rgb(17 24 39 / 0.85);
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
 }
 
 @utility pc-lift {
-  transition: transform var(--dur-base) var(--ease-out-expo),
-    box-shadow var(--dur-base) var(--ease-out-expo),
-    border-color var(--dur-base) var(--ease-smooth);
+  transition: all var(--dur-base) var(--ease-smooth);
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--pc-shadow-lg);
+    border-color: var(--border-strong);
   }
 }
 
