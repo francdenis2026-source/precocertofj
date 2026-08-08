@@ -1,9 +1,10 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag } from "lucide-react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag } from "lucide-react";
+import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,6 +16,10 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   const runAdd = useServerFn(addToCart);
   const runRemove = useServerFn(removeFromCart);
   const qc = useQueryClient();
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const secondBestPrice = group.prices.length > 1 ? group.prices[1] : null;
+  const priceGap = secondBestPrice ? secondBestPrice.price - bestPrice.price : 0;
   
   // Swipe logic
   const x = useMotionValue(0);
