@@ -68,7 +68,7 @@ function ProductImageBase({
     [brand, label],
   );
   const [bg, fg] = useMemo(() => {
-    const idx = hashCode(`${category}|${brand ?? ""}|${label}`) % PALETTE.length;
+    const idx = hashCode(`${brand ?? ""}|${label}`) % PALETTE.length;
     return PALETTE[idx]!;
   }, [category, brand, label]);
 
@@ -76,10 +76,10 @@ function ProductImageBase({
     size === "sm" ? "h-8 w-8" : size === "lg" ? "h-16 w-16" : "h-12 w-12";
   const textSize =
     size === "sm"
-      ? "text-[11px]"
+      ? "text-[12px] font-semibold"
       : size === "lg"
-        ? "text-sm"
-        : "text-[11px]";
+        ? "text-base font-bold"
+        : "text-[13px] font-semibold";
   const gap = size === "sm" ? "gap-1" : "gap-2";
   const padded = size === "sm" ? "px-2" : "px-3";
   const displayLabel = shortLabel(label, brand, size === "lg" ? 32 : 22);
@@ -118,7 +118,7 @@ function ProductImageBase({
         >
           <ProductCategoryIcon
             category={category}
-            className={cn("opacity-90 transition-transform duration-500", iconSize)}
+            className={cn("opacity-40 transition-transform duration-500", iconSize)}
             aria-hidden="true"
           />
           {size !== "sm" && (
