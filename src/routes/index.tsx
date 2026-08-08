@@ -348,10 +348,11 @@ function HomePage() {
                    <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="flex flex-col gap-4">
                       <RegisteredStoresCarousel />
                     </div>
                  </section>
+
                  
                  <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-lg transition-transform hover:scale-[1.02] duration-300">
                    <PromoBanner />
