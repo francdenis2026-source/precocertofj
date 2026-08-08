@@ -171,6 +171,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         className={cn(
           "group relative flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md pl-4 pr-1.5 shadow-2xl transition-all duration-500",
           "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-white md:focus-within:scale-[1.01]",
+          "after:absolute after:-top-8 after:left-1/2 after:-translate-x-1/2 after:content-['DIGITE_AQUI_O_NOME_DO_PRODUTO'] after:text-[10px] after:font-black after:text-primary after:tracking-[0.2em] after:opacity-0 focus-within:after:opacity-100 after:transition-opacity",
           compact ? "h-12" : "h-14 sm:h-16",
           open ? "z-[101]" : "z-auto",
           "touch-none"
@@ -200,7 +201,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="Busque arroz, café, carne, leite..."
+          placeholder="Onde você quer economizar? Digite o produto aqui..."
           aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
