@@ -265,7 +265,11 @@ function HomePage() {
                   src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
                   alt="Análise técnica de preços e tecnologia"
                   onLoad={(e) => {
-                    if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+                    if (e.currentTarget.naturalWidth > 0) {
+                      e.currentTarget.style.opacity = "1";
+                    } else {
+                      e.currentTarget.style.display = "none";
+                    }
                   }}
                   className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-all duration-700 opacity-0"
                 />
@@ -372,7 +376,11 @@ function HomePage() {
               aria-hidden="true"
               loading="lazy"
               onLoad={(e) => {
-                if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+                if (e.currentTarget.naturalWidth > 0) {
+                  e.currentTarget.style.opacity = "1";
+                } else {
+                  e.currentTarget.style.display = "none";
+                }
               }}
               className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px] opacity-0 transition-opacity duration-700"
             />
@@ -396,7 +404,7 @@ function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button size="lg" className="rounded-xl px-8 font-bold shadow-lg shadow-[var(--brand-primary)]/20 active:scale-95 transition-transform" asChild>
-                <Link to="/cadastro">Começar a economizar</Link>
+                <Link to="/cadastro" search={{ from: "/" }}>Começar a economizar</Link>
               </Button>
             </div>
           </div>

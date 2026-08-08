@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { MapPin, Store, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
   ref,
 ) {
   const interactive = typeof onClick === "function";
+  const [failed, setFailed] = useState(false);
   const resolvedLogo = useSignedLogoUrl(logoUrl);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
@@ -106,11 +107,15 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
               backgroundSize: "18px 18px",
             }}
           />
-          {resolvedLogo ? (
+          {resolvedLogo && !failed ? (
             <img
               src={resolvedLogo ?? undefined}
               alt={`${name} logo`}
               loading="lazy"
+              onError={() => setFailed(true)}
+              onLoad={(e) => {
+                if (e.currentTarget.naturalWidth === 0) setFailed(true);
+              }}
               className="relative z-10 max-h-full max-w-[82%] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.06]"
             />
           ) : (
@@ -187,8 +192,17 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
           compact ? "h-11 w-11" : "h-14 w-14",
         )}
       >
-        {resolvedLogo ? (
-          <img src={resolvedLogo ?? undefined} alt="" loading="lazy" className="h-full w-full object-cover" />
+        {resolvedLogo && !failed ? (
+          <img
+            src={resolvedLogo ?? undefined}
+            alt=""
+            loading="lazy"
+            onError={() => setFailed(true)}
+            onLoad={(e) => {
+              if (e.currentTarget.naturalWidth === 0) setFailed(true);
+            }}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <Store className={cn("text-muted-foreground", compact ? "h-5 w-5" : "h-6 w-6")} aria-hidden />
         )}

@@ -120,6 +120,7 @@ export function SmartLogoImage({
 }) {
   const [inView, setInView] = useState(eager);
   const [failed, setFailed] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -161,6 +162,7 @@ export function SmartLogoImage({
       decoding="async"
       onError={() => setFailed(true)}
       onLoad={(e) => {
+        setIsLoaded(true);
         if (e.currentTarget.naturalWidth === 0) setFailed(true);
       }}
       className={cn(
@@ -169,7 +171,7 @@ export function SmartLogoImage({
       )}
       style={{
         transform: `translate(${presentation.offsetX}%, ${presentation.offsetY}%) scale(${presentation.scale})`,
-        opacity: ready ? 1 : 0.9,
+        opacity: ready && isLoaded ? 1 : 0,
         filter: premium3d
           ? "drop-shadow(0 1px 1px rgba(15,23,42,0.16))"
           : undefined,

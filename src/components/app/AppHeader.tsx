@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   Bell,
   ChevronDown,
@@ -167,6 +168,7 @@ function AdminSidebarToggle() {
  */
 export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   const { firstName, fullName, initials, avatarUrl, session, loading } = useMyProfile();
+  const [avatarFailed, setAvatarFailed] = useState(false);
   const { signOut, loading: signingOut } = useSignOut();
   const { state: sidebarState, isMobile } = useSidebar();
   // Com o menu lateral expandido sobra pouca largura: os rótulos longos
@@ -227,8 +229,13 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                 title={fullName ?? "Conta"}
                 className="group pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] pl-1 pr-1.5 text-[11px] font-semibold text-[var(--text-primary)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] data-[state=open]:border-[var(--brand-primary)]/50 data-[state=open]:bg-[var(--bg-surface-elevated)] sm:max-w-[180px]"
               >
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
+                {avatarUrl && !avatarFailed ? (
+                  <img
+                    src={avatarUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                    onError={() => setAvatarFailed(true)}
+                  />
                 ) : (
                   <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[10px] font-bold text-[var(--brand-primary)]">
                     {initials ?? <User className="h-3 w-3" />}

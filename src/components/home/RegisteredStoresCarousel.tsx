@@ -36,7 +36,7 @@ export function RegisteredStoresCarousel() {
           search={{ q: "", from: "" }}
           className="pc-card group flex flex-col items-center justify-center p-2 gap-1 text-center h-auto min-h-[64px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/30 transition-all shadow-none hover:shadow-sm"
         >
-          <div className="h-6 w-6 flex items-center justify-center rounded-[var(--radius-sm)] bg-white p-0.5 shadow-sm group-hover:scale-105 transition-transform overflow-hidden">
+          <div className="h-6 w-6 flex items-center justify-center rounded-[var(--radius-sm)] bg-white p-0.5 shadow-sm group-hover:scale-105 transition-transform overflow-hidden relative">
             {store.name.includes("Contamigos") ? (
               <ContamigosLogo size="xs" hideName />
             ) : (
@@ -48,6 +48,8 @@ export function RegisteredStoresCarousel() {
                 initialsClassName="text-slate-900 font-bold text-[8px]"
               />
             )}
+            {/* Overlay sutil para garantir que o fundo branco não suma se a imagem falhar */}
+            <div className="absolute inset-0 -z-10 bg-slate-50/50" />
           </div>
           <span className="text-[8px] font-bold uppercase tracking-tight text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors truncate w-full px-1">
             {store.name.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
