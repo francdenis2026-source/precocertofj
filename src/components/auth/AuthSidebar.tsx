@@ -79,7 +79,7 @@ export const AuthSidebar: React.FC = () => {
               A inteligência que <br />
               <span className="text-[var(--brand-primary)]">protege o seu bolso.</span>
             </h1>
-            <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
+            <p className="text-[var(--text-secondary)] text-sm max-w-sm leading-relaxed">
               Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
             </p>
           </motion.div>
@@ -91,11 +91,11 @@ export const AuthSidebar: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
-                className="p-4 rounded-[var(--radius-2xl)] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group"
+                className="p-4 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm hover:border-[var(--brand-primary)]/20 transition-colors group"
               >
                 <stat.icon className={`w-5 h-5 mb-3 ${stat.color} group-hover:scale-110 transition-transform`} />
-                <div className="text-lg font-bold text-white">{stat.value}</div>
-                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{stat.label}</div>
+                <div className="text-lg font-bold text-[var(--text-primary)]">{stat.value}</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] uppercase font-bold tracking-wider">{stat.label}</div>
               </motion.div>
             ))}
           </div>
