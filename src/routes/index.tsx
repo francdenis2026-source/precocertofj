@@ -147,7 +147,7 @@ function HomePage() {
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[var(--bg-base)] pb-20 text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 lg:pb-0">
+    <div className="min-h-dvh w-full overflow-x-hidden bg-[var(--bg-base)] pb-20 text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 lg:pb-0">
       <SiteHeader variant="overlay" />
 
       {/* Modern Hero Section */}
@@ -218,7 +218,7 @@ function HomePage() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 relative z-0">
+      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 relative z-0 w-full overflow-hidden">
         {/* Platform Stats Section */}
         <section className="relative -mt-16 mb-20 z-20">
           <div className="mx-auto max-w-5xl">

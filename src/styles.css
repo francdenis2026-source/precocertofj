@@ -102,6 +102,10 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  touch-action: manipulation;
 }
 
 /* Base Headings */
