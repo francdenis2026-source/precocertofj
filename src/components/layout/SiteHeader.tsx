@@ -89,12 +89,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
           </span>
         </Link>
 
-        {/* Compact search (only when scrolled or on inner pages) */}
-        {(pathname !== "/" || scrolled) && (
-          <div className="mx-4 hidden min-w-0 max-w-md flex-1 lg:block">
-            <SmartSearchBar compact />
-          </div>
-        )}
+        {/* Removed redundant top search bar as requested by user */}
+
 
         {/* Navigation & Actions */}
         <div className="flex shrink-0 items-center gap-2 md:gap-4">
