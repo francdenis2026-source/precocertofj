@@ -307,8 +307,9 @@ function HomePage() {
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="px-6 py-8 md:py-10 text-center">
-      <div className="text-3xl font-black text-[var(--brand-primary)] mb-1 tracking-tighter">{value}</div>
-      <div className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">{label}</div>
+      <div className="text-4xl font-black text-[var(--brand-primary)] mb-2 tracking-tighter leading-none">{value}</div>
+      <div className="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--text-tertiary)]">{label}</div>
+
     </div>
   );
 }
