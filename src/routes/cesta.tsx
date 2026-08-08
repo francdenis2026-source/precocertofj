@@ -53,7 +53,8 @@ function CestaPage() {
   const { data, isLoading, isFetching } = useQuery<Cart>({
     queryKey: ["cart"],
     queryFn: () => fetchCart(),
-    staleTime: 30_000,
+    staleTime: 1000 * 60 * 60, // 60 minutos de cache persistente no cliente
+1:     gcTime: 1000 * 60 * 60 * 24, // 24 horas no garbage collector
   });
 
   const removeMutation = useMutation({
