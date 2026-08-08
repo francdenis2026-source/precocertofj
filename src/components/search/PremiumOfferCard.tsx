@@ -1,6 +1,6 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe, Printer } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -151,47 +151,111 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
 
   const handleExportPDF = () => {
     try {
-      const doc = new jsPDF();
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
       
-      // Header
-      doc.setFontSize(22);
-      doc.setTextColor(11, 30, 58); // Navy Blue
-      doc.text("PreçoCerto - Comparativo de Preços", 14, 22);
+      const primaryColor: [number, number, number] = [11, 30, 58]; // Navy
+      const goldColor: [number, number, number] = [212, 175, 55]; // Gold
       
-      doc.setFontSize(14);
-      doc.setTextColor(100);
-      doc.text(group.productName, 14, 32);
+      // Logo and Header
+      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.rect(0, 0, 210, 40, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(24);
+      doc.text("PREÇOCERTO", 15, 20);
       
       doc.setFontSize(10);
-      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 14, 40);
+      doc.setFont("helvetica", "normal");
+      doc.text("INTELIGÊNCIA EM ECONOMIA", 15, 28);
+      
+      doc.setFontSize(10);
+      doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`, 150, 20);
+      doc.text(`ID Consulta: #${Math.random().toString(36).substr(2, 9).toUpperCase()}`, 150, 28);
 
-      // Best Price Highlight
-      doc.setFillColor(243, 244, 246);
-      doc.rect(14, 48, 182, 20, 'F');
-      doc.setFontSize(11);
-      doc.setTextColor(11, 30, 58);
+      // Product Info Section
+      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
-      doc.text(`MELHOR OFERTA: R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName}`, 20, 60);
+      doc.text(group.productName, 15, 55);
+      
+      doc.setDrawColor(goldColor[0], goldColor[1], goldColor[2]);
+      doc.setLineWidth(0.5);
+      doc.line(15, 58, 60, 58);
+
+      // Highlights Box
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(15, 65, 180, 25, 3, 3, 'F');
+      
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("RESUMO DA ECONOMIA", 22, 73);
+      
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Melhor Preço: R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName}`, 22, 80);
+      
+      if (secondBestPrice) {
+        doc.setTextColor(22, 163, 74); // Success Green
+        doc.setFont("helvetica", "bold");
+        doc.text(`Você economiza R$ ${priceGap.toFixed(2).replace('.', ',')} em relação ao 2º lugar!`, 22, 86);
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+      }
 
       // Table
       autoTable(doc, {
-        startY: 75,
-        head: [['Estabelecimento', 'Preço', 'Diferença']],
+        startY: 95,
+        head: [['Ranking', 'Estabelecimento', 'Localidade', 'Preço Unitário', 'Diferença']],
         body: group.prices.map((p, i) => [
-          `${p.marketName} (${p.neighborhood || 'Centro'})`,
+          i === 0 ? '1º (Melhor)' : i === 1 ? '2º Lugar' : `${i + 1}º Lugar`,
+          p.marketName,
+          p.neighborhood || 'Centro',
           `R$ ${p.price.toFixed(2).replace('.', ',')}`,
-          i === 0 ? 'Melhor Preço' : `+ R$ ${(p.price - bestPrice.price).toFixed(2).replace('.', ',')}`
+          i === 0 ? '---' : `+ R$ ${(p.price - bestPrice.price).toFixed(2).replace('.', ',')}`
         ]),
-        headStyles: { fillColor: [11, 30, 58], textColor: 255 },
-        alternateRowStyles: { fillColor: [249, 250, 251] },
+        headStyles: { 
+          fillColor: primaryColor, 
+          textColor: 255, 
+          fontStyle: 'bold',
+          halign: 'center'
+        },
+        columnStyles: {
+          0: { halign: 'center', fontStyle: 'bold' },
+          3: { halign: 'right', fontStyle: 'bold' },
+          4: { halign: 'right' }
+        },
+        styles: {
+          fontSize: 9,
+          cellPadding: 4
+        },
+        alternateRowStyles: { fillColor: [250, 251, 252] },
+        margin: { top: 95, left: 15, right: 15 }
       });
 
+      // Footer
+      const pageCount = (doc as any).internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`PreçoCerto - Inteligência de Mercado | Página ${i} de ${pageCount}`, 105, 285, { align: "center" });
+        doc.text("Os preços podem sofrer alteração conforme a disponibilidade dos estabelecimentos.", 105, 290, { align: "center" });
+      }
+
       doc.save(`comparativo-${group.productName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
-      toast.success("PDF gerado com sucesso!");
+      toast.success("PDF profissional gerado!");
     } catch (error) {
       console.error(error);
       toast.error("Erro ao gerar PDF");
     }
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   const handleSaveComparison = () => {
@@ -320,6 +384,16 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                             Comparativo de Preços
                           </div>
                           <div className="flex items-center gap-2 mr-8">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handlePrint}
+                              title="Imprimir Comparação"
+                              aria-label="Imprimir Comparação"
+                            >
+                              <Printer size={14} />
+                            </Button>
                             <Button 
                               variant="ghost" 
                               size="sm" 
