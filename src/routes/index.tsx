@@ -126,7 +126,7 @@ function HomePage() {
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </h1>
             <p className="text-slate-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-              Compare preços reais dos mercados da sua cidade e descubra onde sua compra fica mais barata.
+              Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
             </p>
 
             <div className="relative max-w-2xl mx-auto">
