@@ -408,12 +408,13 @@ function PlansPage() {
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-subtle/70">
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")}>Recurso</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Degustação</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Mensal</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Trimestral</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")}>Anual</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")} scope="col">Recurso</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Degustação</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Mensal</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Trimestral</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")} scope="col">Anual</th>
                   </tr>
+
                 </thead>
                 <tbody className="divide-y divide-border/60">
                   {[
