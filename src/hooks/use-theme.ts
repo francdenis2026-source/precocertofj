@@ -18,7 +18,7 @@ function storageKeyFor(userId: string | null): string {
   return userId ? `${KEY_PREFIX}.${userId}` : LEGACY_KEY;
 }
 
-// PricePal ships a single, refined dark surface. The preference plumbing is
+// PreçoCerto ships a single, refined dark surface. The preference plumbing is
 // kept intact (other screens still read/write it) but always resolves dark.
 function resolveIsDark(_mode: Theme): boolean {
   return true;

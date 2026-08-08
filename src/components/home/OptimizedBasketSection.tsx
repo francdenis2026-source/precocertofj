@@ -45,7 +45,7 @@ export function OptimizedBasketSection() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
             <Sparkles className="h-3.5 w-3.5" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exclusivo PricePal</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exclusivo PreçoCerto</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)] leading-tight">
             Cestas que rendem <span className="text-[var(--brand-primary)]">mais</span>

@@ -70,7 +70,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
         {/* Brand */}
         <Link
           to="/"
-          aria-label="PricePal — início"
+          aria-label="PreçoCerto — início"
           className="group flex shrink-0 items-center gap-3 rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
         >
           <img
@@ -81,7 +81,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
           />
           <span className="hidden flex-col leading-none sm:flex">
             <span className="text-[19px] font-semibold tracking-[-0.02em] text-[var(--text-primary)] md:text-[21px]">
-              Price<span className="text-[var(--brand-primary)]">Pal</span>
+              Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
             <span className="mt-1 text-[12px] font-medium text-[var(--text-tertiary)]">
               Feijó · Acre

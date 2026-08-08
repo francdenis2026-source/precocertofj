@@ -146,7 +146,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children:
-          // PricePal ships dark-only: pin the document before first paint.
+          // PreçoCerto ships dark-only: pin the document before first paint.
           "try{var r=document.documentElement;r.classList.add('dark');r.classList.remove('light');r.dataset.theme='dark';r.style.colorScheme='dark';localStorage.setItem('pc-theme','dark');}catch(e){}",
       },
       {
