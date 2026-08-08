@@ -361,14 +361,17 @@ function HomePage() {
         <ComparisonStickyBar />
 
         {/* Closing CTA */}
-        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
-          <div className="absolute inset-0 -z-10">
+        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 min-h-[300px] flex items-center justify-center">
+          <div className="absolute inset-0 -z-10 bg-slate-900">
             <img
               src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000"
               alt="Corredor de supermercado moderno e organizado"
               aria-hidden="true"
               loading="lazy"
-              className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px]"
+              onLoad={(e) => {
+                if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+              }}
+              className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px] opacity-0 transition-opacity duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-transparent to-[var(--bg-base)]/80" />
           </div>
