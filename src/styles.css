@@ -30,7 +30,7 @@
   --pc-brand-gold: #F4B400;
   --pc-brand-gold-soft: #FFD24A;
   --pc-brand-gold-ink: #0B1220;
-  --pc-brand-gold-glow: rgb(244 180 0 / 0.22);
+  
   --pc-navy: #0B1220;
 
   /* Surfaces */
@@ -68,7 +68,7 @@
   --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
   --pc-shadow-md: 0 8px 24px -8px rgb(0 0 0 / 0.55);
   --pc-shadow-lg: 0 24px 60px -24px rgb(0 0 0 / 0.7);
-  --pc-shadow-glow: 0 18px 48px -18px var(--pc-brand-gold-glow);
+  
 
   /* Layout */
   --pc-max: 1440px;
@@ -98,13 +98,8 @@
 
   --animate-spin-slow: spin 8s linear infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-float: float 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
 
 body {
   background-color: var(--bg-base);
@@ -251,7 +246,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all var(--dur-base) var(--ease-out-expo);
   font-size: 0.9375rem;
   letter-spacing: -0.01em;
-  box-shadow: var(--pc-shadow-glow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   &:hover {
     background-color: var(--pc-brand-gold-soft);
     transform: translateY(-2px);
@@ -340,10 +335,9 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.005em;
 }
 
-/* Glass — reserved for elements that float over imagery or the page */
+/* Glass — simple semi-transparent background without heavy blur */
 @utility pc-glass {
-  background-color: rgb(17 24 39 / 0.62);
-  backdrop-filter: blur(20px) saturate(150%);
+  background-color: rgb(17 24 39 / 0.85);
   border: 1px solid var(--border-subtle);
 }
 

@@ -83,7 +83,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
         cheapestStore: p.marketName,
         updatedAt: p.when
       })}
-      className="pc-card group relative flex cursor-pointer items-center gap-4 overflow-hidden !p-4"
+      className="pc-card group relative flex cursor-pointer items-center gap-4 !p-4"
     >
       <button 
         onClick={(e) => {
@@ -152,7 +152,6 @@ function HomePage() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden px-4 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-[var(--brand-primary)] opacity-[0.09] blur-[140px]" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
         </div>
 
@@ -228,7 +227,7 @@ function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/40 to-transparent pointer-events-none" />
               
               {/* Floating elements to emphasize app connection */}
-              <div className="absolute -left-6 top-1/4 pc-glass p-4 rounded-xl shadow-xl animate-float">
+              <div className="absolute -left-6 top-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
                     <TrendingDown className="h-4 w-4 text-emerald-500" />
@@ -240,7 +239,7 @@ function HomePage() {
                 </div>
               </div>
 
-              <div className="absolute -right-4 bottom-1/4 pc-glass p-4 rounded-xl shadow-xl animate-float" style={{ animationDelay: '1s' }}>
+              <div className="absolute -right-4 bottom-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-[var(--brand-primary)]/20 flex items-center justify-center">
                     <Zap className="h-4 w-4 text-[var(--brand-primary)]" />
@@ -253,8 +252,6 @@ function HomePage() {
               </div>
             </div>
             
-            {/* Background Glow for image */}
-            <div className="absolute -inset-4 -z-10 bg-[var(--brand-primary)]/10 blur-[100px] rounded-full" />
           </motion.div>
 
           {/* Trust bar */}
