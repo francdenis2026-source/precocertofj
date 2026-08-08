@@ -28,10 +28,9 @@ import { cn } from "@/lib/utils";
    • Formulário no lado direito com typeclear do sistema
    ============================================================ */
 
-const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
-const PC_BODY = "'Figtree', system-ui, sans-serif";
-
-const MONO = "'JetBrains Mono', ui-monospace, monospace";
+const PC_DISPLAY = "var(--font-sans)";
+const PC_BODY = "var(--font-sans)";
+const MONO = "var(--font-mono)";
 
 const MIN_LEN = 8;
 const MAX_LEN = 24;
@@ -309,7 +308,7 @@ function RedeemPage() {
   return (
     <div
       className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
-      style={{ background: "var(--background)", fontFamily: PC_BODY }}
+      style={{ background: "var(--bg-base)", fontFamily: "var(--font-sans)" }}
     >
       {/* Ambient brand glow — paridade com login/cadastro */}
       <div
