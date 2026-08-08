@@ -379,9 +379,9 @@ function HomePage() {
                   e.currentTarget.style.display = "none";
                 }
               }}
-              className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px] opacity-0 transition-opacity duration-700"
+              className="h-full w-full object-cover saturate-[1.2] brightness-[0.8] blur-[1px] opacity-0 transition-opacity duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-transparent to-[var(--bg-base)]/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
           </div>
           
           <div className="relative flex flex-col items-center px-6 py-16 text-center md:py-20">
