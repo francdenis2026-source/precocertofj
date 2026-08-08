@@ -328,13 +328,18 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                           onMouseEnter={() => setActive(i)}
                           onClick={() => go(s.displayName)}
                           className={cn(
-                            "flex w-full items-center gap-3 border-l-[3px] px-4 py-2.5 text-left transition-colors",
+                            "group/item flex w-full items-center gap-3 border-l-[3px] px-4 py-3.5 text-left transition-all duration-300",
                             active === i
-                              ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/8"
+                              ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 scale-[1.02] translate-x-1"
                               : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]",
                           )}
                         >
-                          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-base)]">
+                          <div className={cn(
+                            "grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-300",
+                            active === i 
+                              ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/5 shadow-lg shadow-[var(--brand-primary)]/10" 
+                              : "border-[var(--border-subtle)] bg-[var(--bg-base)]"
+                          )}>
                             {s.imageUrl ? (
                               <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
                             ) : (
@@ -342,26 +347,41 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                                 {(s.displayName || "?").trim().charAt(0).toUpperCase()}
                               </span>
                             )}
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-sm font-semibold text-[var(--text-primary)]">{s.displayName}</span>
-                            <span className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-[var(--text-tertiary)]">
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <span className={cn(
+                              "block truncate text-sm font-bold transition-colors",
+                              active === i ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
+                            )}>
+                              {s.displayName}
+                            </span>
+                            <div className="mt-1 flex items-center gap-1.5 truncate">
                               {s.market ? (
-                                <>
-                                  <Store className="h-3 w-3" /> {s.market}
-                                </>
+                                <span className={cn(
+                                  "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all",
+                                  active === i 
+                                    ? "bg-[var(--brand-primary)] text-white" 
+                                    : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
+                                )}>
+                                  <Store className="h-2.5 w-2.5" /> {s.market}
+                                </span>
                               ) : (
-                                s.category ?? "Catálogo"
+                                <span className="text-[11px] font-medium text-[var(--text-tertiary)]">{s.category ?? "Catálogo"}</span>
                               )}
-                            </span>
-                          </span>
+                            </div>
+                          </div>
                           {typeof s.minPrice === "number" ? (
-                            <span className="shrink-0 text-right">
-                              <span className="block text-sm font-black text-[var(--brand-primary)]">{BRL(s.minPrice)}</span>
+                            <div className="shrink-0 text-right">
+                              <div className={cn(
+                                "text-sm font-black transition-transform duration-300",
+                                active === i ? "scale-110 text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
+                              )}>
+                                {BRL(s.minPrice)}
+                              </div>
                               {i === 0 && (
-                                <span className="text-[9px] font-black uppercase tracking-wider text-[var(--pc-brand-accent)]">Menor preço</span>
+                                <div className="text-[9px] font-black uppercase tracking-wider text-[var(--pc-brand-accent)]">Melhor Oferta</div>
                               )}
-                            </span>
+                            </div>
                           ) : loading ? (
                             <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[var(--text-tertiary)]" />
                           ) : null}
