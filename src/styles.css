@@ -23,10 +23,11 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Brand — Refined Steel Blue Palette */
-  --pc-brand-primary: #3B82F6;
-  --pc-brand-primary-soft: #60A5FA;
-  --pc-brand-accent: #10B981;
+  /* Brand — Modern Tech Palette */
+  --brand-primary: #3B82F6; /* Azure Blue */
+  --brand-primary-soft: #60A5FA;
+  --brand-accent: #EAB308; /* Premium Gold for high-value highlights */
+  --brand-accent-soft: #FDE047;
   
   --pc-navy: #0F172A;
 
@@ -44,9 +45,6 @@
   --text-tertiary: #64748B;
   --text-on-brand: #FFFFFF;
 
-  --brand-primary: var(--pc-brand-primary);
-  --brand-secondary: var(--pc-navy);
-
   /* Semantic */
   --success: #10B981;
   --danger: #EF4444;
@@ -54,14 +52,14 @@
   --info: #3B82F6;
   --savings: #10B981;
 
-  /* Radius — Sophisticated tighter curves */
-  --radius-2xl: 20px;
-  --radius-xl: 14px;
-  --radius-lg: 10px;
+  /* Radius — Sophisticated curves */
+  --radius-2xl: 24px;
+  --radius-xl: 16px;
+  --radius-lg: 12px;
   --radius-md: 8px;
-  --radius-sm: 6px;
+  --radius-sm: 4px;
 
-  /* Elevation — Minimalist depth */
+  /* Elevation */
   --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.1);
   --pc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --pc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
