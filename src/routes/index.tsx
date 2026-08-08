@@ -146,67 +146,52 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Modern Hero Section */}
-      <section className="relative isolate min-h-[60vh] md:min-h-[85vh] flex flex-col items-center justify-center pt-20 overflow-hidden">
+      <section className="relative isolate flex flex-col items-center justify-center pt-24 pb-20 overflow-hidden">
         {/* Immersive Background */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-[var(--bg-base)]/10 to-[var(--bg-base)] z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/80 via-[var(--bg-base)]/60 to-[var(--bg-base)] z-10" />
           <motion.img 
             initial={{ scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
             src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
             alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.9] saturate-[1.2] blur-[1px] md:blur-0"
+            className="h-full w-full object-cover brightness-[0.7] saturate-[1.2]"
           />
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8 w-full flex flex-col items-center text-center">
+        <div className="mx-auto max-w-[1280px] px-4 md:px-8 w-full flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-4xl"
+            className="max-w-3xl"
           >
-            <h1 className="t-hero text-balance mb-4 md:mb-6">
-              Compre melhor.{" "}
+            <h1 className="t-hero text-balance mb-5 leading-[1] tracking-tighter text-white">
+              Compre melhor.<br/>
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </h1>
-            <p className="mt-2 md:mt-4 max-w-2xl mx-auto text-pretty text-[16px] md:text-[22px] leading-relaxed text-[var(--text-secondary)] px-4">
-              Compare preços reais, monte sua cesta e descubra onde economizar em cada compra.
+            <p className="mt-4 max-w-xl mx-auto text-pretty text-[16px] md:text-[20px] leading-relaxed text-slate-200">
+              Compare preços reais dos mercados da sua cidade e descubra onde sua compra fica mais barata.
             </p>
           </motion.div>
 
-          {/* Centralized Search Bar */}
-          <div className="relative z-50 w-full max-w-3xl mt-8 md:mt-12 mb-6 md:mb-10 px-4 md:px-0">
+          <div className="relative z-50 w-full max-w-3xl mt-8 px-4 md:px-0">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
               <SmartSearchBar />
-              
-              {/* Trust Badges */}
-              <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-3 md:gap-8 opacity-80 md:opacity-100">
-                <div className="flex items-center gap-2 group cursor-help">
-                  <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-[var(--success)] animate-pulse" />
-                  <span className="text-[11px] md:text-[13px] font-bold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
-                    Verificados
-                  </span>
-                </div>
-                <div className="h-1 w-1 rounded-full bg-[var(--border-strong)]" />
-                <div className="flex items-center gap-2 group cursor-help">
-                  <Zap className="h-3.5 w-3.5 md:h-4 md:w-4 text-[var(--brand-accent)]" />
-                  <span className="text-[11px] md:text-[13px] font-bold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
-                    Ao Vivo
-                  </span>
-                </div>
-                <div className="hidden md:flex items-center gap-2 group cursor-help">
-                  <div className="h-1 w-1 rounded-full bg-[var(--border-strong)]" />
-                  <Store className="h-4 w-4 text-[var(--brand-primary)]" />
-                  <span className="text-[13px] font-bold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-[12px] font-bold text-white uppercase tracking-[0.2em] opacity-90">
+                 <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)] animate-pulse" />
+                    Preços verificados
+                 </div>
+                 <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-accent)]" />
                     Mercados locais
-                  </span>
-                </div>
+                 </div>
               </div>
             </motion.div>
           </div>
