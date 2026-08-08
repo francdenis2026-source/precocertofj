@@ -14,6 +14,8 @@ import {
 } from "@/lib/admin-security.functions";
 import { useSession } from "@/hooks/useSession";
 import { LoginShell } from "@/components/auth/LoginShell";
+import { brl } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,

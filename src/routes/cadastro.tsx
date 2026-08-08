@@ -12,6 +12,7 @@ import { Logo } from "@/components/brand/Logo";
 import { LoginShell } from "@/components/auth/LoginShell";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { brl } from "@/lib/format";
 
 // ---------- Field validators ----------
 type FieldState = { valid: boolean; msg?: string; hint?: string };

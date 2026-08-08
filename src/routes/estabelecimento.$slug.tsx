@@ -12,7 +12,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { hubForCanonical } from "@/lib/category-hub";
 import { categoryIcon } from "@/lib/category-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn, brl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { brl } from "@/lib/format";
 import {
   ArrowLeft,
   ArrowRight,
