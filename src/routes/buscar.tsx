@@ -83,10 +83,10 @@ function SearchResultsPage() {
           <div ref={anchorRef} className="[overflow-anchor:none]">
             {isPending && !result ? (
               <div className="space-y-12" aria-busy="true">
-                <div className="h-64 w-full rounded-[40px] bg-[var(--bg-surface)] animate-pulse border border-[var(--border-subtle)]" />
+                <div className="h-64 w-full rounded-[40px] bg-[var(--bg-surface-elevated)] animate-pulse border border-[var(--border-subtle)]" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-32 bg-[var(--bg-surface)] animate-pulse rounded-[var(--radius-2xl)] border border-[var(--border-subtle)]" />
+                    <div key={i} className="h-32 bg-[var(--bg-surface-elevated)] animate-pulse rounded-[32px] border border-[var(--border-subtle)]" />
                   ))}
                 </div>
               </div>
@@ -103,7 +103,7 @@ function SearchResultsPage() {
                 {/* Lista de Resultados */}
                 {!q && !c ? (
                   <div className="flex flex-col items-center justify-center py-32 text-center px-6">
-                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)]">
+                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-[32px] flex items-center justify-center mb-8 border border-[var(--border-subtle)] shadow-inner">
                       <Search size={40} className="text-[var(--text-tertiary)]" />
                     </div>
                     <h2 className="text-3xl font-black mb-4 uppercase tracking-tight">O que você procura hoje?</h2>
@@ -117,7 +117,7 @@ function SearchResultsPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-32 text-center px-6">
-                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)] text-[var(--danger)]">
+                    <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-[32px] flex items-center justify-center mb-8 border border-[var(--border-subtle)] text-[var(--danger)] shadow-inner">
                       <Info size={40} />
                     </div>
                     <h2 className="text-3xl font-black mb-4 uppercase tracking-tight">Sem resultados</h2>

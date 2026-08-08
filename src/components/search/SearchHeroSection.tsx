@@ -29,13 +29,13 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
         <div className="space-y-10">
           <header className="space-y-6">
              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 rounded-full bg-[var(--brand-primary)] px-4 py-1.5 shadow-[0_4px_12px_rgba(59,130,246,0.3)]">
+                <div className="flex items-center gap-2 rounded-xl bg-[var(--brand-primary)] px-4 py-1.5 shadow-[0_8px_16px_rgba(59,130,246,0.3)]">
                   <Sparkles className="h-3.5 w-3.5 text-white" />
                   <span className="text-[11px] font-black uppercase tracking-widest text-white">
                     {isCategory ? 'Explorar Categoria' : 'Melhor Escolha Hoje'}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
                   <Clock className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
                   <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
                     Auditado Agora
