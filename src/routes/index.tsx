@@ -266,8 +266,8 @@ function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
                 
                 {/* Floating detail for premium feel */}
-                <div className="absolute top-6 right-6 bg-[var(--brand-primary)]/10 backdrop-blur-md border border-[var(--brand-primary)]/20 px-4 py-2 rounded-full">
-                  <span className="text-[12px] font-bold text-[var(--brand-primary)] uppercase tracking-wider">Qualidade Auditada</span>
+                <div className="absolute top-4 right-4 bg-[var(--brand-primary)]/10 backdrop-blur-md border border-[var(--brand-primary)]/20 px-3 py-1.5 rounded-full">
+                  <span className="text-[10px] font-bold text-[var(--brand-primary)] uppercase tracking-wider">Qualidade Auditada</span>
                 </div>
               </motion.div>
               
