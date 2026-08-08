@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
+      { name: "twitter:title", content: "PreçoCerto — O comparador oficial de Feijó" },
       { name: "twitter:description", content: "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra." },
       { property: "og:image", content: "https://precocerto-feijo.app/og-image.jpg" },
       { property: "og:image:secure_url", content: "https://precocerto-feijo.app/og-image.jpg" },
