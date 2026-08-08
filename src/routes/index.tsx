@@ -107,8 +107,9 @@ function HomePage() {
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
-            alt="Interior de supermercado profissional e moderno"
+            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
+            alt="Interior de um supermercado moderno e organizado"
+
 
 
             className="h-full w-full object-cover"
