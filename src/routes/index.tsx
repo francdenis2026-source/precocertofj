@@ -277,7 +277,7 @@ function HomePage() {
         </section>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-           <div className="space-y-24 lg:col-span-8">
+           <div className="space-y-16 lg:col-span-8">
               <section id="baskets-section" aria-label="Cesta inteligente">
                 <OptimizedBasketSection />
               </section>
