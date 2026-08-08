@@ -205,32 +205,21 @@ function HomePage() {
               <div className="relative z-20">
                 <SmartSearchBar />
               </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {CATEGORIES.slice(0, 5).map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    to="/buscar"
-                    search={{ c: cat.value } as any}
-                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2 text-[14px] font-medium text-[var(--text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[var(--brand-primary)]/40 hover:text-[var(--text-primary)]"
-                  >
-                    {cat.label}
-                  </Link>
-                ))}
-              </div>
             </motion.div>
           </div>
 
-          {/* Trust bar integrated into hero flow */}
-          <div className="mt-20 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
-            <TrustStat label="Registros de preço" value={stats?.priceRecords} />
-            <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
-            <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
-            <TrustStat label="Mercados parceiros" value={stats?.establishments} />
-          </div>
         </div>
       </section>
 
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8">
+        {/* Trust bar integrated into hero flow - moved from inside section to below it if needed, or kept inside */}
+        <div className="mb-24 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <TrustStat label="Registros de preço" value={stats?.priceRecords} />
+          <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
+          <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
+          <TrustStat label="Mercados parceiros" value={stats?.establishments} />
+        </div>
+
         {/* Value props */}
         <section aria-labelledby="how-it-works" className="mb-24">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -306,7 +295,7 @@ function HomePage() {
                       Últimos preços perto de você
                     </h2>
                   </div>
-                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
+                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
                     {[
                       { id: "recent", label: "Recentes" },
                       { id: "price", label: "Mais baratos" },
@@ -316,9 +305,9 @@ function HomePage() {
                         onClick={() => setSort(s.id as any)}
                         aria-pressed={sort === s.id}
                         className={cn(
-                          "min-h-9 rounded-[var(--radius-sm)] px-4 text-[14px] font-medium transition-all",
+                          "min-h-9 rounded-[var(--radius-sm)] px-4 text-[13px] font-bold uppercase tracking-wider transition-all",
                           sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)]"
+                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
                             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                         )}
                       >
@@ -340,30 +329,15 @@ function HomePage() {
                  <h2 id="partners" className="mb-6 text-[15px] font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
                    Mercados parceiros
                  </h2>
-                 <div className="grid grid-cols-2 gap-3">
-                   <RegisteredStoresCarousel />
-                 </div>
-              </section>
-              <section>
-                <PromoBanner />
-              </section>
+                  <div className="grid grid-cols-2 gap-3">
+                    <RegisteredStoresCarousel />
+                  </div>
+               </section>
+               <section className="sticky top-24">
+                 <PromoBanner />
+               </section>
             </aside>
         </div>
-
-        {/* Categories */}
-        <section aria-labelledby="categories" className="mt-24">
-          <SectionHeading
-            id="categories"
-            kicker="Explorar"
-            title="Compre por categoria"
-            description="Padronizadas em todos os mercados parceiros, para uma comparação justa."
-          />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {CATEGORIES.map((cat, idx) => (
-              <CategoryCard key={cat.slug} label={cat.label} value={cat.value} Icon={cat.Icon} index={idx} />
-            ))}
-          </div>
-        </section>
 
         <section aria-labelledby="realtime" className="mt-24 border-t border-[var(--border-subtle)] pt-16">
           <SectionHeading
