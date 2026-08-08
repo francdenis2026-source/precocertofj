@@ -264,7 +264,7 @@ function CadastroPage() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-900">
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--text-primary)]">
                     PIN de acesso · 6 dígitos
                   </label>
 
@@ -276,7 +276,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-1.5 text-[11px] font-medium text-slate-600">
+                <p className="mt-1.5 text-[11px] font-medium text-[var(--text-tertiary)]">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -325,7 +325,7 @@ function CadastroPage() {
               </button>
 
               <div className="flex items-center justify-between pt-1 text-[12px]">
-                <span className="inline-flex items-center gap-1.5 font-medium text-slate-600">
+                <span className="inline-flex items-center gap-1.5 font-medium text-[var(--text-tertiary)]">
                   <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD }} />
                   Dados protegidos
                 </span>
@@ -339,7 +339,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[11px] font-medium text-slate-600">
+            <p className="mt-3 border-t border-[var(--border-subtle)] pt-2.5 text-center text-[11px] font-medium text-[var(--text-tertiary)]">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
@@ -356,7 +356,7 @@ function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
   if (!show) return null;
   if (state.valid) {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
         <CheckCircle2 className="h-3 w-3" /> ok
       </span>
     );
