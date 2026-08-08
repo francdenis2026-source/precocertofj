@@ -168,7 +168,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
   const showPanel = open && (canQuery || (trending?.length ?? 0) > 0);
 
   return (
-    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto isolate z-50">
+    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto z-50">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -240,17 +240,31 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
 
       <AnimatePresence>
         {showPanel && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute left-[-12px] right-[-12px] top-[-12px] z-[100] overflow-hidden rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)] text-left shadow-[0_32px_80px_-16px_rgba(11,30,58,0.7)] min-w-[320px] lg:min-w-[440px]"
-          >
-            <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] px-5 py-3.5 flex items-center justify-between">
-               <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Inteligência de Busca</span>
-               {loading && <Loader2 className="h-3 w-3 animate-spin text-[var(--brand-primary)]" />}
-            </div>
+          <>
+            {/* Backdrop inteligente para isolar a busca */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/60 backdrop-blur-sm lg:backdrop-blur-md"
+              onMouseDown={() => setOpen(false)}
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute left-[-16px] right-[-16px] top-[-16px] z-[100] overflow-hidden rounded-[24px] border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)] text-left shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] min-w-[340px] lg:min-w-[500px]"
+            >
+              <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 px-6 py-4 flex items-center justify-between">
+                 <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Motor de Busca Inteligente</span>
+                 </div>
+                 {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--brand-primary)]" />}
+              </div>
+
 
             <div className="p-1">
             {!canQuery ? (
