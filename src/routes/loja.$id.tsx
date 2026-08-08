@@ -336,45 +336,27 @@ function ProductCardItem({ p, storeId, allItems }: { p: PublicStoreProduct; stor
         isLowest && "shadow-xl shadow-[var(--success)]/5"
       )}
     >
-      <div className="relative aspect-square p-6 flex items-center justify-center overflow-hidden">
-        <ProductImage
-          name={p.productName}
-          alt={p.productName}
-          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
-        />
-        {isLowest && (
-          <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-1.5">
-            <span className="bg-[var(--success)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl shadow-lg shadow-[var(--success)]/30 border border-white/10">
-              Melhor Preço
-            </span>
-            {p.savingsPercent > 0 && (
-              <span className="bg-[var(--brand-primary)] text-[var(--bg-base)] text-[9px] font-black uppercase tracking-tighter px-2 py-1 rounded-lg shadow-md animate-pulse">
-                -{Math.round(p.savingsPercent)}% OFF
-              </span>
-            )}
-          </div>
-        )}
-
-
+      <div className="hidden">
+        {/* Imagem removida conforme solicitação do usuário */}
       </div>
       
-      <div className="p-5 flex flex-col flex-1 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-        <h4 className="font-black text-[15px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors mb-4 min-h-[2.5rem]">
+      <div className="p-3 md:p-5 flex flex-col flex-1 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+        <h4 className="font-black text-[13px] md:text-[15px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors mb-2 md:mb-4 min-h-[2.5rem]">
           {p.productName}
         </h4>
 
         
-        <div className="mt-auto pt-4 flex flex-col gap-1">
+        <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <Price value={p.price} size="lg" className="text-xl font-black tracking-tighter" />
-            <button className="h-10 w-10 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all shadow-sm">
-              <PlusCircleIcon size={18} />
+            <Price value={p.price} size="md" className="text-lg md:text-xl font-black tracking-tighter" />
+            <button className="h-8 md:h-10 w-8 md:w-10 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all shadow-sm">
+              <PlusCircleIcon size={16} />
             </button>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-2">
-            <Clock size={12} />
-            <span>Atualizado {formatDate(p.lastDate)}</span>
+          <div className="flex items-center gap-2 text-[8px] md:text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-1 md:mt-2">
+            <Clock size={10} />
+            <span>{formatDate(p.lastDate)}</span>
           </div>
         </div>
       </div>
