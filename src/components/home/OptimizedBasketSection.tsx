@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { 
   ShoppingBasket, 
-  TrendingDown, 
   ArrowRight, 
   Store, 
   CheckCircle2, 
   Sparkles,
-  ChevronRight,
   Info
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -29,9 +27,9 @@ export function OptimizedBasketSection() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[300px] w-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)]" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {[1, 2].map((i) => (
+          <Skeleton key={i} className="h-[400px] w-full rounded-[var(--radius-2xl)] bg-[var(--bg-surface)]" />
         ))}
       </div>
     );
@@ -78,6 +76,8 @@ export function OptimizedBasketSection() {
   );
 }
 
+function BasketCard({ basket, index }: { basket: any; index: number }) {
+  return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
