@@ -101,8 +101,9 @@ function HomePage() {
       {/* Hero Section — Refined Hierarchy and Depth */}
       <section className="relative min-h-[520px] md:min-h-[640px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0D1B2A]/95 via-[#0D1B2A]/70 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-global)] via-transparent to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D1B2A]/98 via-[#0D1B2A]/85 to-[#0D1B2A]/40 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-global)] via-[#0D1B2A]/20 to-transparent z-10" />
+
           <motion.img 
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -116,7 +117,7 @@ function HomePage() {
 
 
 
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover blur-[2px]"
           />
         </div>
 
