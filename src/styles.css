@@ -353,6 +353,53 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+
+/* ---------------------------------------------------------------
+ * Price Components
+ * ------------------------------------------------------------- */
+.pc-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.125em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.pc-price--xs { font-size: 0.75rem; }
+.pc-price--sm { font-size: 0.875rem; }
+.pc-price--md { font-size: 1rem; }
+.pc-price--lg { font-size: 1.25rem; }
+.pc-price--xl { font-size: 1.875rem; }
+.pc-price--display { font-size: 3rem; letter-spacing: -0.04em; }
+
+.pc-price--best { color: var(--success); }
+.pc-price--muted { color: var(--text-tertiary); font-weight: 500; }
+.pc-price--strike { 
+  color: var(--text-tertiary); 
+  text-decoration: line-through; 
+  opacity: 0.6;
+  font-weight: 500;
+}
+.pc-price--savings { color: var(--brand-accent); }
+.pc-price--onhero { color: white; }
+
+.pc-price__prefix {
+  font-size: 0.6em;
+  font-weight: 700;
+  opacity: 0.8;
+  margin-right: 0.1em;
+}
+
+.pc-price__suffix {
+  font-size: 0.5em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pc-price--block { display: flex; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
