@@ -2,19 +2,42 @@ import { usePriceSearch } from "@/lib/use-price-search";
 import { Route } from "@/routes/buscar";
 import { motion, AnimatePresence } from "framer-motion";
 import { PremiumOfferCard } from "./PremiumOfferCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Price } from "@/components/ds/Price";
-import { ArrowUpDown, Filter, ShoppingBag } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useState, useMemo } from "react";
+import { Loader2 } from "lucide-react";
+
+const ITEMS_PER_PAGE = 20;
 
 export function SearchResultsList() {
-  const { q } = Route.useSearch();
-  const { data: result, isPending: isLoading } = usePriceSearch(q);
+  const { q, c } = Route.useSearch();
+  const { data: result, isPending: isLoading } = usePriceSearch(q, c);
+  const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
+  
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    rootMargin: "200px",
+  });
+
+  useEffect(() => {
+    setDisplayCount(ITEMS_PER_PAGE);
+  }, [q, c]);
+
+  useEffect(() => {
+    if (inView && result && displayCount < result.groups.length) {
+      setDisplayCount(prev => prev + ITEMS_PER_PAGE);
+    }
+  }, [inView, result, displayCount]);
+
+  const visibleGroups = useMemo(() => {
+    if (!result?.groups) return [];
+    return result.groups.slice(0, displayCount);
+  }, [result, displayCount]);
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="aspect-[4/5] w-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-[200px] w-full rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse" />
         ))}
       </div>
     );
@@ -36,7 +59,7 @@ export function SearchResultsList() {
             <div className="flex items-center gap-2 bg-[var(--bg-surface)] px-4 py-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
               <label className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">Ordenar:</label>
               <select className="bg-transparent text-[12px] font-bold focus:outline-none cursor-pointer text-[var(--text-primary)]">
-                <option>Menor Preço</option>
+                <option>Melhor Preço</option>
                 <option>Maior Economia</option>
                 <option>Mais Relevante</option>
               </select>
@@ -46,19 +69,32 @@ export function SearchResultsList() {
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
           <AnimatePresence mode="popLayout">
-            {result.groups.map((group, i) => (
+            {visibleGroups.map((group, i) => (
               <motion.div
                 key={group.productName}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: (i % ITEMS_PER_PAGE) * 0.03,
+                  ease: [0.16, 1, 0.3, 1] 
+                }}
               >
-                <PremiumOfferCard group={group} isBest={i === 0} />
+                <PremiumOfferCard group={group} isBest={i === 0 && !q} />
               </motion.div>
             ))}
           </AnimatePresence>
        </div>
+
+       {displayCount < result.groups.length && (
+         <div ref={ref} className="flex justify-center py-12">
+           <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
+             <Loader2 className="h-5 w-5 animate-spin text-[var(--brand-primary)]" />
+             <span className="text-sm font-bold text-[var(--text-secondary)]">Carregando mais ofertas...</span>
+           </div>
+         </div>
+       )}
 
     </div>
   );

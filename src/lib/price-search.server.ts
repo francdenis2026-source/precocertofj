@@ -33,11 +33,12 @@ export async function performPriceSearch(data: {
   query: string;
   mode: SearchMode;
   pureOnly: boolean;
-  /** Ignora o cache curto — usado quando chega preço novo em tempo real. */
   fresh?: boolean;
   category?: string;
+  page?: number;
+  limit?: number;
 }): Promise<PriceSearchResult> {
-  const cacheKey = `${data.query.trim().toLowerCase()}|${data.category || ""}|${data.mode}|${data.pureOnly ? 1 : 0}`;
+  const cacheKey = `${data.query.trim().toLowerCase()}|${data.category || ""}|${data.mode}|${data.pureOnly ? 1 : 0}|p${data.page || 1}`;
   const hit = searchResultCache.get(cacheKey);
   if (!data.fresh && hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
 
@@ -56,6 +57,8 @@ async function runPriceSearch(data: {
   mode: SearchMode;
   pureOnly: boolean;
   category?: string;
+  page?: number;
+  limit?: number;
 }): Promise<PriceSearchResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -440,12 +443,15 @@ async function runPriceSearch(data: {
       };
     })
     .sort((a, b) => {
-      if (a.min !== b.min) return a.min - b.min;
       if (b._score !== a._score) return b._score - a._score;
+      if (a.min !== b.min) return a.min - b.min;
       return b.samples - a.samples;
-    })
-    .slice(0, 15)
-    .map(({ _score: _s, ...g }) => g);
+    });
+
+  const page = data.page ?? 1;
+  const limit = data.limit ?? 40;
+  const paginatedGroups = allGroups.slice((page - 1) * limit, page * limit);
+  const groups = paginatedGroups.map(({ _score: _s, ...g }) => g);
 
   const eqIdx = groups.length > 0
     ? selectCheapestEquivalentIndexes(
