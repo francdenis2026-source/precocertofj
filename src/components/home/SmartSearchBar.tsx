@@ -2,7 +2,7 @@ import * as React from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { Search, ArrowRight, Store, Loader2, TrendingUp, X, CornerDownLeft } from "lucide-react";
+import { Search, ArrowRight, Store, Loader2, TrendingUp, X, CornerDownLeft, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
