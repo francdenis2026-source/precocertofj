@@ -30,7 +30,7 @@ export function SearchDashboard() {
   ];
 
   return (
-    <div className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded-[32px] p-8 shadow-[var(--pc-shadow-md)]">
+    <div className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded-[var(--radius-3xl)] p-8 shadow-[var(--pc-shadow-md)]">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x md:divide-[var(--border-subtle)]">
         {stats.map((stat, i) => (
           <motion.div

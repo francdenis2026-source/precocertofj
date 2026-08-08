@@ -21,9 +21,9 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 md:p-12 shadow-[var(--pc-shadow-lg)]">
+    <section className="relative overflow-hidden rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 md:p-12 shadow-[var(--pc-shadow-lg)]">
       {/* Decorative background accent */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-[var(--brand-primary)]/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-[var(--brand-primary)]/10 blur-[120px] pointer-events-none" />
       
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,400px] gap-12 relative z-10">
         <div className="space-y-10">

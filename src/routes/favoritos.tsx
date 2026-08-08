@@ -110,7 +110,7 @@ function FavoritosPage() {
                           navigate({ to: "/buscar", search: { q: m.marketName } as never })
                         }
                         aria-label={`Buscar preços em ${m.marketName}`}
-                        className="group flex min-h-[64px] w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left transition-all hover:-translate-y-px hover:border-brand/60 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.99]"
+                        className="group flex min-h-[64px] w-full items-center gap-3 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-left transition-all hover:-translate-y-px hover:border-[var(--brand-primary)]/60 hover:shadow-[var(--pc-shadow-md)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] active:scale-[0.99]"
                       >
                         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand/10 text-brand border border-brand/30" aria-hidden>
                           <Store className="h-5 w-5" strokeWidth={2.2} />
@@ -175,7 +175,7 @@ function FavoritosPage() {
                           navigate({ to: "/buscar", search: { q: it.displayName } as never })
                         }
                         aria-label={`Ver preços de ${it.displayName}`}
-                        className="group flex min-h-[64px] w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left transition-all hover:-translate-y-px hover:border-brand/60 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.99]"
+                        className="group flex min-h-[64px] w-full items-center gap-3 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 text-left transition-all hover:-translate-y-px hover:border-[var(--brand-primary)]/60 hover:shadow-[var(--pc-shadow-md)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] active:scale-[0.99]"
                       >
                         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand/10 text-brand border border-brand/30" aria-hidden>
                           <ShoppingBag className="h-5 w-5" strokeWidth={2.2} />
