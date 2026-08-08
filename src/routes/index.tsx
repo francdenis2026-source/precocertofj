@@ -295,7 +295,7 @@ function HomePage() {
                       Últimos preços perto de você
                     </h2>
                   </div>
-                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
+                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
                     {[
                       { id: "recent", label: "Recentes" },
                       { id: "price", label: "Mais baratos" },
@@ -305,9 +305,9 @@ function HomePage() {
                         onClick={() => setSort(s.id as any)}
                         aria-pressed={sort === s.id}
                         className={cn(
-                          "min-h-9 rounded-[var(--radius-sm)] px-4 text-[14px] font-medium transition-all",
+                          "min-h-9 rounded-[var(--radius-sm)] px-4 text-[13px] font-bold uppercase tracking-wider transition-all",
                           sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)]"
+                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
                             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                         )}
                       >
