@@ -373,7 +373,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                                 {BRL(s.minPrice)}
                               </div>
                               {i === 0 && (
-                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--pc-brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
+                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
                               )}
                             </div>
                           ) : loading ? (
