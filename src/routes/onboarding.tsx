@@ -188,7 +188,7 @@ function FieldRow({
 }) {
   return (
     <div>
-      <Label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
+      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#64748B]">
         {icon}
         {label}
       </Label>
