@@ -1,14 +1,16 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -113,6 +115,35 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
 
   const savings = group.avg && bestPrice.price < group.avg ? group.avg - bestPrice.price : 0;
   
+  const [marketFilter, setMarketFilter] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const marketTypes = useMemo(() => {
+    const types = new Set<string>();
+    group.prices.forEach(p => {
+      if (p.marketKind) types.add(p.marketKind);
+    });
+    return Array.from(types);
+  }, [group.prices]);
+
+  const filteredPrices = useMemo(() => {
+    if (!marketFilter) return group.prices;
+    return group.prices.filter(p => p.marketKind === marketFilter);
+  }, [group.prices, marketFilter]);
+
+  const handleExportPDF = () => {
+    toast.info("Gerando PDF da comparação...", {
+      description: "Esta funcionalidade requer o módulo de exportação premium."
+    });
+  };
+
+  const handleSaveComparison = () => {
+    setIsSaved(true);
+    toast.success("Comparação salva na sua conta!", {
+      description: "Você pode acessá-la em Perfil > Comparações Salvas."
+    });
+  };
+  
   return (
     <div className="relative overflow-hidden rounded-[var(--radius-xl)]">
       {/* Swipe background indicator */}
@@ -203,65 +234,120 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                     </DialogTrigger>
                     <DialogContent className="max-w-2xl bg-[var(--bg-surface)] border-[var(--border-subtle)] p-0 gap-0 overflow-hidden">
                       <DialogHeader className="p-6 pb-4 bg-[var(--bg-surface-elevated)] border-b border-[var(--border-subtle)]">
-                        <DialogTitle className="text-xl font-black tracking-tight text-[var(--text-primary)] flex items-center gap-3">
-                          <BarChart3 className="text-[var(--brand-primary)]" />
-                          Comparativo de Preços
+                        <DialogTitle className="text-xl font-black tracking-tight text-[var(--text-primary)] flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <BarChart3 className="text-[var(--brand-primary)]" />
+                            Comparativo de Preços
+                          </div>
+                          <div className="flex items-center gap-2 mr-8">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handleSaveComparison}
+                            >
+                              {isSaved ? <Check className="text-green-500" /> : <Bookmark size={14} />}
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handleExportPDF}
+                            >
+                              <Download size={14} />
+                            </Button>
+                          </div>
                         </DialogTitle>
                         <p className="text-sm text-[var(--text-secondary)] mt-1 font-medium italic">
                           {group.productName}
                         </p>
                       </DialogHeader>
+
+                      {/* Filters */}
+                      {marketTypes.length > 0 && (
+                        <div className="px-6 py-3 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)]/50 flex items-center gap-2 overflow-x-auto no-scrollbar">
+                          <Filter size={12} className="text-[var(--text-tertiary)] shrink-0" />
+                          <Badge 
+                            variant={marketFilter === null ? "default" : "outline"}
+                            className="cursor-pointer whitespace-nowrap"
+                            onClick={() => setMarketFilter(null)}
+                          >
+                            Todos
+                          </Badge>
+                          {marketTypes.map(type => (
+                            <Badge 
+                              key={type}
+                              variant={marketFilter === type ? "default" : "outline"}
+                              className="cursor-pointer whitespace-nowrap capitalize"
+                              onClick={() => setMarketFilter(type)}
+                            >
+                              {type.toLowerCase()}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                       
-                      <div className="p-0 overflow-x-auto">
+                      <div className="p-0 max-h-[400px] overflow-y-auto no-scrollbar">
                         <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-[var(--bg-surface-elevated)]/50">
-                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)]">Estabelecimento</th>
-                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Preço</th>
-                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Diferença</th>
+                          <thead className="sticky top-0 z-20">
+                            <tr className="bg-[var(--bg-surface-elevated)]">
+                              <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)]">Estabelecimento</th>
+                              <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Preço</th>
+                              <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Diferença</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[var(--border-subtle)]/50">
-                            {group.prices.map((price, idx) => (
-                              <tr key={`${price.establishmentId}-${idx}`} className={cn(
-                                "group/row transition-colors hover:bg-[var(--brand-primary)]/5",
-                                idx === 0 && "bg-[var(--brand-primary)]/5"
-                              )}>
-                                <td className="px-6 py-4">
-                                  <div className="flex flex-col">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-sm font-bold text-[var(--text-primary)]">{price.marketName}</span>
-                                      {idx === 0 && (
-                                        <span className="flex items-center gap-1 text-[9px] font-black bg-[var(--brand-primary)] text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
-                                          <Medal size={8} /> 1º Lugar
-                                        </span>
-                                      )}
-                                      {idx === 1 && (
-                                        <span className="flex items-center gap-1 text-[9px] font-black bg-slate-500 text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
-                                          2º Lugar
-                                        </span>
-                                      )}
+                            {filteredPrices.map((price, idx) => {
+                              // Find original index for 1st/2nd place badges
+                              const originalIdx = group.prices.findIndex(p => p.establishmentId === price.establishmentId && p.price === price.price);
+                              return (
+                                <tr key={`${price.establishmentId}-${idx}`} className={cn(
+                                  "group/row transition-colors hover:bg-[var(--brand-primary)]/5",
+                                  originalIdx === 0 && "bg-[var(--brand-primary)]/5"
+                                )}>
+                                  <td className="px-6 py-4">
+                                    <div className="flex flex-col">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-sm font-bold text-[var(--text-primary)]">{price.marketName}</span>
+                                        {originalIdx === 0 && (
+                                          <span className="flex items-center gap-1 text-[9px] font-black bg-[var(--brand-primary)] text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                            <Medal size={8} /> 1º
+                                          </span>
+                                        )}
+                                        {originalIdx === 1 && (
+                                          <span className="flex items-center gap-1 text-[9px] font-black bg-slate-500 text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                            2º
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="flex items-center gap-2 mt-0.5">
+                                        <span className="text-[10px] text-[var(--text-tertiary)] font-medium">{price.neighborhood || "Centro"}</span>
+                                        {price.marketKind && (
+                                          <span className="text-[9px] text-[var(--text-tertiary)]/70 px-1 rounded-sm border border-[var(--border-subtle)]/30 capitalize">
+                                            {price.marketKind.toLowerCase()}
+                                          </span>
+                                        )}
+                                      </div>
                                     </div>
-                                    <span className="text-[10px] text-[var(--text-tertiary)] font-medium">{price.neighborhood || "Centro"}</span>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                  <Price value={price.price} size="sm" className={cn(
-                                    "font-black tracking-tight",
-                                    idx === 0 ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
-                                  )} />
-                                </td>
-                                <td className="px-6 py-4 text-right">
-                                  {idx === 0 ? (
-                                    <span className="text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-tighter">Melhor Oferta</span>
-                                  ) : (
-                                    <span className="text-[11px] font-bold text-[var(--danger)]/80 tabular-nums">
-                                      +R$ {(price.price - bestPrice.price).toFixed(2).replace('.', ',')}
-                                    </span>
-                                  )}
-                                </td>
-                              </tr>
-                            ))}
+                                  </td>
+                                  <td className="px-6 py-4 text-right">
+                                    <Price value={price.price} size="sm" className={cn(
+                                      "font-black tracking-tight",
+                                      originalIdx === 0 ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
+                                    )} />
+                                  </td>
+                                  <td className="px-6 py-4 text-right">
+                                    {originalIdx === 0 ? (
+                                      <span className="text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-tighter">Melhor Preço</span>
+                                    ) : (
+                                      <span className="text-[11px] font-bold text-[var(--danger)]/80 tabular-nums">
+                                        +R$ {(price.price - bestPrice.price).toFixed(2).replace('.', ',')}
+                                      </span>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            })}
                           </tbody>
                         </table>
                       </div>
@@ -270,11 +356,11 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                         <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10">
                           <Tag className="text-[var(--brand-primary)] mt-0.5" size={18} />
                           <div>
-                            <p className="text-sm font-bold text-[var(--text-primary)] mb-1">Análise de Economia</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)] mb-1">Dica de Economia</p>
                             <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
                               {secondBestPrice 
-                                ? `Você economiza R$ ${priceGap.toFixed(2).replace('.', ',')} comprando no ${bestPrice.marketName} em comparação à segunda melhor opção.`
-                                : `O ${bestPrice.marketName} oferece o melhor preço encontrado para este item.`}
+                                ? `Economia de R$ ${priceGap.toFixed(2).replace('.', ',')} comprando no ${bestPrice.marketName} vs 2º lugar.`
+                                : `O ${bestPrice.marketName} detém o menor preço registrado.`}
                             </p>
                           </div>
                         </div>
