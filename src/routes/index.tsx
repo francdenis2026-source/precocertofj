@@ -259,12 +259,15 @@ function HomePage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]"
+                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-slate-900 shadow-[var(--pc-shadow-lg)]"
               >
                 <img 
                   src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
                   alt="Análise técnica de preços e tecnologia"
-                  className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-transform duration-700"
+                  onLoad={(e) => {
+                    if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+                  }}
+                  className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-all duration-700 opacity-0"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
                 
