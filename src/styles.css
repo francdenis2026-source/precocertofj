@@ -251,7 +251,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all var(--dur-base) var(--ease-out-expo);
   font-size: 0.9375rem;
   letter-spacing: -0.01em;
-  box-shadow: var(--pc-shadow-glow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   &:hover {
     background-color: var(--pc-brand-gold-soft);
     transform: translateY(-2px);
