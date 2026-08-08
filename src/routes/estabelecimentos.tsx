@@ -25,6 +25,7 @@ import {
 
 
 
+
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import {
   humanizeCategory,
