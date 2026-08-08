@@ -1,25 +1,51 @@
 import { createServerFn } from "@tanstack/react-start";
-import { supabase } from "@/integrations/supabase/client";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { z } from "zod";
+
+const monitoringSchema = z.object({
+  query: z.string().optional(),
+  page: z.number().default(1),
+  pageSize: z.number().default(12),
+});
 
 export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
-  .inputValidator((d: any) => d as { query?: string })
-  .handler(async ({ data }) => {
-    const query = data?.query?.trim().toLowerCase();
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => monitoringSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { query, page, pageSize } = data;
+    const cleanQuery = query?.trim().toLowerCase();
 
-    // 1. Fetch establishments
-    const { data: stores } = await supabase
-      .from('establishments')
-      .select('id, name, logo_url')
-      .order('name', { ascending: true });
+    // 1. Check permissions (Security: check if user has admin/moderator role)
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    const isAdmin = roleData?.role === 'admin';
+    const isModerator = roleData?.role === 'moderator';
+
+    if (!isAdmin && !isModerator) {
+      throw new Error("Acesso negado: Permissões insuficientes para visualizar o monitoramento.");
+    }
+
+    // 2. Performance: Fetch establishments with pagination
+    const offset = (page - 1) * pageSize;
     
-    if (!stores || stores.length === 0) return [];
+    let storesQuery = supabase
+      .from('establishments')
+      .select('id, name, logo_url', { count: 'exact' })
+      .order('name', { ascending: true })
+      .range(offset, offset + pageSize - 1);
+      
+    const { data: stores, count } = await storesQuery;
+    
+    if (!stores || stores.length === 0) return { stores: [], total: 0 };
 
-    // Current hour seed for rotation
+    // 3. Batch fetch scans for the current page of stores
     const hourSeed = Math.floor(Date.now() / (1000 * 60 * 60));
-
-    // 2. Fetch some scans for all these stores in a batch
-    // We'll fetch the latest 5 scans per store to have a pool to rotate from
-    // (Using a lateral join would be better but for now let's just fetch recent public scans)
+    
     let scansQuery = supabase
       .from('scans')
       .select('establishment_id, product_name, price_captured, created_at, category')
@@ -28,14 +54,13 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       .is('user_id', null)
       .order('created_at', { ascending: false });
 
-    if (query) {
-      scansQuery = scansQuery.ilike('product_name', `%${query}%`);
+    if (cleanQuery) {
+      scansQuery = scansQuery.ilike('product_name', `%${cleanQuery}%`);
     }
 
-    const { data: allScans } = await scansQuery.limit(150);
+    const { data: allScans } = await scansQuery.limit(pageSize * 5);
 
-
-    // Group scans by establishment
+    // Group scans
     const scansByStore = (allScans || []).reduce((acc: any, scan) => {
       if (!acc[scan.establishment_id]) acc[scan.establishment_id] = [];
       acc[scan.establishment_id].push(scan);
@@ -44,39 +69,37 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
 
     const monitoringData = stores.map((store) => {
       const storeScans = scansByStore[store.id] || [];
-      
-      // Deterministic randomness based on store ID and hour
-      // This creates the "live" effect by showing different products every hour
       const storeHash = store.id.split('-').reduce((acc, part) => acc + (parseInt(part, 16) || 0), 0);
       const rotationIndex = (hourSeed + storeHash) % (storeScans.length || 1);
       const currentScan = storeScans[rotationIndex];
-
-      const status = 'online'; 
-      
-      const insights = [];
-      if (currentScan) {
-        insights.push({
-          type: 'price',
-          message: `${currentScan.product_name} • R$ ${currentScan.price_captured?.toFixed(2)}`,
-          intensity: 'medium'
-        });
-      } else {
-        insights.push({
-          type: 'stock',
-          message: 'Aguardando novas ofertas para este estabelecimento...',
-          intensity: 'low'
-        });
-      }
 
       return {
         storeId: store.id,
         storeName: store.name,
         storeLogoUrl: store.logo_url,
-        status,
+        status: 'online',
         lastSync: currentScan ? currentScan.created_at : new Date().toISOString(),
-        insights: insights.slice(0, 1)
+        insights: currentScan ? [{
+          type: 'price',
+          message: `${currentScan.product_name} • R$ ${currentScan.price_captured?.toFixed(2)}`,
+          intensity: 'medium'
+        }] : [{
+          type: 'stock',
+          message: 'Aguardando novas ofertas...',
+          intensity: 'low'
+        }]
       };
     });
 
-    return monitoringData;
+    // 4. Audit: Log the monitoring access
+    await supabase.from('monitoring_audit_logs').insert({
+      user_id: userId,
+      action: 'view_monitoring_dashboard',
+      details: { page, query: cleanQuery }
+    });
+
+    return {
+      stores: monitoringData,
+      total: count || 0
+    };
   });
