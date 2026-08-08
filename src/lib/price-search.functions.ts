@@ -89,15 +89,21 @@ export type PriceSearchResult = {
 };
 
 export const searchProductPrice = createServerFn({ method: "POST" })
-  .validator((input: { query: string; mode?: SearchMode; pureOnly?: boolean; fresh?: boolean; category?: string }) => {
+  .validator((input: { query: string; mode?: SearchMode; pureOnly?: boolean; fresh?: boolean; category?: string; page?: number; limit?: number }) => {
     const q = (input?.query ?? "").trim();
     const category = input?.category?.trim() || undefined;
-    // Category pages run with an empty query on purpose; only a free-text
-    // search with no category needs the 2-character minimum.
     if (q.length < 2 && !category) throw new Error("Digite ao menos 2 caracteres");
     if (q.length > 80) throw new Error("Busca muito longa");
     const mode: SearchMode = input?.mode === "loose" ? "loose" : "strict";
     const pureOnly = Boolean(input?.pureOnly);
-    return { query: q, mode, pureOnly, fresh: Boolean(input?.fresh), category };
+    return { 
+      query: q, 
+      mode, 
+      pureOnly, 
+      fresh: Boolean(input?.fresh), 
+      category,
+      page: Math.max(1, input?.page ?? 1),
+      limit: Math.max(1, Math.min(100, input?.limit ?? 40))
+    };
   })
   .handler(async ({ data }): Promise<PriceSearchResult> => performPriceSearch(data));

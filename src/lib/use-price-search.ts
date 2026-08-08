@@ -14,7 +14,7 @@ export function usePriceSearch(query: string, category?: string) {
   const runSearch = useServerFn(searchProductPrice);
   return useQuery({
     queryKey: ["price-search", query, category],
-    queryFn: () => runSearch({ data: { query: query || "", category } }),
+    queryFn: () => runSearch({ data: { query: query || "", category, limit: 100 } }),
     enabled: true,
     staleTime: 30_000,
     placeholderData: keepPreviousData,
