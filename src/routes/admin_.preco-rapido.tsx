@@ -179,7 +179,7 @@ export function QuickPricePage() {
       </div>
 
       <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_260px]">
-        <form onSubmit={submit} className="space-y-2 rounded-xl border border-border/70 bg-card p-2.5">
+        <form onSubmit={submit} className="space-y-2 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2.5 shadow-[var(--shadow-sm)]">
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="space-y-1">
               <span className={cn(tc.meta, "font-semibold")}>Estabelecimento</span>
@@ -323,7 +323,7 @@ export function QuickPricePage() {
           </div>
         </form>
 
-        <aside className="rounded-xl border border-border/70 bg-card p-2.5">
+        <aside className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2.5 shadow-[var(--shadow-sm)]">
           <p className={cn(tc.itemTitle, "mb-1.5")}>Registrados agora</p>
           {saved.length === 0 ? (
             <p className={cn(tc.meta)}>Nenhum preço registrado nesta sessão.</p>

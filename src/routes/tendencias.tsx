@@ -200,7 +200,7 @@ function TrendsPage() {
         />
 
         {/* Filtros */}
-        <div className="mb-4 flex flex-col gap-3 rounded-xl border border-border bg-card p-3">
+        <div className="mb-4 flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 shadow-[var(--shadow-sm)]">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
               <TrendingUp className="h-3.5 w-3.5" aria-hidden /> Período
@@ -271,7 +271,7 @@ function TrendsPage() {
             { label: "Termos diferentes", value: uniqueTerms.toLocaleString("pt-BR") },
             { label: "Termo líder", value: topTerm ?? "—" },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-border bg-card p-3">
+            <div key={s.label} className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 shadow-[var(--shadow-sm)]">
               <p className="text-[12px] text-muted-foreground">{s.label}</p>
               <p className="truncate font-display text-lg font-semibold tabular-nums text-foreground">
                 {s.value}

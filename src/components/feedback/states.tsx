@@ -294,7 +294,7 @@ export function SmartErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 text-left animate-in fade-in-0 duration-200 sm:flex-row sm:items-center shadow-lg shadow-destructive/5 backdrop-blur-sm",
+        "flex flex-col items-start gap-3 rounded-[var(--radius-2xl)] border border-destructive/20 bg-destructive/5 text-left animate-in fade-in-0 duration-200 sm:flex-row sm:items-center shadow-[var(--shadow-lg)] shadow-destructive/5 backdrop-blur-sm",
         compact ? "p-3.5" : "p-5",
         className,
       )}
@@ -388,7 +388,7 @@ export function PriceListSkeleton({
         <div
           key={i}
           className={shimmer(
-            "flex items-center gap-3 rounded-xl border border-border/60 bg-card/60 px-3 py-2.5",
+            "flex items-center gap-3 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/60 px-3 py-2.5",
           )}
         >
           <Skeleton className="h-8 w-8 shrink-0 rounded-lg" />
@@ -421,10 +421,10 @@ export function MarketCardsSkeleton({
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className={shimmer("rounded-2xl border border-border/60 bg-card/60 p-4")}
+          className={shimmer("rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/60 p-4")}
         >
           <div className="flex items-center gap-3">
-            <Skeleton className="h-11 w-11 shrink-0 rounded-xl" />
+            <Skeleton className="h-11 w-11 shrink-0 rounded-[var(--radius-xl)]" />
             <div className="min-w-0 flex-1 space-y-1.5">
               <Skeleton className="h-3.5 w-[70%]" />
               <Skeleton className="h-2.5 w-[45%]" />
@@ -461,7 +461,7 @@ export function ComparisonSkeleton({
         {Array.from({ length: columns }).map((_, i) => (
           <div
             key={i}
-            className={shimmer("rounded-2xl border border-border/60 bg-card/60 p-4")}
+            className={shimmer("rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/60 p-4")}
           >
             <Skeleton className="h-3 w-24" />
             <Skeleton className="mt-3 h-7 w-28" />
@@ -469,7 +469,7 @@ export function ComparisonSkeleton({
           </div>
         ))}
       </div>
-      <div className="overflow-hidden rounded-2xl border border-border/60">
+      <div className="overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)]">
         {Array.from({ length: rows }).map((_, r) => (
           <div
             key={r}

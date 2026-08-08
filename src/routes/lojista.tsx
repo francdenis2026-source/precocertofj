@@ -154,7 +154,7 @@ function Overview() {
   return (
     <>
       {alertEvents.length > 0 && (
-        <div className="mb-6 rounded-2xl border border-border bg-card p-5">
+        <div className="mb-6 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 shadow-[var(--shadow-sm)]">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div
@@ -217,7 +217,7 @@ function Overview() {
 
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
+        <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 lg:col-span-2 shadow-[var(--shadow-sm)]">
           <div className="flex items-center justify-between">
             <p className="font-display text-xl text-foreground">Produtos mais buscados</p>
             <button className="text-xs text-muted-foreground hover:text-foreground">
@@ -274,7 +274,7 @@ function Overview() {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 shadow-[var(--shadow-sm)]">
             <p className="text-xs uppercase tracking-widest text-muted-foreground">
               Promoção ativa
             </p>
@@ -364,7 +364,7 @@ function ProductsTab() {
         />
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-card">
+      <div className="mt-6 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)]">
         <div className="flex flex-wrap items-center gap-3 border-b border-border p-4">
           <div className="relative flex-1 min-w-[220px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

@@ -162,7 +162,7 @@ function CestaAdminPage() {
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-4">
         {/* Versões */}
-        <aside className="rounded-2xl border border-border bg-surface p-4">
+        <aside className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)]">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-foreground">Versões</h2>
             <Button
@@ -224,7 +224,7 @@ function CestaAdminPage() {
         </aside>
 
         {/* Itens */}
-        <section className="rounded-2xl border border-border bg-surface p-4">
+        <section className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)]">
           {!selectedSet ? (
             <p className="text-sm text-muted-foreground">
               Selecione uma versão à esquerda para editar seus itens.

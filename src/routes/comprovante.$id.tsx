@@ -119,7 +119,7 @@ function ReceiptPage() {
         </div>
       </div>
 
-      <article className="mx-auto mt-6 max-w-3xl rounded-2xl border border-border bg-card p-8 shadow-sm print:mt-0 print:rounded-none print:border-0 print:shadow-none">
+      <article className="mx-auto mt-6 max-w-3xl rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-[var(--shadow-sm)] print:mt-0 print:rounded-none print:border-0 print:shadow-none">
         <header className="flex items-start justify-between gap-4 border-b border-border pb-6">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
@@ -203,7 +203,7 @@ function ReceiptPage() {
           </p>
         </section>
 
-        <footer className="rounded-xl bg-muted/40 p-4 text-[11px] leading-relaxed text-muted-foreground">
+        <footer className="rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)]/40 p-4 text-[11px] leading-relaxed text-[var(--text-secondary)]">
           <p>
             Este documento é a confirmação eletrônica do pagamento processado pelo
             Mercado Pago. Não há renovação automática — o acesso é ativado pelo
