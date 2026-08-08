@@ -1,0 +1,32 @@
+[
+  {
+    "route": "/",
+    "tokens": {
+      "primary": "",
+      "accent": "",
+      "surface": "",
+      "font": "Inter, system-ui, -apple-system, sans-serif"
+    },
+    "screenshot": "tests/screenshots/audit_home.png"
+  },
+  {
+    "route": "/buscar",
+    "tokens": {
+      "primary": "",
+      "accent": "",
+      "surface": "",
+      "font": "Inter, system-ui, -apple-system, sans-serif"
+    },
+    "screenshot": "tests/screenshots/audit_homebuscar.png"
+  },
+  {
+    "route": "/perfil",
+    "tokens": {
+      "primary": "",
+      "accent": "",
+      "surface": "",
+      "font": "Inter, system-ui, -apple-system, sans-serif"
+    },
+    "screenshot": "tests/screenshots/audit_homeperfil.png"
+  }
+]
