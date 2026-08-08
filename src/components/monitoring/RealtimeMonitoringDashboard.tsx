@@ -23,10 +23,12 @@ export function RealtimeMonitoringDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 12;
+  const { session } = useMyProfile();
   
   const { data, isLoading, refetch, isFetching, error } = useQuery({
-    queryKey: ["realtime-monitoring-stats", searchQuery, page],
+    queryKey: ["realtime-monitoring-stats", searchQuery, page, !!session],
     queryFn: () => fetchStats({ data: { query: searchQuery, page, pageSize } }),
+    enabled: !!session,
     refetchInterval: 60000,
     staleTime: 30000,
   });
