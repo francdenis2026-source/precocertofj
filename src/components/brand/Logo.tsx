@@ -8,7 +8,7 @@ interface LogoProps extends React.HTMLAttributes<HTMLAnchorElement> {
   showTagline?: boolean;
   /** "dark" = sobre superfícies escuras (sidebar/footer).
    *  "on-light" = sobre superfícies claras fixas (independente do tema). */
-  variant?: "default" | "dark" | "on-light";
+  variant?: "default" | "dark" | "on-light" | "on-dark";
 }
 
 /**
@@ -23,7 +23,7 @@ export function Logo({
   variant = "default",
   ...props
 }: LogoProps) {
-  const isDark = variant === "dark";
+  const isDark = variant === "dark" || variant === "on-dark";
   const onLight = variant === "on-light";
   return (
     <a

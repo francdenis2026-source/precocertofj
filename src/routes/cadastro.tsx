@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle, User, CreditCard, Phone, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,8 +9,9 @@ import { signUpWithCpf } from "@/lib/account.functions";
 import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
-import heroPhoto from "@/assets/cadastro-hero.jpg";
-import { AuthHero } from "@/components/auth/AuthHero";
+import { LoginShell } from "@/components/auth/LoginShell";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // ---------- Field validators ----------
 type FieldState = { valid: boolean; msg?: string; hint?: string };
@@ -159,196 +160,105 @@ function CadastroPage() {
   ];
 
   return (
-    <div
-      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
-      style={{ background: "var(--bg-base)", fontFamily: "var(--font-sans)", color: "var(--text-primary)" }}
+    <LoginShell
+      title="Crie sua conta"
+      subtitle="Cadastre-se para economizar nos mercados"
     >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(900px 380px at 90% -10%, rgba(181,138,60,0.10), transparent 60%), radial-gradient(600px 340px at -10% 110%, rgba(15,27,61,0.08), transparent 55%)",
-        }}
-      />
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        <div className="space-y-4">
+          <Field
+            label="Nome completo"
+            value={name}
+            onChange={(v) => setName(v.toLocaleUpperCase("pt-BR").slice(0, 80))}
+            onBlur={() => markTouched("name")}
+            placeholder="Ex: JOÃO DA SILVA"
+            autoComplete="name"
+            state={vName}
+            showState={touched.name}
+            maxLength={80}
+          />
 
-      <Link
-        to={loginHref}
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-slate-900/10 bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur transition hover:bg-white sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
-      >
-        Já tenho conta →
-      </Link>
+          <Field
+            label="CPF"
+            value={cpf}
+            onChange={(v) => setCpf(maskCpf(v).slice(0, 14))}
+            onBlur={() => markTouched("cpf")}
+            placeholder="000.000.000-00"
+            inputMode="numeric"
+            autoComplete="username"
+            state={vCpf}
+            showState={touched.cpf}
+            maxLength={14}
+          />
 
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative z-10 grid w-full max-w-[880px] grid-cols-1 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-lg)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]"
-      >
-        {/* LEFT — Hero unificado (login/cadastro compartilham a mesma arte) */}
-        <div className="hidden md:block">
-          <AuthHero variant="login" />
+          <Field
+            label="Celular"
+            value={phone}
+            onChange={(v) => setPhone(maskPhone(v).slice(0, 15))}
+            onBlur={() => markTouched("phone")}
+            placeholder="(00) 00000-0000"
+            inputMode="tel"
+            autoComplete="tel"
+            state={vPhone}
+            showState={touched.phone}
+            maxLength={15}
+          />
+
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#64748B] flex items-center gap-2">
+                <Lock className="w-3 h-3" /> PIN de 6 dígitos
+              </label>
+              <FieldStatus state={vPin} show={touched.password} />
+            </div>
+            <PinField
+              value={password}
+              onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
+              onComplete={() => markTouched("password")}
+              hasError={touched.password && !vPin.valid}
+            />
+          </div>
         </div>
 
-        {/* RIGHT — Form */}
-        <section className="relative flex flex-col p-3.5 sm:p-4 md:p-5 md:overflow-hidden">
+        {error && (
+          <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl flex gap-3 text-rose-600 text-sm font-medium animate-in fade-in slide-in-from-top-1">
+            <AlertCircle className="w-5 h-5 shrink-0" />
+            <p>{error}</p>
+          </div>
+        )}
 
-            {redirecting && (
-              <div
-                className="absolute inset-0 z-30 grid place-items-center bg-white/85 backdrop-blur-sm"
-                aria-live="polite"
-                aria-busy="true"
-              >
-                <div className="flex items-center gap-2 text-[13px] font-semibold text-slate-700">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Entrando na sua conta…
-                </div>
-              </div>
-            )}
-
-            {/* Header — kicker compacto (evita duplicação com AuthHero) */}
-            <div className="mb-2">
-              <p
-                className="text-[11px] font-bold uppercase tracking-[0.22em]"
-                style={{ color: PC_EMERALD }}
-              >
-                Novo assinante
-              </p>
-              <h2
-                className="mt-0.5 text-[19px] leading-[1.1] tracking-tight"
-                style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
-              >
-                Criar conta
-              </h2>
+        <Button
+          type="submit"
+          disabled={loading || !allValid}
+          className="w-full h-14 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-base font-black shadow-xl shadow-blue-500/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+        >
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>CRIANDO CONTA...</span>
             </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span>CRIAR MINHA CONTA</span>
+              <ArrowRight className="w-5 h-5" />
+            </div>
+          )}
+        </Button>
 
-
-            <form onSubmit={handleSubmit} className="space-y-2" noValidate>
-              <Field
-                label="Nome completo"
-                value={name}
-                onChange={(v) => setName(v.toLocaleUpperCase("pt-BR").slice(0, 80))}
-                onBlur={() => markTouched("name")}
-                placeholder="Nome e sobrenome"
-                autoComplete="name"
-                state={vName}
-                showState={touched.name}
-                uppercase
-                maxLength={80}
-              />
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                <Field
-                  label="CPF"
-                  value={cpf}
-                  onChange={(v) => setCpf(maskCpf(v).slice(0, 14))}
-                  onBlur={() => markTouched("cpf")}
-                  placeholder="000.000.000-00"
-                  inputMode="numeric"
-                  autoComplete="username"
-                  state={vCpf}
-                  showState={touched.cpf}
-                  maxLength={14}
-                />
-                <Field
-                  label="Celular (opcional)"
-                  value={phone}
-                  onChange={(v) => setPhone(maskPhone(v).slice(0, 15))}
-                  onBlur={() => markTouched("phone")}
-                  placeholder="(00) 00000-0000"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  state={vPhone}
-                  showState={touched.phone}
-                  maxLength={15}
-                />
-              </div>
-
-              <div>
-                <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--text-primary)]">
-                    PIN de acesso · 6 dígitos
-                  </label>
-
-                  <FieldStatus state={vPin} show={touched.password} />
-                </div>
-                <PinField
-                  value={password}
-                  onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
-                  onComplete={() => markTouched("password")}
-                  hasError={touched.password && !vPin.valid}
-                />
-                <p className="mt-1.5 text-[11px] font-medium text-[var(--text-tertiary)]">
-                  Use 6 números que só você lembra. Evite datas óbvias.
-                </p>
-              </div>
-
-              {error && (
-                <p
-                  className="flex items-start gap-2 rounded-lg border px-3 py-2.5 text-[12.5px] font-medium"
-                  style={{
-                    borderColor: "rgba(220,38,38,0.35)",
-                    background: "rgba(254,226,226,0.7)",
-                    color: "#991b1b",
-                  }}
-                >
-                  <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
-                  <span>{error}</span>
-                </p>
-              )}
-
-              {/* Primary CTA — navy with gold ring */}
-              <button
-                type="submit"
-                disabled={loading || !allValid}
-                className="group relative mt-1 inline-flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13.5px] font-bold !text-white shadow-lg transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
-                style={{
-                  background: allValid && !loading
-                    ? `linear-gradient(135deg, var(--brand-primary-soft) 0%, var(--brand-primary) 100%)`
-                    : `linear-gradient(135deg, #6b7896, #4a5670)`,
-                  boxShadow: allValid && !loading
-                    ? `0 12px 26px -12px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.14)`
-                    : "0 6px 16px -8px rgba(15,27,61,0.35)",
-                  fontFamily: PC_DISPLAY,
-                  letterSpacing: "0.01em",
-                }}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Criando conta…</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Criar conta grátis</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </>
-                )}
-              </button>
-
-              <div className="flex items-center justify-between pt-1 text-[12px]">
-                <span className="inline-flex items-center gap-1.5 font-medium text-[var(--text-tertiary)]">
-                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD }} />
-                  Dados protegidos
-                </span>
-                <Link
-                  to={loginHref}
-                  className="inline-flex items-center gap-1 font-semibold transition-colors hover:opacity-80"
-                  style={{ color: PC_EMERALD }}
-                >
-                  Já tenho conta <span aria-hidden>→</span>
-                </Link>
-              </div>
-            </form>
-
-            <p className="mt-3 border-t border-[var(--border-subtle)] pt-2.5 text-center text-[11px] font-medium text-[var(--text-tertiary)]">
-              Ao continuar você aceita nossos{" "}
-              <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
-              {" "}e a{" "}
-              <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/privacidade">Política de Privacidade</a>.
-            </p>
-          </section>
-        </motion.div>
-    </div>
-
+        <div className="flex flex-col items-center gap-4 pt-2">
+          <div className="flex items-center gap-2 text-[11px] font-bold text-[#64748B] uppercase tracking-widest">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            Seus dados estão protegidos
+          </div>
+          <Link
+            to={loginHref}
+            className="text-sm font-bold text-[#2563EB] hover:text-[#1D4ED8] transition-colors"
+          >
+            Já tem uma conta? Entre agora
+          </Link>
+        </div>
+      </form>
+    </LoginShell>
   );
 }
 
@@ -381,8 +291,8 @@ function Field({
   autoComplete,
   state,
   showState,
-  uppercase,
   maxLength,
+  icon: Icon,
 }: {
   label: string;
   value: string;
@@ -394,22 +304,24 @@ function Field({
   autoComplete?: string;
   state?: FieldState;
   showState?: boolean;
-  uppercase?: boolean;
   maxLength?: number;
+  icon?: any;
 }) {
   const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
   const good = !!(showState && state?.valid && value);
   const border = invalid
-    ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
+    ? "border-rose-200 focus:border-rose-400 focus:ring-rose-500/5"
     : good
-      ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
-      : "border-[var(--border-subtle)] hover:border-[var(--border-strong)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/10";
+      ? "border-emerald-200 focus:border-emerald-400 focus:ring-emerald-500/5"
+      : "border-[#E5EAF1] focus:border-[#2563EB] focus:ring-[#2563EB]/5";
+  
   return (
-    <label className="block">
-      <div className="mb-1.5 flex items-center justify-between">
-        <span className="block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-900">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-[10px] font-black uppercase tracking-widest text-[#64748B] flex items-center gap-2">
+          {Icon && <Icon className="w-3 h-3" />}
           {label}
-        </span>
+        </label>
         {state && <FieldStatus state={state} show={!!showState} />}
       </div>
       <input
@@ -421,14 +333,13 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         maxLength={maxLength}
-        aria-invalid={invalid}
-        autoCapitalize={uppercase ? "characters" : undefined}
-        className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4 ${uppercase ? "uppercase placeholder:normal-case" : ""}`}
-        style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
+        className={cn(
+          "w-full h-12 px-4 rounded-2xl bg-[#F8FAFC] border-2 text-sm font-bold text-[#0F172A] outline-none transition-all placeholder:text-[#94A3B8] placeholder:font-medium",
+          border
+        )}
       />
-    </label>
+    </div>
   );
-
 }
 
 function PinField({
