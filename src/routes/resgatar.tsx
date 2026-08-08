@@ -356,21 +356,21 @@ function RedeemPage() {
               className="h-8 w-8 shrink-0 object-contain"
             />
             <span
-              className="text-[15px] font-bold tracking-tight text-foreground"
+              className="text-[15px] font-bold tracking-tight text-[var(--text-primary)]"
               style={{ fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
             </span>
           </div>
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
             Ativação de licença
           </p>
 
           {authLoading ? (
             <div className="mt-6 flex min-h-[320px] items-center justify-center" aria-live="polite">
               <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando sessão" />
+                <Loader2 className="h-6 w-6 animate-spin text-[var(--brand-primary)]" aria-label="Carregando sessão" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
                   Carregando sessão…
                 </span>
