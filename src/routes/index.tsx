@@ -222,7 +222,7 @@ function HomePage() {
         {/* Platform Stats Section */}
         <section className="relative -mt-10 md:-mt-16 mb-12 md:mb-20 z-20">
           <div className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-[var(--border-subtle)] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-white/5 overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl shadow-2xl">
               <StatCard label="Preços Verificados" value={stats?.priceRecords || "3.064"} icon={ShieldCheck} />
               <StatCard label="Itens no Catálogo" value={stats?.totalItems || "20.262"} icon={Zap} />
               <StatCard label="Economia Média" value={`${economy?.avgSavingsPct || "15.1"}%`} icon={TrendingDown} />
@@ -344,7 +344,7 @@ function HomePage() {
            
            <aside className="lg:col-span-4">
               <div className="sticky top-28 space-y-10">
-                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-sm">
+                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl p-8 shadow-sm">
                    <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
