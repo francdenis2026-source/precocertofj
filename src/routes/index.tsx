@@ -16,6 +16,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { Footer } from "@/components/brand/Footer";
 import { Button } from "@/components/ui/button";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat, getRecentProducts } from "@/lib/products-public.functions";
