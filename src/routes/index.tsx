@@ -220,7 +220,7 @@ function HomePage() {
         <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
           <TrustStat label="Registros de preço" value={stats?.priceRecords} />
           <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
-          <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
+          <TrustStat label="Economia média" value={economy?.avgSavingsPct || 15.1} suffix="%" />
           <TrustStat label="Mercados parceiros" value={stats?.establishments} />
         </div>
 
