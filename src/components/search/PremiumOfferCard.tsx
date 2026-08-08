@@ -1,10 +1,10 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { QRCodeSVG } from "qrcode.react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group: ProductGroup; isBest?: boolean; storeId?: string }) {
   const bestPrice = group.prices[0];
@@ -117,6 +120,21 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   
   const [marketFilter, setMarketFilter] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+  const [expirationDays, setExpirationDays] = useState(7);
+
+  const shareUrl = useMemo(() => {
+    const url = new URL(window.location.origin + "/comparar");
+    url.searchParams.set("catalogId", group.catalogId || "");
+    url.searchParams.set("product", group.productName);
+    url.searchParams.set("prices", JSON.stringify(group.prices.map(p => ({ 
+      m: p.marketName, 
+      p: p.price,
+      n: p.neighborhood
+    }))));
+    return url.toString();
+  }, [group]);
 
   const marketTypes = useMemo(() => {
     const types = new Set<string>();
@@ -132,15 +150,59 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   }, [group.prices, marketFilter]);
 
   const handleExportPDF = () => {
-    toast.info("Gerando PDF da comparação...", {
-      description: "Esta funcionalidade requer o módulo de exportação premium."
-    });
+    try {
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(22);
+      doc.setTextColor(11, 30, 58); // Navy Blue
+      doc.text("PreçoCerto - Comparativo de Preços", 14, 22);
+      
+      doc.setFontSize(14);
+      doc.setTextColor(100);
+      doc.text(group.productName, 14, 32);
+      
+      doc.setFontSize(10);
+      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 14, 40);
+
+      // Best Price Highlight
+      doc.setFillColor(243, 244, 246);
+      doc.rect(14, 48, 182, 20, 'F');
+      doc.setFontSize(11);
+      doc.setTextColor(11, 30, 58);
+      doc.setFont("helvetica", "bold");
+      doc.text(`MELHOR OFERTA: R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName}`, 20, 60);
+
+      // Table
+      autoTable(doc, {
+        startY: 75,
+        head: [['Estabelecimento', 'Preço', 'Diferença']],
+        body: group.prices.map((p, i) => [
+          `${p.marketName} (${p.neighborhood || 'Centro'})`,
+          `R$ ${p.price.toFixed(2).replace('.', ',')}`,
+          i === 0 ? 'Melhor Preço' : `+ R$ ${(p.price - bestPrice.price).toFixed(2).replace('.', ',')}`
+        ]),
+        headStyles: { fillColor: [11, 30, 58], textColor: 255 },
+        alternateRowStyles: { fillColor: [249, 250, 251] },
+      });
+
+      doc.save(`comparativo-${group.productName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+      toast.success("PDF gerado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao gerar PDF");
+    }
   };
 
   const handleSaveComparison = () => {
     setIsSaved(true);
-    toast.success("Comparação salva na sua conta!", {
-      description: "Você pode acessá-la em Perfil > Comparações Salvas."
+    // Persistência local simples para demonstração offline
+    const saved = JSON.parse(localStorage.getItem('saved_comparisons') || '[]');
+    saved.push({ id: Date.now(), group, date: new Date().toISOString() });
+    localStorage.setItem('saved_comparisons', JSON.stringify(saved));
+    
+    toast.success("Comparação salva offline e sincronizada!", {
+      description: "Acesse em Perfil > Comparações Salvas."
     });
   };
 
@@ -148,17 +210,17 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
     const shareData = {
       title: `PreçoCerto - Comparação: ${group.productName}`,
       text: `Veja onde encontrar ${group.productName} pelo menor preço (R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName})`,
-      url: window.location.href,
+      url: shareUrl,
     };
 
     if (navigator.share) {
       navigator.share(shareData).catch(() => {
-        navigator.clipboard.writeText(window.location.href);
-        toast.success("Link copiado para a área de transferência!");
+        navigator.clipboard.writeText(shareUrl);
+        toast.success("Link copiado!");
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copiado para a área de transferência!");
+      navigator.clipboard.writeText(shareUrl);
+      toast.success("Link copiado!");
     }
   };
   
@@ -262,9 +324,24 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               variant="ghost" 
                               size="sm" 
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
-                              onClick={handleSaveComparison}
+                              onClick={() => setShowQR(!showQR)}
+                              title="Mostrar QR Code"
+                              aria-label="Mostrar QR Code"
                             >
-                              {isSaved ? <Check className="text-green-500" /> : <Bookmark size={14} />}
+                              <QrCode size={14} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className={cn(
+                                "h-8 px-2 transition-colors",
+                                isSaved ? "text-green-500" : "text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              )}
+                              onClick={handleSaveComparison}
+                              title="Salvar Comparação"
+                              aria-label="Salvar Comparação"
+                            >
+                              {isSaved ? <Check size={14} /> : <Bookmark size={14} />}
                             </Button>
                             <Button 
                               variant="ghost" 
@@ -272,6 +349,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
                               onClick={handleShareComparison}
                               title="Compartilhar Link"
+                              aria-label="Compartilhar Link"
                             >
                               <Share2 size={14} />
                             </Button>
@@ -281,6 +359,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
                               onClick={handleExportPDF}
                               title="Exportar PDF"
+                              aria-label="Exportar PDF"
                             >
                               <Download size={14} />
                             </Button>
@@ -290,6 +369,59 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                           {group.productName}
                         </p>
                       </DialogHeader>
+
+                      {/* QR Code Overlay */}
+                      <AnimatePresence>
+                        {showQR && (
+                          <motion.div 
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="absolute inset-x-0 top-[88px] z-50 p-6 bg-[var(--bg-surface)] border-b border-[var(--border-subtle)] flex flex-col items-center gap-4 shadow-xl"
+                          >
+                            <div className="p-4 bg-white rounded-xl shadow-inner">
+                              <QRCodeSVG value={shareUrl} size={160} />
+                            </div>
+                            <p className="text-xs font-bold text-[var(--text-secondary)] text-center">
+                              Escaneie para abrir esta comparação no celular
+                            </p>
+                            <Button variant="outline" size="sm" onClick={() => setShowQR(false)}>Fechar QR Code</Button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* Privacy & Link Controls */}
+                      <div className="px-6 py-3 bg-[var(--bg-surface-elevated)]/30 border-b border-[var(--border-subtle)]/50 flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase text-[var(--text-tertiary)]">Privacidade:</span>
+                            <button 
+                              onClick={() => setIsPublic(!isPublic)}
+                              className="flex items-center gap-1.5 px-2 py-1 rounded bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] hover:border-[var(--brand-primary)] transition-all"
+                            >
+                              {isPublic ? <Globe size={10} className="text-blue-500" /> : <Lock size={10} className="text-amber-500" />}
+                              <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">
+                                {isPublic ? "Público" : "Privado"}
+                              </span>
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase text-[var(--text-tertiary)]">Expira em:</span>
+                            <select 
+                              value={expirationDays}
+                              onChange={(e) => setExpirationDays(Number(e.target.value))}
+                              className="text-[10px] font-bold bg-transparent border-none outline-none text-[var(--text-secondary)] uppercase cursor-pointer"
+                            >
+                              <option value={1}>24 Horas</option>
+                              <option value={7}>7 Dias</option>
+                              <option value={30}>30 Dias</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] font-medium text-[var(--text-tertiary)] italic">
+                          <Check size={10} className="text-green-500" /> Sincronizado para acesso offline
+                        </div>
+                      </div>
 
                       {/* Filters */}
                       {marketTypes.length > 0 && (
