@@ -263,12 +263,12 @@ function LoginPage() {
           
           {/* Header Mobile / Back Link */}
           <div className="flex items-center justify-between p-6 lg:p-8 shrink-0">
-            <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors">
+            <Link to="/" className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors">
               <ChevronLeft className="w-6 h-6" />
             </Link>
             <div className="flex items-center gap-1.5 lg:hidden">
               <img src="/logo-mark.png?v=5" alt="Logo" className="w-7 h-7" />
-              <span className="text-lg font-bold tracking-tight text-slate-900 font-display">PreçoCerto</span>
+              <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] font-display">PreçoCerto</span>
             </div>
             <div className="w-6 h-6" /> {/* Spacer */}
           </div>
