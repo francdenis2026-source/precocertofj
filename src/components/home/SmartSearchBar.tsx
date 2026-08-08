@@ -252,7 +252,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] sm:max-w-2xl sm:mx-auto"
+              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.1)] sm:max-w-2xl sm:mx-auto"
             >
 
               <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-4 flex items-center justify-between">
