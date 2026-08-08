@@ -18,7 +18,6 @@ import {
   ArrowDown,
   ArrowUp,
   Camera,
-
   ChevronLeft,
   ChevronRight,
   History,
@@ -31,6 +30,9 @@ import {
   Store,
   Bell,
   PackageSearch,
+  TrendingDown,
+  TrendingUp,
+  Clock,
 } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
@@ -840,7 +842,7 @@ function PriceHistorySheet({
         {!isLoading && (!history || history.length === 0) && (
           <div className="mt-6 text-center py-12">
             <div className="h-16 w-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-               <HistoryIcon className="h-8 w-8 text-muted-foreground/50" />
+               <History className="h-8 w-8 text-muted-foreground/50" />
             </div>
             <p className="text-sm font-semibold text-muted-foreground">
               Ainda não temos registros de alteração de preço para este produto nesta loja.
