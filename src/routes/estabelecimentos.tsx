@@ -102,8 +102,8 @@ function EstablishmentsPage() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="max-w-2xl">
-            <h1 className="text-4xl font-black text-[#0F172A] tracking-tight mb-3">Mercados parceiros em Feijó</h1>
-            <p className="text-lg text-[#64748B] font-medium">Compare preços e encontre os estabelecimentos disponíveis na sua cidade.</p>
+            <h1 className="text-4xl font-black text-[#0F172A] tracking-tight mb-3">Estabelecimentos em Feijó</h1>
+            <p className="text-lg text-[#64748B] font-medium">Compare produtos e preços dos comércios cadastrados.</p>
           </div>
           
           <Button asChild variant="outline" className="rounded-full border-[#E5EAF1] bg-white text-[#64748B] h-12 px-6 shadow-sm hover:text-[#2563EB] font-bold">
@@ -116,11 +116,12 @@ function EstablishmentsPage() {
 
         {/* Metrics Bar */}
         {data && (
-          <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#E5EAF1] mb-12">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 divide-x divide-[#E5EAF1]">
-              <MetricItem label="Mercados" value={data.totalEstablishments} icon={Store} />
-              <MetricItem label="Produtos monitorados" value={data.totalProducts.toLocaleString("pt-BR")} icon={Package} className="pl-8" />
-              <MetricItem label="Economia potencial" value={`R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`} icon={PiggyBank} className="pl-8 hidden md:flex" />
+          <div className="bg-white rounded-[32px] p-8 shadow-sm border border-[#E5EAF1] mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              <MetricItem label="Estabelecimentos" value={data.totalEstablishments} icon={Store} />
+              <MetricItem label="Mercados" value={data.items.filter(i => i.kind === 'mercado').length} icon={ShoppingBasket} />
+              <MetricItem label="Farmácias" value={data.items.filter(i => i.kind === 'farmacia').length} icon={Pill} />
+              <MetricItem label="Açougues" value={data.items.filter(i => i.kind === 'acougue').length} icon={Beef} />
             </div>
           </div>
         )}
