@@ -15,9 +15,9 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5 mb-16">
           {/* Brand Info */}
           <div className="col-span-2 lg:col-span-2">
-            <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
+            <div className="inline-flex items-center gap-2.5 mb-6">
               <Logo variant="on-dark" className="[&_img]:h-9 [&_img]:w-9 [&_span]:text-[22px]" />
-            </Link>
+            </div>
             <p className="max-w-xs text-[15px] leading-relaxed mb-8 text-white/60">
               A plataforma definitiva de comparação de preços e inteligência de compras em Feijó, Acre.
             </p>
