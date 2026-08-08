@@ -157,21 +157,23 @@ function EstablishmentsPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-                { label: "Comércios", value: data?.totalEstablishments || 0, icon: Store, color: "text-brand-primary", bg: "bg-brand-primary/10" },
-                { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-success", bg: "bg-success/10" },
-                { label: "Economia", value: data?.totalMaxSavings ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "R$ 0,00", icon: PiggyBank, color: "text-brand-accent", bg: "bg-brand-accent/10" },
+                { label: "Comércios", value: data?.totalEstablishments || 0, icon: Store, color: "text-brand-accent", bg: "bg-brand-accent/10", description: "Parceiros ativos hoje" },
+                { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-secondary", bg: "bg-surface-elevated/80", description: "Itens sob monitoramento" },
+                { label: "Economia", value: data?.totalMaxSavings ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "R$ 0,00", icon: PiggyBank, color: "text-success", bg: "bg-success/10", description: "Potencial médio poupado" },
             ].map((stat, i) => (
-                <div key={i} className="bg-surface p-6 rounded-3xl shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-md hover:bg-surface-elevated">
-                    <div className={cn("p-4 rounded-2xl", stat.bg, stat.color)}>
+                <div key={i} className="bg-surface p-6 rounded-[32px] shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] hover:bg-surface-elevated hover:border-brand-accent/20 hover:-translate-y-1.5 duration-500">
+                    <div className={cn("p-4 rounded-2xl flex items-center justify-center w-14 h-14", stat.bg, stat.color)}>
                         <stat.icon className="w-6 h-6" />
                     </div>
                     <div>
-                        <div className="text-[11px] text-tertiary font-bold uppercase tracking-wider">{stat.label}</div>
-                        <div className="text-2xl font-black text-primary">{stat.value}</div>
+                        <div className="text-[10px] text-tertiary font-black uppercase tracking-[0.15em] mb-0.5">{stat.label}</div>
+                        <div className="text-2xl font-black text-primary leading-none">{stat.value}</div>
+                        <div className="text-[11px] text-secondary/60 mt-1 font-medium">{stat.description}</div>
                     </div>
                 </div>
             ))}
         </div>
+
 
         <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Left Column: List */}
@@ -250,7 +252,8 @@ function EstablishmentsPage() {
                                                 <button 
                                                     onClick={() => updateSearch({ sel: e.id })} 
                                                     className={cn(
-                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300 h-[80px] flex items-center",
+                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-500 h-[80px] flex items-center",
+
                                                         active 
                                                             ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
                                                             : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"
@@ -284,7 +287,7 @@ function EstablishmentsPage() {
             </div>
 
             {/* Right Column: Detail */}
-            <div className="flex-1 w-full bg-surface rounded-[32px] p-6 md:p-10 border border-subtle shadow-sm sticky top-28">
+            <div className="flex-1 w-full bg-surface-elevated rounded-[40px] p-6 md:p-12 border border-subtle shadow-lg sticky top-28">
                 {selected ? (
                      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-500">
                         {/* Detail Header */}

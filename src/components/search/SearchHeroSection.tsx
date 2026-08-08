@@ -21,7 +21,7 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
   const savingsPct = avgPrice > 0 ? Math.round(((avgPrice - bestPrice) / avgPrice) * 100) : 0;
 
   return (
-    <section className="relative overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--bg-surface)] to-[var(--bg-base)] p-6 md:p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
+    <section className="relative overflow-hidden rounded-[40px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 md:p-12 shadow-[var(--pc-shadow-lg)]">
       {/* Decorative background accent */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-[var(--brand-primary)]/5 blur-[120px] pointer-events-none" />
       
@@ -29,13 +29,13 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
         <div className="space-y-10">
           <header className="space-y-6">
              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 rounded-full bg-[var(--brand-primary)] px-4 py-1.5 shadow-[0_4px_12px_rgba(59,130,246,0.3)]">
+                <div className="flex items-center gap-2 rounded-xl bg-[var(--brand-primary)] px-4 py-1.5 shadow-[0_8px_16px_rgba(59,130,246,0.3)]">
                   <Sparkles className="h-3.5 w-3.5 text-white" />
                   <span className="text-[11px] font-black uppercase tracking-widest text-white">
                     {isCategory ? 'Explorar Categoria' : 'Melhor Escolha Hoje'}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
                   <Clock className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
                   <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
                     Auditado Agora
