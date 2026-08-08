@@ -163,6 +163,7 @@ export function LiveBasketRanking({
   value?: LiveBasketFilters;
   onChange?: (next: LiveBasketFilters) => void;
 }) {
+  const navigate = useNavigate();
   const qc = useQueryClient();
   const fetchComparison = useServerFn(getBasketComparison);
   const fetchSparklines = useServerFn(getBasketSparklines);
