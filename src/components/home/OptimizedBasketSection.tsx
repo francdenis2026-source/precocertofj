@@ -40,39 +40,39 @@ export function OptimizedBasketSection() {
   if (!data?.baskets?.length) return null;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exclusivo PreçoCerto</span>
+    <div className="space-y-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-subtle)] pb-8">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
+            <Sparkles className="h-4 w-4" />
+            <span className="text-[11px] font-black uppercase tracking-[0.25em]">Cesta Inteligente</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--text-primary)] leading-tight">
+          <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-black tracking-tighter text-[var(--text-primary)] leading-none uppercase">
             Cestas que rendem <span className="text-[var(--brand-primary)]">mais</span>
           </h2>
-          <p className="text-[var(--text-secondary)] text-xs max-w-sm">
-            As combinações mais baratas nas lojas de Feijó hoje.
+          <p className="text-[var(--text-secondary)] text-[14px] font-bold max-w-sm">
+            As combinações mais baratas nos mercados de Feijó hoje.
           </p>
         </div>
 
         <Link 
-          to="/cesta-basica"
-          className="group inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] hover:underline"
+          to="/cesta"
+          className="group inline-flex h-12 items-center gap-3 px-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[12px] font-black uppercase tracking-widest text-[var(--text-primary)] hover:border-[var(--brand-primary)] transition-all shadow-sm"
         >
-          Personalizar minha cesta
-          <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          Minha Cesta
+          <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {data.baskets.slice(0, 2).map((basket, idx) => (
           <BasketCard key={basket.id} basket={basket} index={idx} />
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-4 py-4 px-6 rounded-2xl bg-white/5 border border-white/10 text-white/40 text-[10px] font-bold uppercase tracking-widest text-center">
-        <Info className="h-4 w-4 text-[var(--brand-primary)] shrink-0" />
-        <span>Baseado nos itens mais comprados no Brasil. Preços atualizados em {new Date(data.lastUpdate).toLocaleDateString('pt-BR')}.</span>
+      <div className="flex items-center justify-center gap-4 py-6 px-8 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)] text-[var(--text-tertiary)] text-[11px] font-bold uppercase tracking-widest text-center shadow-inner">
+        <Info className="h-5 w-5 text-[var(--brand-primary)] shrink-0" />
+        <span>Preços atualizados em {new Date(data.lastUpdate).toLocaleDateString('pt-BR')}. Economia calculada sobre a média regional.</span>
       </div>
     </div>
   );
