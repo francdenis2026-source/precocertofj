@@ -106,6 +106,7 @@ export function RealtimeMonitoringDashboard() {
                   {store.storeName.includes("Contamigos") ? (
                     <ContamigosLogo size="sm" hideName />
                   ) : (
+                    <StoreLogoThumb 
                       src={store.storeLogoUrl} 
                       name={store.storeName} 
                       className="h-full w-full border-none p-0 bg-transparent relative z-10"

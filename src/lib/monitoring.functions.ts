@@ -2,7 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 
 export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
-  .handler(async () => {
+  .inputValidator((d: any) => d as { query?: string })
+  .handler(async ({ data }) => {
+    const query = data?.query?.trim().toLowerCase();
+
     // 1. Fetch establishments
     const { data: stores } = await supabase
       .from('establishments')
@@ -17,14 +20,20 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
     // 2. Fetch some scans for all these stores in a batch
     // We'll fetch the latest 5 scans per store to have a pool to rotate from
     // (Using a lateral join would be better but for now let's just fetch recent public scans)
-    const { data: allScans } = await supabase
+    let scansQuery = supabase
       .from('scans')
       .select('establishment_id, product_name, price_captured, created_at, category')
       .in('establishment_id', stores.map(s => s.id))
       .eq('status', 'salvo')
       .is('user_id', null)
-      .order('created_at', { ascending: false })
-      .limit(100);
+      .order('created_at', { ascending: false });
+
+    if (query) {
+      scansQuery = scansQuery.ilike('product_name', `%${query}%`);
+    }
+
+    const { data: allScans } = await scansQuery.limit(150);
+
 
     // Group scans by establishment
     const scansByStore = (allScans || []).reduce((acc: any, scan) => {
