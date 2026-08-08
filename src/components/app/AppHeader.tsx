@@ -237,7 +237,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                     onError={() => setAvatarFailed(true)}
                   />
                 ) : (
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[10px] font-bold text-[var(--brand-primary)]">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-primary)] text-[10px] font-bold text-white">
                     {initials ?? <User className="h-3 w-3" />}
                   </span>
                 )}

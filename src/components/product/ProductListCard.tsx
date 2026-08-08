@@ -43,7 +43,7 @@ export function ProductListCard({
   const absoluteDate = lastDate ? formatAbsoluteTooltip(lastDate) : "";
 
   return (
-    <Card interactive tabIndex={0} className={cn("pc-card group h-full border-none", className)}>
+    <Card interactive tabIndex={0} className={cn("pc-card group h-full border border-[var(--border-subtle)] shadow-sm hover:shadow-md hover:border-[var(--brand-primary)]/40 transition-all", className)}>
       <CardContent className="flex h-full flex-col gap-2 p-4">
         <div className="mb-2 h-24 w-full overflow-hidden rounded-lg border border-border bg-muted/20">
           <ProductImage src={null} name={name} alt={name} size="md" />

@@ -281,8 +281,8 @@ export function AppSidebar() {
                 className={cn(
                   "pcsb-row group/row h-10 px-3 rounded-xl transition-all duration-300",
                   active 
-                    ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" 
-                    : "hover:bg-[var(--bg-surface-elevated)]"
+                    ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-lg" 
+                    : "hover:bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]"
                 )}
               >
                 <Link
@@ -296,7 +296,7 @@ export function AppSidebar() {
                 >
                    <span className={cn(
                      "pcsb-ico flex items-center justify-center h-8 w-8 rounded-lg transition-all duration-300",
-                     active ? "bg-[var(--brand-primary)] text-[var(--brand-secondary)] shadow-lg" : "text-[var(--text-tertiary)] group-hover/row:text-[var(--text-primary)] group-hover/row:scale-110"
+                     active ? "bg-white text-[var(--brand-primary)] shadow-lg" : "text-[var(--text-tertiary)] group-hover/row:text-[var(--text-primary)] group-hover/row:scale-110"
                    )}>
                      <n.icon className="h-4.5 w-4.5" strokeWidth={active ? 2.5 : 2} />
                    </span>

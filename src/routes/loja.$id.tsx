@@ -341,7 +341,7 @@ function ProductCardItem({ p, storeId, allItems }: { p: PublicStoreProduct; stor
       </div>
       
       <div className="p-3 md:p-5 flex flex-col flex-1 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-        <h4 className="font-black text-[13px] md:text-[15px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors mb-2 md:mb-4 min-h-[2.5rem]">
+        <h4 className="font-black text-[13px] md:text-[15px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors mb-2 md:mb-4 min-h-[2.5rem] capitalize">
           {p.productName}
         </h4>
 

@@ -45,7 +45,7 @@ export function MarketCard({
           )}
         </div>
         <div className="min-w-0">
-          <h3 className="text-xl font-black text-[#0F172A] leading-tight truncate group-hover:text-[#2563EB] transition-colors">{name}</h3>
+          <h3 className="text-xl font-black text-[#0F172A] leading-tight truncate group-hover:text-[#2563EB] transition-colors capitalize">{name.toLowerCase()}</h3>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">{kind || "Estabelecimento"}</span>
             <span className="h-1 w-1 rounded-full bg-[#E5EAF1]" />
