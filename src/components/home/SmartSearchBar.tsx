@@ -252,7 +252,9 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                {loading && <Loader2 className="h-3 w-3 animate-spin text-[var(--brand-primary)]" />}
             </div>
 
+            <div className="p-1">
             {!canQuery ? (
+
               <div className="p-4">
                 <p className="mb-3 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
                   <TrendingUp className="h-3 w-3" /> Pesquisas em alta
@@ -306,7 +308,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                 id={LISTBOX_ID}
                 role="listbox"
                 aria-label="Sugestões de produtos"
-                className="max-h-[340px] overflow-y-auto overscroll-contain py-1"
+                className="max-h-[480px] overflow-y-auto overscroll-contain py-1"
               >
                 {items.map((s, i) => (
                   <li key={s.id} role="none">
@@ -366,6 +368,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                 </li>
               </ul>
             )}
+            </div>
+
           </motion.div>
         )}
       </AnimatePresence>
