@@ -328,7 +328,7 @@ function RedeemPage() {
       {/* Top-right link — mesma pílula das outras auth screens */}
       <Link
         to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-2.5 py-1 text-[11px] font-semibold text-[var(--text-primary)] backdrop-blur transition hover:bg-[var(--bg-surface)] sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
       >
         ← Voltar ao site
       </Link>
