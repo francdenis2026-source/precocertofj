@@ -330,20 +330,31 @@ function ProductCardItem({ p, storeId, allItems }: { p: PublicStoreProduct; stor
   }, [p.price, allItems]);
 
   return (
-    <article className="group relative flex flex-col h-full rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-2xl transition-all duration-300">
+    <article
+      className={cn(
+        "group relative flex flex-col h-full rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 hover:shadow-2xl transition-all duration-300",
+        isLowest && "shadow-xl shadow-[var(--success)]/5"
+      )}
+    >
       <div className="relative aspect-square p-6 flex items-center justify-center overflow-hidden">
-        <ProductImage 
-          name={p.productName} 
-          alt={p.productName} 
-          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" 
+        <ProductImage
+          name={p.productName}
+          alt={p.productName}
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
         />
         {isLowest && (
-          <div className="absolute top-4 right-4 z-10">
-            <span className="bg-[var(--success)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl shadow-lg shadow-[var(--success)]/30">
+          <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-1.5">
+            <span className="bg-[var(--success)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl shadow-lg shadow-[var(--success)]/30 border border-white/10">
               Melhor Preço
             </span>
+            {p.savingsPercent > 0 && (
+              <span className="bg-[var(--brand-primary)] text-[var(--bg-base)] text-[9px] font-black uppercase tracking-tighter px-2 py-1 rounded-lg shadow-md animate-pulse">
+                -{Math.round(p.savingsPercent)}% OFF
+              </span>
+            )}
           </div>
         )}
+
 
       </div>
       
