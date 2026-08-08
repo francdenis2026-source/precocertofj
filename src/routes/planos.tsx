@@ -397,7 +397,7 @@ function PlansPage() {
             <DialogHeader className="border-b border-subtle/70 px-5 py-3">
               <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Documento oficial</span>
               <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Comparar <span className="italic text-var(--brand-accent)">recursos</span>
+                Comparar <span className="italic text-brand-accent">recursos</span>
               </DialogTitle>
               <DialogDescription className={"text-sm text-secondary"}>
                 Diferenças reais entre a degustação e os planos pagos.
@@ -411,7 +411,7 @@ function PlansPage() {
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Degustação</th>
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Mensal</th>
                     <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Trimestral</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-var(--brand-accent)")}>Anual</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")}>Anual</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -425,19 +425,19 @@ function PlansPage() {
                     ["Prioridade de suporte", false, false, true, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
-                      <th className={cn(tc.cell, "py-2 text-left font-medium text-primary")}>
+                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")}>
                         {label as string}
                       </th>
                       {cols.map((c, j) => (
                         <td key={j} className="py-2 text-center">
                           {typeof c === "boolean" ? (
                             c ? (
-                              <Check className="mx-auto h-4 w-4 text-var(--brand-accent)" aria-label="Incluído" />
+                              <Check className="mx-auto h-4 w-4 text-brand-accent" aria-label="Incluído" />
                             ) : (
                               <Minus className="mx-auto h-4 w-4 text-secondary/60" aria-label="Não incluído" />
                             )
                           ) : (
-                            <span className={cn(tc.num, "tabular-nums")}>{c}</span>
+                            <span className={cn("font-bold text-brand-accent", "tabular-nums")}>{c}</span>
                           )}
                         </td>
                       ))}
@@ -459,7 +459,7 @@ function PlansPage() {
             <DialogHeader className="border-b border-subtle/70 px-5 py-3">
               <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Ajuda rápida</span>
               <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Perguntas <span className="italic text-var(--brand-accent)">frequentes</span>
+                Perguntas <span className="italic text-brand-accent">frequentes</span>
               </DialogTitle>
               <DialogDescription className={"text-sm text-secondary"}>
                 As dúvidas que mais recebemos sobre planos, pagamento e cota de IA.
@@ -469,7 +469,7 @@ function PlansPage() {
               <Accordion type="single" collapsible className="w-full">
                 {buildFaq(trialDays).map((f, i) => (
                   <AccordionItem key={i} value={`q-${i}`} className="border-subtle/60">
-                    <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
+                    <AccordionTrigger className={cn("text-sm font-semibold text-primary", "text-left hover:no-underline")}>
                       {f.q}
                     </AccordionTrigger>
                     <AccordionContent className={cn("text-sm text-secondary", "leading-relaxed text-primary/85")}>
@@ -483,8 +483,8 @@ function PlansPage() {
                 <Link
                   to="/fale-conosco"
                   className={cn(
-                    tc.chip,
-                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-subtle px-3 py-1 text-secondary hover:border-brand-accent hover:text-var(--brand-accent)",
+                    "text-xs font-bold",
+                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-subtle px-3 py-1 text-secondary hover:border-brand-accent hover:text-brand-accent",
                   )}
                 >
                   Fale conosco →
@@ -511,7 +511,7 @@ function PlansPage() {
               <button
                 type="button"
                 onClick={() => setOpenSheet("compare")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-var(--brand-accent)"
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-brand-accent"
               >
                 <Sparkles className="h-3 w-3 text-brand-accent" aria-hidden />
                 Comparar
@@ -519,7 +519,7 @@ function PlansPage() {
               <button
                 type="button"
                 onClick={() => setOpenSheet("faq")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-var(--brand-accent)"
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-brand-accent"
               >
                 FAQ
               </button>
