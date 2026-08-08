@@ -360,8 +360,8 @@ function PlansPage() {
                     <ul className="min-h-0 flex-1 space-y-2 overflow-hidden text-[12.5px] leading-snug">
                       {planHighlights(plan).slice(0, 4).map((h) => (
                         <li key={h} className="flex items-start gap-2">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-ink" aria-hidden />
-                          <span className="text-foreground/85">{h}</span>
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-accent" aria-hidden />
+                          <span className="text-secondary">{h}</span>
                         </li>
                       ))}
                     </ul>
