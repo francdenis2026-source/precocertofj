@@ -99,6 +99,10 @@ function ProductImageBase({
           loading="lazy"
           decoding="async"
           onError={() => setFailed(true)}
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            if (img.naturalWidth === 0) setFailed(true);
+          }}
           className={cn(
             "h-full w-full transition-transform duration-300",
             fit === "cover" ? "object-cover" : "object-contain",

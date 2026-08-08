@@ -119,6 +119,7 @@ export function SmartLogoImage({
   eager?: boolean;
 }) {
   const [inView, setInView] = useState(eager);
+  const [failed, setFailed] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -147,19 +148,21 @@ export function SmartLogoImage({
     targetFill,
     enabled: inView,
   });
-  if (!src) return null;
+  if (!src || failed) return null;
 
   return (
     <img
       ref={imgRef}
       src={src}
       alt={`Logomarca ${name}`}
-      // Mesmo modo CORS do analisador (logo-quality) → uma única requisição
-      // por logo em vez de duas entradas de cache distintas.
       crossOrigin="anonymous"
       loading={eager ? "eager" : "lazy"}
       fetchPriority={eager ? "high" : "auto"}
       decoding="async"
+      onError={() => setFailed(true)}
+      onLoad={(e) => {
+        if (e.currentTarget.naturalWidth === 0) setFailed(true);
+      }}
       className={cn(
         "max-h-full max-w-full object-contain transition-[opacity,transform] duration-300",
         className,
