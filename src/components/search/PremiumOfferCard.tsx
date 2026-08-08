@@ -1,6 +1,6 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -9,6 +9,13 @@ import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group: ProductGroup; isBest?: boolean; storeId?: string }) {
   const bestPrice = group.prices[0];
@@ -184,9 +191,96 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                   >
                     <ShoppingBag size={16} />
                   </button>
-                  <div className="h-8 md:h-10 px-3 md:px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] group-hover:bg-[var(--bg-surface-elevated)] group-hover:text-[var(--text-primary)] transition-all duration-300">
-                    <span className="hidden sm:inline">Detalhes</span> <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button 
+                        onClick={(e) => e.stopPropagation()}
+                        className="h-8 md:h-10 px-3 md:px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] transition-all duration-300"
+                      >
+                        <BarChart3 size={14} className="text-[var(--brand-primary)]" />
+                        <span className="hidden sm:inline">Comparar</span>
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl bg-[var(--bg-surface)] border-[var(--border-subtle)] p-0 gap-0 overflow-hidden">
+                      <DialogHeader className="p-6 pb-4 bg-[var(--bg-surface-elevated)] border-b border-[var(--border-subtle)]">
+                        <DialogTitle className="text-xl font-black tracking-tight text-[var(--text-primary)] flex items-center gap-3">
+                          <BarChart3 className="text-[var(--brand-primary)]" />
+                          Comparativo de Preços
+                        </DialogTitle>
+                        <p className="text-sm text-[var(--text-secondary)] mt-1 font-medium italic">
+                          {group.productName}
+                        </p>
+                      </DialogHeader>
+                      
+                      <div className="p-0 overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-[var(--bg-surface-elevated)]/50">
+                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)]">Estabelecimento</th>
+                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Preço</th>
+                              <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] border-b border-[var(--border-subtle)] text-right">Diferença</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-[var(--border-subtle)]/50">
+                            {group.prices.map((price, idx) => (
+                              <tr key={`${price.establishmentId}-${idx}`} className={cn(
+                                "group/row transition-colors hover:bg-[var(--brand-primary)]/5",
+                                idx === 0 && "bg-[var(--brand-primary)]/5"
+                              )}>
+                                <td className="px-6 py-4">
+                                  <div className="flex flex-col">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm font-bold text-[var(--text-primary)]">{price.marketName}</span>
+                                      {idx === 0 && (
+                                        <span className="flex items-center gap-1 text-[9px] font-black bg-[var(--brand-primary)] text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                          <Medal size={8} /> 1º Lugar
+                                        </span>
+                                      )}
+                                      {idx === 1 && (
+                                        <span className="flex items-center gap-1 text-[9px] font-black bg-slate-500 text-white px-1.5 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                          2º Lugar
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-[10px] text-[var(--text-tertiary)] font-medium">{price.neighborhood || "Centro"}</span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  <Price value={price.price} size="sm" className={cn(
+                                    "font-black tracking-tight",
+                                    idx === 0 ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
+                                  )} />
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  {idx === 0 ? (
+                                    <span className="text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-tighter">Melhor Oferta</span>
+                                  ) : (
+                                    <span className="text-[11px] font-bold text-[var(--danger)]/80 tabular-nums">
+                                      +R$ {(price.price - bestPrice.price).toFixed(2).replace('.', ',')}
+                                    </span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <div className="p-6 bg-[var(--bg-surface-elevated)] border-t border-[var(--border-subtle)]">
+                        <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10">
+                          <Tag className="text-[var(--brand-primary)] mt-0.5" size={18} />
+                          <div>
+                            <p className="text-sm font-bold text-[var(--text-primary)] mb-1">Análise de Economia</p>
+                            <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-medium">
+                              {secondBestPrice 
+                                ? `Você economiza R$ ${priceGap.toFixed(2).replace('.', ',')} comprando no ${bestPrice.marketName} em comparação à segunda melhor opção.`
+                                : `O ${bestPrice.marketName} oferece o melhor preço encontrado para este item.`}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </div>
