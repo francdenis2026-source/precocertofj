@@ -104,7 +104,7 @@ export function MobileNav() {
                   aria-hidden
                   className={cn(
                     "absolute inset-x-3 top-0 h-0.5 rounded-b-full",
-                    it.accent ? "bg-accent" : "bg-primary",
+                    it.accent ? "bg-[var(--brand-accent)]" : "bg-[var(--brand-primary)]",
                   )}
                 />
               )}
