@@ -4,7 +4,9 @@ import { z } from "zod";
 
 /**
  * Collaboration system for points and credits.
+ * This file is a thin wrapper around server-side logic.
  */
+
 export const getMyContributions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -21,13 +23,17 @@ export const getMyContributions = createServerFn({ method: "GET" })
 export const submitContribution = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: { 
-    type: "receipt" | "price_info" | "photo", 
-    payload: any,
-    establishmentId?: string 
+    email: string,
+    marketName?: string,
+    cityName?: string,
+    attachmentPaths?: string[],
+    source?: string
   }) => z.object({
-    type: z.enum(["receipt", "price_info", "photo"]),
-    payload: z.any(),
-    establishmentId: z.string().optional()
+    email: z.string().email(),
+    marketName: z.string().optional(),
+    cityName: z.string().optional(),
+    attachmentPaths: z.array(z.string()).optional(),
+    source: z.string().optional()
   }).parse(data))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -36,10 +42,12 @@ export const submitContribution = createServerFn({ method: "POST" })
       .from("collaborator_submissions")
       .insert({
         user_id: context.userId,
-        status: "pending",
-        establishment_id: data.establishmentId,
-        payload: data.payload,
-        type: data.type
+        email: data.email,
+        market_name: data.marketName ?? null,
+        city: data.cityName ?? null,
+        attachment_paths: data.attachmentPaths ?? [],
+        source: data.source ?? "app_contribution",
+        status: "pending"
       })
       .select("id")
       .single();
@@ -55,12 +63,12 @@ export const reviewContribution = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((data: { 
     id: string, 
-    status: "approved" | "partially_approved" | "rejected" | "suspected_fraud",
+    status: string,
     points?: number,
     notes?: string
   }) => z.object({
     id: z.string(),
-    status: z.enum(["approved", "partially_approved", "rejected", "suspected_fraud"]),
+    status: z.string(),
     points: z.number().optional(),
     notes: z.string().optional()
   }).parse(data))
@@ -80,15 +88,19 @@ export const reviewContribution = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .single();
     
-    if (fetchErr || sub.status !== "pending") throw new Error("Contribuição já processada ou inválida");
+    if (fetchErr || !sub || sub.status !== "pending") {
+      throw new Error("Contribuição já processada ou inválida");
+    }
 
-    // Start transaction-like process
+    const userId = sub.user_id;
+
+    // Start update
     const { error: updateErr } = await supabaseAdmin
       .from("collaborator_submissions")
       .update({
         status: data.status,
-        points_awarded: data.points || 0,
-        admin_notes: data.notes,
+        points_awarded: data.points ?? 0,
+        admin_notes: data.notes ?? null,
         processed_at: new Date().toISOString(),
         processed_by: context.userId
       })
@@ -97,22 +109,20 @@ export const reviewContribution = createServerFn({ method: "POST" })
     if (updateErr) throw new Error(updateErr.message);
 
     // If points awarded, update wallet and transactions
-    if (data.points && data.points > 0 && (data.status === "approved" || data.status === "partially_approved")) {
+    if (data.points && data.points > 0 && userId && (data.status === "approved" || data.status === "partially_approved")) {
       // Log transaction
       await supabaseAdmin.from("credit_transactions").insert({
-        user_id: sub.user_id,
+        user_id: userId,
         type: "reward",
         amount: data.points,
-        description: `Recompensa por colaboração (${data.id})`,
-        reference_id: data.id
+        description: `Recompensa por colaboração (${data.id})`
       });
 
-      // Update wallet balance (using RPC for safety if available, or manual update)
-      // For now, simple update (wallet is 1:1 user_id)
+      // Update wallet balance
       const { data: wallet } = await supabaseAdmin
         .from("user_wallets")
         .select("balance, total_earned")
-        .eq("user_id", sub.user_id)
+        .eq("user_id", userId)
         .single();
       
       await supabaseAdmin
@@ -122,7 +132,7 @@ export const reviewContribution = createServerFn({ method: "POST" })
           total_earned: (wallet?.total_earned || 0) + data.points,
           updated_at: new Date().toISOString()
         })
-        .eq("user_id", sub.user_id);
+        .eq("user_id", userId);
     }
 
     return { success: true };
