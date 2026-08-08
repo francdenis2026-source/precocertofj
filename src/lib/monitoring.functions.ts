@@ -46,30 +46,24 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       const storeScans = scansByStore[store.id] || [];
       
       // Deterministic randomness based on store ID and hour
-      const storeHash = store.id.split('-').reduce((acc, part) => acc + parseInt(part, 16) || 0, 0);
+      // This creates the "live" effect by showing different products every hour
+      const storeHash = store.id.split('-').reduce((acc, part) => acc + (parseInt(part, 16) || 0), 0);
       const rotationIndex = (hourSeed + storeHash) % (storeScans.length || 1);
       const currentScan = storeScans[rotationIndex];
 
-      const status = 'online'; // Most are online for the live panel
+      const status = 'online'; 
       
       const insights = [];
       if (currentScan) {
         insights.push({
           type: 'price',
-          message: `Destaque: ${currentScan.product_name} por R$ ${currentScan.price_captured?.toFixed(2)}`,
+          message: `${currentScan.product_name} • R$ ${currentScan.price_captured?.toFixed(2)}`,
           intensity: 'medium'
-        });
-        
-        const category = currentScan.category || 'Geral';
-        insights.push({
-          type: 'demand',
-          message: `Alta procura na categoria ${category} hoje`,
-          intensity: 'high'
         });
       } else {
         insights.push({
           type: 'stock',
-          message: 'Verificando novas atualizações de preços...',
+          message: 'Aguardando novas ofertas para este estabelecimento...',
           intensity: 'low'
         });
       }
@@ -79,9 +73,8 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
         storeName: store.name,
         storeLogoUrl: store.logo_url,
         status,
-        activeSensors: currentScan ? Math.floor((Math.abs(Math.sin(hourSeed + storeHash)) * 5)) + 3 : 0,
         lastSync: currentScan ? currentScan.created_at : new Date().toISOString(),
-        insights: insights.slice(0, 2)
+        insights: insights.slice(0, 1)
       };
     });
 
