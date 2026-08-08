@@ -8,8 +8,10 @@ import {
   Zap,
   LayoutGrid,
   Search,
-  Timer
+  Timer,
+  ShieldAlert
 } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { getRealtimeMonitoringStats } from "@/lib/monitoring.functions";
 import { cn } from "@/lib/utils";
@@ -19,15 +21,34 @@ import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 export function RealtimeMonitoringDashboard() {
   const fetchStats = useServerFn(getRealtimeMonitoringStats);
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
   
-  const { data: stats, isLoading, refetch, isFetching } = useQuery({
-    queryKey: ["realtime-monitoring-stats", searchQuery],
-    queryFn: () => fetchStats({ data: { query: searchQuery } } as any),
+  const { data, isLoading, refetch, isFetching, error } = useQuery({
+    queryKey: ["realtime-monitoring-stats", searchQuery, page],
+    queryFn: () => fetchStats({ data: { query: searchQuery, page, pageSize } }),
     refetchInterval: 60000,
     staleTime: 30000,
   });
 
+  const stats = data?.stores || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / pageSize);
+
+  if (error) {
+    return (
+      <div className="p-8 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--danger)]/20 text-center">
+        <ShieldAlert className="h-10 w-10 text-[var(--danger)] mx-auto mb-4 opacity-50" />
+        <h4 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">Acesso Restrito</h4>
+        <p className="text-[13px] text-[var(--text-tertiary)] max-w-sm mx-auto">
+          {error.message || "Você não tem permissão para acessar esta funcionalidade de monitoramento."}
+        </p>
+      </div>
+    );
+  }
+
   if (isLoading) {
+
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
@@ -64,10 +85,14 @@ export function RealtimeMonitoringDashboard() {
             <input 
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(1); // Reset to first page on search
+              }}
               placeholder="Buscar por produto..."
               className="w-full h-11 pl-10 pr-4 rounded-[var(--radius-lg)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[14px] font-medium placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]/50 transition-all"
             />
+
           </div>
           <button 
             onClick={() => refetch()} 
@@ -158,6 +183,30 @@ export function RealtimeMonitoringDashboard() {
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Pagination Performance */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1 || isFetching}
+            className="h-10 px-4 rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[12px] font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] disabled:opacity-50 transition-all"
+          >
+            Anterior
+          </button>
+          <div className="text-[12px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">
+            Página {page} de {totalPages}
+          </div>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages || isFetching}
+            className="h-10 px-4 rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[12px] font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] disabled:opacity-50 transition-all"
+          >
+            Próxima
+          </button>
+        </div>
+      )}
     </div>
   );
 }
+
