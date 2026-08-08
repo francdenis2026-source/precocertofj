@@ -382,16 +382,16 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                         </button>
                       </li>
                     ))}
-                    <li className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
-                      <span className="flex items-center gap-2">
-                        <CornerDownLeft className="h-3 w-3 text-[var(--brand-primary)]" /> <span className="text-[var(--text-secondary)]">Enter</span> para buscar
+                    <li className="flex items-center justify-between border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-2.5 text-[9px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)]">
+                      <span className="flex items-center gap-1.5">
+                        <CornerDownLeft className="h-3 w-3 text-[var(--brand-primary)]" /> <span>Enter</span> para buscar
                       </span>
                       <span className="flex items-center gap-2">
-                        <span className="flex gap-0.5">
-                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1.5 py-0.5">↑</span>
-                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1.5 py-0.5">↓</span>
+                        <span className="flex gap-0.5 opacity-50">
+                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1 py-0.5">↑</span>
+                          <span className="rounded border border-[var(--border-subtle)] bg-[var(--bg-base)] px-1 py-0.5">↓</span>
                         </span>
-                        para navegar
+                        navegar
                       </span>
                     </li>
                   </ul>
