@@ -213,7 +213,7 @@ function HomePage() {
 
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8">
         {/* Trust bar integrated into hero flow - moved from inside section to below it if needed, or kept inside */}
-        <div className="mb-24 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="mb-16 grid grid-cols-2 gap-4 md:grid-cols-4">
           <TrustStat label="Registros de preço" value={stats?.priceRecords} />
           <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
           <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
