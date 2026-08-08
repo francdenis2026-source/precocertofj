@@ -225,7 +225,7 @@ function HomePage() {
         {/* Partner Stores */}
         <section>
           <div className="text-center mb-12">
-            <h2 className="t-h3 uppercase tracking-widest text-[var(--text-tertiary)]">Mercados Monitorados</h2>
+            <h2 className="t-h3 uppercase tracking-widest text-[var(--text-tertiary)]">Estabelecimentos Monitorados</h2>
           </div>
           <RegisteredStoresCarousel />
         </section>
@@ -276,7 +276,7 @@ function HomePage() {
           <div className="mb-12">
             <div className="inline-block px-3 py-1 rounded-lg bg-navy text-white text-[10px] font-black uppercase tracking-widest mb-4">Área Profissional</div>
             <h2 className="t-h2 mb-4">Painel de Inteligência de Mercado</h2>
-            <p className="text-[var(--text-secondary)] max-w-3xl">Visão estratégica e monitoramento de concorrência em tempo real para estabelecimentos parceiros de Feijó.</p>
+            <p className="text-[var(--text-secondary)] max-w-3xl">Visão estratégica e monitoramento de concorrência em tempo real para todos os estabelecimentos cadastrados em Feijó.</p>
           </div>
           <RealtimeMonitoringDashboard />
         </section>

@@ -35,7 +35,7 @@ export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
   const navLinks = [
     { label: "Comparar preços", to: "/precos" },
     { label: "Cesta inteligente", to: "/cesta" },
-    { label: "Mercados", to: "/estabelecimentos" },
+    { label: "Estabelecimentos", to: "/estabelecimentos" },
     { label: "Ofertas", to: "/ofertas" },
     { label: "Planos", to: "/planos" },
   ];
