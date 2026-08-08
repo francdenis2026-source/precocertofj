@@ -281,7 +281,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   const [showPreview, setShowPreview] = useState(false);
 
   const handleOpenPreview = () => {
-    const url = handleExportPDF(true) as string;
+    const url = handleExportPDF(true) as unknown as string;
     setPdfPreviewUrl(url);
     setShowPreview(true);
   };
