@@ -123,7 +123,7 @@ function HomePage() {
               </div>
               <h1 className="t-h1 text-white mb-6">
                 Compre melhor.<br/>
-                <span className="text-primary">Gaste muito menos agora.</span>
+                <span className="text-primary">Gaste menos.</span>
               </h1>
               <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
                 Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
@@ -148,7 +148,7 @@ function HomePage() {
           {stats?.generatedAt && (
             <div className="mt-4 pb-4 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-80">
               <Clock className="h-3.5 w-3.5 text-primary" />
-              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })} • Sincronizado</span>
             </div>
           )}
         </div>
