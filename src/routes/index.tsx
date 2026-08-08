@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   LineChart,
   Zap,
+  Clock,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
