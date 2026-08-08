@@ -157,8 +157,8 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
         format: "a4"
       });
       
-      const primaryColor = [11, 30, 58]; // Navy
-      const goldColor = [212, 175, 55]; // Gold
+      const primaryColor: [number, number, number] = [11, 30, 58]; // Navy
+      const goldColor: [number, number, number] = [212, 175, 55]; // Gold
       
       // Logo and Header
       doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
