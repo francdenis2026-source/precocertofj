@@ -101,14 +101,14 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
       </div>
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-center gap-2">
-          <span className="truncate text-[13px] font-medium text-[var(--brand-primary)]">{p.marketName}</span>
-          <span className="shrink-0 text-[13px] text-[var(--text-tertiary)]">· {formatDate(p.when)}</span>
+          <span className="truncate text-[11px] md:text-[13px] font-medium text-[var(--brand-primary)]">{p.marketName}</span>
+          <span className="shrink-0 text-[11px] md:text-[13px] text-[var(--text-tertiary)]">· {formatDate(p.when)}</span>
         </div>
-        <h3 className="truncate text-[16px] font-semibold leading-snug tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
+        <h3 className="truncate text-[14px] md:text-[16px] font-semibold leading-snug tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
           {p.name}
         </h3>
         <div className="mt-1">
-          <Price value={p.price} size="md" className="font-semibold" />
+          <Price value={p.price} size="sm" className="font-semibold" />
         </div>
       </div>
     </motion.div>
@@ -329,7 +329,7 @@ function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                   {filteredProducts.map((p, i) => (
                     <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
                   ))}
