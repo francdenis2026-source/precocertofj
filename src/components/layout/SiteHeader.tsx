@@ -44,11 +44,12 @@ export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100] h-[68px] transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-[100] h-[72px] transition-all duration-500",
           isScrolled 
-            ? "bg-white/90 backdrop-blur-md border-b border-[var(--border-base)] shadow-sm" 
-            : isOverlay ? "bg-transparent" : "bg-white border-b border-[var(--border-base)]"
+            ? "bg-white/80 backdrop-blur-xl border-b border-[var(--border-subtle)] shadow-sm" 
+            : isOverlay ? "bg-transparent" : "bg-white border-b border-[var(--border-subtle)]"
         )}
+
       >
         <div className="pc-shell h-full flex items-center justify-between">
           <div className="flex items-center gap-8">

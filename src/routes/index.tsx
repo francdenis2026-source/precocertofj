@@ -95,37 +95,40 @@ function HomePage() {
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-global)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg-global)] text-[var(--text-primary)] selection:bg-[var(--brand-primary)] selection:text-white">
       <SiteHeader variant="overlay" />
 
-      {/* Hero Section - Professional Supermarket Interior */}
-      <section className="relative h-[480px] md:h-[600px] flex items-center overflow-hidden">
+      {/* Hero Section — Refined Hierarchy and Depth */}
+      <section className="relative min-h-[520px] md:min-h-[640px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D1B2A]/95 via-[#0D1B2A]/70 to-transparent z-10" />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-global)] via-transparent to-transparent z-10" />
-          <img 
+          <motion.img 
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
             alt="Interior de um supermercado profissional"
-            className="h-full w-full object-cover scale-105"
+            className="h-full w-full object-cover"
           />
         </div>
 
         <div className="pc-shell relative z-20">
           <div className="max-w-3xl">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-white text-[11px] font-black uppercase tracking-[0.2em] mb-6">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                Inteligência Local · Feijó · Acre
+              <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white mb-8 animate-fade-in-up">
+                <span className="flex h-2 w-2 rounded-full bg-[var(--brand-primary)] shadow-[0_0_8px_var(--brand-primary)] animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Inteligência Local · Feijó · Acre</span>
               </div>
-              <h1 className="t-h1 text-white mb-6">
+              <h1 className="t-hero text-white mb-6">
                 Compre melhor.<br/>
-                <span className="text-[var(--brand-primary)]">Gaste menos.</span>
+                <span className="text-[var(--brand-primary)] drop-shadow-sm">Gaste menos.</span>
               </h1>
-              <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
+              <p className="text-white/80 t-body mb-10 max-w-2xl leading-relaxed">
                 Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
               </p>
 
@@ -137,22 +140,28 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Metrics Bar - Compact container */}
-      <div className="mx-auto max-w-[1280px] px-4 -mt-12 relative z-20 mb-20">
-        <div className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden p-2">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border-base)]">
+      {/* Stats Bar — Unified and Elevated */}
+      <div className="pc-shell -mt-10 relative z-30 mb-24">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl shadow-navy/5 overflow-hidden"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border-subtle)]">
             <StatItem label="Produtos cadastrados" value={stats?.totalItems ? stats.totalItems.toLocaleString('pt-BR') : "..."} />
             <StatItem label="Preços monitorados" value={stats?.priceRecords ? stats.priceRecords.toLocaleString('pt-BR') : "..."} />
             <StatItem label="Estabelecimentos" value={stats?.establishments ? stats.establishments.toLocaleString('pt-BR') : "..."} />
           </div>
           {stats?.generatedAt && (
-            <div className="mt-4 pb-4 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-80">
-              <Clock className="h-3.5 w-3.5 text-primary" />
-              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })} • Sincronizado</span>
+            <div className="bg-[var(--bg-secondary)]/50 py-3 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] border-t border-[var(--border-subtle)]">
+              <Clock className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+              <span>Dados atualizados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
+
 
       <main className="pc-shell space-y-32 pb-32">
         {/* Optimized Baskets Section */}
