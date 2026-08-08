@@ -604,6 +604,9 @@ export type Database = {
           id: string
           market_name: string | null
           notified_at: string | null
+          points_awarded: number | null
+          processed_at: string | null
+          processed_by: string | null
           purchase_date: string | null
           receipts_count: number
           rejection_reason: string | null
@@ -628,6 +631,9 @@ export type Database = {
           id?: string
           market_name?: string | null
           notified_at?: string | null
+          points_awarded?: number | null
+          processed_at?: string | null
+          processed_by?: string | null
           purchase_date?: string | null
           receipts_count?: number
           rejection_reason?: string | null
@@ -652,6 +658,9 @@ export type Database = {
           id?: string
           market_name?: string | null
           notified_at?: string | null
+          points_awarded?: number | null
+          processed_at?: string | null
+          processed_by?: string | null
           purchase_date?: string | null
           receipts_count?: number
           rejection_reason?: string | null
@@ -664,6 +673,69 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      credit_packages: {
+        Row: {
+          active: boolean | null
+          bonus_credits: number | null
+          created_at: string | null
+          credits: number
+          id: string
+          name: string
+          price_cents: number
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          bonus_credits?: number | null
+          created_at?: string | null
+          credits: number
+          id?: string
+          name: string
+          price_cents: number
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          bonus_credits?: number | null
+          created_at?: string | null
+          credits?: number
+          id?: string
+          name?: string
+          price_cents?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      credit_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          reference_id: string | null
+          type: Database["public"]["Enums"]["credit_transaction_type"]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          type: Database["public"]["Enums"]["credit_transaction_type"]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          type?: Database["public"]["Enums"]["credit_transaction_type"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -800,9 +872,16 @@ export type Database = {
           name: string
           neighborhood: string | null
           notes: string | null
+          owner_id: string | null
           phone: string | null
+          plan_id: string | null
+          size: Database["public"]["Enums"]["business_size"] | null
           state: string
+          subscription_status:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
           updated_at: string
+          verified: boolean | null
           zip: string | null
         }
         Insert: {
@@ -822,9 +901,16 @@ export type Database = {
           name: string
           neighborhood?: string | null
           notes?: string | null
+          owner_id?: string | null
           phone?: string | null
+          plan_id?: string | null
+          size?: Database["public"]["Enums"]["business_size"] | null
           state: string
+          subscription_status?:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
           updated_at?: string
+          verified?: boolean | null
           zip?: string | null
         }
         Update: {
@@ -844,12 +930,27 @@ export type Database = {
           name?: string
           neighborhood?: string | null
           notes?: string | null
+          owner_id?: string | null
           phone?: string | null
+          plan_id?: string | null
+          size?: Database["public"]["Enums"]["business_size"] | null
           state?: string
+          subscription_status?:
+            | Database["public"]["Enums"]["subscription_status"]
+            | null
           updated_at?: string
+          verified?: boolean | null
           zip?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "establishments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "license_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       favorite_establishments: {
         Row: {
@@ -2947,6 +3048,87 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          created_at: string | null
+          establishment_id: string | null
+          external_subscription_id: string | null
+          id: string
+          payment_provider: string | null
+          plan_id: string
+          renewal_date: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          establishment_id?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          payment_provider?: string | null
+          plan_id: string
+          renewal_date?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          establishment_id?: string | null
+          external_subscription_id?: string | null
+          id?: string
+          payment_provider?: string | null
+          plan_id?: string
+          renewal_date?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_establishment_id_fkey"
+            columns: ["establishment_id"]
+            isOneToOne: false
+            referencedRelation: "establishments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "license_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
       user_notifications: {
         Row: {
           body: string | null
@@ -3042,6 +3224,30 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_wallets: {
+        Row: {
+          balance: number
+          total_earned: number
+          total_spent: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -3170,6 +3376,9 @@ export type Database = {
           id: string
           market_name: string | null
           notified_at: string | null
+          points_awarded: number | null
+          processed_at: string | null
+          processed_by: string | null
           purchase_date: string | null
           receipts_count: number
           rejection_reason: string | null
@@ -3781,6 +3990,26 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      business_size: "micro" | "small" | "medium" | "large" | "enterprise"
+      collaboration_status:
+        | "pending"
+        | "approved"
+        | "partially_approved"
+        | "rejected"
+        | "suspected_fraud"
+      credit_transaction_type:
+        | "purchase"
+        | "reward"
+        | "usage"
+        | "refund"
+        | "bonus"
+        | "admin_adjustment"
+      subscription_status:
+        | "trial"
+        | "active"
+        | "past_due"
+        | "cancelled"
+        | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3909,6 +4138,29 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      business_size: ["micro", "small", "medium", "large", "enterprise"],
+      collaboration_status: [
+        "pending",
+        "approved",
+        "partially_approved",
+        "rejected",
+        "suspected_fraud",
+      ],
+      credit_transaction_type: [
+        "purchase",
+        "reward",
+        "usage",
+        "refund",
+        "bonus",
+        "admin_adjustment",
+      ],
+      subscription_status: [
+        "trial",
+        "active",
+        "past_due",
+        "cancelled",
+        "expired",
+      ],
     },
   },
 } as const
