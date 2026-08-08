@@ -141,7 +141,7 @@ function ProductDetailPage() {
         </Link>
 
         {/* Hero — thumbnail à esquerda + detalhes à direita */}
-        <header className="mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <header className="mt-3 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)]">
           <div className="flex gap-3 p-3">
             {/* Foto profissional em tamanho compacto — clique abre galeria com zoom */}
             <button
@@ -149,7 +149,7 @@ function ProductDetailPage() {
               onClick={() => product.imageUrl && setGalleryOpen(true)}
               disabled={!product.imageUrl}
               aria-label={product.imageUrl ? "Ampliar foto" : "Sem foto disponível"}
-              className="group relative grid h-[104px] w-[104px] shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-gradient-to-br from-primary/10 via-surface to-accent/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="group relative grid h-[104px] w-[104px] shrink-0 place-items-center overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-gradient-to-br from-[var(--brand-primary)]/10 via-[var(--bg-surface)] to-[var(--brand-gold)]/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
             >
               {product.imageUrl ? (
                 <>
@@ -274,7 +274,7 @@ function ProductDetailPage() {
             <h2 className="mb-2 font-display text-[13px] font-semibold text-foreground">
               Outros tamanhos & variações
             </h2>
-            <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+            <ul className="divide-y divide-[var(--border-subtle)] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)]">
               {variations.map((v) => (
                 <li key={v.slug}>
                   <Link
@@ -313,7 +313,7 @@ function ProductDetailPage() {
             <h2 className="mb-2 font-display text-[13px] font-semibold text-foreground">
               Histórico de preço
             </h2>
-            <div className="overflow-hidden rounded-2xl border border-border bg-surface p-4 shadow-sm">
+            <div className="overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)]">
               <Sparkline points={history} />
               <ul className="mt-3 divide-y divide-border text-[12px]">
                 {[...history].reverse().slice(0, 10).map((h, i) => (
@@ -339,7 +339,7 @@ function ProductDetailPage() {
           <button
             type="button"
             onClick={() => setReportOpen(true)}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-surface px-4 py-3 text-[12.5px] font-semibold text-muted-foreground hover:border-primary hover:text-primary"
+            className="flex w-full items-center justify-center gap-2 rounded-[var(--radius-2xl)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-3 text-[12.5px] font-semibold text-[var(--text-secondary)] hover:border-[var(--brand-primary)] hover:text-[var(--brand-primary)]"
           >
             <Flag className="h-3.5 w-3.5" />
             Reportar preço incorreto ou desatualizado
@@ -386,7 +386,7 @@ function Stat({
   accent?: "savings" | "destructive";
 }) {
   return (
-    <div className="rounded-xl border border-border bg-background px-2 py-2 text-center">
+    <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-base)] px-2 py-2 text-center">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
@@ -403,7 +403,7 @@ function Stat({
 
 function MetaBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-2.5">
+    <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2.5">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>

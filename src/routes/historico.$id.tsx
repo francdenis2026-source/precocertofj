@@ -100,10 +100,10 @@ function DetailPage() {
               fit="contain"
               fallbackIcon={ImageOff}
               fallbackLabel={scan.productName ?? undefined}
-              className="aspect-square w-full rounded-3xl border border-primary/20 bg-surface"
+              className="aspect-square w-full rounded-[var(--radius-3xl)] border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)]"
             />
 
-            <div className={`rounded-3xl p-5 ${verdictBg}`}>
+            <div className={`rounded-[var(--radius-3xl)] p-5 ${verdictBg}`}>
               <p className="font-mono text-[11px] font-bold uppercase tracking-widest opacity-80">
                 Veredito
               </p>
@@ -170,7 +170,7 @@ function DetailPage() {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-primary/10 bg-surface p-3">
+    <div className="rounded-[var(--radius-2xl)] border border-[var(--brand-primary)]/10 bg-[var(--bg-surface)] p-3">
       <dt className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
         {label}
       </dt>

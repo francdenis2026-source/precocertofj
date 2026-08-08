@@ -338,7 +338,7 @@ function RedeemPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[880px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[880px] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-xl)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]"
       >
         {/* LEFT — Hero unificado (mesma arte de login/cadastro) */}
         <div className="hidden md:block">

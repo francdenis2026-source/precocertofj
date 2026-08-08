@@ -27,8 +27,8 @@ function RegisterPage() {
           </header>
 
           <div className="grid grid-cols-1 gap-4">
-            <button className="flex items-center gap-4 p-6 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)] transition-all group">
-              <div className="h-12 w-12 rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] group-hover:scale-110 transition-transform">
+            <button className="flex items-center gap-4 p-6 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-2xl)] hover:border-[var(--brand-primary)] transition-all group shadow-[var(--shadow-sm)]">
+              <div className="h-12 w-12 rounded-[var(--radius-xl)] bg-[var(--brand-primary)]/10 flex items-center justify-center text-[var(--brand-primary)] group-hover:scale-110 transition-transform">
                 <Camera className="h-6 w-6" />
               </div>
               <div className="text-left">
@@ -37,8 +37,8 @@ function RegisterPage() {
               </div>
             </button>
 
-            <button className="flex items-center gap-4 p-6 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl hover:border-[var(--brand-primary)] transition-all group">
-              <div className="h-12 w-12 rounded-xl bg-white/5 flex items-center justify-center text-[var(--text-secondary)] group-hover:scale-110 transition-transform">
+            <button className="flex items-center gap-4 p-6 bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-2xl)] hover:border-[var(--brand-primary)] transition-all group shadow-[var(--shadow-sm)]">
+              <div className="h-12 w-12 rounded-[var(--radius-xl)] bg-white/5 flex items-center justify-center text-[var(--text-secondary)] group-hover:scale-110 transition-transform">
                 <Search className="h-6 w-6" />
               </div>
               <div className="text-left">
@@ -48,7 +48,7 @@ function RegisterPage() {
             </button>
           </div>
 
-          <div className="mt-8 p-6 rounded-2xl bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10">
+          <div className="mt-8 p-6 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/10 shadow-[var(--shadow-sm)]">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-[var(--brand-primary)] mb-2">Dica</h4>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
               Ao registrar um preço, verifique se a data de validade e a unidade de medida (kg, un, ml) estão corretas para garantir a melhor comparação para todos.

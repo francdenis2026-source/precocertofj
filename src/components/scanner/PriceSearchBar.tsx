@@ -677,8 +677,8 @@ export function PriceSearchBar({
       className={
         "pc-search-scope relative isolate z-40 " +
         (fitResults
-          ? "flex h-full min-h-0 flex-col rounded-xl border-0 bg-transparent p-0"
-          : "rounded-2xl border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] bg-surface p-3 sm:rounded-3xl sm:p-4")
+          ? "flex h-full min-h-0 flex-col rounded-[var(--radius-xl)] border-0 bg-transparent p-0"
+          : "rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-3 sm:rounded-[var(--radius-3xl)] sm:p-4 shadow-[var(--shadow-sm)]")
       }
     >
       <div
@@ -1043,7 +1043,7 @@ export function PriceSearchBar({
 
           {/* Painel resumo (melhor preço / economia) */}
           <div
-            className="animate-pulse rounded-xl border border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] p-3.5 sm:p-4"
+            className="animate-pulse rounded-[var(--radius-xl)] border border-[var(--border-subtle)] p-3.5 sm:p-4"
             aria-hidden="true"
           >
             <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
@@ -1215,7 +1215,7 @@ export function PriceSearchBar({
                     role="region"
                     aria-label={`Melhor resultado: ${fmt(result.cheapest?.price ?? result.min)}`}
                     tabIndex={0}
-                    className="pc-best-result relative overflow-hidden rounded-xl border border-brand-gold/40 bg-brand-navy text-white ring-1 ring-brand-gold/20 shadow-[0_10px_40px_-18px_rgba(201,168,76,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    className="pc-best-result relative overflow-hidden rounded-[var(--radius-xl)] border border-[var(--brand-gold)]/40 bg-[var(--brand-navy)] text-[var(--text-on-brand)] ring-1 ring-[var(--brand-gold)]/20 shadow-[0_10px_40px_-18px_rgba(201,168,76,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
                     <span aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-brand-gold via-brand-gold/60 to-transparent" />
@@ -2415,7 +2415,7 @@ function CompareMatrix({
   return (
     <section
       aria-label={`Comparação lado a lado dos mercados mais baratos para ${productName}`}
-      className="mt-2 rounded-xl border border-brand-gold/40 bg-[color-mix(in_oklab,var(--brand-gold)_6%,var(--pc-surface-1))] p-2 shadow-sm"
+      className="mt-2 rounded-[var(--radius-xl)] border border-[var(--brand-gold)]/40 bg-[color-mix(in_oklab,var(--brand-gold)_6%,var(--bg-surface))] p-2 shadow-[var(--shadow-sm)]"
     >
       <header className="mb-1.5 flex flex-wrap items-baseline justify-between gap-1.5 px-1">
         <h4 className="text-[12.5px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
@@ -3305,7 +3305,7 @@ function MarketBucketSection({
   return (
     <section
       className={
-        "overflow-hidden rounded-xl border transition-colors " +
+        "overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] transition-colors " +
         (isCheapest
           ? "border-[color-mix(in_oklab,var(--brand-gold)_46%,transparent)] bg-card/90"
           : "border-[color-mix(in_oklab,var(--color-border)_52%,transparent)] bg-card/80 hover:border-[color-mix(in_oklab,var(--color-border)_80%,transparent)]")
@@ -3639,7 +3639,7 @@ function MatrixCompareResults({
 
   if (allMarkets.length < 2) {
     return (
-      <div className="rounded-xl border border-border/60 bg-card/70 px-3 py-3 text-[13.5px] text-muted-foreground">
+      <div className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/70 px-3 py-3 text-[13.5px] text-[var(--text-secondary)]">
         Comparação lado a lado precisa de pelo menos 2 mercados com o mesmo produto. Ajuste os filtros
         para incluir mais estabelecimentos.
       </div>
@@ -3649,7 +3649,7 @@ function MatrixCompareResults({
   return (
     <div className="space-y-2">
       {/* Toolbar: seletor de mercados + navegação + exportar */}
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/60 px-2.5 py-2">
+      <div className="flex flex-wrap items-center gap-2 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/60 px-2.5 py-2">
         <div className="flex items-center gap-1.5">
           <span className="text-[13px] font-medium text-muted-foreground">
             Colunas
@@ -3735,7 +3735,7 @@ function MatrixCompareResults({
       {/* Grid acessível */}
       <div
         ref={scrollRef}
-        className="overflow-x-auto rounded-xl border border-border/60 bg-card/70 shadow-sm scroll-smooth"
+        className="overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/70 shadow-[var(--shadow-sm)] scroll-smooth"
         aria-label="Área de rolagem da comparação lado a lado"
       >
         <table
