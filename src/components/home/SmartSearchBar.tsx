@@ -176,7 +176,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         role="search"
         className={cn(
           "group relative flex items-center gap-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] pl-4 pr-1.5 shadow-lg transition-all duration-300",
-          "focus-within:border-[var(--brand-primary)] focus-within:shadow-[0_0_0_6px_rgba(212,175,55,0.12)]",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-1 focus-within:ring-[var(--brand-primary)]",
           compact ? "h-12" : "h-14 sm:h-[68px]",
         )}
       >

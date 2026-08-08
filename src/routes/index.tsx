@@ -227,7 +227,7 @@ function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/40 to-transparent pointer-events-none" />
               
               {/* Floating elements to emphasize app connection */}
-              <div className="absolute -left-6 top-1/4 pc-glass p-4 rounded-xl shadow-xl animate-float">
+              <div className="absolute -left-6 top-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
                     <TrendingDown className="h-4 w-4 text-emerald-500" />
@@ -239,7 +239,7 @@ function HomePage() {
                 </div>
               </div>
 
-              <div className="absolute -right-4 bottom-1/4 pc-glass p-4 rounded-xl shadow-xl animate-float" style={{ animationDelay: '1s' }}>
+              <div className="absolute -right-4 bottom-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-[var(--brand-primary)]/20 flex items-center justify-center">
                     <Zap className="h-4 w-4 text-[var(--brand-primary)]" />

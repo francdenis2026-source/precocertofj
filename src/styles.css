@@ -340,10 +340,9 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.005em;
 }
 
-/* Glass — reserved for elements that float over imagery or the page */
+/* Glass — simple semi-transparent background without heavy blur */
 @utility pc-glass {
-  background-color: rgb(17 24 39 / 0.62);
-  backdrop-filter: blur(20px) saturate(150%);
+  background-color: rgb(17 24 39 / 0.85);
   border: 1px solid var(--border-subtle);
 }
 
