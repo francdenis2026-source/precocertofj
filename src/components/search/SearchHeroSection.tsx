@@ -2,7 +2,7 @@ import { usePriceSearch } from "@/lib/use-price-search";
 import { motion } from "framer-motion";
 import { Price } from "@/components/ds/Price";
 import { Badge } from "@/components/ds/Badge";
-import { TrendingDown, TrendingUp, Star, Share2, Bell, Maximize2, Clock, MapPin, Store } from "lucide-react";
+import { TrendingDown, TrendingUp, Star, Share2, Bell, Maximize2, Clock, MapPin, Store, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PriceHistoryChart } from "./PriceHistoryChart";
 import { cn } from "@/lib/utils";
