@@ -381,8 +381,8 @@ function PlansPage() {
                         "btn-state-safe pc-focus mt-3 h-11 w-full px-3",
                         tc.control,
                         isRecommended
-                          ? "btn-gold shadow-elev-1"
-                          : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-gold-ink",
+                          ? "bg-brand-accent text-bg-base hover:bg-brand-accent-soft shadow-lg shadow-brand-accent/10"
+                          : "border border-subtle bg-surface text-primary hover:border-brand-accent hover:text-brand-accent",
                       )}
                     >
                       {buying === plan.id
