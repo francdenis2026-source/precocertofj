@@ -177,7 +177,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300">
+      <body className="bg-[var(--bg-global)] text-[var(--text-primary)] transition-colors duration-300 antialiased selection:bg-[var(--brand-primary)] selection:text-white">
         {children}
         <Scripts />
       </body>

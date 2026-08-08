@@ -1,81 +1,52 @@
 import { cn } from "@/lib/utils";
+import { ShoppingCart } from "lucide-react";
 
 interface LogoProps extends React.HTMLAttributes<HTMLAnchorElement> {
   href?: string;
-  /** Esconde o wordmark e mostra apenas a etiqueta. */
   compact?: boolean;
-  /** Exibe a linha "FEIJÓ • ACRE" sob o wordmark. */
-  showTagline?: boolean;
-  /** "dark" = sobre superfícies escuras (sidebar/footer).
-   *  "on-light" = sobre superfícies claras fixas (independente do tema). */
   variant?: "default" | "dark" | "on-light" | "on-dark";
 }
 
-/**
- * Marca oficial PreçoCerto — Feijó · Acre.
- * Etiqueta dourada com check + wordmark "Preço" (contextual) + "Certo" (dourado).
- */
 export function Logo({
   className,
   compact = false,
-  showTagline = false,
   href = "/",
   variant = "default",
   ...props
 }: LogoProps) {
   const isDark = variant === "dark" || variant === "on-dark";
   const onLight = variant === "on-light";
+
   return (
     <a
       href={href}
       aria-label="PreçoCerto — Feijó, Acre"
       className={cn(
-        "group inline-flex items-center gap-2.5 outline-none",
-        "focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md",
-        className,
+        "flex items-center gap-2.5 select-none group outline-none",
+        "focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md",
+        className
       )}
       {...props}
     >
-      <img
-        src="/logo-mark.png"
-        alt=""
-        aria-hidden="true"
-        width={40}
-        height={40}
-        className="h-10 w-10 shrink-0 object-contain drop-shadow-[0_1px_0_rgba(11,30,58,0.15)] transition-transform duration-200 group-hover:-rotate-3"
-      />
-
+      <div className={cn(
+        "relative flex items-center justify-center rounded-xl transition-all duration-500 group-hover:rotate-[10deg] group-hover:scale-110",
+        compact ? "h-8 w-8" : "h-10 w-10",
+        isDark ? "bg-white text-[var(--brand-primary)]" : "bg-[var(--brand-primary)] text-white shadow-lg shadow-[var(--brand-primary)]/20"
+      )}>
+        <ShoppingCart size={compact ? 18 : 22} strokeWidth={2.5} />
+        <div className={cn(
+          "absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 transition-transform duration-500 group-hover:scale-125",
+          isDark ? "bg-[var(--brand-accent)] border-[var(--navy-900)]" : "bg-[var(--brand-accent)] border-white"
+        )} />
+      </div>
+      
       {!compact && (
-        <span className="inline-flex flex-col leading-none">
-          <span
-            className={cn(
-              "font-display text-[22px] font-bold tracking-tight",
-              isDark ? "text-white" : onLight ? "text-[#08122a]" : "text-foreground",
-            )}
-          >
-            Preço
-            <span className={onLight ? "text-[#6b4a12]" : "text-gold-ink"}>
-              Certo
-            </span>
-          </span>
-          {showTagline && (
-            <span
-              className={cn(
-                "mt-1 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.28em]",
-                isDark
-                  ? "text-white/80"
-                  : onLight
-                    ? "text-[#2d3a4f]"
-                    : "text-foreground",
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className="inline-block h-[2px] w-4 rounded-full bg-brand-gold"
-              />
-              Feijó <span className="text-gold-ink">•</span> <span className="text-gold-ink">Acre</span>
-            </span>
-          )}
+        <span className={cn(
+          "font-display font-black tracking-tighter leading-none transition-colors",
+          compact ? "text-lg" : "text-2xl",
+          isDark ? "text-white" : onLight ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
+        )}>
+          Preço<span className={isDark ? "text-white/80" : "text-[var(--brand-primary)]"}>Certo</span>
         </span>
       )}
     </a>

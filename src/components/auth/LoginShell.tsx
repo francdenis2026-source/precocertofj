@@ -36,7 +36,7 @@ export function LoginShell({ children, title, subtitle }: { children: React.Reac
       <div className="w-full max-w-[440px] space-y-8">
         <div className="flex flex-col items-center text-center space-y-4">
           <Link to="/" className="transition-transform hover:scale-105">
-            <Logo variant="on-light" compact showTagline={false} className="[&_img]:h-12 [&_img]:w-12" />
+            <Logo variant="on-light" compact className="[&_div]:h-12 [&_div]:w-12" />
           </Link>
           <div>
             <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">{title}</h1>
