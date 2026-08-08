@@ -270,7 +270,7 @@ function PlansPage() {
                 <div
                   key={i}
                   data-planos-card
-                  className="h-full w-[78%] shrink-0 animate-pulse rounded-2xl border border-border bg-muted/40 lg:w-auto"
+                  className="h-full w-[78%] shrink-0 animate-pulse rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/40 lg:w-auto"
                 />
               ))}
             </div>

@@ -91,7 +91,7 @@ function SearchPage() {
                 <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Plataforma Ativa</h2>
                 <p className="text-[18px] font-black tracking-tight mt-1">Mercados em Feijó</p>
               </div>
-              <div className="flex items-center gap-1.5 bg-[var(--bg-surface-elevated)] px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] shadow-sm">
+              <div className="flex items-center gap-1.5 bg-[var(--bg-surface-elevated)] px-3 py-1.5 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
                 <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[11px] font-black uppercase tracking-wider text-[var(--text-secondary)]">{markets.length}</span>
               </div>
@@ -138,7 +138,7 @@ function SearchPage() {
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-black text-[16px] tracking-tight truncate leading-none uppercase">{m.name}</h3>
                         {m.maxSavings > 0 && (
-                          <span className="bg-emerald-500/10 text-emerald-600 text-[10px] font-black px-2 py-0.5 rounded-lg border border-emerald-500/20">
+                          <span className="bg-emerald-500/10 text-emerald-600 text-[10px] font-black px-2 py-0.5 rounded-[var(--radius-lg)] border border-emerald-500/20">
                             -{m.maxSavings}%
                           </span>
                         )}
@@ -172,7 +172,7 @@ function SearchPage() {
           
           {/* Market Hero Card */}
           {activeMarket && (
-            <section className="bg-[var(--bg-surface)] rounded-[40px] border border-[var(--border-subtle)] overflow-hidden shadow-2xl relative">
+            <section className="bg-[var(--bg-surface)] rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] overflow-hidden shadow-[var(--shadow-2xl)] relative">
               <div className="h-48 bg-[var(--bg-surface-elevated)] relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1400" 
@@ -192,7 +192,7 @@ function SearchPage() {
                   </div>
                   <div className="flex-1 min-w-0 pb-2">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-xl border border-[var(--brand-primary)]/20">Mercado Verificado</span>
+                      <span className="bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-[var(--radius-xl)] border border-[var(--brand-primary)]/20">Mercado Verificado</span>
                     </div>
                     <h1 className="text-[clamp(1.5rem,4vw,3.5rem)] font-black tracking-tighter mb-4 leading-none uppercase">{activeMarket.name}</h1>
                     <div className="flex flex-wrap items-center gap-6">
@@ -283,7 +283,7 @@ function StatCard({ label, value, icon, tone = "default" }: { label: string; val
       <div className="flex items-center justify-between mb-4">
         <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors">{label}</span>
         <div className={cn(
-          "h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-sm",
+          "h-10 w-10 rounded-[var(--radius-xl)] flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-[var(--shadow-sm)]",
           tone === "savings" ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : 
           tone === "offers" ? "bg-red-500/10 text-red-600 border border-red-500/20" : 
           "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20"
