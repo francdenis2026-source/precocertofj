@@ -17,10 +17,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
-import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { Footer } from "@/components/brand/Footer";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
@@ -38,22 +37,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-
-
 export const Route = createFileRoute("/planos")({
   head: () => ({
     meta: [
-      { title: "Planos e preços — PreçoCerto Feijó" },
+      { title: "Escolha sua Economia — PreçoCerto" },
       {
         name: "description",
         content:
-          "Escolha o plano ideal para acompanhar preços em Feijó/AC. Degustação grátis, mensal, trimestral e anual.",
+          "Planos flexíveis para consumidores que buscam poupar e lojistas que buscam crescer em Feijó/AC.",
       },
-      { property: "og:title", content: "Planos e preços — PreçoCerto Feijó" },
+      { property: "og:title", content: "Escolha sua Economia — PreçoCerto" },
       {
         property: "og:description",
         content:
-          "Preços justos para o mercado local. Ativação imediata após pagamento.",
+          "Inteligência de preços para você e para o seu negócio.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -75,80 +72,30 @@ function pricePerMonth(cents: number, days: number): string | null {
   return centsToBRL(Math.round(cents / months));
 }
 
-/** Fallback highlights when the admin hasn't filled `features` in the DB. */
-function fallbackHighlights(slug: string, days: number): string[] {
-  switch (slug) {
-    case "degustacao":
-      return [
-        `${days} dias com tudo liberado`,
-        "Sem cartão de crédito",
-        "Encerra sozinho — sem cobrança surpresa",
-      ];
-    case "mensal":
-      return [
-        `Acesso completo por ${days} dias`,
-        "Cancele quando quiser, sem multa",
-        "Ideal para testar antes de anual",
-      ];
-    case "trimestral":
-      return [
-        `${days} dias de acesso contínuo`,
-        "Economia sobre 3 mensais",
-        "Boa opção para famílias que fazem feira grande",
-      ];
-    case "anual":
-      return [
-        `${days} meses ininterruptos`,
-        "O menor valor por mês da plataforma",
-        "A escolha da maioria dos assinantes",
-      ];
-    default:
-      return [
-        `Acesso completo por ${days} dias`,
-        "Suporte por e-mail em até 24h",
-        "Novas funcionalidades incluídas",
-      ];
-  }
-}
-
 function planHighlights(plan: PublicPlan): string[] {
-  if (plan.features && plan.features.length > 0) return plan.features;
-  return fallbackHighlights(plan.slug, plan.days);
+  return (plan.features as string[]) || [];
 }
 
 function buildFaq(trialDays: number) {
   return [
     {
-      q: "Preciso de cartão de crédito para começar?",
-      a: `Não. O plano de degustação libera ${trialDays} dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.`,
+      q: "Preciso de cartão de crédito para o PreçoCerto+?",
+      a: `Não. Você pode testar os recursos premium ou usar créditos avulsos sem compromisso.`,
     },
     {
-      q: "Como funciona o pagamento?",
-      a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
+      q: "Como os lojistas se beneficiam?",
+      a: "Parceiros têm acesso a painéis de analytics, monitoramento de concorrência em tempo real e destaque nas buscas dos usuários.",
     },
     {
-      q: "Tenho um cupom. Onde aplico?",
-      a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
+      q: "Como funciona o sistema de créditos?",
+      a: "Além dos planos, você pode adquirir pacotes de créditos para consultas específicas de IA ou exportações de relatórios detalhados.",
     },
     {
-      q: "E se eu quiser cancelar?",
-      a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
-    },
-    {
-      q: "Posso trocar de plano depois?",
-      a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
-    },
-    {
-      q: "Quem pode usar a IA e quantas análises tenho por mês?",
-      a: `Na degustação (${trialDays} dias) você tem 1 análise de IA no período total — ideal para experimentar a cesta inteligente uma vez. Nos planos pagos a cota é mensal e renova todo mês: Mensal 30, Trimestral 40 e Anual 60 análises por mês. O saldo aparece no seu perfil.`,
-    },
-    {
-      q: "E se eu precisar de mais análises?",
-      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano.",
+      q: "Posso cancelar minha assinatura a qualquer momento?",
+      a: "Sim, você tem total controle sobre sua assinatura direto no painel do usuário, sem taxas de cancelamento.",
     },
   ];
 }
-
 
 function PlansPage() {
   const navigate = useNavigate();
@@ -156,17 +103,20 @@ function PlansPage() {
   const create = useServerFn(createCheckoutOrder);
   const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [type, setType] = useState<"consumer" | "merchant">("consumer");
   const [openSheet, setOpenSheet] = useState<"compare" | "faq" | null>(null);
-  
 
-
-
-  const { data: plans = [], isLoading } = useQuery({
+  const { data: plans = [], isLoading: loading } = useQuery({
     queryKey: ["public-plans"],
     queryFn: () => fetchPlans(),
   });
   usePlansRealtime();
+
+  const filtered = plans.filter((p) => {
+    const slug = p.slug.toLowerCase();
+    const isMerchant = ["parceiro", "pro", "business", "enterprise", "local"].some(k => slug.includes(k));
+    return type === "merchant" ? isMerchant : !isMerchant;
+  });
 
   async function handleBuy(plan: PublicPlan) {
     setBuying(plan.id);
@@ -182,7 +132,7 @@ function PlansPage() {
       }
 
       if (plan.price_cents === 0) {
-        toast.success("Seu período de degustação está ativo. Aproveite!");
+        toast.success("Plano ativado com sucesso!");
         navigate({ to: "/app" });
         return;
       }
@@ -195,350 +145,148 @@ function PlansPage() {
     }
   }
 
-  const recommendedSlug = "anual";
-
-  const selectedPlan =
-    plans.find((p) => p.id === selectedId) ??
-    plans.find((p) => p.slug === recommendedSlug) ??
-    plans[0];
-
-  const trialPlan = plans.find((p) => p.slug === "degustacao" || p.price_cents === 0);
-  const trialDays = trialPlan?.days ?? 7;
-
-
   return (
-    <div className="min-h-screen bg-[#F7F9FC]">
+    <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
       <SiteHeader variant="solid" />
 
-      <main className="mx-auto max-w-[1280px] px-4 py-12 md:px-8">
-        <section className="mb-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl font-black text-[#0F172A] tracking-tight mb-3">Planos e preços</h1>
-              <p className="text-lg text-[#64748B] font-medium">Assinatura mensal a partir de <strong className="text-[#2563EB]">R$ 29,90</strong> — economize até 30% no anual.</p>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <Button onClick={() => setOpenSheet("compare")} variant="outline" className="rounded-full border-[#E5EAF1] bg-white text-[#64748B] h-12 px-6 shadow-sm hover:text-[#2563EB] font-bold">
-                <Sparkles className="w-4 h-4 mr-2 text-[#EAB308]" />
-                Comparar recursos
-              </Button>
-              <Button onClick={() => setOpenSheet("faq")} variant="ghost" className="rounded-full text-[#64748B] h-12 px-6 font-bold hover:text-[#2563EB]">
-                Perguntas frequentes
-              </Button>
+      <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mb-16 text-center">
+          <h1 className="text-4xl font-black tracking-tight text-[#0F172A] sm:text-5xl uppercase">
+            Escolha sua <span className="text-[#2563EB]">Economia</span>
+          </h1>
+          <p className="mt-4 text-lg font-medium text-[#64748B]">
+            Planos flexíveis para consumidores que buscam poupar e lojistas que buscam crescer.
+          </p>
+          
+          <div className="mt-10 flex justify-center">
+            <div className="inline-flex p-1 bg-white border border-[#E5EAF1] rounded-2xl shadow-sm">
+              <button 
+                onClick={() => setType("consumer")}
+                className={cn(
+                  "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                  type === "consumer" ? "bg-[#2563EB] text-white shadow-md" : "text-[#64748B] hover:text-[#0F172A]"
+                )}
+              >
+                Para Você
+              </button>
+              <button 
+                onClick={() => setType("merchant")}
+                className={cn(
+                  "px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                  type === "merchant" ? "bg-[#2563EB] text-white shadow-md" : "text-[#64748B] hover:text-[#0F172A]"
+                )}
+              >
+                Para sua Loja
+              </button>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section className="mb-12">
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-96 rounded-[32px] border border-[#E5EAF1] bg-white animate-pulse" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {plans.map((plan) => {
-                const isRecommended = plan.slug === recommendedSlug;
-                const perMonth = pricePerMonth(plan.price_cents, plan.days);
-                const isFree = plan.price_cents === 0;
-                const savings = plan.original_price_cents && plan.original_price_cents > plan.price_cents
-                    ? Math.round(((plan.original_price_cents - plan.price_cents) / plan.original_price_cents) * 100)
-                    : null;
-
-                return (
-                  <article
-                    key={plan.id}
-                    className={cn(
-                      "relative flex flex-col p-8 rounded-[40px] transition-all duration-500",
-                      isRecommended 
-                        ? "bg-white border-2 border-[#2563EB] shadow-[0_20px_40px_-15px_rgba(37,99,235,0.1)] scale-105 z-10" 
-                        : "bg-white border border-[#E5EAF1] hover:border-[#2563EB]/30 shadow-sm"
-                    )}
-                  >
-                    {(isRecommended || savings) && (
-                      <span
-                        className={cn(
-                          "absolute right-3 top-3 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] shadow-sm",
-                          isRecommended
-                            ? "bg-brand-accent text-bg-base"
-                            : "border border-brand-accent/30 bg-brand-accent/5 text-brand-accent",
-                        )}
-                      >
-                        {isRecommended ? (
-                          <>
-                            <Sparkles className="h-3 w-3" />
-                            Recomendado
-                          </>
-                        ) : `-${savings}%`}
-                      </span>
-                    )}
-
-
-                    <span className={cn("text-[10px] font-bold uppercase tracking-widest text-tertiary mb-1 block", (isRecommended || savings) && "pr-24")}>
-                      {isRecommended ? "Mais escolhido" : isFree ? "Comece por aqui" : "Plano"}
-                    </span>
-                    <h2 className={cn("text-xl font-black text-primary pr-24 leading-tight")}>{plan.name}</h2>
-
-                    <div className="mt-3">
-                      <div className="flex items-baseline gap-2">
-                        <span
-                          className={cn(
-                            "font-display leading-none tracking-tight text-primary",
-                            isRecommended
-                              ? "text-[34px] font-bold lg:text-[40px]"
-                              : "text-[30px] font-bold lg:text-[34px]",
-                          )}
-                        >
-                          {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
-                        </span>
-                        {plan.original_price_cents != null &&
-                          plan.original_price_cents > plan.price_cents && (
-                            <span className="text-[12px] text-secondary line-through">
-                              {centsToBRL(plan.original_price_cents)}
-                            </span>
-                          )}
-                      </div>
-                      <p className="text-[12px] text-tertiary font-bold uppercase tracking-wider mt-1.5">
-                        {isFree
-                          ? `${plan.days} dias · sem cartão`
-                          : perMonth
-                            ? `≈ ${perMonth}/mês · ${plan.days} dias`
-                            : `${plan.days} dias de acesso`}
-                      </p>
-                    </div>
-
-                    <hr className="pc-rule my-3" />
-
-                    <ul className="min-h-0 flex-1 space-y-2 overflow-hidden text-[12.5px] leading-snug">
-                      {planHighlights(plan).slice(0, 4).map((h) => (
-                        <li key={h} className="flex items-start gap-2">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-accent" aria-hidden />
-                          <span className="text-secondary">{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedId(plan.id);
-                        handleBuy(plan);
-                      }}
-                      disabled={buying === plan.id}
-                      data-loading={buying === plan.id ? "true" : undefined}
-                      className={cn(
-                        "inline-flex items-center justify-center gap-2 pc-focus mt-3 h-11 w-full px-3 rounded-xl transition-all font-bold text-sm",
-                        isRecommended
-                          ? "bg-brand-accent text-bg-base hover:bg-brand-accent-soft shadow-lg shadow-brand-accent/10"
-                          : "border border-subtle bg-surface text-primary hover:border-brand-accent hover:text-brand-accent",
-                      )}
-                    >
-                      {buying === plan.id
-                        ? "Iniciando…"
-                        : isFree
-                          ? "Começar grátis"
-                          : "Assinar agora"}
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                    </button>
-                  </article>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        <section className="mb-24">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-[#0F172A] tracking-tight">Perguntas frequentes</h2>
-            <Link to="/ajuda" className="text-sm font-bold text-[#2563EB] hover:underline">Ver central de ajuda →</Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {buildFaq(trialDays).map((item, idx) => (
-              <div key={idx} className="bg-white rounded-[32px] p-8 border border-[#E5EAF1] shadow-sm">
-                <h3 className="text-lg font-black text-[#0F172A] mb-3">{item.q}</h3>
-                <p className="text-[#64748B] font-medium leading-relaxed">{item.a}</p>
-              </div>
+        {loading ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-[500px] animate-pulse rounded-3xl bg-white border border-[#E5EAF1]"
+              />
             ))}
           </div>
-        </section>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filtered.map((p) => (
+              <PlanCard
+                key={p.id}
+                plan={p}
+                onBuy={handleBuy}
+                buying={buying === p.id}
+                recommended={p.slug === "trimestral" || p.slug === "business"}
+              />
+            ))}
+          </div>
+        )}
 
-        {/* Modal: Comparar recursos */}
-        <Dialog open={openSheet === "compare"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-4xl border-[#E5EAF1] bg-white p-0 rounded-[40px] overflow-hidden">
-            <DialogHeader className="border-b border-[#E5EAF1] px-8 py-6 bg-[#F8FAFC]">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2563EB] mb-2 block">Comparativo oficial</span>
-              <DialogTitle className="text-2xl font-black text-[#0F172A]">
-                Recursos do <span className="text-[#2563EB]">PreçoCerto</span>
-              </DialogTitle>
-              <DialogDescription className="text-[#64748B] font-medium">
-                Confira o que está incluso em cada modalidade de acesso.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="max-h-[70vh] overflow-y-auto p-8">
-              <ComparisonMatrix plans={plans} onBuy={handleBuy} buying={buying} recommendedSlug={recommendedSlug} />
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Modal: Perguntas */}
-        <Dialog open={openSheet === "faq"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-2xl border-[#E5EAF1] bg-white p-8 rounded-[40px]">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-black text-[#0F172A]">FAQ</DialogTitle>
-            </DialogHeader>
-            <Accordion type="single" collapsible className="w-full mt-4">
-              {buildFaq(trialDays).map((item, idx) => (
-                <AccordionItem key={idx} value={`item-${idx}`} className="border-[#E5EAF1]">
-                  <AccordionTrigger className="text-left font-bold text-[#0F172A] hover:text-[#2563EB]">
-                    {item.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-[#64748B] font-medium leading-relaxed">
-                    {item.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </DialogContent>
-        </Dialog>
+        <div className="mt-24">
+          <h2 className="text-center text-2xl font-black uppercase tracking-widest text-[#0F172A] mb-12">Comparativo de Recursos</h2>
+          <ComparisonMatrix
+            plans={filtered}
+            onBuy={handleBuy}
+            buying={buying}
+            recommendedSlug={type === "consumer" ? "trimestral" : "business"}
+          />
+        </div>
       </main>
-
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
 
+function PlanCard({
+  plan,
+  onBuy,
+  buying,
+  recommended,
+}: {
+  plan: PublicPlan;
+  onBuy: (p: PublicPlan) => void;
+  buying: boolean;
+  recommended?: boolean;
+}) {
+  const isFree = plan.price_cents === 0;
+  
+  return (
+    <div
+      className={cn(
+        "relative flex flex-col rounded-3xl border p-8 transition-all duration-300 bg-white",
+        recommended
+          ? "border-[#2563EB] shadow-xl shadow-[#2563EB]/5 scale-105 z-10"
+          : "border-[#E5EAF1] hover:border-[#CBD5E1] shadow-sm"
+      )}
+    >
+      {recommended && (
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg">
+          Recomendado
+        </div>
+      )}
 
+      <div className="mb-8">
+        <h3 className="text-xl font-black text-[#0F172A] uppercase tracking-tight">{plan.name}</h3>
+        <p className="mt-2 text-sm font-medium text-[#64748B] min-h-[40px]">{plan.description}</p>
+      </div>
 
-// ============================================================================
-// ComparisonMatrix — tabela comparativa lado a lado com plano ideal destacado
-// ============================================================================
+      <div className="mb-8 flex items-baseline gap-1">
+        <span className="text-4xl font-black tracking-tighter text-[#0F172A]">
+          {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
+        </span>
+        {!isFree && (
+          <span className="text-sm font-bold text-[#94A3B8]">/{plan.days} dias</span>
+        )}
+      </div>
 
-type ComparisonRow = {
-  label: string;
-  values: Partial<Record<string, string | boolean>>;
-};
+      <div className="flex-1">
+        <ul className="space-y-4 mb-8">
+          {planHighlights(plan).map((feature, i) => (
+            <li key={i} className="flex items-start gap-3 text-sm font-bold text-[#64748B]">
+              <Check className="h-5 w-5 shrink-0 text-[#2563EB]" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
-  const bySlug = Object.fromEntries(plans.map((p) => [p.slug, p]));
-  const val = (slug: string, v: string | boolean) => (bySlug[slug] ? { [slug]: v } : {});
-
-  return [
-    {
-      label: "Duração",
-      values: Object.fromEntries(
-        plans.map((p) => [p.slug, `${p.days} dias`]),
-      ),
-    },
-    {
-      label: "Preço total",
-      values: Object.fromEntries(
-        plans.map((p) => [
-          p.slug,
-          p.price_cents === 0 ? "Grátis" : centsToBRL(p.price_cents),
-        ]),
-      ),
-    },
-    {
-      label: "Equivalente por mês",
-      values: Object.fromEntries(
-        plans.map((p) => [p.slug, pricePerMonth(p.price_cents, p.days) ?? "—"]),
-      ),
-    },
-    {
-      label: "Comparador ilimitado",
-      values: {
-        ...val("degustacao", true),
-        ...val("mensal", true),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Alertas de queda de preço",
-      values: {
-        ...val("degustacao", "Prévia"),
-        ...val("mensal", true),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Listas inteligentes",
-      values: {
-        ...val("degustacao", true),
-        ...val("mensal", true),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Histórico completo",
-      values: {
-        ...val("degustacao", false),
-        ...val("mensal", true),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Suporte prioritário",
-      values: {
-        ...val("degustacao", false),
-        ...val("mensal", false),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Scan Inteligente (IA) / mês",
-      values: {
-        ...val("degustacao", "1 análise (única)"),
-        ...val("mensal", "30 análises/mês"),
-        ...val("trimestral", "40 análises/mês"),
-        ...val("anual", "60 análises/mês"),
-      },
-    },
-    {
-      label: "Cataloga\u00e7\u00e3o por foto (lote)",
-      values: {
-        ...val("degustacao", false),
-        ...val("mensal", false),
-        ...val("trimestral", true),
-        ...val("anual", true),
-      },
-    },
-    {
-      label: "Pacote extra de IA (avulso)",
-      values: {
-        ...val("degustacao", false),
-        ...val("mensal", "R$ 9,90 / 50"),
-        ...val("trimestral", "R$ 9,90 / 50"),
-        ...val("anual", "R$ 9,90 / 50"),
-      },
-    },
-  ];
-}
-
-
-function ComparisonCell({ value }: { value: string | boolean | undefined }) {
-  if (value === true) {
-    return (
-      <span className="inline-flex items-center justify-center">
-        <Check className="h-4 w-4 text-brand-accent" strokeWidth={2.5} aria-label="Incluído" />
-      </span>
-    );
-  }
-  if (value === false || value === undefined) {
-    return (
-      <span className="inline-flex items-center justify-center text-secondary/50">
-        <Minus className="h-3.5 w-3.5" aria-label="Não incluído" />
-      </span>
-    );
-  }
-  return <span className="text-[13px] font-semibold text-primary">{value}</span>;
+      <Button
+        onClick={() => onBuy(plan)}
+        disabled={buying}
+        className={cn(
+          "w-full h-12 rounded-2xl font-black text-xs uppercase tracking-widest transition-all",
+          recommended 
+            ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-lg shadow-[#2563EB]/20" 
+            : "bg-[#F8FAFC] border border-[#E5EAF1] text-[#0F172A] hover:bg-[#F1F5F9]"
+        )}
+      >
+        {buying ? "Processando..." : isFree ? "Testar agora" : "Assinar plano"}
+      </Button>
+    </div>
+  );
 }
 
 function ComparisonMatrix({ 
@@ -552,7 +300,27 @@ function ComparisonMatrix({
   buying: string | null;
   recommendedSlug: string;
 }) {
-  const matrix = planFeatureMatrix(plans);
+  const bySlug = Object.fromEntries(plans.map((p) => [p.slug, p]));
+  const val = (slug: string, v: string | boolean) => (bySlug[slug] ? { [slug]: v } : {});
+
+  const matrix = [
+    {
+      label: "Duração",
+      values: Object.fromEntries(plans.map((p) => [p.slug, `${p.days} dias`])),
+    },
+    {
+      label: "Consultas Ilimitadas",
+      values: Object.fromEntries(plans.map((p) => [p.slug, true])),
+    },
+    {
+      label: "Histórico de Preços",
+      values: Object.fromEntries(plans.map((p) => [p.slug, true])),
+    },
+    {
+      label: "Exportação de Dados",
+      values: Object.fromEntries(plans.map((p) => [p.slug, !p.slug.includes("degustacao")])),
+    }
+  ];
 
   return (
     <div className="overflow-x-auto">
@@ -575,13 +343,13 @@ function ComparisonMatrix({
             <tr key={i}>
               <td className="py-4 text-sm font-bold text-[#64748B]">{row.label}</td>
               {plans.map((p) => {
-                const val = row.values[p.slug];
+                const v = row.values[p.slug];
                 return (
                   <td key={p.id} className="py-4 px-4 text-center text-sm font-medium">
-                    {typeof val === "boolean" ? (
-                      val ? <Check className="mx-auto w-5 h-5 text-[#2563EB]" /> : <Minus className="mx-auto w-5 h-5 text-[#94A3B8]/30" />
+                    {typeof v === "boolean" ? (
+                      v ? <Check className="mx-auto w-5 h-5 text-[#2563EB]" /> : <Minus className="mx-auto w-5 h-5 text-[#94A3B8]/30" />
                     ) : (
-                      val || "—"
+                      v || "—"
                     )}
                   </td>
                 );
@@ -612,4 +380,3 @@ function ComparisonMatrix({
     </div>
   );
 }
-
