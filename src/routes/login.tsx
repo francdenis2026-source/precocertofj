@@ -305,7 +305,7 @@ function LoginPage() {
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between px-1">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">PIN de 6 dígitos</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">PIN de 6 dígitos</label>
                         <Link to="/resgatar" className="text-[11px] font-bold text-[var(--brand-primary)] uppercase tracking-widest hover:underline">Esqueci meu PIN</Link>
                       </div>
                       <PinInput 
@@ -333,7 +333,7 @@ function LoginPage() {
                     </div>
 
                     <div className="text-center pt-4">
-                      <p className="text-xs font-medium text-slate-500">
+                      <p className="text-xs font-medium text-[var(--text-tertiary)]">
                         Não tem uma conta?{" "}
                         <button
                           type="button"
