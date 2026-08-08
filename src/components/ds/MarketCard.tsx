@@ -4,7 +4,7 @@ import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface MarketCardProps {
+export interface MarketCardProps {
   id: string;
   name: string;
   neighborhood?: string | null;
