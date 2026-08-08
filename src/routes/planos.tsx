@@ -306,8 +306,8 @@ function PlansPage() {
                   >
                     {(isRecommended || savings) && (
                       <span
-                        className={dsx(
-                          tc.eyebrow,
+                        className={
+                          "text-[10px] font-bold uppercase tracking-widest text-tertiary",
                           "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
                           isRecommended
                             ? "bg-brand-accent text-bg-base"
@@ -371,7 +371,7 @@ function PlansPage() {
                       }}
                       disabled={buying === plan.id}
                       data-loading={buying === plan.id ? "true" : undefined}
-                      className={dsx(
+                      className={
                         "inline-flex items-center justify-center gap-2 pc-focus mt-3 h-11 w-full px-3 rounded-xl transition-all font-bold text-sm",
                         isRecommended
                           ? "bg-brand-accent text-bg-base hover:bg-brand-accent-soft shadow-lg shadow-brand-accent/10"
@@ -396,11 +396,11 @@ function PlansPage() {
         <Dialog open={openSheet === "compare"} onOpenChange={(v) => !v && setOpenSheet(null)}>
           <DialogContent className="max-w-3xl border-border/70 bg-card p-0">
             <DialogHeader className="border-b border-border/70 px-5 py-3">
-              <span className={tc.eyebrow}>Documento oficial</span>
-              <DialogTitle className={cn(tc.h2, "mt-0.5")}>
+              <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Documento oficial</span>
+              <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
                 Comparar <span className="italic text-[var(--pc-gold-ink)]">recursos</span>
               </DialogTitle>
-              <DialogDescription className={tc.meta}>
+              <DialogDescription className={"text-sm text-secondary"}>
                 Diferenças reais entre a degustação e os planos pagos.
               </DialogDescription>
             </DialogHeader>
@@ -408,11 +408,11 @@ function PlansPage() {
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-border/70">
-                    <th className={cn(tc.tableHead, "py-2 text-left")}>Recurso</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center")}>Degustação</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center")}>Mensal</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center")}>Trimestral</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")}>Recurso</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Degustação</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Mensal</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Trimestral</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -446,7 +446,7 @@ function PlansPage() {
                   ))}
                 </tbody>
               </table>
-              <p className={cn(tc.meta, "mt-3 flex items-center gap-1.5")}>
+              <p className={cn("text-sm text-secondary", "mt-3 flex items-center gap-1.5")}>
                 <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Ativação imediata após confirmação de pagamento pelo Mercado Pago.
               </p>
@@ -458,11 +458,11 @@ function PlansPage() {
         <Dialog open={openSheet === "faq"} onOpenChange={(v) => !v && setOpenSheet(null)}>
           <DialogContent className="max-w-2xl border-border/70 bg-card p-0">
             <DialogHeader className="border-b border-border/70 px-5 py-3">
-              <span className={tc.eyebrow}>Ajuda rápida</span>
-              <DialogTitle className={cn(tc.h2, "mt-0.5")}>
+              <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Ajuda rápida</span>
+              <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
                 Perguntas <span className="italic text-[var(--pc-gold-ink)]">frequentes</span>
               </DialogTitle>
-              <DialogDescription className={tc.meta}>
+              <DialogDescription className={"text-sm text-secondary"}>
                 As dúvidas que mais recebemos sobre planos, pagamento e cota de IA.
               </DialogDescription>
             </DialogHeader>
@@ -473,14 +473,14 @@ function PlansPage() {
                     <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
                       {f.q}
                     </AccordionTrigger>
-                    <AccordionContent className={cn(tc.meta, "leading-relaxed text-foreground/85")}>
+                    <AccordionContent className={cn("text-sm text-secondary", "leading-relaxed text-foreground/85")}>
                       {f.a}
                     </AccordionContent>
                   </AccordionItem>
                 ))}
               </Accordion>
               <div className="mt-2 flex items-center justify-between border-t border-border/60 py-2">
-                <p className={tc.meta}>Não encontrou sua resposta?</p>
+                <p className={"text-sm text-secondary"}>Não encontrou sua resposta?</p>
                 <Link
                   to="/fale-conosco"
                   className={cn(
@@ -498,8 +498,8 @@ function PlansPage() {
         {/* Barra inferior: confiança + atalhos mobile (em fluxo, sempre visível) */}
         <div
           data-testid="planos-cta-bar"
-          className={dsx(
-            ds.container,
+          className={
+            "pc-shell",
             "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
           )}
         >
@@ -699,7 +699,7 @@ function ComparisonMatrix({
                 <th
                   key={p.id}
                   scope="col"
-                  className={dsx(
+                  className={
                     "px-3 py-3.5 text-center align-top",
                     isRec && "relative bg-brand-gold/[0.08]",
                   )}
@@ -749,7 +749,7 @@ function ComparisonMatrix({
                 return (
                   <td
                     key={p.id}
-                    className={dsx(
+                    className={
                       "px-3 py-2.5 text-center",
                       isRec && "bg-brand-gold/[0.06]",
                     )}
@@ -769,13 +769,13 @@ function ComparisonMatrix({
               return (
                 <td
                   key={p.id}
-                  className={dsx("px-2 py-3 align-top", isRec && "bg-brand-gold/[0.08]")}
+                  className={"px-2 py-3 align-top", isRec && "bg-brand-gold/[0.08]")}
                 >
                   <button
                     type="button"
                     onClick={() => onBuy(p)}
                     disabled={buying === p.id}
-                    className={dsx(
+                    className={
                       "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-wait disabled:opacity-70",
                       isRec
                         ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105"
