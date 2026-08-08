@@ -7,8 +7,8 @@ export function Footer() {
 
   return (
     <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">
-      <div className="mx-auto max-w-[1440px] px-4 py-16 md:px-8">
-        <div className="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
+      <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-8">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Info */}
           <div className="col-span-2 lg:col-span-2">
             <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
@@ -56,7 +56,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
             <div className="flex items-center gap-2 text-[12px] font-bold tracking-widest text-[var(--text-primary)]">
               SKAES NET TECHNOLOGY

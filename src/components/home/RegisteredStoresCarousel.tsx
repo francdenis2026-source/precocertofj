@@ -27,17 +27,16 @@ export function RegisteredStoresCarousel() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="flex items-center gap-8 overflow-x-auto no-scrollbar py-2">
       {stores.slice(0, 12).map((store) => (
-
         <Link
           key={store.id}
           to="/loja/$id"
           params={{ id: store.id }}
           search={{ q: "", from: "" }}
-          className="group relative flex flex-col items-center justify-center p-3 gap-2 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 transition-all duration-300"
+          className="group shrink-0 flex items-center gap-3 transition-all grayscale hover:grayscale-0 opacity-60 hover:opacity-100"
         >
-          <div className="relative z-10 h-10 w-10 flex items-center justify-center rounded-[var(--radius-md)] bg-white p-1.5 shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white p-1.5 shadow-sm">
             {store.name.includes("Contamigos") ? (
               <ContamigosLogo size="sm" hideName />
             ) : (
@@ -50,12 +49,11 @@ export function RegisteredStoresCarousel() {
               />
             )}
           </div>
-          <span className="relative z-10 text-[10px] font-bold uppercase tracking-wider text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full px-1 text-center">
+          <span className="text-[12px] font-bold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
             {store.name.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
           </span>
         </Link>
       ))}
     </div>
-
   );
 }

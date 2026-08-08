@@ -28,9 +28,9 @@ type Props = {
 };
 
 const NAV_LINKS = [
-  { to: "/precos", label: "Comparar Preços" },
-  { to: "/estabelecimentos", label: "Lojas" },
-  { to: "/cesta", label: "Cesta Inteligente" },
+  { to: "/precos", label: "Comparar preços" },
+  { to: "/cesta", label: "Cesta inteligente" },
+  { to: "/estabelecimentos", label: "Mercados" },
   { to: "/planos", label: "Planos" },
 ] as const;
 
@@ -61,12 +61,12 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
     "transition-[background-color,border-color,box-shadow] duration-300 ease-out",
     floating
       ? "border-b border-transparent bg-transparent"
-      : "border-b border-[var(--border-subtle)] bg-[var(--bg-base)] shadow-[var(--pc-shadow-sm)] backdrop-blur-xl",
+      : "border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 shadow-sm backdrop-blur-md",
   );
 
   return (
     <header className={shellClass}>
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 md:h-20 md:px-8">
+      <div className="mx-auto flex h-[64px] md:h-[72px] max-w-[1280px] items-center justify-between gap-4 px-4 md:px-8">
         {/* Brand */}
         <Link
           to="/"
@@ -170,8 +170,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                 <Link to="/login" className="pc-button-ghost hidden sm:inline-flex">
                   Entrar
                 </Link>
-                <Link to="/cadastro" search={{ redirect: "/" }} className="pc-button-primary">
-                  Começar
+                <Link to="/cadastro" search={{ redirect: "/" }} className="pc-button-primary px-6 rounded-full">
+                  Começar grátis
                 </Link>
               </>
             )}
