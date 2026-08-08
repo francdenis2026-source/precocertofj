@@ -6,7 +6,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">
+    <footer className="border-t border-[#E5EAF1] bg-[#F8FAFC] text-[#64748B]">
       <div className="mx-auto max-w-[1280px] px-4 py-12 md:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Info */}
@@ -26,7 +26,7 @@ export function Footer() {
 
           {/* PreçoCerto */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">PreçoCerto</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] mb-5">PreçoCerto</h4>
             <ul className="space-y-3 text-[14px]">
               <li><FooterLink to="/sobre">Sobre</FooterLink></li>
               <li><FooterLink to="/como-funciona">Como funciona</FooterLink></li>
@@ -36,7 +36,7 @@ export function Footer() {
 
           {/* Produto */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">Produto</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] mb-5">Produto</h4>
             <ul className="space-y-3 text-[14px]">
               <li><FooterLink to="/precos">Comparar preços</FooterLink></li>
               <li><FooterLink to="/cesta">Cesta inteligente</FooterLink></li>
@@ -47,7 +47,7 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--text-primary)] mb-5">Legal</h4>
+            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0F172A] mb-5">Legal</h4>
             <ul className="space-y-3 text-[14px]">
               <li><FooterLink to="/privacidade">Privacidade</FooterLink></li>
               <li><FooterLink to="/termos">Termos</FooterLink></li>
@@ -56,14 +56,14 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-12 pt-6 border-t border-[#E5EAF1] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-[var(--text-primary)]">
+            <div className="flex items-center gap-2 text-[10px] font-black tracking-widest text-[#0F172A]">
               SKAES NET TECHNOLOGY
-              <span className="h-1 w-1 rounded-full bg-[var(--brand-primary)]" />
+              <span className="h-1 w-1 rounded-full bg-[#2563EB]" />
               FRANC D'NIS
             </div>
-            <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--text-tertiary)] font-medium">
+            <p className="text-[9px] uppercase tracking-widest text-[#94A3B8] font-bold">
               Feijó · AC · {year}
             </p>
           </div>
@@ -81,7 +81,7 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
   return (
     <Link 
       to={to} 
-      className="transition-colors hover:text-[var(--brand-primary)]"
+      className="transition-colors hover:text-[#2563EB]"
     >
       {children}
     </Link>
@@ -90,7 +90,7 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
 
 function SocialLink({ Icon }: { Icon: any }) {
   return (
-    <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)]">
+    <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#E5EAF1] bg-white text-[#64748B] transition-all hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB]">
       <Icon className="h-4 w-4" />
     </button>
   );

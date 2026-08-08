@@ -21,12 +21,12 @@ export const AuthButton: React.FC<AuthButtonProps> = ({
   className = "",
   ...props
 }) => {
-  const baseClasses = "relative flex items-center justify-center gap-2 w-full min-h-[54px] rounded-2xl font-bold transition-all duration-300 active:scale-[0.98] overflow-hidden";
+  const baseClasses = "relative flex items-center justify-center gap-2 w-full min-h-[56px] rounded-2xl font-black text-sm uppercase tracking-widest transition-all duration-300 active:scale-[0.98] overflow-hidden";
   
   const variants = {
-    primary: "bg-[var(--brand-primary)] text-[var(--text-on-brand)] hover:shadow-[0_12px_24px_-8px_rgba(37,99,235,0.4)] shadow-lg",
-    secondary: "bg-[var(--bg-surface-elevated)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] shadow-md",
-    outline: "bg-transparent border-2 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)]",
+    primary: "bg-[#2563EB] text-white hover:bg-[#1D4ED8] shadow-[0_12px_24px_-8px_rgba(37,99,235,0.4)] shadow-lg disabled:shadow-none",
+    secondary: "bg-[#F8FAFC] text-[#0F172A] border border-[#E5EAF1] hover:bg-[#F1F5F9]",
+    outline: "bg-transparent border-2 border-[#E5EAF1] text-[#64748B] hover:border-[#CBD5E1] hover:text-[#0F172A]",
   };
 
   return (

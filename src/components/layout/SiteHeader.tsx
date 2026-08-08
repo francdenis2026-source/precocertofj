@@ -1,223 +1,150 @@
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { LogOut, User as UserIcon, LayoutDashboard, ChevronDown, Menu, ShieldCheck } from "lucide-react";
-import { SmartSearchBar } from "@/components/home/SmartSearchBar";
-import { useMyProfile } from "@/hooks/useMyProfile";
-import { useMyRoles } from "@/hooks/useMyRoles";
-import { useSignOut } from "@/hooks/use-sign-out";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "framer-motion";
+import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
-import { BackButton } from "@/components/layout/BackButton";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useMyProfile } from "@/hooks/useMyProfile";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { Menu, X, ArrowRight } from "lucide-react";
 
-type Variant = "overlay" | "solid";
+interface SiteHeaderProps {
+  variant?: "solid" | "overlay";
+}
 
-type Props = {
-  variant?: Variant;
-  showNav?: boolean;
-  showThemeToggle?: boolean;
-  showBack?: boolean;
-};
+export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
+  const { session } = useMyProfile();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-const NAV_LINKS = [
-  { to: "/precos", label: "Comparar preços" },
-  { to: "/cesta", label: "Cesta inteligente" },
-  { to: "/estabelecimentos", label: "Mercados" },
-  { to: "/planos", label: "Planos" },
-] as const;
-
-export function SiteHeader({ variant = "solid", showNav = true, showBack = true }: Props) {
-  const isOverlay = variant === "overlay";
-  const pathname = useLocation({ select: (l) => l.pathname });
-  const canShowBack = showBack && pathname !== "/";
-  const { session, firstName, initials, loading } = useMyProfile();
-  const { isAdmin } = useMyRoles();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 320);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const { signOut, loading: signingOut } = useSignOut();
-  void signingOut;
-  const navigate = useNavigate();
+  const isOverlay = variant === "overlay" && !isScrolled && !mobileMenuOpen;
 
-  const floating = isOverlay && !scrolled;
-
-  const shellClass = cn(
-    "sticky top-0 z-40 w-full shrink-0 text-[var(--text-primary)]",
-    "transition-[background-color,border-color,box-shadow] duration-300 ease-out",
-    floating
-      ? "border-b border-transparent bg-transparent"
-      : "border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/80 shadow-sm backdrop-blur-md",
-  );
+  const navLinks = [
+    { label: "Comparar preços", to: "/precos" },
+    { label: "Mercados", to: "/estabelecimentos" },
+    { label: "Cesta inteligente", to: "/cesta" },
+    { label: "Planos", to: "/planos" },
+  ];
 
   return (
-    <header className={shellClass}>
-      <div className="mx-auto flex h-[64px] md:h-[72px] max-w-[1280px] items-center justify-between gap-4 px-4 md:px-8">
-        {/* Brand */}
-        <Link
-          to="/"
-          aria-label="PreçoCerto — início"
-          className="group flex shrink-0 items-center gap-3 rounded-[var(--radius-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]"
-        >
-          <img
-            src="/logo-mark.png"
-            alt=""
-            aria-hidden="true"
-            className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105 md:h-11 md:w-11"
-          />
-          <span className="flex flex-col leading-none">
-            <span className="text-[18px] md:text-[20px] font-black tracking-tight text-[var(--text-primary)]">
-              Preço<span className="text-[var(--brand-primary)]">Certo</span>
-            </span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
-                Feijó · AC
-              </span>
-            </div>
-          </span>
-        </Link>
+    <>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-300",
+          isScrolled ? "bg-white/80 backdrop-blur-md border-b border-[var(--border-subtle)] shadow-sm" : "bg-transparent",
+          !isOverlay && "bg-white border-b border-[var(--border-subtle)]"
+        )}
+      >
+        <div className="mx-auto max-w-[1280px] h-full px-4 md:px-8 flex items-center justify-between">
+          <div className="flex items-center gap-10">
+            <Link to="/" className="relative z-50">
+              <Logo 
+                variant={isOverlay ? "on-dark" : "on-light"} 
+                className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" 
+              />
+            </Link>
 
-        {/* Removed redundant top search bar as requested by user */}
-
-
-        {/* Navigation & Actions */}
-        <div className="flex shrink-0 items-center gap-2 md:gap-4">
-          {showNav && (
-            <nav aria-label="Principal" className="hidden items-center gap-1.5 lg:flex">
-              {NAV_LINKS.map((l) => (
+            <nav className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link) => (
                 <Link
-                  key={l.to}
-                  to={l.to}
-                  activeProps={{ "data-active": "true" } as any}
+                  key={link.to}
+                  to={link.to}
                   className={cn(
-                    "group relative rounded-[var(--radius-xl)] px-4 py-2 text-[14px] font-bold uppercase tracking-wider text-[var(--text-secondary)]",
-                    "transition-all duration-200 hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
-                    "data-[active=true]:text-[var(--brand-primary)] data-[active=true]:bg-[var(--brand-primary)]/5",
+                    "text-[14px] font-bold tracking-tight transition-colors hover:text-[var(--brand-primary)]",
+                    isOverlay ? "text-white/90 hover:text-white" : "text-[var(--text-secondary)]",
+                    pathname === link.to && (isOverlay ? "text-white" : "text-[var(--brand-primary)]")
                   )}
                 >
-                  {l.label}
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 bg-[var(--brand-primary)] transition-transform duration-300 ease-out group-hover:scale-x-100 group-data-[active=true]:scale-x-100"
-                  />
+                  {link.label}
                 </Link>
               ))}
             </nav>
-          )}
+          </div>
 
-          <div className="flex items-center gap-2">
-            {!isOverlay && canShowBack && (
-              <BackButton variant="pill" className="hidden sm:inline-flex" />
-            )}
-
-            {loading ? (
-              <div className="h-11 w-24 animate-pulse rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)]" />
-            ) : session ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      "h-11 gap-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] px-3 text-[15px] font-medium",
-                      "bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
-                    )}
-                  >
-                    <span className="grid h-7 w-7 place-items-center rounded-full bg-[var(--brand-primary)] text-[12px] font-semibold uppercase text-[var(--text-on-brand)]">
-                      {initials}
-                    </span>
-                    <span className="hidden sm:inline">{firstName}</span>
-                    <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 rounded-[var(--radius-lg)]">
-                  <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {isAdmin && (
-                    <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })}>
-                      <ShieldCheck className="mr-2 h-4 w-4" /> Admin
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" /> Painel
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })}>
-                    <UserIcon className="mr-2 h-4 w-4" /> Perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onSelect={() => void signOut()} className="text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" /> Sair
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
+          <div className="flex items-center gap-4">
+            {!session ? (
               <>
-                <Link to="/login" className="pc-button-ghost hidden sm:inline-flex">
+                <Link
+                  to="/login"
+                  className={cn(
+                    "hidden md:block text-[14px] font-bold tracking-tight px-4 py-2 transition-colors",
+                    isOverlay ? "text-white hover:text-white/80" : "text-[var(--text-secondary)] hover:text-[var(--brand-primary)]"
+                  )}
+                >
                   Entrar
                 </Link>
-                <Link to="/cadastro" search={{ redirect: "/" }} className="pc-button-primary px-6 rounded-full">
-                  Começar grátis
-                </Link>
+                <Button asChild className="pc-button-primary rounded-full px-6 h-10 text-[13px] font-bold shadow-lg shadow-[var(--brand-primary)]/20">
+                  <Link to="/cadastro">Começar grátis</Link>
+                </Button>
               </>
+            ) : (
+              <Button asChild className="pc-button-primary rounded-full px-6 h-10 text-[13px] font-bold">
+                <Link to="/app">Minha área</Link>
+              </Button>
             )}
 
-            {showNav && (
-              <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    aria-label="Abrir menu"
-                    className="h-11 w-11 rounded-[var(--radius-md)] p-0 text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] lg:hidden"
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-                  <SheetHeader className="mb-8">
-                    <SheetTitle className="text-left text-[20px] font-semibold tracking-[-0.02em]">Menu</SheetTitle>
-                  </SheetHeader>
-                  <nav className="flex flex-col gap-2">
-                    {NAV_LINKS.map((l) => (
-                      <Link
-                        key={l.to}
-                        to={l.to}
-                        onClick={() => setMenuOpen(false)}
-                        className="flex h-12 items-center rounded-[var(--radius-md)] px-4 text-[16px] font-medium text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
-                      >
-                        {l.label}
-                      </Link>
-                    ))}
-                    {!session && (
-                      <Link
-                        to="/login"
-                        onClick={() => setMenuOpen(false)}
-                        className="mt-2 flex h-12 items-center rounded-[var(--radius-md)] px-4 text-[16px] font-medium text-[var(--brand-primary)] hover:bg-[var(--bg-surface-elevated)]"
-                      >
-                        Entrar
-                      </Link>
-                    )}
-                  </nav>
-                </SheetContent>
-              </Sheet>
-            )}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={cn(
+                "lg:hidden relative z-50 p-2",
+                isOverlay ? "text-white" : "text-[var(--text-primary)]"
+              )}
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </button>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-40 bg-white pt-[72px] px-6 lg:hidden"
+          >
+            <nav className="flex flex-col gap-6 pt-10">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-2xl font-black text-[var(--text-primary)] flex items-center justify-between group"
+                >
+                  {link.label}
+                  <ArrowRight className="text-[var(--brand-primary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              ))}
+              <div className="mt-10 pt-10 border-t border-[var(--border-subtle)] flex flex-col gap-4">
+                {!session && (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-lg font-bold text-[var(--text-secondary)]"
+                    >
+                      Entrar na conta
+                    </Link>
+                    <Button asChild className="pc-button-primary rounded-2xl h-14 text-lg">
+                      <Link to="/cadastro" onClick={() => setMobileMenuOpen(false)}>Começar grátis</Link>
+                    </Button>
+                  </>
+                )}
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

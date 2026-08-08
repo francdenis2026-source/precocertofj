@@ -29,15 +29,15 @@ export const AuthInput: React.FC<AuthInputProps> = ({
     <div className="relative w-full">
       <div
         className={`
-          relative flex items-center gap-3 w-full min-h-[56px] px-4 rounded-[var(--radius-2xl)] border-2 transition-all duration-300
+          relative flex items-center gap-3 w-full min-h-[56px] px-4 rounded-2xl border-2 transition-all duration-300
           ${
             isFocused
-              ? "border-[var(--brand-primary)] bg-[var(--bg-surface)] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+              ? "border-[#2563EB] bg-white ring-4 ring-[#2563EB]/5"
               : error
-              ? "border-red-500/50 bg-red-500/5"
+              ? "border-rose-200 bg-rose-50/30"
               : success
-              ? "border-emerald-500/50 bg-emerald-500/5"
-              : "border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 hover:border-[var(--border-subtle)]/80"
+              ? "border-emerald-200 bg-emerald-50/30"
+              : "border-[#E5EAF1] bg-[#F8FAFC] hover:border-[#CBD5E1]"
           }
           ${className}
         `}
@@ -55,11 +55,11 @@ export const AuthInput: React.FC<AuthInputProps> = ({
             initial={false}
             animate={{
               y: isFocused || isFilled ? -22 : 0,
-              scale: isFocused || isFilled ? 0.8 : 1,
-              color: isFocused ? "var(--brand-primary)" : error ? "#EF4444" : success ? "#10B981" : "#94A3B8",
+              scale: isFocused || isFilled ? 0.75 : 1,
+              color: isFocused ? "#2563EB" : error ? "#E11D48" : success ? "#059669" : "#64748B",
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className={`absolute left-0 pointer-events-none origin-left font-medium ${isFocused || isFilled ? "text-[var(--brand-primary)]" : "text-[var(--text-tertiary)]"}`}
+            className={`absolute left-0 pointer-events-none origin-left font-black text-[10px] uppercase tracking-widest ${isFocused || isFilled ? "text-[#2563EB]" : "text-[#64748B]"}`}
           >
             {label}
           </motion.label>
@@ -74,7 +74,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
               setIsFocused(false);
               onBlur?.(e);
             }}
-            className="w-full bg-transparent border-none outline-none text-[var(--text-primary)] font-semibold text-[15px] pb-1"
+            className="w-full bg-transparent border-none outline-none text-[#0F172A] font-bold text-[15px] pb-1 uppercase placeholder:normal-case"
           />
         </div>
 

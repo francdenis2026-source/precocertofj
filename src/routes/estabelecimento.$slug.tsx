@@ -13,6 +13,7 @@ import { hubForCanonical } from "@/lib/category-hub";
 import { categoryIcon } from "@/lib/category-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { brl } from "@/lib/format";
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,6 +35,7 @@ import {
   TrendingDown,
   TrendingUp,
   Clock,
+  X,
 } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
@@ -44,6 +46,7 @@ import { useUserLocation } from "@/hooks/useUserLocation";
 import { LocationControl } from "@/components/location/LocationControl";
 import { formatDistance, haversineKm, resolveEstablishmentPosition } from "@/lib/geo";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import {
   Select,
   SelectContent,
@@ -78,8 +81,6 @@ import { Price } from "@/components/ds/Price";
 import { ShareButton } from "@/components/ds/ShareButton";
 
 
-const brl = (v: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
 type SortKey = "price-asc" | "price-desc" | "ppu-asc" | "name" | "recent";
 const SORT_LABEL: Record<SortKey, string> = {
@@ -387,62 +388,32 @@ function EstablishmentPage() {
 
 
   return (
-    <div className="min-h-svh bg-background text-foreground">
-      {/* Barra superior única: marca + navegação na mesma linha (sem espaço morto). */}
-      <div className="sticky top-0 z-30 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-2 px-3 py-1.5 sm:px-6">
-          <HomeBrandLink />
-          <div className="ml-auto flex items-center gap-1.5">
-            <ShareButton
-              size="sm"
-              label="Compartilhar"
-              title={`${data.store.name} — PreçoCerto`}
-              text={`Veja os preços de ${data.store.name} no PreçoCerto`}
-              className="h-8 !text-[12.5px] font-bold uppercase tracking-[0.16em]"
-            />
+    <div className="min-h-svh bg-[#F7F9FC]">
+      <SiteHeader variant="solid" />
 
-            <Link
-              to="/estabelecimentos"
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-            >
-              <ArrowLeft className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-              <span className="hidden sm:inline">Estabelecimentos</span>
-            </Link>
-            <Link
-              to="/catalogo/$slug"
-              params={{ slug }}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-            >
-              <PackageSearch className="h-3.5 w-3.5 text-gold-ink" aria-hidden /> Catálogo completo
-            </Link>
-          </div>
-        </div>
-      </div>
       <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
-
-        {/* Hero compacto — escala: eyebrow 10 / título 19-22 / meta 12 / stat 15 */}
-        <header className="overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
-          <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-3.5 py-3 sm:px-4">
+        <header className="overflow-hidden rounded-[24px] border border-[#E5EAF1] bg-white text-[#0F172A] shadow-sm mb-8">
+          <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-3.5 py-3 sm:px-6 sm:py-6">
             <StoreBadge
               name={data.store.name}
               logoUrl={data.store.logoUrl}
-              size="md"
-              className="rounded-xl"
+              size="lg"
+              className="rounded-2xl"
             />
             <div className="min-w-0">
-              <p className="text-[12.5px] font-bold uppercase leading-none tracking-[0.18em] text-gold-ink">
+              <p className="text-[11px] font-black uppercase leading-none tracking-[0.2em] text-[#2563EB]">
                 Mercado parceiro
               </p>
-              <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
-                <h1 className="min-w-0 truncate font-serif text-[21px] font-semibold leading-[1.15] sm:text-[25px]">
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                <h1 className="min-w-0 truncate text-2xl font-black leading-[1.15] sm:text-3xl text-[#0F172A]">
                   {data.store.name}
                 </h1>
-                <div className="flex shrink-0 items-center gap-1.5">
+                <div className="flex shrink-0 items-center gap-2">
                   <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
                   <FavoriteMarketButton marketName={data.store.name} variant="inline" />
                 </div>
               </div>
-              <p className="mt-0.5 truncate text-[13px] leading-snug text-white/85">
+              <p className="mt-2 truncate text-[14px] leading-snug text-[#64748B] font-medium">
                 {[
                   data.store.address,
                   data.store.neighborhood ? `Bairro ${data.store.neighborhood}` : null,
@@ -451,265 +422,251 @@ function EstablishmentPage() {
                   .filter(Boolean)
                   .join(" · ")}
               </p>
-              <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
                 {distance && (
-                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-brand-gold/45 bg-brand-gold/15 px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-gold-ink">
-                    <MapPin className="h-3 w-3" aria-hidden />
+                  <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-[#E5EAF1] bg-[#F8FAFC] px-3 text-[12px] font-black uppercase leading-none tracking-[0.16em] text-[#2563EB]">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden />
                     {formatDistance(distance.km)}{" "}
                     {distance.source === "exact" ? "de você" : "aprox."}
                   </span>
                 )}
-                <LocationControl loc={loc} variant="surface" />
               </div>
             </div>
           </div>
-          <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10">
-            <StoreStat label="Produtos" value={data.products.length.toLocaleString("pt-BR")} />
-            <StoreStat label="Categorias" value={String(data.categories.length)} />
-            <StoreStat
-              label="Menor preço"
-              accent
-              value={cheapest ? brl(cheapest.price) : "—"}
-              hint={cheapest?.productName}
-            />
-          </dl>
         </header>
-
-        {hasButcher && (
-          <div
-            role="tablist"
-            aria-label="Áreas do estabelecimento"
-            className="mt-2.5 flex flex-wrap gap-1.5"
-          >
-            {(isButcherStore
-              ? [
-                  { id: "acougue" as const, label: "Açougue · Cortes", count: cuts.length },
-                  { id: "catalogo" as const, label: "Outros produtos", count: general.length },
-                ]
-              : [
-                  { id: "catalogo" as const, label: "Catálogo", count: general.length },
-                  { id: "acougue" as const, label: "Açougue", count: cuts.length },
-                ]
-            ).map((t) => {
-              const active = tab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setSearch({ aba: t.id })}
-                  className={
-                    active
-                      ? "inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 text-[13px] font-semibold leading-none text-brand-navy"
-                      : "inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[13px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
-                  }
-                >
-                  {t.label}
-                  <span className="text-[12.5px] font-bold tabular-nums opacity-70">{t.count}</span>
-                </button>
-              );
-            })}
+        <div className="bg-white rounded-[24px] p-6 shadow-sm border border-[#E5EAF1] mb-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 divide-x divide-[#E5EAF1]">
+              <MetricItem label="Produtos" value={data.products.length} icon={PackageSearch} />
+              <MetricItem label="Categorias" value={data.categories.length} icon={LayoutGrid} className="pl-8" />
+              <MetricItem label="Melhor oferta" value={cheapest ? brl(cheapest.price) : "—"} icon={TrendingDown} className="pl-8 hidden md:flex" />
+            </div>
+            <div className="h-full border-l border-[#E5EAF1] pl-6 hidden md:block">
+              <LocationControl loc={loc} variant="surface" />
+            </div>
           </div>
-        )}
-
-        {/* Últimas atualizações — faixa única com rolagem horizontal (sem nuvem de chips). */}
-        <section className="mt-2.5 overflow-hidden rounded-xl border border-border bg-card/70">
-          <div className="flex items-center gap-2 border-b border-border/70 px-2.5 py-1.5">
-            <h2 className="inline-flex items-center gap-1.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
-              <History className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-              Últimas atualizações
-            </h2>
-            <Link
-              to="/colaborar"
-              className="ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
-            >
-              <Camera className="h-3.5 w-3.5" aria-hidden />
-              Enviar fotos
-            </Link>
-          </div>
-          {recentUpdates.length > 0 ? (
-            <ul className="flex snap-x gap-1.5 overflow-x-auto px-2.5 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {recentUpdates.map((p) => (
-                <li
-                  key={p.slug}
-                  className="flex w-[190px] shrink-0 snap-start flex-col gap-0.5 rounded-lg border border-border bg-background px-2.5 py-1.5"
-                >
-                  <span className="truncate text-[13px] font-medium leading-tight text-foreground">
-                    {p.productName}
-                  </span>
-                  <span className="flex items-baseline justify-between gap-2">
-                    <Price value={p.price} size="xs" tone="best" />
-                    <span className="text-[12.5px] tabular-nums text-muted-foreground">
-                      {new Date(p.lastDate).toLocaleDateString("pt-BR")}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="px-2.5 py-2 text-[13px] leading-snug text-muted-foreground">
-              Ainda não há atualizações recentes. Envie fotos das etiquetas para começar.
-            </p>
+        </div>
+        <div className="space-y-8">
+          {hasButcher && (
+            <div className="flex items-center gap-2 p-1 bg-[#F1F5F9] rounded-2xl w-fit">
+              {(isButcherStore
+                ? [
+                    { id: "acougue" as const, label: "Açougue", count: cuts.length },
+                    { id: "catalogo" as const, label: "Produtos", count: general.length },
+                  ]
+                : [
+                    { id: "catalogo" as const, label: "Catálogo", count: general.length },
+                    { id: "acougue" as const, label: "Açougue", count: cuts.length },
+                  ]
+              ).map((t) => {
+                const active = tab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setSearch({ aba: t.id })}
+                    className={cn(
+                      "px-6 py-2 rounded-xl text-sm font-black transition-all",
+                      active 
+                        ? "bg-white text-[#0F172A] shadow-sm" 
+                        : "text-[#64748B] hover:text-[#0F172A]"
+                    )}
+                  >
+                    {t.label}
+                    <span className="ml-2 opacity-50 tabular-nums">{t.count}</span>
+                  </button>
+                );
+              })}
+            </div>
           )}
-        </section>
 
-        {tab === "catalogo" && (
-          <>
-            {/* Painel único de controles: categorias + busca + ordenação + visão. */}
-            <div className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
-              {data.categories.length > 0 && (
-                <CategoryRail
-                  categories={[
-                    { key: "__all", label: "Todas", count: catalogProducts.length },
-                    ...data.categories,
-                  ]}
-                  activeLabel={selectedCategory}
-                  onSelect={(label) => {
-                    setSearch({ cat: label === "Todas" ? "" : label });
-                  }}
-                />
-              )}
-
-              <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
-                <div className="relative flex-1">
-                  <Search
-                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                    aria-hidden
-                  />
+          {tab === "catalogo" && (
+            <div className="space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
                   <input
                     value={q}
                     onChange={(e) => {
                       setQ(e.target.value);
                       setLimit(30);
                     }}
-                    placeholder="Buscar produto (ignora acentos e ç/c)"
-                    aria-label="Buscar produto"
-                    inputMode="search"
-                    className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[14px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                    placeholder="O que você procura?"
+                    className="w-full pl-11 pr-4 py-3 bg-white border border-[#E5EAF1] rounded-2xl text-sm font-medium focus:ring-2 focus:ring-[#2563EB]/10 focus:border-[#2563EB] outline-none transition-all"
                   />
                 </div>
-                <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
-                  <SelectTrigger
-                    aria-label="Ordenar por"
-                    className="h-9 w-full text-[13.5px] font-medium sm:w-[240px]"
-                  >
-                    <SelectValue placeholder="Ordenar por" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                      <SelectItem key={k} value={k} className="text-[13.5px]">
-                        {SORT_LABEL[k]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
+                
+                <div className="flex items-center gap-3">
+                  <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
+                    <SelectTrigger className="h-12 w-[200px] rounded-2xl border-[#E5EAF1] bg-white font-bold text-[#0F172A]">
+                      <SelectValue placeholder="Ordenar" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-[#E5EAF1]">
+                      {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+                        <SelectItem key={k} value={k} className="font-medium">{SORT_LABEL[k]}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
+                </div>
               </div>
 
-              {/* Ponte entre a categoria da loja e o hub correspondente da cidade. */}
-              {activeHub && (
-                <Link
-                  to="/categoria/$slug"
-                  params={{ slug: activeHub.slug }}
-                  className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-gold-ink underline-offset-2 hover:underline"
-                >
-                  Comparar {selectedCategory} em toda a cidade · {activeHub.label}
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                </Link>
+              {data.categories.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setSearch({ cat: "" })}
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                      !selectedCategory 
+                        ? "bg-[#0F172A] text-white" 
+                        : "bg-white border border-[#E5EAF1] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]"
+                    )}
+                  >
+                    Tudo
+                  </button>
+                  {data.categories.map((cat) => (
+                    <button
+                      key={cat.key}
+                      onClick={() => setSearch({ cat: cat.label })}
+                      className={cn(
+                        "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                        selectedCategory === cat.label 
+                          ? "bg-[#0F172A] text-white" 
+                          : "bg-white border border-[#E5EAF1] text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]"
+                      )}
+                    >
+                      {cat.label}
+                      <span className="ml-2 opacity-50">{cat.count}</span>
+                    </button>
+                  ))}
+                </div>
               )}
-            </div>
 
+              <div className="mt-8">
+                <div className="flex items-baseline justify-between mb-4">
+                  <h2 className="text-sm font-black text-[#0F172A] uppercase tracking-widest">
+                    Produtos ({filtered.length})
+                  </h2>
+                </div>
 
-            <div className="mt-2.5 flex items-baseline justify-between gap-3">
-              <h2 className="text-[12.5px] font-bold uppercase tracking-[0.16em] text-foreground">
-                Produtos publicados
-              </h2>
-              <span className="text-[12.5px] text-muted-foreground">
-                {filtered.length} de {catalogProducts.length}
-                {selectedCategory ? ` · ${selectedCategory}` : ""}
-              </span>
-            </div>
-
-            {filtered.length > 0 ? (
-              <>
-                {view === "grid" ? (
-                  <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                    {filtered.slice(0, limit).map((p) => (
-                      <li key={p.slug}>
-                        <ProductTile
-                          product={p}
-                          onOpen={() => openQuickView(p)}
-                          onAlert={() => createAlert(p)}
-                          onHistory={() => setHistoryFor(p)}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
-                    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
-                      <span className="text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
-                        Produto
-                      </span>
-                      <span className="hidden text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
-                        Unidade
-                      </span>
-                      <span className="text-right text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
-                        Preço
-                      </span>
-                      <span className="hidden text-right text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
-                        Ações
-                      </span>
-                    </div>
-                    <ul className="divide-y divide-border/70">
-                      {filtered.slice(0, limit).map((p) => (
-                        <li key={p.slug}>
-                          <ProductRow
+                {filtered.length > 0 ? (
+                  <>
+                    {view === "grid" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.slice(0, limit).map((p) => (
+                          <ProductTile
+                            key={p.slug}
                             product={p}
                             onOpen={() => openQuickView(p)}
                             onAlert={() => createAlert(p)}
                             onHistory={() => setHistoryFor(p)}
                           />
-                        </li>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="bg-white rounded-3xl border border-[#E5EAF1] overflow-hidden">
+                        <div className="grid grid-cols-[1fr_100px_100px] gap-4 px-6 py-4 bg-[#F8FAFC] border-b border-[#E5EAF1] text-[10px] font-black uppercase tracking-widest text-[#64748B]">
+                          <span>Produto</span>
+                          <span className="text-center">Unidade</span>
+                          <span className="text-right">Preço</span>
+                        </div>
+                        <div className="divide-y divide-[#E5EAF1]">
+                          {filtered.slice(0, limit).map((p) => (
+                            <ProductRow
+                              key={p.slug}
+                              product={p}
+                              onOpen={() => openQuickView(p)}
+                              onAlert={() => createAlert(p)}
+                              onHistory={() => setHistoryFor(p)}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {filtered.length > limit && (
+                      <Button
+                        onClick={() => setLimit((l) => l + 30)}
+                        variant="outline"
+                        className="w-full mt-8 h-12 rounded-2xl border-[#E5EAF1] text-[#0F172A] font-bold"
+                      >
+                        Ver mais {filtered.length - limit} produtos
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <EmptyState
+                    icon={Search}
+                    title="Nada encontrado"
+                    message="Tente ajustar sua busca ou categoria."
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        {tab === "catalogo" && (
+          <div className="mt-8">
+            <div className="flex items-baseline justify-between mb-4">
+              <h2 className="text-sm font-black text-[#0F172A] uppercase tracking-widest">
+                Produtos ({filtered.length})
+              </h2>
+            </div>
+
+            {filtered.length > 0 ? (
+              <>
+                {view === "grid" ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filtered.slice(0, limit).map((p) => (
+                      <ProductTile
+                        key={p.slug}
+                        product={p}
+                        onOpen={() => openQuickView(p)}
+                        onAlert={() => createAlert(p)}
+                        onHistory={() => setHistoryFor(p)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-3xl border border-[#E5EAF1] overflow-hidden">
+                    <div className="grid grid-cols-[1fr_100px_100px] gap-4 px-6 py-4 bg-[#F8FAFC] border-b border-[#E5EAF1] text-[10px] font-black uppercase tracking-widest text-[#64748B]">
+                      <span>Produto</span>
+                      <span className="text-center">Unidade</span>
+                      <span className="text-right">Preço</span>
+                    </div>
+                    <div className="divide-y divide-[#E5EAF1]">
+                      {filtered.slice(0, limit).map((p) => (
+                        <ProductRow
+                          key={p.slug}
+                          product={p}
+                          onOpen={() => openQuickView(p)}
+                          onAlert={() => createAlert(p)}
+                          onHistory={() => setHistoryFor(p)}
+                        />
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
+                
                 {filtered.length > limit && (
-                  <button
-                    type="button"
+                  <Button
                     onClick={() => setLimit((l) => l + 30)}
-                    className="mt-2.5 h-9 w-full rounded-lg border border-border bg-card text-[13.5px] font-semibold text-foreground transition-colors hover:border-brand-gold"
+                    variant="outline"
+                    className="w-full mt-8 h-12 rounded-2xl border-[#E5EAF1] text-[#0F172A] font-bold"
                   >
-                    Mostrar mais ({filtered.length - limit} restantes)
-                  </button>
+                    Ver mais {filtered.length - limit} produtos
+                  </Button>
                 )}
               </>
-
             ) : (
               <EmptyState
-                className="mt-6"
                 icon={Search}
-                title="Nenhum produto encontrado"
-                message={
-                  selectedCategory
-                    ? `Nenhum item${q ? ` para "${q}"` : ""} nessa categoria.`
-                    : q
-                      ? `Nenhum item para "${q}".`
-                      : "Ainda não há produtos disponíveis."
-                }
-                action={
-                  selectedCategory ? (
-                    <Button variant="outline" size="sm" onClick={() => setSearch({ cat: "" })}>
-                      Limpar categoria
-                    </Button>
-                  ) : undefined
-                }
+                title="Nada encontrado"
+                message="Tente ajustar sua busca ou categoria."
               />
             )}
-          </>
+          </div>
         )}
+
 
 
         {hasButcher && tab === "acougue" && (
@@ -1134,197 +1091,109 @@ function RailArrow({
   );
 }
 
-/** Alternância Lista/Grade — radiogroup acessível. */
-function ViewToggle({
-  value,
-  onChange,
-}: {
-  value: "grid" | "list";
-  onChange: (v: "grid" | "list") => void;
-}) {
-  const items = [
-    { id: "grid" as const, label: "Grade", Icon: LayoutGrid },
-    { id: "list" as const, label: "Lista", Icon: ListIcon },
-  ];
+
+function MetricItem({ label, value, icon: Icon, className }: { label: string; value: string | number; icon: any; className?: string }) {
   return (
-    <div
-      role="radiogroup"
-      aria-label="Modo de exibição"
-      className="flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+    <div className={cn("flex flex-col gap-1", className)}>
+      <div className="flex items-center gap-2 text-[#64748B]">
+        <Icon className="w-4 h-4" />
+        <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
+      </div>
+      <span className="text-xl font-black text-[#0F172A]">{value}</span>
+    </div>
+  );
+}
+
+function ProductRow({ product, onOpen, onAlert, onHistory }: { product: PublicStoreProduct; onOpen: () => void; onAlert: () => void; onHistory: () => void }) {
+  return (
+    <div className="grid grid-cols-[1fr_100px_100px] gap-4 px-6 py-4 hover:bg-[#F8FAFC] transition-colors items-center group cursor-pointer" onClick={onOpen}>
+      <div className="min-w-0">
+        <h4 className="text-sm font-bold text-[#0F172A] truncate group-hover:text-[#2563EB] transition-colors">{product.productName}</h4>
+        {product.brand && <p className="text-[10px] font-medium text-[#94A3B8] uppercase tracking-wider">{product.brand}</p>}
+      </div>
+      <div className="text-center text-xs font-bold text-[#64748B]">
+        {product.unitLabel}
+      </div>
+      <div className="text-right">
+        <span className="text-sm font-black text-[#0F172A]">{brl(product.price)}</span>
+      </div>
+    </div>
+  );
+}
+
+function ProductTile({ product, onOpen, onAlert, onHistory }: { product: PublicStoreProduct; onOpen: () => void; onAlert: () => void; onHistory: () => void }) {
+  return (
+    <div 
+      className="group bg-white rounded-3xl border border-[#E5EAF1] p-5 shadow-sm hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-[#2563EB]/5 transition-all duration-300 cursor-pointer"
+      onClick={onOpen}
     >
-      {items.map(({ id, label, Icon }) => {
-        const active = value === id;
-        return (
-          <button
-            key={id}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            aria-label={`Exibir em ${label.toLowerCase()}`}
-            onClick={() => onChange(id)}
-            className={
-              active
-                ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[13px] font-bold leading-none text-brand-navy"
-                : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[13px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
-            }
-          >
-            <Icon className="h-3.5 w-3.5" aria-hidden /> {label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-/**
- * Sufixo de preço por unidade ("· R$ 12,90 /kg").
- * Renderiza via <Price /> para manter a mesma tipografia monetária do site.
- */
-function UnitSuffix({ product }: { product: PublicStoreProduct }) {
-  const unit = product.unitLabel
-    ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
-    : null;
-  if (product.pricePerUnit == null || !unit) return null;
-  return (
-    <>
-      {" · "}
-      <Price value={product.pricePerUnit} size="xs" tone="muted" suffix={` ${unit}`} />
-    </>
-  );
-}
-
-/** Cartão compacto de produto — clique abre o modal de detalhes. */
-function ProductTile({
-  product,
-  onOpen,
-  onAlert,
-  onHistory,
-}: {
-  product: PublicStoreProduct;
-  onOpen: () => void;
-  onAlert: () => void;
-  onHistory: () => void;
-}) {
-  return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-elev-1 transition-colors hover:border-brand-gold hover:bg-muted/30">
-      <button
-        type="button"
-        onClick={onOpen}
-        aria-label={`Ver detalhes de ${product.productName}`}
-        className="w-full px-3 pb-1.5 pt-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
-      >
-        <div className="flex items-start gap-2">
-          <h3 className="min-w-0 flex-1 text-[14px] font-semibold leading-snug text-foreground">
-            {product.productName}
-          </h3>
-          <Price value={product.price} size="md" className="shrink-0" />
+      <div className="flex justify-between items-start mb-4">
+        <div className="p-2 bg-[#F8FAFC] rounded-xl text-[#2563EB]">
+          <PackageSearch className="w-5 h-5" />
         </div>
-        <p className="mt-1 truncate text-[12.5px] leading-none text-muted-foreground">
-          {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-          <UnitSuffix product={product} />
-        </p>
-      </button>
-      <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
-        <span className="truncate text-[12.5px] leading-none text-muted-foreground">
-          {product.lastDate
-            ? `Atualizado ${new Date(product.lastDate).toLocaleDateString("pt-BR")}`
-            : ""}
-        </span>
-        <div className="flex shrink-0 items-center gap-1">
-          <button
-            type="button"
-            onClick={onAlert}
-            aria-label={`Criar alerta de preço para ${product.productName}`}
-            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
-          >
-            <Bell className="h-3 w-3 text-muted-foreground" aria-hidden /> Alerta
-          </button>
-          <button
-            type="button"
-            onClick={onHistory}
-            aria-label={`Ver histórico de preço de ${product.productName}`}
-            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
-          >
-            <History className="h-3 w-3 text-muted-foreground" aria-hidden /> Histórico
-          </button>
-        </div>
+        <button 
+          onClick={(e) => { e.stopPropagation(); onHistory(); }}
+          className="p-2 text-[#94A3B8] hover:text-[#2563EB] transition-colors"
+        >
+          <History className="w-4 h-4" />
+        </button>
       </div>
-    </article>
-  );
-}
-
-/** Linha densa em colunas (produto · unidade · preço · ações) para o modo Lista. */
-function ProductRow({
-  product,
-  onOpen,
-  onAlert,
-  onHistory,
-}: {
-  product: PublicStoreProduct;
-  onOpen: () => void;
-  onAlert: () => void;
-  onHistory: () => void;
-}) {
-  const unit =
-    product.unitLabel?.replace("R$", "").replace(/^\s*\/\s*/, "").trim() ||
-    (product.pricePerUnit != null ? "un" : null);
-  return (
-    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
-      <button
-        type="button"
-        onClick={onOpen}
-        aria-label={`Ver detalhes de ${product.productName}`}
-        className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
-      >
-        <span className="block truncate text-[13.5px] font-semibold leading-tight text-foreground">
+      
+      <div className="mb-4">
+        <h4 className="text-sm font-black text-[#0F172A] leading-tight mb-1 group-hover:text-[#2563EB] transition-colors line-clamp-2">
           {product.productName}
-        </span>
-        <span className="block truncate text-[12.5px] leading-tight text-muted-foreground">
-          {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-        </span>
-      </button>
+        </h4>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">{product.unitLabel}</span>
+          {product.brand && (
+            <>
+              <span className="text-[#E5EAF1]">·</span>
+              <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest">{product.brand}</span>
+            </>
+          )}
+        </div>
+      </div>
 
-      <span className="hidden min-w-0 truncate text-[13px] leading-tight text-muted-foreground sm:block">
-        {unit ? (
-          <>
-            {unit}
-            {product.pricePerUnit != null ? (
-              <Price
-                value={product.pricePerUnit}
-                size="xs"
-                tone="muted"
-                suffix={`/${unit}`}
-                className="flex truncate"
-              />
-            ) : null}
-          </>
-        ) : (
-          "—"
-        )}
-      </span>
-
-      <Price value={product.price} size="sm" className="justify-end whitespace-nowrap" />
-
-      <div className="hidden items-center justify-end gap-1 sm:flex">
-        <button
-          type="button"
-          onClick={onAlert}
-          aria-label={`Criar alerta de preço para ${product.productName}`}
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+      <div className="flex items-end justify-between">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest mb-0.5">Preço atual</span>
+          <span className="text-lg font-black text-[#0F172A]">{brl(product.price)}</span>
+        </div>
+        <button 
+          onClick={(e) => { e.stopPropagation(); onAlert(); }}
+          className="w-10 h-10 rounded-xl bg-[#F8FAFC] flex items-center justify-center text-[#64748B] hover:bg-[#2563EB] hover:text-white transition-all"
         >
-          <Bell className="h-3 w-3 text-muted-foreground" aria-hidden /> Alerta
-        </button>
-        <button
-          type="button"
-          onClick={onHistory}
-          aria-label={`Ver histórico de preço de ${product.productName}`}
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-        >
-          <History className="h-3 w-3 text-muted-foreground" aria-hidden /> Histórico
+          <Bell className="w-4 h-4" />
         </button>
       </div>
     </div>
   );
 }
+
+function ViewToggle({ value, onChange }: { value: "grid" | "list"; onChange: (v: "grid" | "list") => void }) {
+  return (
+    <div className="flex p-1 bg-[#F1F5F9] rounded-2xl">
+      <button
+        onClick={() => onChange("grid")}
+        className={cn(
+          "p-2 rounded-xl transition-all",
+          value === "grid" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B] hover:text-[#0F172A]"
+        )}
+      >
+        <LayoutGrid className="w-4 h-4" />
+      </button>
+      <button
+        onClick={() => onChange("list")}
+        className={cn(
+          "p-2 rounded-xl transition-all",
+          value === "list" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B] hover:text-[#0F172A]"
+        )}
+      >
+        <ListIcon className="w-4 h-4" />
+      </button>
+    </div>
+  );
+}
+
 
 

@@ -1,259 +1,93 @@
-import { forwardRef, useState, type ReactNode } from "react";
-import { motion, type HTMLMotionProps } from "framer-motion";
-import { MapPin, Store, ArrowUpRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
+import { Price } from "@/components/ds/Price";
 import { cn } from "@/lib/utils";
-import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
-import { Badge } from "./Badge";
-import { RatingInline } from "./RatingStars";
+import { MapPin, Package, ChevronRight, TrendingDown } from "lucide-react";
 
-
-export interface MarketCardProps extends HTMLMotionProps<"article"> {
+export interface MarketCardProps {
+  id: string;
   name: string;
+  neighborhood: string;
+  productsCount: number;
   logoUrl?: string | null;
-  /** Bairro ou cidade. */
-  neighborhood?: string | null;
-  /** Distância em km. */
-  distanceKm?: number | null;
-  /** Total de produtos monitorados. */
-  productCount?: number | null;
-  /** Nota (0-5). */
-  rating?: number | null;
-  /** Selo customizado (ex.: "Mais barato hoje"). */
-  badge?: ReactNode;
-  /** Ação principal opcional (link ou botão). */
-  action?: ReactNode;
-  compact?: boolean;
-  /** Layout: linha horizontal (default) ou tile vertical estilo categoria. */
-  variant?: "row" | "tile";
+  maxSavings?: number;
+  kind?: string | null;
+  className?: string;
 }
 
-/**
- * MarketCard — card de mercado/mercado, focado em hierarquia visual limpa.
- */
-export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function MarketCard(
-  {
-    className,
-    name,
-    logoUrl,
-    neighborhood,
-    distanceKm,
-    productCount,
-    rating,
-    badge,
-    action,
-    compact = false,
-    variant = "row",
-    onClick,
-    onKeyDown,
-    ...rest
-  },
-  ref,
-) {
-  const interactive = typeof onClick === "function";
-  const [failed, setFailed] = useState(false);
-  const resolvedLogo = useSignedLogoUrl(logoUrl);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    onKeyDown?.(e);
-    if (!interactive || e.defaultPrevented) return;
-    if (e.currentTarget !== e.target) return;
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onClick?.(e as unknown as React.MouseEvent<HTMLElement>);
-    }
+export function MarketCard({
+  id,
+  name,
+  neighborhood,
+  productsCount,
+  logoUrl,
+  maxSavings = 0,
+  kind = "mercado",
+  className
+}: MarketCardProps) {
+  const KINDS: Record<string, string> = {
+    mercado: "Supermercado",
+    farmacia: "Farmácia",
+    padaria: "Padaria",
+    acougue: "Açougue"
   };
 
-  const distanceLabel =
-    typeof distanceKm === "number"
-      ? distanceKm < 1
-        ? `${Math.round(distanceKm * 1000)} m`
-        : `${distanceKm.toFixed(1)} km`
-      : null;
-
-  if (variant === "tile") {
-    const initials = name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((w) => w[0])
-      .join("")
-      .toUpperCase();
-
-    return (
-      <motion.article
-        ref={ref}
-        whileHover={{ y: -3 }}
-        transition={{ type: "spring", stiffness: 320, damping: 24 }}
-        role={interactive ? "link" : undefined}
-        tabIndex={interactive ? 0 : undefined}
-        onClick={onClick}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          "group relative flex flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)] transition-all duration-200 hover:border-[var(--brand-primary)]/50 hover:shadow-[var(--shadow-lg)]",
-          interactive &&
-            "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          className,
-        )}
-        {...rest}
-      >
-        {/* Logo showcase panel — protagonist */}
-        <div className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden bg-gradient-to-br from-white via-white to-[color-mix(in_oklab,var(--primary)_6%,white)] p-4">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.35]"
-            style={{
-              backgroundImage:
-                "linear-gradient(to right, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px)",
-              backgroundSize: "18px 18px",
-            }}
-          />
-          {resolvedLogo && !failed ? (
-            <img
-              src={resolvedLogo ?? undefined}
-              alt={`${name} logo`}
-              loading="lazy"
-              onError={() => setFailed(true)}
-              onLoad={(e) => {
-                if (e.currentTarget.naturalWidth === 0) setFailed(true);
-              }}
-              className="relative z-10 max-h-full max-w-[82%] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.06]"
-            />
-          ) : (
-            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-[var(--radius-2xl)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] ring-1 ring-[var(--brand-primary)]/20 shadow-[var(--shadow-sm)]">
-              <span className="font-display text-xl font-bold tracking-tight">
-                {initials || <Store className="h-7 w-7" aria-hidden />}
-              </span>
-            </div>
-          )}
-          {badge ? <div className="absolute right-2 top-2 z-20">{badge}</div> : null}
+  return (
+    <Link
+      to="/estabelecimento/$slug"
+      params={{ slug: id }} // Simplificado, ideal usar slugifyEstablishment
+      className={cn(
+        "group block bg-[var(--bg-surface)] rounded-[32px] border border-[var(--border-subtle)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-xl)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2",
+        className
+      )}
+    >
+      <div className="flex gap-5">
+        <div className="h-20 w-20 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)] p-3 border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
+          <StoreLogoThumb src={logoUrl} name={name} className="h-full w-full object-contain" />
         </div>
-
-        {/* Info strip */}
-        <div className="flex flex-1 flex-col gap-1.5 border-t border-border/70 px-3.5 py-3">
-          <h3
-            className="line-clamp-1 font-display text-[14px] font-bold leading-tight tracking-tight text-foreground"
-            title={name}
-          >
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <span className="bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border border-[var(--brand-primary)]/20">
+              {KINDS[kind || "mercado"] || "Estabelecimento"}
+            </span>
+            {maxSavings > 0 && (
+              <span className="text-[10px] font-black text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <TrendingDown className="inline h-3 w-3 mr-1" />
+                -{maxSavings}%
+              </span>
+            )}
+          </div>
+          <h3 className="text-xl font-black tracking-tight text-[var(--text-primary)] leading-tight mb-1 truncate group-hover:text-[var(--brand-primary)] transition-colors">
             {name}
           </h3>
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-1 text-[11.5px] text-muted-foreground">
-              {neighborhood ? (
-                <>
-                  <MapPin className="h-3 w-3 shrink-0" aria-hidden />
-                  <span className="truncate">{neighborhood}</span>
-                  {distanceLabel ? (
-                    <span className="ml-1 shrink-0 tabular-nums">· {distanceLabel}</span>
-                  ) : null}
-                </>
-              ) : (
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em]">Explore</span>
-              )}
+          <p className="flex items-center gap-1.5 text-[12px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
+            <MapPin className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+            {neighborhood || "Feijó, AC"}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 pt-6 border-t border-[var(--border-subtle)] flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)]">
+              <Package className="h-4 w-4" />
             </div>
-            {typeof productCount === "number" ? (
-              <span className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
-                {productCount}
-                <span className="ml-0.5 text-muted-foreground">itens</span>
-              </span>
-            ) : null}
+            <div>
+              <div className="text-[14px] font-black text-[var(--text-primary)] leading-none">{productsCount}</div>
+              <div className="text-[9px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mt-1">Produtos</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Online</span>
           </div>
         </div>
-
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-primary via-primary to-accent transition-transform duration-300 group-hover:scale-x-100"
-        />
-      </motion.article>
-    );
-  }
-
-
-  return (
-    <motion.article
-      ref={ref}
-      whileHover={{ y: -2 }}
-      transition={{ type: "spring", stiffness: 320, damping: 24 }}
-      role={interactive ? "link" : undefined}
-      tabIndex={interactive ? 0 : undefined}
-      onClick={onClick}
-      onKeyDown={handleKeyDown}
-      className={cn(
-        "group flex items-center gap-3 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--shadow-sm)] transition-shadow hover:shadow-[var(--shadow-md)]",
-        compact ? "p-2.5" : "p-3",
-        interactive &&
-          "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        className,
-      )}
-      {...rest}
-    >
-      <div
-        className={cn(
-          "flex shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] ring-1 ring-[var(--border-subtle)]/60 shadow-[var(--shadow-sm)]",
-          compact ? "h-11 w-11" : "h-14 w-14",
-        )}
-      >
-        {resolvedLogo && !failed ? (
-          <img
-            src={resolvedLogo ?? undefined}
-            alt=""
-            loading="lazy"
-            onError={() => setFailed(true)}
-            onLoad={(e) => {
-              if (e.currentTarget.naturalWidth === 0) setFailed(true);
-            }}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <Store className={cn("text-muted-foreground", compact ? "h-5 w-5" : "h-6 w-6")} aria-hidden />
-        )}
-      </div>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center gap-2">
-          <h3
-            className={cn(
-              "truncate font-display font-semibold text-foreground",
-              compact ? "text-sm" : "text-base",
-            )}
-            title={name}
-          >
-            {name}
-          </h3>
-          {badge}
+        
+        <div className="h-10 w-10 rounded-full bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all shadow-inner">
+          <ChevronRight className="h-5 w-5" />
         </div>
-
-        <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[12.5px] leading-snug text-muted-foreground">
-          {neighborhood ? (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3" aria-hidden />
-              {neighborhood}
-            </span>
-          ) : null}
-          {distanceLabel ? <span className="tabular-nums">{distanceLabel}</span> : null}
-          {typeof productCount === "number" ? (
-            <span className="tabular-nums">{productCount} produtos</span>
-          ) : null}
-          {typeof rating === "number" ? <RatingInline value={rating} /> : null}
-        </div>
-
       </div>
-
-      {action ?? (
-        <ArrowUpRight
-          className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
-          aria-hidden
-        />
-      )}
-    </motion.article>
-  );
-});
-
-MarketCard.displayName = "MarketCard";
-
-export function MarketCardBestPrice() {
-  return (
-    <Badge variant="savings" size="sm">
-      Menor preço
-    </Badge>
+    </Link>
   );
 }

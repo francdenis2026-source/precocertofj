@@ -13,6 +13,9 @@ import {
   completeMyOnboarding,
 } from "@/lib/admin-security.functions";
 import { useSession } from "@/hooks/useSession";
+import { LoginShell } from "@/components/auth/LoginShell";
+import { brl } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,
@@ -87,50 +90,31 @@ function OnboardingPage() {
   }
 
   return (
-    <div
-      className="min-h-svh w-full px-4 py-10"
-      style={{
-        background:
-          "radial-gradient(ellipse at top, var(--bg-surface-elevated) 0%, var(--bg-surface) 45%, var(--bg-base) 100%)",
-      }}
+    <LoginShell
+      title="Complete seu cadastro"
+      subtitle="Falta pouco para você começar a economizar"
     >
-      <div className="mx-auto flex max-w-lg flex-col items-center">
-        <Logo className="text-[var(--text-primary)]" />
-
-        <div className="mt-6 flex items-center gap-2 rounded-full border border-[var(--brand-accent)]/20 bg-[var(--brand-accent)]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--brand-accent)]">
-          <ShieldCheck className="h-3 w-3" />
-          Falta menos de 1 minuto
-        </div>
-
-        <h1 className="mt-4 text-center font-display text-3xl font-semibold leading-tight text-[var(--text-primary)] sm:text-4xl">
-          Só mais alguns dados para começar
-        </h1>
-        <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-          A gente usa seu bairro para mostrar os mercados perto de você e avisar
-          quando o preço dos seus produtos cair.
-        </p>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (canSubmit) mut.mutate();
-          }}
-          className="mt-8 w-full space-y-4 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-[var(--shadow-lg)]"
-        >
-          <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (canSubmit) mut.mutate();
+        }}
+        className="space-y-6"
+      >
+        <div className="space-y-4">
+          <FieldRow icon={<User className="w-3 h-3" />} label="Seu nome completo">
             <Input
               value={fullName}
               onChange={(e) => setFullName(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 80))}
-              placeholder="Ex.: Maria Silva"
+              placeholder="Ex: JOÃO DA SILVA"
               autoComplete="name"
-              autoCapitalize="characters"
-              className="uppercase placeholder:normal-case"
+              className="h-12 rounded-2xl bg-[#F8FAFC] border-[#E5EAF1] font-bold text-[#0F172A] uppercase placeholder:normal-case placeholder:font-medium transition-all focus:border-[#2563EB] focus:ring-[#2563EB]/5"
               maxLength={80}
               autoFocus
             />
           </FieldRow>
 
-          <FieldRow icon={<Phone className="h-4 w-4" />} label="Celular (WhatsApp)">
+          <FieldRow icon={<Phone className="w-3 h-3" />} label="WhatsApp">
             <Input
               value={phone}
               onChange={(e) => {
@@ -140,55 +124,58 @@ function OnboardingPage() {
                 if (raw.length > 7) masked = `(${raw.slice(0, 2)}) ${raw.slice(2, 7)}-${raw.slice(7)}`;
                 setPhone(masked);
               }}
-              placeholder="(68) 90000-0000"
+              placeholder="(00) 00000-0000"
               inputMode="tel"
               autoComplete="tel"
+              className="h-12 rounded-2xl bg-[#F8FAFC] border-[#E5EAF1] font-bold text-[#0F172A] transition-all focus:border-[#2563EB] focus:ring-[#2563EB]/5"
               maxLength={15}
             />
           </FieldRow>
 
-          <div className="grid grid-cols-2 gap-3">
-            <FieldRow icon={<MapPin className="h-4 w-4" />} label="Cidade">
+          <div className="grid grid-cols-2 gap-4">
+            <FieldRow icon={<MapPin className="w-3 h-3" />} label="Cidade">
               <Input
                 value={city}
                 onChange={(e) => setCity(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 50))}
-                autoCapitalize="characters"
-                className="uppercase"
+                className="h-12 rounded-2xl bg-[#F8FAFC] border-[#E5EAF1] font-bold text-[#0F172A] uppercase placeholder:font-medium transition-all focus:border-[#2563EB] focus:ring-[#2563EB]/5"
                 maxLength={50}
               />
             </FieldRow>
-            <FieldRow icon={<MapPin className="h-4 w-4" />} label="Bairro">
+            <FieldRow icon={<MapPin className="w-3 h-3" />} label="Bairro">
               <Input
                 value={neighborhood}
                 onChange={(e) => setNeighborhood(e.target.value.toLocaleUpperCase("pt-BR").slice(0, 50))}
-                placeholder="Ex.: Centro"
-                autoCapitalize="characters"
-                className="uppercase placeholder:normal-case"
+                placeholder="Ex: CENTRO"
+                className="h-12 rounded-2xl bg-[#F8FAFC] border-[#E5EAF1] font-bold text-[#0F172A] uppercase placeholder:normal-case placeholder:font-medium transition-all focus:border-[#2563EB] focus:ring-[#2563EB]/5"
                 maxLength={50}
               />
             </FieldRow>
           </div>
+        </div>
 
-          <Button
-            type="submit"
-            disabled={!canSubmit || mut.isPending}
-            className="mt-2 h-12 w-full gap-2 bg-[var(--brand-primary)] text-[var(--text-on-brand)] hover:bg-[var(--brand-primary)]/90"
-          >
-            {mut.isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <>
-                Entrar no painel <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </Button>
+        <Button
+          type="submit"
+          disabled={!canSubmit || mut.isPending}
+          className="w-full h-14 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-base font-black shadow-xl shadow-blue-500/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+        >
+          {mut.isPending ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>SALVANDO...</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span>FINALIZAR CADASTRO</span>
+              <ArrowRight className="w-5 h-5" />
+            </div>
+          )}
+        </Button>
 
-          <p className="text-center text-[11px] text-muted-foreground">
-            Você pode editar tudo depois no seu perfil. Nada é compartilhado.
-          </p>
-        </form>
-      </div>
-    </div>
+        <p className="text-center text-[11px] font-bold text-[#94A3B8] uppercase tracking-widest leading-relaxed">
+          Sua privacidade é nossa prioridade. <br /> Seus dados nunca serão compartilhados.
+        </p>
+      </form>
+    </LoginShell>
   );
 }
 
@@ -203,7 +190,7 @@ function FieldRow({
 }) {
   return (
     <div>
-      <Label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
+      <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#64748B]">
         {icon}
         {label}
       </Label>

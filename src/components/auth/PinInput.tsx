@@ -72,15 +72,15 @@ export const PinInput: React.FC<PinInputProps> = ({
             onBlur={() => setFocusedIndex(null)}
             disabled={disabled}
             className={`
-              w-full h-full text-center text-xl font-bold rounded-xl border-2 transition-all duration-200 outline-none
+              w-full h-full text-center text-xl font-black rounded-2xl border-2 transition-all duration-200 outline-none
               ${
                 focusedIndex === i
-                  ? "border-[var(--brand-primary)] bg-[var(--brand-primary)]/5 shadow-[0_0_15px_rgba(212,175,55,0.2)] scale-105"
+                  ? "border-[#2563EB] bg-white ring-4 ring-[#2563EB]/5 scale-105"
                   : values[i]
-                  ? "border-[var(--brand-primary)]/40 bg-[var(--bg-surface)]"
-                  : "border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50"
+                  ? "border-[#2563EB]/40 bg-white"
+                  : "border-[#E5EAF1] bg-[#F8FAFC]"
               }
-              ${error ? "border-red-500/50 bg-red-500/5" : ""}
+              ${error ? "border-rose-200 bg-rose-50/30" : ""}
               ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-text"}
             `}
           />
@@ -88,7 +88,7 @@ export const PinInput: React.FC<PinInputProps> = ({
             {focusedIndex === i && (
               <motion.div
                 layoutId="pin-cursor"
-                className="absolute bottom-3 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[var(--brand-primary)] rounded-full"
+                className="absolute bottom-3 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-[#2563EB] rounded-full"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}

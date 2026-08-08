@@ -86,7 +86,7 @@ function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] pb-24">
-      <SiteHeader variant="solid" showThemeToggle />
+      <SiteHeader variant="solid" />
       
       <main className="mx-auto w-full max-w-6xl px-4 py-8">
         {/* Breadcrumb & Title */}

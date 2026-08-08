@@ -19,6 +19,9 @@ import {
 import { toast } from "sonner";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { cn } from "@/lib/utils";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Footer } from "@/components/brand/Footer";
+import { Button } from "@/components/ui/button";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import {
@@ -204,109 +207,55 @@ function PlansPage() {
 
 
   return (
-    <div
-      data-planos-shell
-      className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-base text-primary md:h-[100svh]"
-    >
-      <main className="flex min-h-0 flex-1 flex-col">
-        {/* Cabeçalho compacto com atalhos à direita */}
-        <section className="pc-shell shrink-0 pt-2 pb-1.5">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <InternalPageHeader
-              title="Planos e preços"
-              highlight="preços"
-              showBack={false}
-              breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
-              description={
-                <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span>Assinatura mensal a partir de <strong className="text-primary">R$ 29,90</strong> — economize até 30% no anual.</span>
-                  <span className="inline-flex items-center gap-1 text-[11.5px] text-secondary">
-                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-accent" aria-hidden />
-                    Pix instantâneo · Ativação imediata
-                  </span>
-                </span>
-              }
-              className="mb-0 flex-1 min-w-[240px]"
-            />
-            <div className="hidden items-center gap-1.5 md:flex">
-              <button
-                type="button"
-                onClick={() => setOpenSheet("compare")}
-                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
-              >
-                <Sparkles className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
-                Comparar
-              </button>
-              <button
-                type="button"
-                onClick={() => setOpenSheet("faq")}
-                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
-              >
-                <ChevronDown className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
-                Perguntas
-              </button>
-              <Link
-                to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-brand-accent hover:underline"
-              >
-                Já tenho código →
-              </Link>
+    <div className="min-h-screen bg-[#F7F9FC]">
+      <SiteHeader variant="solid" />
+
+      <main className="mx-auto max-w-[1280px] px-4 py-12 md:px-8">
+        <section className="mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl font-black text-[#0F172A] tracking-tight mb-3">Planos e preços</h1>
+              <p className="text-lg text-[#64748B] font-medium">Assinatura mensal a partir de <strong className="text-[#2563EB]">R$ 29,90</strong> — economize até 30% no anual.</p>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <Button onClick={() => setOpenSheet("compare")} variant="outline" className="rounded-full border-[#E5EAF1] bg-white text-[#64748B] h-12 px-6 shadow-sm hover:text-[#2563EB] font-bold">
+                <Sparkles className="w-4 h-4 mr-2 text-[#EAB308]" />
+                Comparar recursos
+              </Button>
+              <Button onClick={() => setOpenSheet("faq")} variant="ghost" className="rounded-full text-[#64748B] h-12 px-6 font-bold hover:text-[#2563EB]">
+                Perguntas frequentes
+              </Button>
             </div>
           </div>
         </section>
 
-        {/* Planos — ocupam toda a altura disponível */}
-        <section
-          id="detalhes"
-          className="pc-shell min-h-0 flex-1 overflow-hidden pb-1.5"
-          aria-label="Planos disponíveis"
-        >
+        <section className="mb-12">
           {isLoading ? (
-            <div className="flex h-full gap-3 overflow-hidden pt-1 lg:grid lg:grid-cols-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  data-planos-card
-                  className="h-full w-[78%] shrink-0 animate-pulse rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/40 lg:w-auto"
-                />
+                <div key={i} className="h-96 rounded-[32px] border border-[#E5EAF1] bg-white animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="pc-rail flex h-full snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-1 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
-                
                 const isFree = plan.price_cents === 0;
-                const isSelected = selectedPlan?.id === plan.id;
-                const savings =
-                  plan.original_price_cents && plan.original_price_cents > plan.price_cents
+                const savings = plan.original_price_cents && plan.original_price_cents > plan.price_cents
                     ? Math.round(((plan.original_price_cents - plan.price_cents) / plan.original_price_cents) * 100)
                     : null;
 
                 return (
                   <article
                     key={plan.id}
-                    data-planos-card
-                    onClick={() => setSelectedId(plan.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelectedId(plan.id);
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={isSelected}
-                    aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
-                      className={cn(
-                        "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-6 rounded-[32px] transition-all duration-500",
-                        isRecommended 
-                          ? "bg-surface-elevated border-brand-accent/20 hover:border-brand-accent/40 shadow-[0_20px_40px_-15px_rgba(234,179,8,0.1)] hover:shadow-[0_25px_50px_-12px_rgba(234,179,8,0.2)]" 
-                          : "bg-surface border-subtle hover:border-brand-primary/30 shadow-sm",
-                        isSelected && "ring-2 ring-brand-accent/40 bg-surface-elevated",
-                      )}
-
+                    className={cn(
+                      "relative flex flex-col p-8 rounded-[40px] transition-all duration-500",
+                      isRecommended 
+                        ? "bg-white border-2 border-[#2563EB] shadow-[0_20px_40px_-15px_rgba(37,99,235,0.1)] scale-105 z-10" 
+                        : "bg-white border border-[#E5EAF1] hover:border-[#2563EB]/30 shadow-sm"
+                    )}
                   >
                     {(isRecommended || savings) && (
                       <span
@@ -401,154 +350,66 @@ function PlansPage() {
           )}
         </section>
 
+        <section className="mb-24">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-black text-[#0F172A] tracking-tight">Perguntas frequentes</h2>
+            <Link to="/ajuda" className="text-sm font-bold text-[#2563EB] hover:underline">Ver central de ajuda →</Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {buildFaq(trialDays).map((item, idx) => (
+              <div key={idx} className="bg-white rounded-[32px] p-8 border border-[#E5EAF1] shadow-sm">
+                <h3 className="text-lg font-black text-[#0F172A] mb-3">{item.q}</h3>
+                <p className="text-[#64748B] font-medium leading-relaxed">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Modal: Comparar recursos */}
         <Dialog open={openSheet === "compare"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-3xl border-subtle/70 bg-surface p-0">
-            <DialogHeader className="border-b border-subtle/70 px-5 py-3">
-              <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Documento oficial</span>
-              <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Comparar <span className="italic text-brand-accent">recursos</span>
+          <DialogContent className="max-w-4xl border-[#E5EAF1] bg-white p-0 rounded-[40px] overflow-hidden">
+            <DialogHeader className="border-b border-[#E5EAF1] px-8 py-6 bg-[#F8FAFC]">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2563EB] mb-2 block">Comparativo oficial</span>
+              <DialogTitle className="text-2xl font-black text-[#0F172A]">
+                Recursos do <span className="text-[#2563EB]">PreçoCerto</span>
               </DialogTitle>
-              <DialogDescription className={"text-sm text-secondary"}>
-                Diferenças reais entre a degustação e os planos pagos.
+              <DialogDescription className="text-[#64748B] font-medium">
+                Confira o que está incluso em cada modalidade de acesso.
               </DialogDescription>
             </DialogHeader>
-            <div className="max-h-[70svh] overflow-y-auto px-5 py-3">
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-subtle/70">
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")} scope="col">Recurso</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Degustação</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Mensal</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Trimestral</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")} scope="col">Anual</th>
-                  </tr>
-
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {[
-                    ["Busca de preços", true, true, true, true],
-                    ["Comparador entre mercados", true, true, true, true],
-                    ["Alertas de preço", false, true, true, true],
-                    ["Análises de IA / mês", "1", "30", "150", "150"],
-                    ["Ranking de bairros", true, true, true, true],
-
-                    ["Exportar CSV/PDF", false, true, true, true],
-                    ["Prioridade de suporte", false, false, true, true],
-                  ].map(([label, ...cols], i) => (
-                    <tr key={i}>
-                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")} scope="row">
-                        {label as string}
-                      </th>
-
-                      {cols.map((c, j) => (
-                        <td key={j} className="py-2 text-center">
-                          {typeof c === "boolean" ? (
-                            c ? (
-                              <Check className="mx-auto h-4 w-4 text-brand-accent" aria-label="Incluído" />
-                            ) : (
-                              <Minus className="mx-auto h-4 w-4 text-secondary/60" aria-label="Não incluído" />
-                            )
-                          ) : (
-                            <span className={cn("font-bold text-brand-accent", "tabular-nums")}>{c}</span>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <p className={cn("text-sm text-secondary", "mt-3 flex items-center gap-1.5")}>
-                <ShieldCheck className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
-                Ativação imediata após confirmação de pagamento pelo Mercado Pago.
-              </p>
+            <div className="max-h-[70vh] overflow-y-auto p-8">
+              <ComparisonMatrix plans={plans} onBuy={handleBuy} buying={buying} recommendedSlug={recommendedSlug} />
             </div>
           </DialogContent>
         </Dialog>
 
-        {/* Modal: Perguntas frequentes */}
+        {/* Modal: Perguntas */}
         <Dialog open={openSheet === "faq"} onOpenChange={(v) => !v && setOpenSheet(null)}>
-          <DialogContent className="max-w-2xl border-subtle/70 bg-surface p-0">
-            <DialogHeader className="border-b border-subtle/70 px-5 py-3">
-              <span className={"text-[10px] font-bold uppercase tracking-widest text-tertiary"}>Ajuda rápida</span>
-              <DialogTitle className={cn("text-2xl font-black text-primary", "mt-0.5")}>
-                Perguntas <span className="italic text-brand-accent">frequentes</span>
-              </DialogTitle>
-              <DialogDescription className={"text-sm text-secondary"}>
-                As dúvidas que mais recebemos sobre planos, pagamento e cota de IA.
-              </DialogDescription>
+          <DialogContent className="max-w-2xl border-[#E5EAF1] bg-white p-8 rounded-[40px]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-black text-[#0F172A]">FAQ</DialogTitle>
             </DialogHeader>
-            <div className="max-h-[70svh] overflow-y-auto px-5 py-2">
-              <Accordion type="single" collapsible className="w-full">
-                {buildFaq(trialDays).map((f, i) => (
-                  <AccordionItem key={i} value={`q-${i}`} className="border-subtle/60">
-                    <AccordionTrigger className={cn("text-sm font-semibold text-primary", "text-left hover:no-underline")}>
-                      {f.q}
-                    </AccordionTrigger>
-                    <AccordionContent className={cn("text-sm text-secondary", "leading-relaxed text-primary/85")}>
-                      {f.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-              <div className="mt-2 flex items-center justify-between border-t border-subtle/60 py-2">
-                <p className={"text-sm text-secondary"}>Não encontrou sua resposta?</p>
-                <Link
-                  to="/fale-conosco"
-                  className={cn(
-                    "text-xs font-bold",
-                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-subtle px-3 py-1 text-secondary hover:border-brand-accent hover:text-brand-accent",
-                  )}
-                >
-                  Fale conosco →
-                </Link>
-              </div>
-            </div>
+            <Accordion type="single" collapsible className="w-full mt-4">
+              {buildFaq(trialDays).map((item, idx) => (
+                <AccordionItem key={idx} value={`item-${idx}`} className="border-[#E5EAF1]">
+                  <AccordionTrigger className="text-left font-bold text-[#0F172A] hover:text-[#2563EB]">
+                    {item.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-[#64748B] font-medium leading-relaxed">
+                    {item.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </DialogContent>
         </Dialog>
-
-        {/* Barra inferior: confiança + atalhos mobile (em fluxo, sempre visível) */}
-        <div
-          data-testid="planos-cta-bar"
-          className={cn(
-            "pc-shell",
-            "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
-          )}
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-subtle bg-surface px-3.5 py-2 shadow-elev-1">
-            <p className="inline-flex items-center gap-1.5 text-[11.5px] text-secondary">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand-accent" aria-hidden />
-              Pagamento seguro Mercado Pago · Cancele quando quiser
-            </p>
-            <div className="flex items-center gap-1.5 md:hidden">
-              <button
-                type="button"
-                onClick={() => setOpenSheet("compare")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-brand-accent"
-              >
-                <Sparkles className="h-3 w-3 text-brand-accent" aria-hidden />
-                Comparar
-              </button>
-              <button
-                type="button"
-                onClick={() => setOpenSheet("faq")}
-                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-subtle bg-base px-2.5 text-[11.5px] font-semibold text-secondary hover:border-brand-accent hover:text-brand-accent"
-              >
-                FAQ
-              </button>
-              <Link
-                to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-brand-accent hover:underline"
-              >
-                Código →
-              </Link>
-            </div>
-          </div>
-        </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
+
 
 
 // ============================================================================
@@ -680,132 +541,71 @@ function ComparisonCell({ value }: { value: string | boolean | undefined }) {
   return <span className="text-[13px] font-semibold text-primary">{value}</span>;
 }
 
-function ComparisonMatrix({
-  plans,
-  recommendedSlug,
-  onBuy,
+function ComparisonMatrix({ 
+  plans, 
+  onBuy, 
   buying,
-}: {
-  plans: PublicPlan[];
-  recommendedSlug: string;
+  recommendedSlug 
+}: { 
+  plans: PublicPlan[]; 
   onBuy: (p: PublicPlan) => void;
   buying: string | null;
+  recommendedSlug: string;
 }) {
-  if (plans.length === 0) return null;
-  const rows = planFeatureMatrix(plans);
+  const matrix = planFeatureMatrix(plans);
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-subtle bg-surface shadow-elev-1">
-      <table className="w-full min-w-[580px] border-collapse text-left">
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b border-subtle">
-            <th
-              scope="col"
-              className="sticky left-0 z-[1] w-[34%] bg-surface px-4 py-3.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-secondary"
-            >
-              Recursos
-            </th>
-            {plans.map((p) => {
-              const isRec = p.slug === recommendedSlug;
-              return (
-                <th
-                  key={p.id}
-                  scope="col"
-                  className={cn(
-                    "px-3 py-3.5 text-center align-top",
-                    isRec && "relative bg-brand-accent/[0.08]",
-                  )}
-                >
-                  {isRec && (
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-0 top-0 h-[3px] bg-brand-accent"
-                    />
-                  )}
-                  {isRec && (
-                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-bg-base">
-                      <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
-                    </span>
-                  )}
-                  <div className="font-display text-[14px] font-semibold text-primary">
-                    {p.name}
-                  </div>
-                  <div className="mt-0.5 text-[11.5px] text-secondary">
-                    {p.price_cents === 0
-                      ? "Grátis"
-                      : `${centsToBRL(p.price_cents)}${
-                          p.days >= 60
-                            ? ` · ${pricePerMonth(p.price_cents, p.days)}/mês`
-                            : ""
-                        }`}
-                  </div>
-                </th>
-              );
-            })}
+          <tr>
+            <th className="py-4 text-left text-[11px] font-black uppercase tracking-[0.2em] text-[#94A3B8]">Recurso</th>
+            {plans.map((p) => (
+              <th key={p.id} className="py-4 px-4 text-center">
+                <div className="text-[11px] font-black uppercase tracking-[0.2em] text-[#0F172A] mb-1">{p.name}</div>
+                {p.slug === recommendedSlug && (
+                  <span className="bg-[#2563EB] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full">Popular</span>
+                )}
+              </th>
+            ))}
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr
-              key={row.label}
-              className={i % 2 === 0 ? "bg-surface-elevated/25" : "bg-transparent"}
-            >
-              <th
-                scope="row"
-                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-3 text-left text-[13px] font-medium text-primary"
-              >
-                {row.label}
-              </th>
+        <tbody className="divide-y divide-[#E5EAF1]">
+          {matrix.map((row, i) => (
+            <tr key={i}>
+              <td className="py-4 text-sm font-bold text-[#64748B]">{row.label}</td>
               {plans.map((p) => {
-                const isRec = p.slug === recommendedSlug;
+                const val = row.values[p.slug];
                 return (
-                  <td
-                    key={p.id}
-                    className={cn(
-                      "px-3 py-2.5 text-center",
-                      isRec && "bg-brand-accent/[0.06]",
+                  <td key={p.id} className="py-4 px-4 text-center text-sm font-medium">
+                    {typeof val === "boolean" ? (
+                      val ? <Check className="mx-auto w-5 h-5 text-[#2563EB]" /> : <Minus className="mx-auto w-5 h-5 text-[#94A3B8]/30" />
+                    ) : (
+                      val || "—"
                     )}
-                  >
-                    <ComparisonCell value={row.values[p.slug]} />
                   </td>
                 );
               })}
             </tr>
           ))}
-          {/* Linha final: CTAs */}
-          <tr className="border-t border-subtle">
-            <th scope="row" className="sticky left-0 z-[1] bg-surface px-4 py-3" />
-            {plans.map((p) => {
-              const isRec = p.slug === recommendedSlug;
-              const isFree = p.price_cents === 0;
-              return (
-                <td
-                  key={p.id}
-                  className={cn("px-2 py-3 align-top", isRec && "bg-brand-accent/[0.08]")}
+          <tr>
+            <td className="py-6"></td>
+            {plans.map((p) => (
+              <td key={p.id} className="py-6 px-4">
+                <Button 
+                  onClick={() => onBuy(p)}
+                  disabled={buying === p.id}
+                  className={cn(
+                    "w-full rounded-2xl h-10 font-black text-xs uppercase tracking-widest",
+                    p.slug === recommendedSlug 
+                      ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]" 
+                      : "bg-[#F8FAFC] border border-[#E5EAF1] text-[#0F172A] hover:bg-[#F1F5F9]"
+                  )}
                 >
-                  <button
-                    type="button"
-                    onClick={() => onBuy(p)}
-                    disabled={buying === p.id}
-                    className={cn(
-                      "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent disabled:cursor-wait disabled:opacity-70",
-                      isRec
-                        ? "bg-brand-accent text-bg-base shadow-elev-1 hover:brightness-105"
-                        : "border border-subtle bg-base text-primary hover:border-brand-accent hover:text-brand-accent",
-                    )}
-                  >
-                    {buying === p.id
-                      ? "…"
-                      : isFree
-                        ? "Testar grátis"
-                        : isRec
-                          ? "Assinar agora"
-                          : "Escolher"}
-                    <ArrowRight className="h-3 w-3" aria-hidden />
-                  </button>
-                </td>
-              );
-            })}
+                  {buying === p.id ? "..." : (p.price_cents === 0 ? "Testar" : "Assinar")}
+                </Button>
+              </td>
+            ))}
           </tr>
         </tbody>
       </table>
