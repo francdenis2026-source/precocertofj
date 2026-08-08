@@ -395,20 +395,6 @@ function HomePage() {
             </div>
           </div>
         </section>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              <Button asChild className="pc-button-primary">
-                <Link to="/buscar">
-                  Começar a economizar <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" className="pc-button-secondary">
-                <Link to="/estabelecimentos">
-                  <Store className="h-4 w-4" aria-hidden="true" /> Ver mercados
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
       </main>
 
       {selectedProduct && (
