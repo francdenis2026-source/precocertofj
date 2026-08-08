@@ -282,7 +282,7 @@ function HomePage() {
               alt="" 
               className="w-full h-full object-cover" 
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--navy-900)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--navy-900)]/40 to-[var(--navy-900)]" />
           </div>
           <div className="relative z-10 max-w-2xl mx-auto">
             <div className="t-kicker mb-4 text-[var(--brand-primary)]">Junte-se à Economia Real</div>
