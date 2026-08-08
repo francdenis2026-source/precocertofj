@@ -286,7 +286,7 @@ function EstablishmentsPage() {
             </div>
 
             {/* Right Column: Detail */}
-            <div className="flex-1 w-full bg-surface rounded-[32px] p-6 md:p-10 border border-subtle shadow-sm sticky top-28">
+            <div className="flex-1 w-full bg-surface-elevated rounded-[40px] p-6 md:p-12 border border-subtle shadow-lg sticky top-28">
                 {selected ? (
                      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-500">
                         {/* Detail Header */}
