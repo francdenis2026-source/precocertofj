@@ -65,7 +65,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
 
       { name: "author", content: "PreçoCerto" },
-      { name: "theme-color", content: "#07111F" },
+      { name: "theme-color", content: "#F8FAFC" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "PreçoCerto" },
