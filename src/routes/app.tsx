@@ -139,7 +139,7 @@ function DashboardPage() {
           <SectionCard 
             title="Insights & Economia" 
             description="Veja onde você está economizando mais este mês em Feijó."
-            className="lg:col-span-2 pc-animate-fade-in border-none bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm rounded-[32px] overflow-hidden"
+            className="lg:col-span-2 pc-animate-fade-in border-none bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-md)] rounded-[32px] overflow-hidden"
             action={
               <Button asChild variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-[var(--brand-primary)]">
                 <Link to="/app/insights">Ver Relatório Completo <ChevronRight className="ml-1 h-3 w-3" /></Link>
@@ -148,7 +148,7 @@ function DashboardPage() {
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 p-2">
               <div className="space-y-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Eficiência de Compra</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Eficiência de Compra</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-3xl font-black text-[var(--text-primary)]">84%</span>
                   <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">+5% este mês</span>
@@ -163,7 +163,7 @@ function DashboardPage() {
                 </div>
               </div>
               <div className="space-y-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Melhor Localidade</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Melhor Localidade</p>
                 <p className="font-display text-lg font-bold leading-tight text-[var(--text-primary)]">Varejão Contamigos</p>
                 <div className="flex items-center gap-2 text-[10px] font-black text-[var(--brand-primary)] uppercase tracking-wider">
                   <TrendingUp className="h-3 w-3" />
