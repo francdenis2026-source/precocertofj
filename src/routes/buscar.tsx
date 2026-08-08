@@ -50,7 +50,7 @@ function SearchResultsPage() {
       <SiteHeader variant="solid" />
 
       
-      <main className="mx-auto max-w-[1600px] px-4 py-12 md:px-8">
+      <main className="mx-auto max-w-[1600px] px-4 py-20 md:px-8">
         <div ref={anchorRef} className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr,400px]">
           {/* Main Content Area */}
           <div className="space-y-16 min-h-[640px] [overflow-anchor:none]">
