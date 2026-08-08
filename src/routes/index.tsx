@@ -117,7 +117,7 @@ function HomePage() {
 
 
 
-            className="h-full w-full object-cover blur-[2px]"
+            className="h-full w-full object-cover"
           />
         </div>
 
