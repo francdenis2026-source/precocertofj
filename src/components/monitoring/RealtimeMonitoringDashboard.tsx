@@ -37,21 +37,28 @@ export function RealtimeMonitoringDashboard() {
 
   if (error) {
     return (
-      <div className="p-8 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--danger)]/20 text-center">
-        <ShieldAlert className="h-10 w-10 text-[var(--danger)] mx-auto mb-4 opacity-50" />
-        <h4 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">Acesso Restrito</h4>
-        <p className="text-[13px] text-[var(--text-tertiary)] max-w-sm mx-auto">
+      <div className="p-12 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center shadow-2xl">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[var(--danger)]/10 mb-6">
+          <ShieldAlert className="h-8 w-8 text-[var(--danger)] opacity-80" />
+        </div>
+        <h4 className="t-h3 mb-3">Acesso Restrito</h4>
+        <p className="t-small max-w-sm mx-auto mb-8">
           {error.message || "Você não tem permissão para acessar esta funcionalidade de monitoramento."}
         </p>
+        <button 
+          onClick={() => window.location.href = '/'}
+          className="pc-button-secondary"
+        >
+          Voltar para o Início
+        </button>
       </div>
     );
   }
 
   if (isLoading) {
-
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse shadow-2xl shadow-blue-500/5">
           <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
           <span className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">Iniciando Varredura...</span>
         </div>
@@ -63,6 +70,7 @@ export function RealtimeMonitoringDashboard() {
       </div>
     );
   }
+
 
   return (
     <div className="space-y-8">
