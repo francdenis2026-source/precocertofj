@@ -235,6 +235,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @utility pc-stat-card {
   background-color: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 1.25rem;
