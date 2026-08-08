@@ -161,7 +161,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
   const showPanel = open && (canQuery || (trending?.length ?? 0) > 0);
 
   return (
-    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto z-50">
+    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto z-50 px-0 md:px-0">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -170,9 +170,10 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         role="search"
         className={cn(
           "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)]/90 backdrop-blur-2xl pl-4 pr-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] focus-within:scale-[1.02]",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.02]",
           compact ? "h-12" : "h-14 sm:h-[80px]",
-          open ? "z-[101]" : "z-auto"
+          open ? "z-[101]" : "z-auto",
+          "touch-none"
         )}
       >
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
@@ -207,7 +208,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           role="combobox"
           className={cn(
             "flex-1 min-w-0 bg-transparent outline-none font-bold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
-            compact ? "text-[15px]" : "text-lg sm:text-xl",
+            compact ? "text-[15px]" : "text-base sm:text-xl",
           )}
         />
         {q && (
@@ -226,11 +227,11 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_8px_20px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] active:scale-[0.96]",
-            compact ? "h-9 text-[12px]" : "h-14 text-[14px] sm:h-16 sm:text-[15px]",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-4 sm:px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_8px_20px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] active:scale-[0.96]",
+            compact ? "h-9 text-[10px]" : "h-11 sm:h-16 text-[12px] sm:text-[15px]",
           )}
         >
-          Pesquisar
+          {compact ? <Search size={16} /> : "Pesquisar"}
         </button>
       </form>
 
