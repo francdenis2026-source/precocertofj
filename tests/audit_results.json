@@ -1,0 +1,38 @@
+[
+  {
+    "route": "/",
+    "tokens": {
+      "brandPrimary": "#3b82f6",
+      "brandAccent": "#eab308",
+      "bgBase": "#070d17",
+      "bgSurface": "#0f172a",
+      "fontSans": "\"Inter\", system-ui, -apple-system, sans-serif",
+      "radiusLg": "12px"
+    },
+    "screenshot": "tests/screenshots/audit_home.png"
+  },
+  {
+    "route": "/buscar",
+    "tokens": {
+      "brandPrimary": "#3b82f6",
+      "brandAccent": "#eab308",
+      "bgBase": "#070d17",
+      "bgSurface": "#0f172a",
+      "fontSans": "\"Inter\", system-ui, -apple-system, sans-serif",
+      "radiusLg": "12px"
+    },
+    "screenshot": "tests/screenshots/audit_homebuscar.png"
+  },
+  {
+    "route": "/perfil",
+    "tokens": {
+      "brandPrimary": "#3b82f6",
+      "brandAccent": "#eab308",
+      "bgBase": "#070d17",
+      "bgSurface": "#0f172a",
+      "fontSans": "\"Inter\", system-ui, -apple-system, sans-serif",
+      "radiusLg": "12px"
+    },
+    "screenshot": "tests/screenshots/audit_homeperfil.png"
+  }
+]
