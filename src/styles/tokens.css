@@ -1,0 +1,8 @@
+:root {
+  /* Dynamic layout tokens */
+  --pc-max: 1440px;
+  --pc-gutter: clamp(1.25rem, 4vw, 3rem);
+  
+  /* Shared ease definitions not yet in Tailwind theme */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
