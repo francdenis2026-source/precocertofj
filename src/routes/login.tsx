@@ -359,15 +359,15 @@ function LoginPage() {
                       {[1, 2, 3].map((step) => (
                         <div 
                           key={step} 
-                          className={`h-1 flex-1 rounded-full transition-all duration-500 ${step <= signupStep ? "bg-[var(--brand-primary)]" : "bg-slate-100"}`} 
+                          className={`h-1 flex-1 rounded-full transition-all duration-500 ${step <= signupStep ? "bg-[var(--brand-primary)]" : "bg-[var(--bg-surface-elevated)]"}`} 
                         />
                       ))}
                     </div>
                     <div>
-                      <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                      <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-[var(--text-primary)] font-display">
                         {signupStep === 1 ? "Dados pessoais" : signupStep === 2 ? "Contato e local" : "Segurança"}
                       </h1>
-                      <p className="text-sm text-slate-500 font-medium">
+                      <p className="text-sm text-[var(--text-secondary)] font-medium">
                         {signupStep === 1 ? "Comece informando quem é você." : signupStep === 2 ? "Como podemos falar com você?" : "Crie seu código de acesso."}
                       </p>
                     </div>
