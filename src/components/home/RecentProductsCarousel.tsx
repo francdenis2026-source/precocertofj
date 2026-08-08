@@ -109,8 +109,7 @@ export function RecentProductsCarousel() {
         <div className="mb-2 h-4 w-52 animate-pulse rounded-full bg-muted" />
         <div className="flex gap-3 overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-[240px] w-[180px] shrink-0 animate-pulse rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/50"
-          ))}
+            <div key={i} className="h-[240px] w-[180px] shrink-0 animate-pulse rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/50" />
         </div>
       </section>
     );
