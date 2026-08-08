@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface ContamigosLogoProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "on-dark";
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   hideName?: boolean;
 }
 
@@ -21,18 +21,21 @@ export function ContamigosLogo({
   const isDark = variant === "on-dark";
   
   const sizes = {
+    xs: "h-6",
     sm: "h-8",
     md: "h-12",
     lg: "h-20"
   };
 
   const iconSizes = {
+    xs: "h-5 w-5",
     sm: "h-8 w-8",
     md: "h-10 w-10",
     lg: "h-16 w-16"
   };
 
   const svgSizes = {
+    xs: "h-3 w-3",
     sm: "h-5 w-5",
     md: "h-6 w-6",
     lg: "h-10 w-10"
@@ -82,7 +85,7 @@ export function ContamigosLogo({
             <div className="flex items-center">
               <span className={cn(
                 "font-display font-black tracking-tighter uppercase italic",
-                size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
+                size === "xs" ? "text-sm" : size === "sm" ? "text-lg" : size === "md" ? "text-2xl" : "text-4xl",
                 isDark ? "text-white" : "text-[#0B1E3A]"
               )}>
                 Varejão
@@ -91,7 +94,7 @@ export function ContamigosLogo({
             </div>
             <span className={cn(
               "font-mono font-bold tracking-[0.2em] uppercase",
-              size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
+              size === "xs" ? "text-[6px]" : size === "sm" ? "text-[8px]" : size === "md" ? "text-[10px]" : "text-[14px]",
               isDark ? "text-white/60" : "text-[#0B1E3A]/60"
             )}>
               Preço Baixo de Verdade
