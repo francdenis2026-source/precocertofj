@@ -265,7 +265,11 @@ function HomePage() {
                   src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
                   alt="Análise técnica de preços e tecnologia"
                   onLoad={(e) => {
-                    if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+                    if (e.currentTarget.naturalWidth > 0) {
+                      e.currentTarget.style.opacity = "1";
+                    } else {
+                      e.currentTarget.style.display = "none";
+                    }
                   }}
                   className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-all duration-700 opacity-0"
                 />
@@ -372,7 +376,11 @@ function HomePage() {
               aria-hidden="true"
               loading="lazy"
               onLoad={(e) => {
-                if (e.currentTarget.naturalWidth > 0) e.currentTarget.style.opacity = "1";
+                if (e.currentTarget.naturalWidth > 0) {
+                  e.currentTarget.style.opacity = "1";
+                } else {
+                  e.currentTarget.style.display = "none";
+                }
               }}
               className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px] opacity-0 transition-opacity duration-700"
             />

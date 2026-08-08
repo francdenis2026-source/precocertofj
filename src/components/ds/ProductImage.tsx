@@ -60,6 +60,7 @@ function ProductImageBase({
   size = "md",
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const showImage = Boolean(src) && !failed;
 
   const label = name ?? alt;
@@ -100,11 +101,13 @@ function ProductImageBase({
           decoding="async"
           onError={() => setFailed(true)}
           onLoad={(e) => {
+            setIsLoaded(true);
             const img = e.currentTarget;
             if (img.naturalWidth === 0) setFailed(true);
           }}
           className={cn(
-            "h-full w-full transition-transform duration-300",
+            "h-full w-full transition-opacity duration-300",
+            isLoaded ? "opacity-100" : "opacity-0",
             fit === "cover" ? "object-cover" : "object-contain",
             imgClassName,
           )}
