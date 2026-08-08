@@ -95,8 +95,9 @@ function EstablishmentsPage() {
   const [qDraft, setQDraft] = useState(search.q);
   useEffect(() => {
     const t = setTimeout(() => updateSearch({ q: qDraft }), 300);
-    return () => setTimeout(() => clearTimeout(t));
+    return () => clearTimeout(t);
   }, [qDraft, updateSearch]);
+
 
   const filtered = useMemo(() => {
     if (!data) return [];
