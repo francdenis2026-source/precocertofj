@@ -1,19 +1,13 @@
 import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
 import {
   PlusCircle,
-  ArrowRight,
   ShieldCheck,
   LineChart,
-  Sparkles,
-  Store,
   Zap,
-  TrendingDown,
-  CheckCircle2,
-  Search,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -21,15 +15,14 @@ import { Footer } from "@/components/brand/Footer";
 import { Button } from "@/components/ui/button";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat, getRecentProducts } from "@/lib/products-public.functions";
-import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { RegisteredStoresCarousel } from "@/components/home/RegisteredStoresCarousel";
 import { SmartSearchBar } from "@/components/home/SmartSearchBar";
 import { OptimizedBasketSection } from "@/components/home/OptimizedBasketSection";
 import { ComparisonStickyBar } from "@/components/home/ComparisonStickyBar";
-import { useComparisonList } from "@/hooks/use-comparison-list";
 import { RealtimeMonitoringDashboard } from "@/components/monitoring/RealtimeMonitoringDashboard";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -44,16 +37,16 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "PreçoCerto — Compare Preços de Supermercados" },
+      { title: "PreçoCerto — Inteligência em Compras de Supermercado" },
       {
         name: "description",
         content:
-          "Economize nas compras de mercado em Feijó. Compare preços reais, monte sua cesta e descubra onde é mais barato.",
+          "Economize nas compras em Feijó. Compare preços reais em tempo real, monte sua cesta inteligente e descubra onde é mais barato.",
       },
       { property: "og:title", content: "PreçoCerto — Seu assistente inteligente de compras" },
       {
         property: "og:description",
-        content: "Inteligência de preços em tempo real. Compare mercados, monte sua cesta e economize.",
+        content: "Inteligência de preços em tempo real em Feijó. Compare mercados, monte sua cesta e economize todos os meses.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -101,187 +94,104 @@ function HomePage() {
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg-global)] text-[var(--text-primary)]">
       <SiteHeader variant="overlay" />
 
-      {/* Hero Section - Compact & Powerful */}
-      <section className="relative pt-32 pb-24 overflow-hidden border-b border-[var(--border-subtle)] shadow-[inset_0_-20px_40px_-20px_rgba(0,0,0,0.5)]">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-[var(--bg-base)] z-10" />
+      {/* Hero Section - Professional Supermarket Interior */}
+      <section className="relative h-[480px] md:h-[600px] flex items-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-global)] via-transparent to-transparent z-10" />
           <img 
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
-            alt=""
-            className="h-full w-full object-cover"
+            alt="Interior de um supermercado profissional"
+            className="h-full w-full object-cover scale-105"
           />
         </div>
 
-        <div className="mx-auto max-w-[1280px] px-4 md:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto"
-          >
-            <h1 className="t-hero text-white mb-6">
-              Compre melhor.<br/>
-              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
-            </h1>
-            <p className="text-slate-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-              Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
-            </p>
-
-            <div className="relative max-w-2xl mx-auto">
-              <SmartSearchBar />
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-[11px] font-bold text-white uppercase tracking-[0.2em]">
-                <span className="flex items-center gap-2">✓ Preços verificados</span>
-                <span className="flex items-center gap-2">● Atualizações frequentes</span>
-                <span className="flex items-center gap-2">📍 Mercados locais</span>
+        <div className="pc-shell relative z-20">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-white text-[11px] font-black uppercase tracking-[0.2em] mb-6">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Inteligência Local · Feijó · Acre
               </div>
-            </div>
-          </motion.div>
+              <h1 className="t-h1 text-white mb-6">
+                Compre melhor.<br/>
+                <span className="text-primary">Gaste menos.</span>
+              </h1>
+              <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
+                Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
+              </p>
+
+              <div className="relative max-w-2xl">
+                <SmartSearchBar />
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Metrics Bar - Compact container */}
-      <div className="mx-auto max-w-[1280px] px-4 -mt-8 relative z-20">
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-subtle)]">
-            <StatItem label="Preços verificados" value={stats?.priceRecords || "3.064"} />
-            <StatItem label="Produtos" value={stats?.totalItems || "2.262"} />
-            <StatItem label="Economia média" value={`${economy?.avgSavingsPct || "15.1"}%`} />
-            <StatItem label="Lojas parceiras" value={stats?.establishments || "11"} />
+      <div className="mx-auto max-w-[1280px] px-4 -mt-12 relative z-20 mb-20">
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-2xl shadow-xl overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-base)]">
+            <StatItem label="Preços verificados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Produtos" value={stats?.totalItems?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Economia média" value={economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "..."} />
+            <StatItem label="Lojas parceiras" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
           </div>
         </div>
       </div>
 
-      <main className="mx-auto max-w-[1280px] px-4 py-20 space-y-24">
-        {/* Why Use PreçoCerto */}
-        <section className="text-center max-w-4xl mx-auto">
-          <h2 className="t-h2 mb-4">Por que usar o PreçoCerto?</h2>
-          <p className="text-[var(--text-secondary)] mb-12">Compare com confiança antes de comprar.</p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <BenefitCard 
-              icon={ShieldCheck} 
-              title="Preços verificados" 
-              desc="Cada preço informa mercado e data da atualização."
-            />
-            <BenefitCard 
-              icon={LineChart} 
-              title="Histórico de preços" 
-              desc="Veja se uma promoção realmente vale a pena."
-            />
-            <BenefitCard 
-              icon={Zap} 
-              title="Cesta inteligente" 
-              desc="Descubra a combinação mais barata para sua lista."
-            />
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section className="bg-[var(--bg-surface-elevated)] -mx-4 px-4 py-16 rounded-[40px]">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="t-h3 mb-12 uppercase tracking-widest text-[var(--text-secondary)]">Como funciona</h2>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
-              <Step number="1" title="Busque" desc="Encontre o produto ou monte sua lista." />
-              <div className="hidden md:block text-[var(--border-strong)]">→</div>
-              <Step number="2" title="Compare" desc="Veja os preços disponíveis nos mercados locais." />
-              <div className="hidden md:block text-[var(--border-strong)]">→</div>
-              <Step number="3" title="Economize" desc="Escolha onde sua compra fica mais barata." />
-            </div>
-          </div>
-        </section>
-
-        {/* Smart Baskets */}
+      <main className="pc-shell space-y-32 pb-32">
+        {/* Optimized Baskets Section */}
         <section>
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <h2 className="t-h2 mb-2">Sua lista. O menor preço possível.</h2>
-              <p className="text-[var(--text-secondary)]">O PreçoCerto calcula automaticamente onde comprar cada item para economizar mais.</p>
+              <div className="text-primary text-[11px] font-black uppercase tracking-widest mb-3">Oportunidades de Hoje</div>
+              <h2 className="t-h2">Cestas Otimizadas</h2>
+              <p className="text-[var(--text-secondary)] mt-2">As combinações mais baratas encontradas nos mercados de Feijó hoje.</p>
             </div>
-            <Button asChild className="pc-button-primary rounded-full px-8">
-              <Link to="/cesta">Montar minha cesta</Link>
-            </Button>
+            <Link to="/cesta" className="text-primary font-bold text-sm flex items-center gap-2 hover:underline">
+              Ver todas as cestas <PlusCircle size={16} />
+            </Link>
           </div>
           <OptimizedBasketSection />
         </section>
 
-        {/* Cesta Básica Premium / Veredito */}
-        <section className="bg-[var(--bg-surface)] border border-[var(--brand-primary)]/10 rounded-[40px] p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <Sparkles size={120} className="text-[var(--brand-primary)]" />
-          </div>
-          <div className="max-w-3xl">
-            <h2 className="t-h2 mb-4">Veredito da Cesta Básica</h2>
-            <p className="text-[var(--text-secondary)] mb-8 text-lg">
-              Acompanhe qual mercado tem o menor custo total para os 15 itens essenciais hoje em Feijó.
-            </p>
-            <div className="flex flex-wrap gap-4 mb-10">
-              <div className="bg-[var(--bg-surface-elevated)] px-6 py-4 rounded-2xl border border-[var(--border-subtle)]">
-                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Itens Monitorados</p>
-                <p className="text-2xl font-black text-[var(--brand-primary)]">15 Essenciais</p>
-              </div>
-              <div className="bg-[var(--bg-surface-elevated)] px-6 py-4 rounded-2xl border border-[var(--border-subtle)]">
-                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-1">Atualização</p>
-                <p className="text-2xl font-black text-[var(--brand-primary)]">Tempo Real</p>
-              </div>
+        {/* Live Prices / Search Results preview */}
+        <section className="bg-white rounded-[32px] border border-[var(--border-base)] p-8 md:p-12 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div>
+              <h2 className="t-h2 mb-2">Preços em Tempo Real</h2>
+              <p className="text-[var(--text-secondary)]">Últimas atualizações capturadas pela nossa comunidade.</p>
             </div>
             
-            <div className="p-6 rounded-2xl bg-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/20 mb-8">
-              <h4 className="font-bold text-[var(--brand-primary)] mb-2 flex items-center gap-2">
-                <ShieldCheck size={18} />
-                Recurso PreçoCerto+
-              </h4>
-              <p className="text-sm text-[var(--text-secondary)]">
-                O ranking detalhado e a exportação do Veredito da Cesta Básica são exclusivos para assinantes ou através do uso de créditos.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild className="pc-button-primary rounded-full px-8 h-12">
-                <Link to="/planos">Assinar PreçoCerto+</Link>
-              </Button>
-              <Button variant="outline" asChild className="rounded-full px-8 h-12 border-[var(--border-subtle)]">
-                <Link to="/cesta-basica">Ver Veredito Geral</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Partner Markets - faiza horizontal */}
-        <section className="border-y border-[var(--border-subtle)] py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-            <h2 className="t-h3 font-bold">Compare preços nos mercados da sua cidade</h2>
-            <Link to="/estabelecimentos" className="text-[var(--brand-primary)] font-bold flex items-center gap-2 hover:underline">
-              Ver todos os mercados <ArrowRight size={16} />
-            </Link>
-          </div>
-          <RegisteredStoresCarousel />
-        </section>
-
-        {/* Recent Prices - Table format */}
-        <section>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-4 border-b border-[var(--border-subtle)]">
-            <h2 className="t-h2">Últimos preços registrados</h2>
-            <div className="flex gap-2 p-1 bg-[var(--bg-surface-elevated)] rounded-xl">
+            <div className="flex items-center p-1 bg-[var(--bg-global)] rounded-lg">
               <button 
                 onClick={() => setSort("recent")}
-                className={cn("px-4 py-2 text-xs font-bold rounded-lg transition-all", sort === "recent" ? "bg-[var(--brand-primary)] text-white shadow-md" : "text-[var(--text-secondary)]")}
+                className={cn("px-4 py-2 text-xs font-bold rounded-md transition-all", sort === "recent" ? "bg-white shadow-sm text-primary" : "text-[var(--text-secondary)]")}
               >
                 Recentes
               </button>
               <button 
                 onClick={() => setSort("price")}
-                className={cn("px-4 py-2 text-xs font-bold rounded-lg transition-all", sort === "price" ? "bg-[var(--brand-primary)] text-white shadow-md" : "text-[var(--text-secondary)]")}
+                className={cn("px-4 py-2 text-xs font-bold rounded-md transition-all", sort === "price" ? "bg-white shadow-sm text-primary" : "text-[var(--text-secondary)]")}
               >
-                Menor preço
+                Menor Preço
               </button>
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto -mx-8 px-8 md:mx-0 md:px-0">
+            <table className="w-full text-left min-w-[600px]">
               <thead>
-                <tr className="text-[var(--text-tertiary)] text-[11px] font-bold uppercase tracking-widest border-b border-[var(--border-subtle)]">
+                <tr className="text-[var(--text-tertiary)] text-[11px] font-black uppercase tracking-widest border-b border-[var(--border-base)]">
                   <th className="py-4 px-2">Produto</th>
                   <th className="py-4 px-2">Mercado</th>
                   <th className="py-4 px-2">Preço</th>
@@ -289,16 +199,16 @@ function HomePage() {
                   <th className="py-4 px-2 text-right">Ação</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border-subtle)]">
+              <tbody className="divide-y divide-[var(--border-base)]">
                 {filteredProducts.map((p: any) => (
-                  <tr key={`${p.name}-${p.when}`} className="group hover:bg-[var(--bg-surface-elevated)]/50 transition-colors">
-                    <td className="py-4 px-2 font-bold">{p.name}</td>
-                    <td className="py-4 px-2 text-[var(--text-secondary)] text-sm">{p.marketName}</td>
-                    <td className="py-4 px-2"><Price value={p.price} size="sm" /></td>
-                    <td className="py-4 px-2 text-[var(--text-tertiary)] text-xs">{formatDate(p.when)}</td>
-                    <td className="py-4 px-2 text-right">
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-[var(--brand-primary)]">
-                        <PlusCircle size={18} />
+                  <tr key={`${p.name}-${p.when}`} className="group hover:bg-[var(--bg-global)]/50 transition-colors">
+                    <td className="py-6 px-2 font-bold text-[var(--text-primary)]">{p.name}</td>
+                    <td className="py-6 px-2 text-[var(--text-secondary)] text-sm font-medium">{p.marketName}</td>
+                    <td className="py-6 px-2"><Price value={p.price} size="sm" tone="best" className="font-black" /></td>
+                    <td className="py-6 px-2 text-[var(--text-tertiary)] text-xs font-bold">{formatDate(p.when)}</td>
+                    <td className="py-6 px-2 text-right">
+                      <Button size="sm" variant="ghost" className="h-9 w-9 p-0 text-primary hover:bg-primary/10">
+                        <PlusCircle size={20} />
                       </Button>
                     </td>
                   </tr>
@@ -306,32 +216,68 @@ function HomePage() {
               </tbody>
             </table>
           </div>
-          <div className="mt-8 text-center">
-             <Link to="/precos" className="pc-button-secondary rounded-full">Ver mais preços →</Link>
+          <div className="mt-12 text-center">
+             <Button asChild variant="outline" className="rounded-full px-8 h-12 font-bold border-primary text-primary hover:bg-primary/5">
+                <Link to="/buscar">Explorar catálogo completo</Link>
+             </Button>
           </div>
+        </section>
+
+        {/* Partner Stores */}
+        <section>
+          <div className="text-center mb-12">
+            <h2 className="t-h3 uppercase tracking-widest text-[var(--text-tertiary)]">Mercados Monitorados</h2>
+          </div>
+          <RegisteredStoresCarousel />
+        </section>
+
+        {/* Benefits Section */}
+        <section className="grid md:grid-cols-3 gap-8">
+          <BenefitCard 
+            icon={ShieldCheck} 
+            title="Preços verificados" 
+            desc="Transparência total: cada preço informa o mercado e o horário exato da última atualização."
+          />
+          <BenefitCard 
+            icon={LineChart} 
+            title="Histórico de preços" 
+            desc="Analise a tendência dos preços e saiba se uma promoção é realmente vantajosa para você."
+          />
+          <BenefitCard 
+            icon={Zap} 
+            title="Cesta inteligente" 
+            desc="Nossa IA calcula automaticamente a melhor rota de economia para sua lista de compras."
+          />
         </section>
 
         {/* Final CTA */}
-        <section className="relative overflow-hidden rounded-[40px] bg-slate-950 text-white py-16 px-8 text-center">
-          <div className="absolute inset-0 -z-10 opacity-30">
-            <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+        <section className="relative overflow-hidden rounded-[40px] bg-navy text-white py-20 px-8 text-center">
+          <div className="absolute inset-0 z-0 opacity-20">
+            <img 
+              src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
+              alt="" 
+              className="w-full h-full object-cover" 
+            />
+            <div className="absolute inset-0 bg-navy" />
           </div>
-          <h2 className="t-h2 mb-4">Economia inteligente</h2>
-          <h3 className="text-xl font-bold mb-6 text-[var(--brand-primary)]">Antes de comprar, compare.</h3>
-          <p className="text-slate-300 max-w-xl mx-auto mb-8">Veja onde sua lista fica mais barata e economize em cada ida ao mercado.</p>
-          <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-xl shadow-[var(--brand-primary)]/20">
-            <Link to="/cadastro">Começar a economizar</Link>
-          </Button>
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <h2 className="t-h2 mb-4">Economia inteligente todos os dias</h2>
+            <h3 className="text-xl font-bold mb-8 text-primary">Antes de comprar, compare com o PreçoCerto.</h3>
+            <p className="text-white/60 mb-10 text-lg">
+              Junte-se a milhares de feijoenses e economize em cada ida ao mercado. Gratuito para sempre para consumidores.
+            </p>
+            <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-2xl shadow-primary/20">
+              <Link to="/cadastro">Criar minha conta gratuita</Link>
+            </Button>
+          </div>
         </section>
 
-        {/* Monitoramento em Tempo Real - Administradores e Parceiros */}
-        <section id="monitoramento" className="pt-20 border-t border-[var(--border-subtle)]">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-            <div>
-              <h2 className="t-h2 mb-2">Monitoramento Profissional</h2>
-              <p className="text-[var(--text-secondary)]">Visão estratégica do mercado em tempo real para parceiros e administradores.</p>
-            </div>
+        {/* Professional Monitoring for Merchants */}
+        <section id="monitoramento" className="pt-10 border-t border-[var(--border-base)]">
+          <div className="mb-12">
+            <div className="inline-block px-3 py-1 rounded-lg bg-navy text-white text-[10px] font-black uppercase tracking-widest mb-4">Área Profissional</div>
+            <h2 className="t-h2 mb-4">Painel de Inteligência de Mercado</h2>
+            <p className="text-[var(--text-secondary)] max-w-3xl">Visão estratégica e monitoramento de concorrência em tempo real para estabelecimentos parceiros de Feijó.</p>
           </div>
           <RealtimeMonitoringDashboard />
         </section>
@@ -345,35 +291,21 @@ function HomePage() {
 
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="px-6 py-8 text-center">
-      <div className="text-3xl font-black text-[var(--brand-primary)] mb-1">{value}</div>
-      <div className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">{label}</div>
+    <div className="px-6 py-10 text-center">
+      <div className="text-3xl font-black text-primary mb-1 tracking-tighter">{value}</div>
+      <div className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">{label}</div>
     </div>
   );
 }
 
 function BenefitCard({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
   return (
-    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 rounded-2xl text-left h-full flex flex-col justify-center min-h-[160px] hover:border-[var(--brand-primary)]/30 transition-colors group">
-      <div className="flex items-center gap-4 mb-3">
-        <div className="h-10 w-10 rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] flex items-center justify-center group-hover:scale-110 transition-transform">
-          <Icon size={20} />
-        </div>
-        <h3 className="font-bold text-lg">{title}</h3>
+    <div className="bg-white border border-[var(--border-base)] p-8 rounded-[24px] text-left h-full flex flex-col hover:border-primary/30 transition-all group shadow-sm hover:shadow-md">
+      <div className="h-12 w-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+        <Icon size={24} />
       </div>
-      <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{desc}</p>
-    </div>
-  );
-}
-
-function Step({ number, title, desc }: { number: string; title: string; desc: string }) {
-  return (
-    <div className="flex flex-col items-center max-w-[200px]">
-      <div className="h-12 w-12 rounded-full bg-[var(--brand-primary)] text-white flex items-center justify-center font-black text-xl mb-4 shadow-lg shadow-[var(--brand-primary)]/20">
-        {number}
-      </div>
-      <h3 className="font-bold mb-2">{title}</h3>
-      <p className="text-xs text-[var(--text-tertiary)] font-medium leading-relaxed">{desc}</p>
+      <h3 className="font-bold text-xl mb-3 text-[var(--text-primary)]">{title}</h3>
+      <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed">{desc}</p>
     </div>
   );
 }
