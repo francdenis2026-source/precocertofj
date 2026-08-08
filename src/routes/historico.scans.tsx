@@ -158,9 +158,17 @@ function ScansHistoryPage() {
                 title="Nenhum scan ainda"
                 message="Faça seu primeiro scan para vê-lo aqui."
                 action={
-                  <Button asChild variant="default" size="sm">
-                    <Link to="/">Fazer scan</Link>
-                  </Button>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button asChild variant="default" size="sm">
+                      <Link to="/">Início</Link>
+                    </Button>
+                    <Button asChild variant="outline" size="sm" className="gap-2">
+                      <Link to="/admin/cadastro-foto">
+                        <Camera className="h-4 w-4" />
+                        Scan por Foto
+                      </Link>
+                    </Button>
+                  </div>
                 }
               />
             )}

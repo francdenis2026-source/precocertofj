@@ -17,7 +17,8 @@ import {
   TrendingUp,
   Search,
   LayoutGrid,
-  Info
+  Info,
+  Scale
 } from "lucide-react";
 
 import { searchProductPrice, type ProductGroup } from "@/lib/price-search.functions";
@@ -91,9 +92,16 @@ function SearchPage() {
                 <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Plataforma Ativa</h2>
                 <p className="text-[18px] font-black tracking-tight mt-1">Mercados em Feijó</p>
               </div>
-              <div className="flex items-center gap-1.5 bg-[var(--bg-surface-elevated)] px-3 py-1.5 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
-                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[11px] font-black uppercase tracking-wider text-[var(--text-secondary)]">{markets.length}</span>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="icon" className="h-9 w-9 rounded-full text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]">
+                  <Link to="/app/comparacoes">
+                    <Scale className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <div className="flex items-center gap-1.5 bg-[var(--bg-surface-elevated)] px-3 py-1.5 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[var(--text-secondary)]">{markets.length}</span>
+                </div>
               </div>
             </div>
             <div className="relative">

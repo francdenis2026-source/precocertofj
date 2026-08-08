@@ -93,6 +93,13 @@ const storeQuery = (id: string) =>
     queryFn: () => getPublicStoreCatalog({ data: { id } }),
     staleTime: 60_000,
   });
+
+const historyQuery = (id: string) =>
+  queryOptions({
+    queryKey: ["public-store-history", id],
+    queryFn: () => getPublicPriceHistory({ data: { storeId: id, limit: 100 } }),
+    staleTime: 5 * 60_000,
+  });
 const SEARCH_DEFAULTS = {
   q: "",
   cat: "",

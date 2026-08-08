@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Home, Search, ShoppingBasket, Store, User } from "lucide-react";
+import { Heart, Home, Search, ShoppingBasket, Store, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
   { to: "/", label: "Início", Icon: Home },
   { to: "/buscar", label: "Pesquisar", Icon: Search },
+  { to: "/favoritos", label: "Favoritos", Icon: Heart },
   { to: "/cesta", label: "Cesta", Icon: ShoppingBasket },
-  { to: "/estabelecimentos", label: "Lojas", Icon: Store },
   { to: "/perfil", label: "Conta", Icon: User },
 ] as const;
 
