@@ -124,21 +124,22 @@ export function RealtimeMonitoringDashboard() {
               {/* Card Header: Store Info */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-10 w-10 shrink-0 rounded-[var(--radius-md)] bg-white border border-[var(--border-subtle)] p-1.5 flex items-center justify-center shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                  <div className="h-10 w-10 shrink-0 rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] p-1.5 flex items-center justify-center shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
                     {store.storeName.includes("Contamigos") ? (
                       <ContamigosLogo size="sm" hideName />
                     ) : (
                       <StoreLogoThumb 
                         src={store.storeLogoUrl} 
                         name={store.storeName} 
-                        className="h-full w-full border-none p-0 bg-transparent"
-                        imgClassName="object-contain filter-none mix-blend-multiply"
+                        className="h-full w-full border-none p-0 bg-transparent brightness-90 contrast-125 saturate-0 group-hover:saturate-100 group-hover:brightness-100 transition-all duration-500"
+                        imgClassName="object-contain filter-none"
+
                         initialsClassName="text-slate-900 font-bold text-[10px]"
                       />
                     )}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-[13px] font-bold text-[var(--text-primary)] leading-tight truncate">
+                    <h4 className="text-[13px] font-bold text-[var(--text-primary)] leading-tight truncate group-hover:text-[var(--brand-primary)] transition-colors">
                       {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
@@ -155,7 +156,7 @@ export function RealtimeMonitoringDashboard() {
               </div>
 
               {/* Card Body: Recent Scan Result */}
-              <div className="flex-1 bg-[var(--bg-base)]/40 rounded-[var(--radius-lg)] p-3 border border-[var(--border-subtle)]/50 group-hover:border-[var(--brand-primary)]/20 transition-colors">
+              <div className="flex-1 bg-[var(--bg-surface-elevated)]/30 rounded-[var(--radius-lg)] p-3 border border-[var(--border-subtle)] group-hover:border-[var(--brand-primary)]/20 transition-all duration-300">
                 {store.insights && store.insights.length > 0 ? (
                   <div className="space-y-2">
                     {store.insights.slice(0, 1).map((insight: any, idx: number) => (
