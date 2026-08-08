@@ -46,7 +46,7 @@ export const AuthSidebar: React.FC = () => {
   ];
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[var(--pc-brand-navy-deep)] p-8 lg:p-12 flex flex-col justify-between">
+    <div className="relative h-full w-full overflow-hidden bg-[var(--bg-surface-elevated)] p-8 lg:p-12 flex flex-col justify-between">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[var(--brand-primary)]/10 blur-[100px]" />
@@ -64,7 +64,7 @@ export const AuthSidebar: React.FC = () => {
             <img src="/logo-mark.png?v=5" alt="Logo" className="w-8 h-8" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white tracking-tight">PreçoCerto</h2>
+            <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">PreçoCerto</h2>
             <p className="text-[10px] uppercase tracking-widest text-[var(--brand-primary)] font-black">Sua economia começa aqui</p>
           </div>
         </motion.div>
@@ -75,7 +75,7 @@ export const AuthSidebar: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
               A inteligência que <br />
               <span className="text-[var(--brand-primary)]">protege o seu bolso.</span>
             </h1>
