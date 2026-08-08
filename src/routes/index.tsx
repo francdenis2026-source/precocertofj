@@ -101,43 +101,45 @@ function HomePage() {
   }, [rawRecentProducts, sort]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg-global)] text-[var(--text-primary)]">
       <SiteHeader variant="overlay" />
 
-      {/* Hero Section - Compact & Powerful */}
-      <section className="relative pt-32 pb-24 overflow-hidden border-b border-[var(--border-subtle)] shadow-[inset_0_-20px_40px_-20px_rgba(0,0,0,0.5)]">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-[var(--bg-base)] z-10" />
+      {/* Hero Section - Professional Supermarket Interior */}
+      <section className="relative h-[480px] md:h-[560px] flex items-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-global)] via-transparent to-transparent z-10" />
           <img 
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000" 
-            alt=""
-            className="h-full w-full object-cover"
+            alt="Interior de um supermercado profissional"
+            className="h-full w-full object-cover scale-105"
           />
         </div>
 
-        <div className="mx-auto max-w-[1280px] px-4 md:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto"
-          >
-            <h1 className="t-hero text-white mb-6">
-              Compre melhor.<br/>
-              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
-            </h1>
-            <p className="text-slate-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-              Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
-            </p>
-
-            <div className="relative max-w-2xl mx-auto">
-              <SmartSearchBar />
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-[11px] font-bold text-white uppercase tracking-[0.2em]">
-                <span className="flex items-center gap-2">✓ Preços verificados</span>
-                <span className="flex items-center gap-2">● Atualizações frequentes</span>
-                <span className="flex items-center gap-2">📍 Mercados locais</span>
+        <div className="pc-shell relative z-20">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-white text-[11px] font-black uppercase tracking-[0.2em] mb-6">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Inteligência Local · Feijó · Acre
               </div>
-            </div>
-          </motion.div>
+              <h1 className="t-h1 text-white mb-6">
+                Compre melhor.<br/>
+                <span className="text-primary">Gaste menos.</span>
+              </h1>
+              <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
+                Junte-se a milhares de feijoenses que economizam todos os meses comparando preços em tempo real nos mercados da nossa cidade.
+              </p>
+
+              <div className="relative max-w-2xl">
+                <SmartSearchBar />
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
