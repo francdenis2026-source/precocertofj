@@ -45,7 +45,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
         {Icon && (
           <Icon
             className={`w-5 h-5 transition-colors duration-300 ${
-              isFocused ? "text-[var(--brand-primary)]" : error ? "text-red-500" : success ? "text-emerald-500" : "text-slate-400"
+              isFocused ? "text-[var(--brand-primary)]" : error ? "text-red-500" : success ? "text-emerald-500" : "text-[var(--text-tertiary)]"
             }`}
           />
         )}
@@ -59,7 +59,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
               color: isFocused ? "var(--brand-primary)" : error ? "#EF4444" : success ? "#10B981" : "#94A3B8",
             }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className={`absolute left-0 pointer-events-none origin-left font-medium ${isFocused || isFilled ? "text-[var(--brand-primary)]" : "text-slate-400"}`}
+            className={`absolute left-0 pointer-events-none origin-left font-medium ${isFocused || isFilled ? "text-[var(--brand-primary)]" : "text-[var(--text-tertiary)]"}`}
           >
             {label}
           </motion.label>
@@ -74,7 +74,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
               setIsFocused(false);
               onBlur?.(e);
             }}
-            className="w-full bg-transparent border-none outline-none text-slate-900 font-semibold text-[15px] pb-1"
+            className="w-full bg-transparent border-none outline-none text-[var(--text-primary)] font-semibold text-[15px] pb-1"
           />
         </div>
 

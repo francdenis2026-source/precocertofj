@@ -171,7 +171,7 @@ export function AuthHero({
       <div className="relative">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-[var(--brand-primary)] rounded-[var(--radius-xl)] shadow-[0_0_15px_rgba(255,215,0,0.3)]">
-            <BrandIcon className="h-6 w-6 text-black" strokeWidth={2.5} />
+            <BrandIcon className="h-6 w-6 text-[var(--text-on-brand)]" strokeWidth={2.5} />
           </div>
 
           <span
@@ -255,7 +255,7 @@ export function AuthHero({
           >
             <div
               className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
-              style={{ background: T.brand, color: "white" }}
+              style={{ background: T.brand, color: "var(--text-on-brand)" }}
             >
               <TrustIcon className="h-4.5 w-4.5" strokeWidth={2.5} />
             </div>
