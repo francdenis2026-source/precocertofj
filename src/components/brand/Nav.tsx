@@ -41,7 +41,7 @@ export function Nav() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         <div className="flex min-w-0 items-center gap-4">
-          <Logo showTagline />
+          <Logo />
           <span
             className="hidden items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3 text-[11px] font-semibold text-foreground lg:inline-flex"
             aria-label="Localização atual"
