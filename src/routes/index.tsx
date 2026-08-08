@@ -354,7 +354,7 @@ function HomePage() {
         <ComparisonStickyBar />
 
         {/* Closing CTA */}
-        <section className="relative mt-28 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
+        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
           <img
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000"
             alt="Produtos de supermercado realistas"
