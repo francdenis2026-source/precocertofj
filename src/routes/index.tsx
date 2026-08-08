@@ -458,10 +458,10 @@ function TrustStat({ label, value, suffix = "" }: { label: string; value?: numbe
       {/* Tooltip explicativo discreto */}
       <div className="absolute inset-x-0 -bottom-8 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none">
         <span className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-md text-[10px] text-[var(--text-secondary)] whitespace-nowrap shadow-sm">
-          {label === "Registros de preço" && "Total de etiquetas verificadas"}
-          {label === "Produtos monitorados" && "Itens únicos catalogados"}
-          {label === "Economia média" && "Desconto médio na cesta"}
-          {label === "Mercados parceiros" && "Lojas ativas em Feijó"}
+          {label === "Preços Verificados" && "Etiquetas reais conferidas hoje"}
+          {label === "Itens no Catálogo" && "Total de produtos identificados"}
+          {label === "Economia Direta" && "Sua economia potencial média"}
+          {label === "Lojas Conectadas" && "Estabelecimentos ativos em Feijó"}
         </span>
       </div>
     </div>
