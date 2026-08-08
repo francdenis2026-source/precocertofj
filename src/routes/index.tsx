@@ -145,12 +145,12 @@ function HomePage() {
 
       {/* Metrics Bar - Compact container */}
       <div className="mx-auto max-w-[1280px] px-4 -mt-8 relative z-20">
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-subtle)]">
-            <StatItem label="Preços verificados" value={stats?.priceRecords || "3.064"} />
-            <StatItem label="Produtos" value={stats?.totalItems || "2.262"} />
-            <StatItem label="Economia média" value={`${economy?.avgSavingsPct || "15.1"}%`} />
-            <StatItem label="Lojas parceiras" value={stats?.establishments || "11"} />
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-2xl shadow-xl overflow-hidden">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-base)]">
+            <StatItem label="Preços verificados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Produtos" value={stats?.totalItems?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Economia média" value={economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "..."} />
+            <StatItem label="Lojas parceiras" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
           </div>
         </div>
       </div>
