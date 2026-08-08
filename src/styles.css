@@ -23,36 +23,36 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  /* Brand — Modern Tech Palette */
+  /* --- Design Tokens: Colors --- */
   --brand-primary: #3B82F6; /* Azure Blue */
   --brand-primary-soft: #60A5FA;
-  --brand-accent: #EAB308; /* Premium Gold for high-value highlights */
+  --brand-accent: #EAB308; /* Premium Gold */
   --brand-accent-soft: #FDE047;
   
-  --pc-navy: #0F172A;
-
-  /* Surfaces */
   --bg-base: #070D17;
   --bg-surface: #0F172A;
   --bg-surface-elevated: #1E293B;
   --bg-surface-hover: #334155;
-  --border-subtle: rgb(255 255 255 / 0.05);
-  --border-strong: rgb(255 255 255 / 0.12);
-
-  /* Text — AA Contrast */
+  
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
   --text-tertiary: #64748B;
   --text-on-brand: #FFFFFF;
 
-  /* Semantic */
+  --border-subtle: rgb(255 255 255 / 0.05);
+  --border-strong: rgb(255 255 255 / 0.12);
+
   --success: #10B981;
   --danger: #EF4444;
   --warning: #F59E0B;
   --info: #3B82F6;
-  --savings: #10B981;
 
-  /* Radius — Sophisticated curves */
+  /* --- Design Tokens: Typography --- */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Manrope", "Inter", sans-serif;
+  
+  /* --- Design Tokens: Spacing & Radius --- */
+  --spacing-unit: 4px;
   --radius-2xl: 24px;
   --radius-xl: 16px;
   --radius-lg: 12px;
@@ -60,19 +60,14 @@
   --radius-sm: 4px;
 
   /* Elevation */
-  --pc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.1);
-  --pc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --pc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
-  /* Layout */
-  --pc-max: 1440px;
-  --pc-gutter: clamp(1.25rem, 4vw, 3rem);
-
-  --dur-base: 0.22s;
-  --dur-slow: 0.45s;
+  /* Motion */
+  --dur-base: 0.2s;
+  --dur-slow: 0.4s;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme {
