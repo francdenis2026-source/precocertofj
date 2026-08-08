@@ -308,15 +308,21 @@ function PlansPage() {
                     {(isRecommended || savings) && (
                       <span
                         className={cn(
-                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                          "absolute right-3 top-3 inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] shadow-sm",
                           isRecommended
                             ? "bg-brand-accent text-bg-base"
-                            : "border border-brand-accent/40 bg-brand-accent/10 text-brand-accent",
+                            : "border border-brand-accent/30 bg-brand-accent/5 text-brand-accent",
                         )}
                       >
-                        {isRecommended ? "Recomendado" : `-${savings}%`}
+                        {isRecommended ? (
+                          <>
+                            <Sparkles className="h-3 w-3" />
+                            Recomendado
+                          </>
+                        ) : `-${savings}%`}
                       </span>
                     )}
+
 
                     <span className={cn("text-[10px] font-bold uppercase tracking-widest text-tertiary mb-1 block", (isRecommended || savings) && "pr-24")}>
                       {isRecommended ? "Mais escolhido" : isFree ? "Comece por aqui" : "Plano"}
