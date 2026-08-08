@@ -8,8 +8,10 @@ import {
   Zap,
   LayoutGrid,
   Search,
-  Timer
+  Timer,
+  ShieldAlert
 } from "lucide-react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { getRealtimeMonitoringStats } from "@/lib/monitoring.functions";
 import { cn } from "@/lib/utils";
@@ -36,7 +38,7 @@ export function RealtimeMonitoringDashboard() {
   if (error) {
     return (
       <div className="p-8 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--danger)]/20 text-center">
-        <ShieldCheck className="h-10 w-10 text-[var(--danger)] mx-auto mb-4 opacity-50" />
+        <ShieldAlert className="h-10 w-10 text-[var(--danger)] mx-auto mb-4 opacity-50" />
         <h4 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">Acesso Restrito</h4>
         <p className="text-[13px] text-[var(--text-tertiary)] max-w-sm mx-auto">
           {error.message || "Você não tem permissão para acessar esta funcionalidade de monitoramento."}
