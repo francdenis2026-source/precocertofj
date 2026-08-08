@@ -109,27 +109,26 @@ function DashboardPage() {
           title="Meu Painel"
           description="Aqui você acompanha seus produtos, quanto economizou e seus avisos de preço."
           actions={
-            <div className="flex gap-2">
-              <Button asChild size="sm" variant="outline">
-                <Link to="/app/insights">
-                  <TrendingDown className="mr-2 h-4 w-4" />
-                  Insights
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link to="/favoritos">
+                  <Star className="mr-2 h-4 w-4" />
+                  Favoritos
                 </Link>
               </Button>
-              <Button asChild size="sm" variant="outline">
-                <Link to="/app/estabelecimentos">
-                  <Store className="mr-2 h-4 w-4" />
-                  Ver comércios
-                </Link>
-              </Button>
-              <Button asChild size="sm" variant="outline">
+              <Button asChild size="sm" variant="outline" className="rounded-full">
                 <Link to="/app/comparacoes">
                   <Scale className="mr-2 h-4 w-4" />
                   Comparativos
                 </Link>
               </Button>
+              <Button asChild size="sm" variant="outline" className="rounded-full">
+                <Link to="/app/insights">
+                  <TrendingDown className="mr-2 h-4 w-4" />
+                  Insights
+                </Link>
+              </Button>
             </div>
-
           }
         />
 
