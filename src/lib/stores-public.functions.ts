@@ -291,10 +291,12 @@ function buildProduct(
     lastDate: latestRow.created_at,
     historyCount: prices.length,
     imageUrl: meta.imageUrl,
-
     barcode: latestRow.barcode,
+    savingsPercent: avgPrice > minPrice ? ((avgPrice - minPrice) / avgPrice) * 100 : 0,
+    isLowestPrice: false,
   };
 }
+
 
 // ---------- server fns ----------
 
@@ -993,6 +995,20 @@ export const getPublicStoreCatalog = createServerFn({ method: "GET" })
       return new Date(p.lastDate) > new Date(acc) ? p.lastDate : acc;
     }, null);
 
+    // 2. Calcula isLowestPrice cruzando os dados de todos os produtos retornados
+    const priceMap = new Map<string, number>(); // baseName -> minPriceAcrossStores
+    products.forEach((p) => {
+      const cur = priceMap.get(p.baseName);
+      if (cur === undefined || p.price < cur) {
+        priceMap.set(p.baseName, p.price);
+      }
+    });
+
+    const enrichedProducts = products.map((p) => ({
+      ...p,
+      isLowestPrice: p.price > 0 && p.price <= (priceMap.get(p.baseName) || 0),
+    }));
+
     return {
       store: {
         id: estab.id,
@@ -1004,12 +1020,13 @@ export const getPublicStoreCatalog = createServerFn({ method: "GET" })
         latitude: estab.latitude ?? null,
         longitude: estab.longitude ?? null,
         logoUrl: estab.logo_url,
-        productCount: products.length,
+        productCount: enrichedProducts.length,
         lastUpdate,
       },
-      products,
+      products: enrichedProducts,
       categories,
     };
+
   });
 
 /* =============== Top produtos + histórico (drawer) =============== */
