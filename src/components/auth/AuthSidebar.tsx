@@ -123,7 +123,7 @@ export const AuthSidebar: React.FC = () => {
           </div>
         </motion.div>
 
-        <div className="mt-8 flex items-center gap-6 text-[10px] text-slate-500 font-medium uppercase tracking-widest">
+        <div className="mt-8 flex items-center gap-6 text-[10px] text-[var(--text-tertiary)] font-medium uppercase tracking-widest">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-3 h-3 text-[var(--brand-primary)]" />
             Conexão Segura
