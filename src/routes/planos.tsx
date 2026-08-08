@@ -16,12 +16,8 @@ import {
   ChevronDown,
   Sparkles,
 } from "lucide-react";
-
 import { toast } from "sonner";
-
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
-import { ds, dsx } from "@/lib/ds";
-import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
