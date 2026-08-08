@@ -150,7 +150,7 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Hero */}
-      <section className="relative isolate min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden px-4 pb-12 pt-24 md:px-8 md:pb-16">
+      <section className="relative isolate min-h-[450px] md:min-h-[550px] flex items-center overflow-hidden px-4 pb-12 pt-16 md:px-8 md:pb-16">
         {/* Background Image Container */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <img 
@@ -168,7 +168,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2"
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--brand-primary)]" aria-hidden="true" />
               <span className="text-[13px] font-medium text-[var(--text-secondary)]">
@@ -190,7 +190,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 max-w-xl text-pretty text-[18px] md:text-[20px] leading-relaxed text-[var(--text-secondary)]"
+              className="mt-4 max-w-xl text-pretty text-[18px] md:text-[20px] leading-relaxed text-[var(--text-secondary)]"
             >
               O PreçoCerto acompanha os preços reais dos supermercados da sua cidade, monta a
               cesta mais barata para você e diz exatamente onde comprar.
@@ -200,7 +200,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-10 max-w-2xl"
+              className="mt-8 max-w-2xl"
             >
               <div className="relative z-20">
                 <SmartSearchBar />
@@ -211,7 +211,7 @@ function HomePage() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8">
+      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-8 relative z-10">
         {/* Trust bar integrated into hero flow - moved from inside section to below it if needed, or kept inside */}
         <div className="mb-16 grid grid-cols-2 gap-4 md:grid-cols-4">
           <TrustStat label="Registros de preço" value={stats?.priceRecords} />
