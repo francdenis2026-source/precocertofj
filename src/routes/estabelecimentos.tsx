@@ -232,7 +232,8 @@ function EstablishmentsPage() {
                         <div className="p-12 text-center text-tertiary bg-surface rounded-3xl border border-dashed border-subtle">Nenhum mercado encontrado</div>
                     ) : (
                         <AutoSizer>
-                            {({ height, width }: Size) => (
+                            {({ height, width }) => (
+
                                 <List
                                     height={height}
                                     width={width}
