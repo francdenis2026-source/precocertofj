@@ -11,6 +11,7 @@ import {
   Sparkles,
   Store,
   Zap,
+  TrendingDown,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
