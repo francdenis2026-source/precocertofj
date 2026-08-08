@@ -20,12 +20,11 @@ import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
 import { useMyProfile } from "@/hooks/useMyProfile";
 
 export function RealtimeMonitoringDashboard() {
-  const { session, isLoading: isAuthLoading } = useMyProfile();
+  const { session, loading: isAuthLoading } = useMyProfile();
   const fetchStats = useServerFn(getRealtimeMonitoringStats);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 12;
-  const { session } = useMyProfile();
   
   const { data, isLoading, refetch, isFetching, error } = useQuery({
     queryKey: ["realtime-monitoring-stats", searchQuery, page, !!session],
