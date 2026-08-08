@@ -294,26 +294,26 @@ function HomePage() {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-           <div className="space-y-12 lg:col-span-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+           <div className="space-y-16 lg:col-span-8">
               <section id="baskets-section" aria-label="Cesta inteligente" className="scroll-mt-24">
                 <OptimizedBasketSection />
               </section>
 
               <section aria-labelledby="live-prices" className="scroll-mt-24">
-                <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-[var(--border-subtle)] pb-4">
+                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
                   <div className="min-w-0">
-                    <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
+                    <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
                       Monitoramento ao vivo
                     </p>
                     <h2
                       id="live-prices"
-                      className="text-[22px] font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
+                      className="text-[28px] font-bold tracking-tight text-[var(--text-primary)]"
                     >
                       Últimos preços registrados
                     </h2>
                   </div>
-                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
+                  <div className="flex w-fit rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm">
                     {[
                       { id: "recent", label: "Recentes" },
                       { id: "price", label: "Menor Preço" },
@@ -323,10 +323,10 @@ function HomePage() {
                         onClick={() => setSort(s.id as any)}
                         aria-pressed={sort === s.id}
                         className={cn(
-                          "min-h-8 rounded-[var(--radius-sm)] px-3 text-[11px] font-bold uppercase tracking-wider transition-all",
+                          "min-h-10 rounded-[var(--radius-md)] px-5 text-[12px] font-bold uppercase tracking-wider transition-all",
                           sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-sm"
-                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
+                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
+                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
                         )}
                       >
                         {s.label}
@@ -334,7 +334,7 @@ function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {filteredProducts.map((p, i) => (
                     <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
                   ))}
@@ -343,17 +343,17 @@ function HomePage() {
            </div>
            
            <aside className="lg:col-span-4">
-              <div className="sticky top-24 space-y-8">
-                <section aria-labelledby="partners" className="pc-card !bg-[var(--bg-surface)]/30 !p-5">
-                   <h2 id="partners" className="mb-4 text-[13px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+              <div className="sticky top-24 space-y-10">
+                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-sm">
+                   <h2 id="partners" className="mb-6 text-[14px] font-bold uppercase tracking-widest text-[var(--text-secondary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-3 gap-3">
                       <RegisteredStoresCarousel />
                     </div>
                  </section>
                  
-                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-sm">
+                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-lg transition-transform hover:scale-[1.02] duration-300">
                    <PromoBanner />
                  </section>
               </div>
