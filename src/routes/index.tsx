@@ -156,7 +156,7 @@ function HomePage() {
             transition={{ duration: 1.5, ease: "easeOut" }}
             src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
             alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.3] saturate-[0.8] blur-[8px] md:blur-[4px]"
+            className="h-full w-full object-cover brightness-[0.7] saturate-[1.2] blur-[2px] md:blur-[1px]"
           />
         </div>
 
