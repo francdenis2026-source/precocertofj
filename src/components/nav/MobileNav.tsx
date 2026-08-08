@@ -77,7 +77,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]/95 backdrop-blur-[12px] pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.05)]"
+      className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]/98 backdrop-blur-[12px] pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.03)]"
     >
       <div className="mx-auto flex max-w-md items-stretch justify-between px-1">
         {items.map((it) => {
@@ -94,9 +94,9 @@ export function MobileNav() {
                 "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
                 active
                   ? it.accent
-                    ? "text-accent-strong"
-                    : "text-primary"
-                  : "text-muted-foreground",
+                    ? "text-[var(--brand-accent)]"
+                    : "text-[var(--brand-primary)]"
+                  : "text-[var(--text-tertiary)]",
               )}
             >
               {active && (
@@ -104,7 +104,7 @@ export function MobileNav() {
                   aria-hidden
                   className={cn(
                     "absolute inset-x-3 top-0 h-0.5 rounded-b-full",
-                    it.accent ? "bg-accent" : "bg-primary",
+                    it.accent ? "bg-[var(--brand-accent)]" : "bg-[var(--brand-primary)]",
                   )}
                 />
               )}
@@ -117,7 +117,7 @@ export function MobileNav() {
                   strokeWidth={active ? 2.4 : 2}
                 />
                 {showBadge && (
-                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold leading-none text-accent-foreground ring-2 ring-background">
+                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[11px] font-bold leading-none text-[var(--text-on-brand)] ring-2 ring-[var(--bg-surface)]">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
@@ -137,11 +137,11 @@ export function MobileNav() {
             aria-current={isAppActive ? "page" : undefined}
             className={cn(
               "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
-              isAppActive ? "text-primary" : "text-muted-foreground",
+              isAppActive ? "text-[var(--brand-primary)]" : "text-[var(--text-tertiary)]",
             )}
           >
             {isAppActive && (
-              <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 rounded-b-full bg-primary" />
+              <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 rounded-b-full bg-[var(--brand-primary)]" />
             )}
             <User className="h-[22px] w-[22px]" strokeWidth={isAppActive ? 2.4 : 2} />
             <span className="text-[11px] font-semibold leading-none tracking-tight">Painel</span>
@@ -150,7 +150,7 @@ export function MobileNav() {
           <a
             href={loginHref}
             aria-label="Entrar"
-            className="pc-nav-link group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground"
+            className="pc-nav-link group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[var(--text-tertiary)]"
           >
             <User className="h-[22px] w-[22px]" strokeWidth={2} />
             <span className="text-[11px] font-semibold leading-none tracking-tight">Entrar</span>

@@ -28,10 +28,9 @@ import { cn } from "@/lib/utils";
    • Formulário no lado direito com typeclear do sistema
    ============================================================ */
 
-const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
-const PC_BODY = "'Figtree', system-ui, sans-serif";
-
-const MONO = "'JetBrains Mono', ui-monospace, monospace";
+const PC_DISPLAY = "var(--font-sans)";
+const PC_BODY = "var(--font-sans)";
+const MONO = "var(--font-mono)";
 
 const MIN_LEN = 8;
 const MAX_LEN = 24;
@@ -309,7 +308,7 @@ function RedeemPage() {
   return (
     <div
       className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
-      style={{ background: "var(--background)", fontFamily: PC_BODY }}
+      style={{ background: "var(--bg-base)", fontFamily: "var(--font-sans)" }}
     >
       {/* Ambient brand glow — paridade com login/cadastro */}
       <div
@@ -329,7 +328,7 @@ function RedeemPage() {
       {/* Top-right link — mesma pílula das outras auth screens */}
       <Link
         to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-2.5 py-1 text-[11px] font-semibold text-[var(--text-primary)] backdrop-blur transition hover:bg-[var(--bg-surface)] sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
       >
         ← Voltar ao site
       </Link>
@@ -357,21 +356,21 @@ function RedeemPage() {
               className="h-8 w-8 shrink-0 object-contain"
             />
             <span
-              className="text-[15px] font-bold tracking-tight text-foreground"
+              className="text-[15px] font-bold tracking-tight text-[var(--text-primary)]"
               style={{ fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
             </span>
           </div>
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
             Ativação de licença
           </p>
 
           {authLoading ? (
             <div className="mt-6 flex min-h-[320px] items-center justify-center" aria-live="polite">
               <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando sessão" />
+                <Loader2 className="h-6 w-6 animate-spin text-[var(--brand-primary)]" aria-label="Carregando sessão" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
                   Carregando sessão…
                 </span>
@@ -395,10 +394,10 @@ function RedeemPage() {
           ) : (
             <>
               <h1
-                className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+                className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-[var(--text-primary)]"
                 style={{ fontFamily: PC_DISPLAY }}
               >
-                Ativar meu <span className="text-[color:var(--pc-home-gold)]">código</span>
+                Ativar meu <span className="text-[var(--brand-accent)]">código</span>
               </h1>
               <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
                 Cole o código do e-mail — formato{" "}
@@ -411,7 +410,7 @@ function RedeemPage() {
               <form onSubmit={handleSubmit} noValidate className="mt-3 flex flex-col">
                   <label
                     htmlFor="license-code"
-                    className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/80"
+                    className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-[var(--text-secondary)]"
                   >
                     Código de licença
 

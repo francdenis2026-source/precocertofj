@@ -169,14 +169,14 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)]/90 backdrop-blur-2xl pl-4 pr-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.02]",
+          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)] bg-[var(--bg-surface)] pl-4 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.01]",
           compact ? "h-12" : "h-14 sm:h-[80px]",
           open ? "z-[101]" : "z-auto",
           "touch-none"
         )}
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-primary-soft)] text-white shadow-md transition-transform duration-500 group-focus-within:scale-105">
           <Search
             aria-hidden="true"
             className={cn(
@@ -227,7 +227,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-4 sm:px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_8px_20px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] active:scale-[0.96]",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-4 sm:px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_4px_12px_rgba(37,99,235,0.2)] transition-all hover:bg-[var(--brand-primary-soft)] hover:shadow-[0_8px_20px_rgba(37,99,235,0.3)] active:scale-[0.98]",
             compact ? "h-9 text-[10px]" : "h-11 sm:h-16 text-[12px] sm:text-[15px]",
           )}
         >
@@ -243,7 +243,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/80 backdrop-blur-md"
+              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/60 backdrop-blur-sm"
               onMouseDown={() => setOpen(false)}
             />
             
@@ -252,7 +252,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] sm:max-w-2xl sm:mx-auto"
+              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.1)] sm:max-w-2xl sm:mx-auto"
             >
 
               <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-4 flex items-center justify-between">
@@ -373,7 +373,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                                 {BRL(s.minPrice)}
                               </div>
                               {i === 0 && (
-                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--pc-brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
+                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
                               )}
                             </div>
                           ) : loading ? (

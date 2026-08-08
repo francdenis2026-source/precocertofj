@@ -58,7 +58,7 @@ export function RealtimeMonitoringDashboard() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse shadow-2xl shadow-blue-500/5">
+        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse shadow-lg shadow-[var(--brand-primary)]/5">
           <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
           <span className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">Iniciando Varredura...</span>
         </div>
@@ -142,7 +142,7 @@ export function RealtimeMonitoringDashboard() {
                         className="h-full w-full border-none p-0 bg-transparent brightness-90 contrast-125 saturate-0 group-hover:saturate-100 group-hover:brightness-100 transition-all duration-500"
                         imgClassName="object-contain filter-none"
 
-                        initialsClassName="text-slate-900 font-bold text-[10px]"
+                        initialsClassName="text-[var(--text-primary)] font-bold text-[10px]"
                       />
                     )}
                   </div>

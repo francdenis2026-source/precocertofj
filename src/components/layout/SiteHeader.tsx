@@ -61,7 +61,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
     "transition-[background-color,border-color,box-shadow] duration-300 ease-out",
     floating
       ? "border-b border-transparent bg-transparent"
-      : "border-b border-[var(--border-subtle)] bg-[color-mix(in_oklab,var(--bg-base)_78%,transparent)] shadow-[var(--pc-shadow-sm)] backdrop-blur-xl",
+      : "border-b border-[var(--border-subtle)] bg-[var(--bg-base)] shadow-[var(--pc-shadow-sm)] backdrop-blur-xl",
   );
 
   return (

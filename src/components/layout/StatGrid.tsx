@@ -23,9 +23,9 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
             key={i}
             className={cn(
               "pc-stat-card transition-transform hover:-translate-y-1",
-              s.tone === "primary" && "border-[var(--brand-primary)]/20 bg-[var(--brand-primary)]/5",
-              s.tone === "success" && "border-[var(--success)]/20 bg-[var(--success)]/5",
-              s.tone === "danger" && "border-[var(--danger)]/20 bg-[var(--danger)]/5"
+              s.tone === "primary" && "border-[var(--brand-primary)]/20 bg-[var(--bg-surface)] shadow-[var(--shadow-md)]",
+              s.tone === "success" && "border-[var(--success)]/20 bg-[var(--bg-surface)] shadow-[var(--shadow-md)]",
+              s.tone === "danger" && "border-[var(--danger)]/20 bg-[var(--bg-surface)] shadow-[var(--shadow-md)]"
             )}
           >
             <div className="flex items-center justify-between gap-2">
@@ -46,7 +46,7 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
                     className={cn(
                       "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-bold uppercase tracking-wider text-[10px]",
                       s.delta.direction === "down" ? "bg-[var(--danger)]/10 text-[var(--danger)]" : 
-                      s.delta.direction === "flat" ? "bg-muted text-[var(--text-tertiary)]" : 
+                      s.delta.direction === "flat" ? "bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)]" : 
                       "bg-[var(--success)]/10 text-[var(--success)]"
                     )}
                   >

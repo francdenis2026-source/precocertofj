@@ -49,14 +49,14 @@ function validatePin(v: string): FieldState {
 }
 
 // Emerald Prestige tokens — mirror /login
-const PC_EMERALD_DEEP = "#081b3a";
-const PC_EMERALD = "#0f2b52";
-const PC_EMERALD_LIGHT = "#1e4a85";
-const PC_GOLD = "#f5b301";
-const PC_GOLD_DARK = "#c78d00";
-const PC_CREAM = "#f7f9fc";
-const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
-const PC_BODY = "'Figtree', system-ui, sans-serif";
+const PC_EMERALD_DEEP = "var(--brand-primary)";
+const PC_EMERALD = "var(--brand-primary)";
+const PC_EMERALD_LIGHT = "var(--brand-primary-soft)";
+const PC_GOLD = "var(--brand-accent)";
+const PC_GOLD_DARK = "var(--brand-accent)";
+const PC_CREAM = "var(--bg-base)";
+const PC_DISPLAY = "var(--font-sans)";
+const PC_BODY = "var(--font-sans)";
 
 export const Route = createFileRoute("/cadastro")({
   ssr: false,
@@ -161,7 +161,7 @@ function CadastroPage() {
   return (
     <div
       className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
-      style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
+      style={{ background: "var(--bg-base)", fontFamily: "var(--font-sans)", color: "var(--text-primary)" }}
     >
       <div
         className="pointer-events-none absolute inset-0"
@@ -182,7 +182,7 @@ function CadastroPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative z-10 grid w-full max-w-[880px] grid-cols-1 overflow-hidden rounded-[var(--radius-2xl)] border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[880px] grid-cols-1 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-[var(--shadow-lg)] sm:rounded-[var(--radius-3xl)] md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)]"
       >
         {/* LEFT — Hero unificado (login/cadastro compartilham a mesma arte) */}
         <div className="hidden md:block">
@@ -264,7 +264,7 @@ function CadastroPage() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-900">
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--text-primary)]">
                     PIN de acesso · 6 dígitos
                   </label>
 
@@ -276,7 +276,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-1.5 text-[11px] font-medium text-slate-600">
+                <p className="mt-1.5 text-[11px] font-medium text-[var(--text-tertiary)]">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -302,10 +302,10 @@ function CadastroPage() {
                 className="group relative mt-1 inline-flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13.5px] font-bold !text-white shadow-lg transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
                 style={{
                   background: allValid && !loading
-                    ? `linear-gradient(135deg, ${PC_EMERALD_LIGHT} 0%, ${PC_EMERALD} 50%, ${PC_EMERALD_DEEP} 100%)`
+                    ? `linear-gradient(135deg, var(--brand-primary-soft) 0%, var(--brand-primary) 100%)`
                     : `linear-gradient(135deg, #6b7896, #4a5670)`,
                   boxShadow: allValid && !loading
-                    ? `0 12px 26px -12px rgba(15,27,61,0.55), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px ${PC_GOLD}55`
+                    ? `0 12px 26px -12px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.14)`
                     : "0 6px 16px -8px rgba(15,27,61,0.35)",
                   fontFamily: PC_DISPLAY,
                   letterSpacing: "0.01em",
@@ -325,7 +325,7 @@ function CadastroPage() {
               </button>
 
               <div className="flex items-center justify-between pt-1 text-[12px]">
-                <span className="inline-flex items-center gap-1.5 font-medium text-slate-600">
+                <span className="inline-flex items-center gap-1.5 font-medium text-[var(--text-tertiary)]">
                   <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD }} />
                   Dados protegidos
                 </span>
@@ -339,7 +339,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[11px] font-medium text-slate-600">
+            <p className="mt-3 border-t border-[var(--border-subtle)] pt-2.5 text-center text-[11px] font-medium text-[var(--text-tertiary)]">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
@@ -356,7 +356,7 @@ function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
   if (!show) return null;
   if (state.valid) {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
         <CheckCircle2 className="h-3 w-3" /> ok
       </span>
     );
@@ -403,7 +403,7 @@ function Field({
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
     : good
       ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
-      : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
+      : "border-[var(--border-subtle)] hover:border-[var(--border-strong)] focus:border-[var(--brand-primary)] focus:ring-[var(--brand-primary)]/10";
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">

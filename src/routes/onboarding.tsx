@@ -97,7 +97,7 @@ function OnboardingPage() {
       <div className="mx-auto flex max-w-lg flex-col items-center">
         <Logo className="text-[var(--text-primary)]" />
 
-        <div className="mt-6 flex items-center gap-2 rounded-full border border-[var(--brand-accent)]/20 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--brand-accent)]">
+        <div className="mt-6 flex items-center gap-2 rounded-full border border-[var(--brand-accent)]/20 bg-[var(--brand-accent)]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--brand-accent)]">
           <ShieldCheck className="h-3 w-3" />
           Falta menos de 1 minuto
         </div>
@@ -115,7 +115,7 @@ function OnboardingPage() {
             e.preventDefault();
             if (canSubmit) mut.mutate();
           }}
-          className="mt-8 w-full space-y-4 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-[var(--shadow-lg)] backdrop-blur"
+          className="mt-8 w-full space-y-4 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-[var(--shadow-lg)]"
         >
           <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
             <Input

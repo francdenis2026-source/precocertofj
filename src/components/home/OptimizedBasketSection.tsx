@@ -96,7 +96,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
             <ShoppingBasket className="h-7 w-7" />
           </div>
           {basket.economyPct > 10 && (
-            <div className="px-3 py-1.5 rounded-[var(--radius-xl)] bg-emerald-500 text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-[var(--shadow-lg)] shadow-emerald-500/20">
+            <div className="px-3 py-1.5 rounded-[var(--radius-xl)] bg-emerald-600 text-white text-[11px] font-black uppercase tracking-[0.2em] shadow-[var(--shadow-lg)] shadow-emerald-600/20">
               -{basket.economyPct}% OFF
             </div>
           )}
@@ -121,7 +121,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
 
         <div className="space-y-2 mb-8">
           <div className="flex items-center gap-3 text-[var(--text-secondary)] text-[14px] font-bold">
-            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
             <span>{basket.itemsCount} de {basket.totalItems} itens disponíveis</span>
           </div>
         </div>
@@ -132,7 +132,7 @@ function BasketCard({ basket, index }: { basket: any; index: number }) {
             <Price value={basket.total} size="lg" className="text-2xl font-black tracking-tighter" />
           </div>
           
-          <Button asChild className="h-12 w-12 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/90 text-white shadow-[var(--shadow-xl)] shadow-[var(--brand-primary)]/20 transition-all hover:scale-105 active:scale-95 p-0">
+          <Button asChild className="h-12 w-12 rounded-[var(--radius-2xl)] bg-[var(--brand-primary)] hover:bg-[var(--brand-primary-soft)] text-[var(--text-on-brand)] shadow-[var(--shadow-lg)] shadow-[var(--brand-primary)]/20 transition-all hover:scale-105 active:scale-95 p-0">
             <Link to="/cesta" search={{ mode: 'compare' }}>
               <ArrowRight className="h-5 w-5" />
             </Link>

@@ -149,14 +149,14 @@ function HomePage() {
       <section className="relative isolate min-h-[60vh] md:min-h-[85vh] flex flex-col items-center justify-center pt-20 overflow-hidden">
         {/* Immersive Background */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-[var(--bg-base)]/20 to-[var(--bg-base)] z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-[var(--bg-base)]/10 to-[var(--bg-base)] z-10" />
           <motion.img 
             initial={{ scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
             src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
             alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.3] saturate-[0.8] blur-[8px] md:blur-[4px]"
+            className="h-full w-full object-cover brightness-[0.9] saturate-[1.2] blur-[1px] md:blur-0"
           />
         </div>
 
@@ -217,7 +217,7 @@ function HomePage() {
         {/* Platform Stats Section */}
         <section className="relative -mt-10 md:-mt-16 mb-12 md:mb-20 z-20">
           <div className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-white/5 overflow-hidden rounded-[var(--radius-2xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl shadow-[var(--shadow-2xl)]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-[var(--border-subtle)] overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-xl shadow-[var(--shadow-lg)]">
               <StatCard label="Preços Verificados" value={stats?.priceRecords || "3.064"} icon={ShieldCheck} />
               <StatCard label="Itens no Catálogo" value={stats?.totalItems || "20.262"} icon={Zap} />
               <StatCard label="Economia Média" value={`${economy?.avgSavingsPct || "15.1"}%`} icon={TrendingDown} />
@@ -339,7 +339,7 @@ function HomePage() {
            
            <aside className="lg:col-span-4">
               <div className="sticky top-28 space-y-10">
-                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl p-8 shadow-sm">
+                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-xl p-8 shadow-sm">
                    <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
@@ -379,9 +379,9 @@ function HomePage() {
                   e.currentTarget.style.display = "none";
                 }
               }}
-              className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px] opacity-0 transition-opacity duration-700"
+              className="h-full w-full object-cover saturate-[1.2] brightness-[0.8] blur-[1px] opacity-0 transition-opacity duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-transparent to-[var(--bg-base)]/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-[var(--bg-base)]/40 to-[var(--bg-base)]" />
           </div>
           
           <div className="relative flex flex-col items-center px-6 py-16 text-center md:py-20">

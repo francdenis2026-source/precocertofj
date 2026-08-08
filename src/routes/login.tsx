@@ -263,12 +263,12 @@ function LoginPage() {
           
           {/* Header Mobile / Back Link */}
           <div className="flex items-center justify-between p-6 lg:p-8 shrink-0">
-            <Link to="/" className="text-slate-400 hover:text-slate-600 transition-colors">
+            <Link to="/" className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors">
               <ChevronLeft className="w-6 h-6" />
             </Link>
             <div className="flex items-center gap-1.5 lg:hidden">
               <img src="/logo-mark.png?v=5" alt="Logo" className="w-7 h-7" />
-              <span className="text-lg font-bold tracking-tight text-slate-900 font-display">PreçoCerto</span>
+              <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] font-display">PreçoCerto</span>
             </div>
             <div className="w-6 h-6" /> {/* Spacer */}
           </div>
@@ -284,10 +284,10 @@ function LoginPage() {
                   className="space-y-8"
                 >
                   <div className="space-y-2">
-                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-[var(--text-primary)] font-display">
                       Bem-vindo <span className="text-[var(--brand-primary)]">de volta</span>
                     </h1>
-                    <p className="text-sm text-slate-500 font-medium">
+                    <p className="text-sm text-[var(--text-secondary)] font-medium">
                       Acesse sua conta para continuar economizando.
                     </p>
                   </div>
@@ -305,7 +305,7 @@ function LoginPage() {
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between px-1">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-400">PIN de 6 dígitos</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">PIN de 6 dígitos</label>
                         <Link to="/resgatar" className="text-[11px] font-bold text-[var(--brand-primary)] uppercase tracking-widest hover:underline">Esqueci meu PIN</Link>
                       </div>
                       <PinInput 
@@ -333,7 +333,7 @@ function LoginPage() {
                     </div>
 
                     <div className="text-center pt-4">
-                      <p className="text-xs font-medium text-slate-500">
+                      <p className="text-xs font-medium text-[var(--text-tertiary)]">
                         Não tem uma conta?{" "}
                         <button
                           type="button"
@@ -359,15 +359,15 @@ function LoginPage() {
                       {[1, 2, 3].map((step) => (
                         <div 
                           key={step} 
-                          className={`h-1 flex-1 rounded-full transition-all duration-500 ${step <= signupStep ? "bg-[var(--brand-primary)]" : "bg-slate-100"}`} 
+                          className={`h-1 flex-1 rounded-full transition-all duration-500 ${step <= signupStep ? "bg-[var(--brand-primary)]" : "bg-[var(--bg-surface-elevated)]"}`} 
                         />
                       ))}
                     </div>
                     <div>
-                      <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                      <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-[var(--text-primary)] font-display">
                         {signupStep === 1 ? "Dados pessoais" : signupStep === 2 ? "Contato e local" : "Segurança"}
                       </h1>
-                      <p className="text-sm text-slate-500 font-medium">
+                      <p className="text-sm text-[var(--text-secondary)] font-medium">
                         {signupStep === 1 ? "Comece informando quem é você." : signupStep === 2 ? "Como podemos falar com você?" : "Crie seu código de acesso."}
                       </p>
                     </div>

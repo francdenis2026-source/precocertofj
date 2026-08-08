@@ -6,13 +6,13 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-base)] text-[var(--text-tertiary)]">
+    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">
       <div className="mx-auto max-w-[1440px] px-4 py-16 md:px-8">
         <div className="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand Info */}
           <div className="col-span-2 lg:col-span-2">
             <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
-              <Logo variant="dark" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
+              <Logo variant="on-light" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
             </Link>
             <p className="max-w-xs text-[15px] leading-relaxed mb-8">
               O PreçoCerto é a maior plataforma de inteligência de compras e economia doméstica de Feijó.
@@ -90,7 +90,7 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
 
 function SocialLink({ Icon }: { Icon: any }) {
   return (
-    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)]">
+    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] hover:border-[var(--brand-primary)]">
       <Icon className="h-4.5 w-4.5" />
     </button>
   );
