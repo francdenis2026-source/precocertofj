@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Heart, Search, Store, ShoppingBag, ArrowRight } from "lucide-react";
+import { Heart, Search, Store, ShoppingBag, ArrowRight, Scale } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { EmptyState } from "@/components/layout/EmptyState";
@@ -10,6 +10,7 @@ import {
   listFavoriteMarkets,
   listFavoriteItems,
 } from "@/lib/favorites.functions";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/favoritos")({
   head: () => ({
@@ -138,16 +139,24 @@ function FavoritosPage() {
 
             {/* Produtos favoritos */}
             <section aria-labelledby="fav-items-title">
-              <div className="mb-3 flex items-center justify-between gap-2">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                 <h2 id="fav-items-title" className="flex items-center gap-2 text-[15px] font-bold">
                   <ShoppingBag className="h-4 w-4 text-brand" aria-hidden /> Produtos
                 </h2>
-                <Link
-                  to="/buscar"
-                  className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-brand/60 rounded"
-                >
-                  <Search className="h-3.5 w-3.5" aria-hidden /> Buscar mais
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Button asChild variant="outline" size="sm" className="h-8 rounded-full text-[11px] font-bold uppercase tracking-wider">
+                    <Link to="/app/comparacoes">
+                      <Scale className="mr-1.5 h-3.5 w-3.5" />
+                      Comparações
+                    </Link>
+                  </Button>
+                  <Link
+                    to="/buscar"
+                    className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand outline-none hover:underline focus-visible:ring-2 focus-visible:ring-brand/60 rounded"
+                  >
+                    <Search className="h-3.5 w-3.5" aria-hidden /> Buscar mais
+                  </Link>
+                </div>
               </div>
 
               {iLoading ? (
