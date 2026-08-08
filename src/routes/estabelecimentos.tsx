@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import {
   Beef,
   ChevronRight,
@@ -18,7 +20,9 @@ import {
   Store,
   X,
   Star,
+  ArrowUpDown,
 } from "lucide-react";
+
 
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import {
