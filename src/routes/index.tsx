@@ -150,39 +150,55 @@ function HomePage() {
     <div className="min-h-dvh overflow-x-hidden bg-[var(--bg-base)] pb-20 text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 lg:pb-0">
       <SiteHeader variant="overlay" />
 
-      {/* Hero */}
-      <section className="relative isolate min-h-[480px] md:min-h-[580px] flex items-center overflow-hidden px-4 pb-12 pt-16 md:px-8 md:pb-16">
-        {/* Background Image Container */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
-            alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.22] saturate-[0.7] blur-[2px] scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-transparent to-[var(--bg-base)]" />
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
+      {/* Floating Hero Search - Extreme Top Priority */}
+      <section className="relative isolate pt-24 pb-12 px-4 md:px-8">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="relative z-50 mx-auto max-w-2xl mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SmartSearchBar />
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
+                <div className="flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)]/40 backdrop-blur-sm border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-medium text-[var(--text-secondary)]">
+                   <Sparkles className="h-3 w-3 text-[var(--brand-primary)]" />
+                   <span>Inteligência de preços ativa em Feijó</span>
+                </div>
+                <div className="flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)]/40 backdrop-blur-sm border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-medium text-[var(--text-secondary)]">
+                   <Zap className="h-3 w-3 text-amber-500" />
+                   <span>Atualização real-time</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center pt-8">
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-[var(--brand-primary)]" aria-hidden="true" />
-              <span className="text-[13px] font-medium text-[var(--text-secondary)]">
-                Inteligência de preços ao vivo em Feijó, Acre
-              </span>
-            </motion.div>
+        {/* Hero Content Grid */}
+        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Background Image Container */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
+              alt="Supermercado realista background"
+              className="h-full w-full object-cover brightness-[0.22] saturate-[0.7] blur-[2px] scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-transparent to-[var(--bg-base)]" />
+            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
+          </div>
 
+
+        <div className="max-w-4xl relative z-10">
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="text-balance text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-balance text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
             >
+              Compre melhor.{" "}
+              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
+            </motion.h1>
+
               Compre melhor.{" "}
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </motion.h1>
@@ -199,19 +215,24 @@ function HomePage() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-20 w-full lg:max-w-md ml-auto mt-4 lg:mt-8"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 w-full ml-auto"
           >
-            <div className="bg-[var(--bg-surface)]/10 backdrop-blur-md border border-[var(--border-subtle)] rounded-3xl p-6 shadow-2xl relative">
-              <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Encontre o melhor preço</h2>
-              <SmartSearchBar />
-              <p className="mt-4 text-xs text-[var(--text-tertiary)] text-center">
-                Pesquise por produtos, marcas ou categorias.
-              </p>
+            <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]/5 px-6 py-8 backdrop-blur-md">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-xl bg-[var(--brand-primary)]/20 flex items-center justify-center">
+                  <TrendingDown className="h-6 w-6 text-[var(--brand-primary)]" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-[var(--text-primary)]">15.1%</div>
+                  <div className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold">Economia Média</div>
+                </div>
+              </div>
             </div>
           </motion.div>
+
         </div>
       </section>
 

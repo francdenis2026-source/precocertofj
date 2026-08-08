@@ -169,19 +169,21 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] pl-4 pr-1.5 shadow-lg transition-all duration-300",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-1 focus-within:ring-[var(--brand-primary)]",
-          compact ? "h-12" : "h-14 sm:h-[68px]",
+          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)]/80 backdrop-blur-xl pl-4 pr-1.5 shadow-2xl transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)]",
+          compact ? "h-12" : "h-14 sm:h-[72px]",
           open ? "z-[101]" : "z-auto"
         )}
       >
-        <Search
-          aria-hidden="true"
-          className={cn(
-            "shrink-0 text-[var(--text-tertiary)] transition-colors group-focus-within:text-[var(--brand-primary)]",
-            compact ? "h-4 w-4" : "h-5 w-5",
-          )}
-        />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] transition-transform duration-500 group-focus-within:scale-110 group-focus-within:bg-[var(--brand-primary)] group-focus-within:text-white">
+          <Search
+            aria-hidden="true"
+            className={cn(
+              "transition-colors",
+              compact ? "h-4 w-4" : "h-5 w-5",
+            )}
+          />
+        </div>
         <input
           ref={inputRef}
           value={q}
@@ -197,15 +199,15 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="Pesquise um produto e veja onde é mais barato"
+          placeholder="Qual produto você busca hoje?"
           aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-medium text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]",
-            compact ? "text-[13px]" : "text-sm sm:text-base",
+            "flex-1 min-w-0 bg-transparent outline-none font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] placeholder:font-medium",
+            compact ? "text-[14px]" : "text-base sm:text-lg",
           )}
         />
         {q && (
@@ -216,7 +218,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
               inputRef.current?.focus();
             }}
             aria-label="Limpar pesquisa"
-            className="shrink-0 rounded-full p-1.5 text-[var(--text-tertiary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)]"
+            className="shrink-0 rounded-full p-2 text-[var(--text-tertiary)] transition-all hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -224,13 +226,14 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-[var(--radius-md)] bg-[var(--brand-primary)] px-5 font-semibold tracking-[-0.01em] text-[var(--text-on-brand)] transition-all hover:bg-[var(--pc-brand-primary-soft)] active:scale-[0.98]",
-            compact ? "h-9 text-[14px]" : "h-11 text-[15px] sm:h-12",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-6 font-bold tracking-tight text-[var(--text-on-brand)] shadow-[0_4px_12px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.4)] active:scale-[0.96]",
+            compact ? "h-9 text-[14px]" : "h-12 text-[16px] sm:h-14",
           )}
         >
-          Pesquisar
+          Buscar agora
         </button>
       </form>
+
 
       <AnimatePresence>
         {showPanel && (
