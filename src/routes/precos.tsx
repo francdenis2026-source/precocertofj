@@ -1,11 +1,10 @@
-import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { 
-  Search, 
   Store, 
   MapPin, 
   Clock, 
@@ -14,20 +13,21 @@ import {
   Star, 
   ArrowRight, 
   Filter,
-  LayoutGrid,
-  Rows3,
   Package,
   TrendingUp,
-  X
+  Search,
+  LayoutGrid,
+  Info
 } from "lucide-react";
 
-import { searchProductPrice, type PriceSearchResult, type ProductGroup } from "@/lib/price-search.functions";
+import { searchProductPrice, type ProductGroup } from "@/lib/price-search.functions";
 import { listPublicEstablishments } from "@/lib/establishments-public.functions";
 import { Price } from "@/components/ds/Price";
-import { Badge } from "@/components/ds/Badge";
 import { ProductImage } from "@/components/ds/ProductImage";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Footer } from "@/components/brand/Footer";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -36,9 +36,6 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/precos")({
   validateSearch: zodValidator(searchSchema),
-  search: {
-    middlewares: [retainSearchParams(["q", "sel"])],
-  },
   head: () => ({
     meta: [
       { title: "Comparador de Preços — PreçoCerto" },
@@ -50,7 +47,6 @@ export const Route = createFileRoute("/precos")({
 
 function SearchPage() {
   const { q, sel } = Route.useSearch() as any;
-  const navigate = useNavigate({ from: "/precos" });
   const [activeMarketId, setActiveMarketId] = useState<string | null>(sel || null);
   
   const runSearch = useServerFn(searchProductPrice);
@@ -73,11 +69,6 @@ function SearchPage() {
     markets.find(m => m.id === (activeMarketId || sel)) || markets[0],
   [markets, activeMarketId, sel]);
 
-  const selectMarket = (id: string) => {
-    setActiveMarketId(id);
-    navigate({ search: (prev: any) => ({ ...prev, sel: id }) });
-  };
-
   const filteredGroups = useMemo(() => {
     if (!searchResult) return [];
     if (!activeMarketId) return searchResult.groups;
@@ -93,63 +84,83 @@ function SearchPage() {
       <div className="mx-auto w-full max-w-[1600px] flex flex-col md:flex-row min-h-[calc(100vh-80px)]">
         
         {/* Left Sidebar: Markets List */}
-        <aside className="w-full md:w-[380px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex flex-col shrink-0">
-          <div className="p-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] sticky top-0 z-20">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Mercados em Feijó</h2>
-              <span className="pc-badge bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]">{markets.length}</span>
+        <aside className="w-full md:w-[420px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex flex-col shrink-0">
+          <div className="p-8 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] sticky top-0 z-20">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col">
+                <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Plataforma Ativa</h2>
+                <p className="text-[18px] font-black tracking-tight mt-1">Mercados em Feijó</p>
+              </div>
+              <div className="flex items-center gap-1.5 bg-[var(--bg-surface-elevated)] px-3 py-1.5 rounded-xl border border-[var(--border-subtle)] shadow-sm">
+                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[11px] font-black uppercase tracking-wider text-[var(--text-secondary)]">{markets.length}</span>
+              </div>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-tertiary)]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--text-tertiary)]" />
               <input 
                 type="text" 
-                placeholder="Filtrar por nome..." 
-                className="w-full pl-10 pr-4 py-3 bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 focus:border-[var(--brand-primary)]"
+                placeholder="Localizar estabelecimento..." 
+                className="w-full pl-12 pr-4 py-4 bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-[var(--radius-xl)] text-[15px] font-bold outline-none focus:ring-4 focus:ring-[var(--brand-primary)]/5 focus:border-[var(--brand-primary)] transition-all"
               />
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
             {isMarketsLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-28 bg-[var(--bg-surface-elevated)] animate-pulse rounded-2xl" />
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-32 bg-[var(--bg-surface-elevated)] animate-pulse rounded-[var(--radius-2xl)] border border-[var(--border-subtle)]" />
               ))
             ) : (
               markets.map(m => (
                 <button
                   key={m.id}
-                  onClick={() => selectMarket(m.id)}
+                  onClick={() => setActiveMarketId(m.id)}
                   className={cn(
-                    "w-full text-left p-4 rounded-2xl border transition-all duration-200",
+                    "w-full text-left p-5 rounded-[var(--radius-2xl)] border transition-all duration-300 relative group",
                     activeMarketId === m.id 
-                      ? "bg-[var(--bg-surface)] border-[var(--brand-primary)] shadow-[var(--pc-shadow-md)]" 
+                      ? "bg-[var(--bg-surface-elevated)] border-[var(--brand-primary)] shadow-xl translate-x-1" 
                       : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/40 hover:bg-[var(--bg-surface-elevated)]"
                   )}
                 >
-                  <div className="flex gap-4">
-                    <div className="h-14 w-14 shrink-0 rounded-xl bg-[var(--bg-base)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
+                  <div className="flex gap-5">
+                    <div className={cn(
+                      "h-16 w-16 shrink-0 rounded-2xl bg-white p-2 border flex items-center justify-center overflow-hidden transition-all duration-300",
+                      activeMarketId === m.id ? "border-[var(--brand-primary)] shadow-inner" : "border-[var(--border-subtle)]"
+                    )}>
                       {m.logoUrl ? (
-                         <img src={m.logoUrl} alt={m.name} className="h-full w-full object-contain p-1" />
+                         <img src={m.logoUrl} alt={m.name} className="h-full w-full object-contain" />
                       ) : (
-                         <Store className="h-6 w-6 text-[var(--text-tertiary)]" />
+                         <Store className="h-8 w-8 text-[var(--text-tertiary)]" />
                       )}
                     </div>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 py-1">
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-bold text-[15px] truncate">{m.name}</h3>
-                        {m.maxSavings > 0 && <span className="pc-badge bg-emerald-500/10 text-emerald-600">-{m.maxSavings}%</span>}
+                        <h3 className="font-black text-[16px] tracking-tight truncate leading-none uppercase">{m.name}</h3>
+                        {m.maxSavings > 0 && (
+                          <span className="bg-emerald-500/10 text-emerald-600 text-[10px] font-black px-2 py-0.5 rounded-lg border border-emerald-500/20">
+                            -{m.maxSavings}%
+                          </span>
+                        )}
                       </div>
-                      <p className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-1">{m.neighborhood || "Centro"}</p>
-                      <div className="flex items-center gap-3 mt-3">
-                        <span className="text-[10px] font-bold text-[var(--text-secondary)] flex items-center gap-1">
-                          <Package className="h-3 w-3" /> {m.productsCount || 0} itens
-                        </span>
-                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                          <Clock className="h-3 w-3" /> Online
-                        </span>
+                      <p className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-2">{m.neighborhood || "Centro"}</p>
+                      <div className="flex items-center gap-4 mt-3">
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-secondary)]">
+                          <Package className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+                          <span>{m.productsCount || 0} Itens</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
+                          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>Online</span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  {activeMarketId === m.id && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                      <ChevronRight size={20} className="text-[var(--brand-primary)]" />
+                    </div>
+                  )}
                 </button>
               ))
             )}
@@ -157,85 +168,101 @@ function SearchPage() {
         </aside>
 
         {/* Right Content Area */}
-        <main className="flex-1 bg-[var(--bg-base)] overflow-y-auto p-6 md:p-10 space-y-8 no-scrollbar">
+        <main className="flex-1 bg-[var(--bg-base)] overflow-y-auto p-8 md:p-12 space-y-12 no-scrollbar">
           
           {/* Market Hero Card */}
           {activeMarket && (
-            <section className="bg-[var(--bg-surface)] rounded-[32px] border border-[var(--border-subtle)] overflow-hidden shadow-[var(--pc-shadow-lg)]">
-              <div className="h-40 bg-[var(--bg-surface-elevated)] relative">
+            <section className="bg-[var(--bg-surface)] rounded-[40px] border border-[var(--border-subtle)] overflow-hidden shadow-2xl relative">
+              <div className="h-48 bg-[var(--bg-surface-elevated)] relative overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200" 
+                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1400" 
                   alt="" 
-                  className="w-full h-full object-cover opacity-40 mix-blend-overlay" 
+                  className="w-full h-full object-cover opacity-30 mix-blend-overlay grayscale" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent" />
               </div>
-              <div className="px-10 pb-10 -mt-12 relative z-10">
-                <div className="flex flex-col md:flex-row items-end gap-6 mb-8">
-                  <div className="h-32 w-32 rounded-[24px] bg-white p-2 border border-[var(--border-subtle)] shadow-2xl flex items-center justify-center overflow-hidden shrink-0">
-                    {activeMarket.logoUrl ? <img src={activeMarket.logoUrl} alt="" className="h-full w-full object-contain" /> : <Store className="h-12 w-12 text-[var(--brand-primary)]" />}
+              <div className="px-10 pb-12 -mt-16 relative z-10">
+                <div className="flex flex-col md:flex-row items-end gap-8 mb-10">
+                  <div className="h-36 w-36 rounded-[32px] bg-white p-3 border-4 border-[var(--bg-base)] shadow-2xl flex items-center justify-center overflow-hidden shrink-0">
+                    {activeMarket.logoUrl ? (
+                      <img src={activeMarket.logoUrl} alt="" className="h-full w-full object-contain" />
+                    ) : (
+                      <Store className="h-16 w-16 text-[var(--brand-primary)]" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0 pb-2">
-                    <h1 className="text-4xl font-black tracking-tight mb-2 truncate">{activeMarket.name}</h1>
-                    <div className="flex flex-wrap items-center gap-4">
-                      <div className="flex items-center gap-1.5 text-[13px] font-bold text-[var(--text-secondary)]">
-                        <MapPin className="h-4 w-4 text-[var(--brand-primary)]" />
-                        <span>{activeMarket.city || "Feijó, AC"}</span>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-xl border border-[var(--brand-primary)]/20">Mercado Verificado</span>
+                    </div>
+                    <h1 className="text-[clamp(1.5rem,4vw,3.5rem)] font-black tracking-tighter mb-4 leading-none uppercase">{activeMarket.name}</h1>
+                    <div className="flex flex-wrap items-center gap-6">
+                      <div className="flex items-center gap-2 text-[15px] font-bold text-[var(--text-secondary)]">
+                        <MapPin className="h-5 w-5 text-[var(--brand-primary)]" />
+                        <span>{activeMarket.neighborhood}, {activeMarket.city || "Feijó, AC"}</span>
                       </div>
-                      <div className="w-1 h-1 rounded-full bg-[var(--border-subtle)]" />
-                      <div className="flex items-center gap-1.5 text-[13px] font-bold text-emerald-600">
-                        <Clock className="h-4 w-4" />
-                        <span>Aberto agora</span>
+                      <div className="flex items-center gap-2 text-[15px] font-bold text-emerald-600">
+                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>Operação Normal</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 pb-2">
-                    <button className="pc-button-secondary h-11 px-6">
-                      <Star className="h-4 w-4" /> Favoritar
-                    </button>
+                  <div className="flex items-center gap-4 pb-2">
                     <Link 
                       to="/loja/$id" 
                       params={{ id: activeMarket.id }}
                       search={{ q: "", from: "" }}
-                      className="pc-button-primary h-11 px-8"
+                      className="pc-button-primary h-14 px-10 shadow-xl shadow-[var(--brand-primary)]/20 text-[14px] uppercase tracking-widest"
                     >
-                      Ver Loja <ChevronRight className="h-4 w-4" />
+                      Entrar na Loja <ChevronRight className="h-5 w-5" />
                     </Link>
                   </div>
                 </div>
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
-                  <StatCard label="Mix de Produtos" value={String(activeMarket?.productsCount || 0)} icon={<Package className="h-4 w-4" />} />
-                  <StatCard label="Categorias" value={String(activeMarket?.topCategories?.length || 0)} icon={<Filter className="h-4 w-4" />} />
-                  <StatCard label="Economia Média" value={`${activeMarket?.maxSavings || 0}%`} icon={<TrendingDown className="h-4 w-4" />} tone="savings" />
-                  <StatCard label="Preço Mínimo" value={activeMarket?.minPrice ? `R$ ${activeMarket.minPrice.toFixed(2)}` : "—"} icon={<TrendingUp className="h-4 w-4" />} tone="offers" />
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-10 border-t border-[var(--border-subtle)]">
+                  <StatCard label="Mix de Itens" value={String(activeMarket?.productsCount || 0)} icon={<Package className="h-5 w-5" />} />
+                  <StatCard label="Departamentos" value={String(activeMarket?.topCategories?.length || 0)} icon={<Filter className="h-5 w-5" />} />
+                  <StatCard label="Taxa de Economia" value={`${activeMarket?.maxSavings || 0}%`} icon={<TrendingDown className="h-5 w-5" />} tone="savings" />
+                  <StatCard label="Preço Mínimo" value={activeMarket?.minPrice ? `R$ ${activeMarket.minPrice.toFixed(2)}` : "—"} icon={<TrendingUp className="h-5 w-5" />} tone="offers" />
                 </div>
               </div>
             </section>
           )}
 
-          {/* Featured Grid */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+          {/* Search Results Area */}
+          <div className="space-y-10">
+            <div className="flex items-center justify-between border-b border-[var(--border-subtle)] pb-8">
               <div>
-                <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] mb-1">Destaques da Loja</h2>
-                <h3 className="text-2xl font-black tracking-tight">Melhores Ofertas</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)]" />
+                  <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Inteligência de Mercado</h2>
+                </div>
+                <h3 className="text-3xl font-black tracking-tight uppercase">
+                  {q ? `Resultados para "${q}"` : "Destaques em Destaque"}
+                </h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="h-12 px-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[13px] font-black uppercase tracking-wider flex items-center gap-2 hover:bg-[var(--bg-surface-elevated)] transition-all">
+                  <LayoutGrid size={18} /> Galeria
+                </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
               {isSearchLoading ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="aspect-[3/4] bg-[var(--bg-surface)] rounded-3xl animate-pulse border border-[var(--border-subtle)]" />
+                Array.from({ length: 10 }).map((_, i) => (
+                  <div key={i} className="aspect-[3/4.5] bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] animate-pulse border border-[var(--border-subtle)]" />
                 ))
               ) : filteredGroups.length === 0 ? (
-                <div className="col-span-full py-20 text-center pc-card border-dashed">
-                  <p className="font-bold text-lg mb-2">Sem produtos nesta loja</p>
-                  <p className="text-[var(--text-secondary)]">Tente buscar por outro termo ou selecione outro mercado.</p>
+                <div className="col-span-full py-32 flex flex-col items-center text-center px-6">
+                  <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)]">
+                    <Info size={40} className="text-[var(--text-tertiary)]" />
+                  </div>
+                  <h4 className="text-2xl font-black mb-4 uppercase tracking-tight">Nenhum item localizado</h4>
+                  <p className="text-[var(--text-secondary)] font-bold text-lg max-w-lg">Não encontramos produtos com este termo no estoque de <span className="text-[var(--text-primary)]">{activeMarket?.name}</span>.</p>
                 </div>
               ) : (
-                filteredGroups.slice(0, 8).map((g) => (
+                filteredGroups.map((g) => (
                   <MarketProductCard key={g.productName} group={g} marketId={activeMarketId} />
                 ))
               )}
@@ -243,25 +270,28 @@ function SearchPage() {
           </div>
         </main>
       </div>
+      
+      <Footer />
+      <MobileBottomNav />
     </div>
   );
 }
 
 function StatCard({ label, value, icon, tone = "default" }: { label: string; value: string; icon: React.ReactNode; tone?: "default" | "savings" | "offers" }) {
   return (
-    <div className="pc-stat-card flex flex-col justify-between h-full">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">{label}</span>
+    <div className="flex flex-col justify-between h-full bg-[var(--bg-surface-elevated)]/30 rounded-[var(--radius-2xl)] p-6 border border-[var(--border-subtle)] shadow-sm hover:border-[var(--brand-primary)]/20 transition-all group">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)] transition-colors">{label}</span>
         <div className={cn(
-          "h-8 w-8 rounded-lg flex items-center justify-center",
-          tone === "savings" ? "bg-emerald-500/10 text-emerald-600" : 
-          tone === "offers" ? "bg-red-500/10 text-red-600" : 
-          "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
+          "h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-sm",
+          tone === "savings" ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : 
+          tone === "offers" ? "bg-red-500/10 text-red-600 border border-red-500/20" : 
+          "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20"
         )}>
           {icon}
         </div>
       </div>
-      <div className="text-2xl font-black text-[var(--text-primary)]">{value}</div>
+      <div className="text-3xl font-black text-[var(--text-primary)] tracking-tight leading-none">{value}</div>
     </div>
   );
 }
@@ -272,35 +302,48 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
   const savings = Math.round(((group.max - priceObj.price) / group.max) * 100);
   
   return (
-    <article className="pc-card p-0 group overflow-hidden flex flex-col">
-      <div className="aspect-square bg-[var(--bg-surface-elevated)]/50 p-6 flex items-center justify-center relative">
-        <ProductImage name={group.productName} alt={group.productName} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110" />
+    <article className="group relative flex flex-col bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-2xl hover:border-[var(--brand-primary)]/30 hover:-translate-y-2">
+      <div className="aspect-square bg-[var(--bg-surface-elevated)]/30 p-8 flex items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface-elevated)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <ProductImage 
+          name={group.productName} 
+          alt={group.productName} 
+          className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-110 relative z-10" 
+        />
         {savings > 5 && (
-          <div className="absolute top-4 right-4">
-             <span className="pc-badge bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">-{savings}%</span>
+          <div className="absolute top-4 right-4 z-20">
+             <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-xl shadow-lg shadow-emerald-500/30">
+               -{savings}% OFF
+             </span>
           </div>
         )}
       </div>
-      <div className="p-6 flex flex-col flex-1">
-        <div className="flex-1 mb-4">
-          <h4 className="font-bold text-[15px] leading-snug line-clamp-2 group-hover:text-[var(--brand-primary)] transition-colors mb-2">{group.productName}</h4>
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
-            <Clock className="h-3 w-3" /> Hoje
+      
+      <div className="p-6 flex flex-col flex-1 relative bg-[var(--bg-surface)]">
+        <div className="flex-1 mb-6">
+          <h4 className="font-black text-[16px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors min-h-[2.5rem]">
+            {group.productName}
+          </h4>
+          <div className="flex items-center gap-2 mt-4">
+             <div className="h-1 w-1 rounded-full bg-emerald-500" />
+             <span className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-[0.15em]">Preço Verificado</span>
           </div>
         </div>
         
-        <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
+        <div className="pt-6 border-t border-[var(--border-subtle)] flex items-center justify-between">
            <div className="flex flex-col">
-             {savings > 5 && <span className="text-[10px] text-[var(--text-tertiary)] line-through mb-0.5">R$ {group.max.toFixed(2)}</span>}
-             <Price value={priceObj.price} size="lg" className="text-xl font-black" />
+             {savings > 5 && (
+               <span className="text-[11px] font-bold text-[var(--text-tertiary)] line-through mb-1 opacity-60">
+                 R$ {group.max.toFixed(2)}
+               </span>
+             )}
+             <Price value={priceObj.price} size="lg" className="text-2xl font-black tracking-tighter" />
            </div>
-           <button className="h-10 w-10 rounded-xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-black transition-all">
-             <ArrowRight className="h-4 w-4" />
+           <button className="h-12 w-12 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-white hover:rotate-45 transition-all duration-300 border border-[var(--border-subtle)] shadow-sm">
+             <ArrowRight className="h-5 w-5" />
            </button>
         </div>
       </div>
     </article>
   );
 }
-
-

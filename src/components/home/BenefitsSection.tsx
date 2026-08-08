@@ -1,67 +1,59 @@
 import { Zap, Wallet, MapPin, ShieldCheck } from "lucide-react";
-
-const P = {
-  card: "var(--pc-home-card)",
-  line: "var(--pc-home-line)",
-  gold: "var(--pc-gold-ink)",
-  heading: "var(--pc-home-heading)",
-  body: "var(--pc-text-body)",
-};
-
-const serif = "font-editorial";
+import { motion } from "framer-motion";
 
 const BENEFITS = [
-  { icon: <Wallet className="h-4 w-4" strokeWidth={2} />, title: "Economia real", desc: "O menor preço da semana em segundos." },
-  { icon: <Zap className="h-4 w-4" strokeWidth={2} />, title: "Tempo real", desc: "Atualizações contínuas da comunidade." },
-  { icon: <MapPin className="h-4 w-4" strokeWidth={2} />, title: "Feito para Feijó", desc: "Mercados e bairros de toda a cidade." },
-  { icon: <ShieldCheck className="h-4 w-4" strokeWidth={2} />, title: "Dados verificados", desc: "Curadoria e auditoria automáticas." },
+  { 
+    icon: Wallet, 
+    title: "Economia Real", 
+    desc: "Compare preços em segundos e descubra o menor valor da semana.",
+    color: "var(--success)"
+  },
+  { 
+    icon: Zap, 
+    title: "Tempo Real", 
+    desc: "Dados atualizados continuamente para você não perder nenhuma oferta.",
+    color: "var(--brand-accent)"
+  },
+  { 
+    icon: MapPin, 
+    title: "Feito para Feijó", 
+    desc: "Inteligência de mercado local focada nos estabelecimentos da nossa cidade.",
+    color: "var(--brand-primary)"
+  },
+  { 
+    icon: ShieldCheck, 
+    title: "Dados Verificados", 
+    desc: "Algoritmos de auditoria garantem a precisão das informações exibidas.",
+    color: "var(--info)"
+  },
 ];
 
 export function BenefitsSection() {
   return (
-    <section aria-labelledby="benefits-title" className="pc-container pt-4 sm:pt-5">
-      <header className="mb-2.5 flex items-baseline justify-between gap-3">
-        <div className="flex items-baseline gap-2.5 min-w-0">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: P.gold }}>
-            Benefícios
-          </p>
-          <h2
-            id="benefits-title"
-            className={`${serif} leading-tight truncate`}
-            style={{ color: P.heading, fontSize: "clamp(1.05rem, 1.8vw, 1.35rem)", letterSpacing: "-0.01em" }}
-          >
-            Por que usar o PreçoCerto
-          </h2>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {BENEFITS.map((b) => (
-          <article
+    <section className="py-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {BENEFITS.map((b, i) => (
+          <motion.article
             key={b.title}
-            className="rounded-lg border p-2.5 sm:p-3 transition-colors"
-            style={{ background: P.card, borderColor: P.line }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="group p-8 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/30 transition-all duration-300 shadow-sm hover:shadow-xl"
           >
-            <div className="flex items-center gap-2">
-              <div
-                className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md"
-                style={{
-                  background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-                  color: P.gold,
-                  border: "1px solid color-mix(in oklab, var(--pc-home-gold) 30%, transparent)",
-                }}
-                aria-hidden
-              >
-                {b.icon}
-              </div>
-              <h3 className="text-[13px] font-bold leading-tight tracking-tight truncate" style={{ color: P.heading }}>
-                {b.title}
-              </h3>
+            <div 
+              className="inline-flex h-14 w-14 items-center justify-center rounded-2xl mb-6 transition-transform group-hover:scale-110 duration-300"
+              style={{ background: `color-mix(in oklab, ${b.color} 12%, transparent)`, color: b.color }}
+            >
+              <b.icon className="h-7 w-7" strokeWidth={2.5} />
             </div>
-            <p className="mt-1.5 text-[11.5px] leading-snug" style={{ color: P.body }}>
+            <h3 className="text-[20px] font-bold tracking-tight text-[var(--text-primary)] mb-3">
+              {b.title}
+            </h3>
+            <p className="text-[15px] leading-relaxed text-[var(--text-secondary)]">
               {b.desc}
             </p>
-          </article>
+          </motion.article>
         ))}
       </div>
     </section>

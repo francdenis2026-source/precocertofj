@@ -131,7 +131,7 @@ function ProductImageBase({
           {size !== "sm" && (
             <span
               className={cn(
-                "line-clamp-2 select-none font-medium leading-tight tracking-tight",
+                "line-clamp-2 select-none font-bold uppercase tracking-tight leading-tight",
                 textSize,
               )}
             >

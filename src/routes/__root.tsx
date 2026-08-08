@@ -57,12 +57,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "PreçoCerto — Consulte o preço antes de comprar" },
+      { title: "PreçoCerto — Economia Real em Feijó" },
       {
         name: "description",
         content:
-          "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
+          "Encontre o menor preço em supermercados de Feijó. Inteligência de preços auditada para você economizar em cada compra.",
       },
+
       { name: "author", content: "PreçoCerto" },
       { name: "theme-color", content: "#07111F" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -70,16 +71,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "PreçoCerto" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "application-name", content: "PreçoCerto" },
-      { property: "og:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
+      { property: "og:title", content: "PreçoCerto — Economia Real em Feijó" },
       {
         property: "og:description",
         content:
-          "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
+          "Encontre o menor preço em supermercados de Feijó. Inteligência de preços auditada para você economizar em cada compra.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
-      { name: "twitter:description", content: "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra." },
+      { name: "twitter:title", content: "PreçoCerto — Economia Real em Feijó" },
+      { name: "twitter:description", content: "Encontre o menor preço em supermercados de Feijó. Inteligência de preços auditada para você economizar em cada compra." },
+
       { property: "og:image", content: "https://precocerto-feijo.app/og-image.jpg" },
       { property: "og:image:secure_url", content: "https://precocerto-feijo.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },

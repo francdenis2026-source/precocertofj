@@ -1,60 +1,97 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-
-const items: Array<{ to: string; label: string }> = [
-  { to: "/comparador", label: "Comparador" },
-  { to: "/planos", label: "Planos" },
-  { to: "/colaborar", label: "Colaborar" },
-];
+import { Facebook, Instagram, Twitter, Linkedin, Globe } from "lucide-react";
 
 export function Footer() {
-  const navigate = useNavigate();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/5 bg-[#07111F] text-slate-400">
-      <div className="mx-auto max-w-7xl px-5 py-6">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:gap-0">
-          <div className="flex flex-col items-center gap-2 md:items-start">
-            <div className="flex items-center gap-2.5">
-              <Logo variant="dark" className="[&_img]:h-7 [&_img]:w-7 [&_span]:text-[17px]" />
-              <div className="h-4 w-px bg-white/10" />
-              <span className="text-[12px] font-bold tracking-[0.2em] text-white/90">
-                SKAES<span className="text-[var(--primary)]">.</span>
-              </span>
+    <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-base)] text-[var(--text-tertiary)]">
+      <div className="mx-auto max-w-[1440px] px-4 py-16 md:px-8">
+        <div className="grid grid-cols-2 gap-12 md:grid-cols-4 lg:grid-cols-5">
+          {/* Brand Info */}
+          <div className="col-span-2 lg:col-span-2">
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-6">
+              <Logo variant="dark" className="[&_img]:h-8 [&_img]:w-8 [&_span]:text-[20px]" />
+            </Link>
+            <p className="max-w-xs text-[15px] leading-relaxed mb-8">
+              O PreçoCerto é a maior plataforma de inteligência de compras e economia doméstica de Feijó.
+            </p>
+            <div className="flex items-center gap-4">
+              <SocialLink Icon={Instagram} />
+              <SocialLink Icon={Facebook} />
+              <SocialLink Icon={Twitter} />
             </div>
-            <p className="mt-1 text-[10px] tracking-wider text-slate-500 uppercase">
-              Technology & Intelligence
+          </div>
+
+          {/* Column 1 */}
+          <div>
+            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">PreçoCerto</h4>
+            <ul className="space-y-4 text-[15px]">
+              <li><FooterLink to="/sobre">Sobre nós</FooterLink></li>
+              <li><FooterLink to="/como-funciona">Como funciona</FooterLink></li>
+              <li><FooterLink to="/contato">Contato</FooterLink></li>
+            </ul>
+          </div>
+
+          {/* Column 2 */}
+          <div>
+            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">Produto</h4>
+            <ul className="space-y-4 text-[15px]">
+              <li><FooterLink to="/precos">Comparar Preços</FooterLink></li>
+              <li><FooterLink to="/cesta">Cesta Inteligente</FooterLink></li>
+              <li><FooterLink to="/estabelecimentos">Mercados</FooterLink></li>
+              <li><FooterLink to="/planos">Planos Premium</FooterLink></li>
+            </ul>
+          </div>
+
+          {/* Column 3 */}
+          <div>
+            <h4 className="text-[13px] font-bold uppercase tracking-widest text-[var(--text-primary)] mb-6">Legal</h4>
+            <ul className="space-y-4 text-[15px]">
+              <li><FooterLink to="/privacidade">Privacidade</FooterLink></li>
+              <li><FooterLink to="/termos">Termos de Uso</FooterLink></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-8 border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <div className="flex items-center gap-2 text-[12px] font-bold tracking-widest text-[var(--text-primary)]">
+              SKAES NET TECHNOLOGY
+              <span className="h-1 w-1 rounded-full bg-[var(--brand-primary)]" />
+              FRANC D'NIS
+            </div>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
+              Feijó · Acre · Brasil
             </p>
           </div>
 
-          <nav aria-label="Institucional" className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {items.map((i) => (
-              <button
-                key={i.to}
-                type="button"
-                onClick={() => navigate({ to: i.to })}
-                className="text-[11px] font-medium transition-colors hover:text-[var(--primary)] focus-visible:outline-none"
-              >
-                {i.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex flex-col items-center gap-1.5 text-right md:items-end">
-            <div className="flex items-center gap-2 text-[11px]">
-              <span className="font-semibold text-white/80">SKAES NET TECHNOLOGY</span>
-              <span className="text-white/20">•</span>
-              <span className="text-slate-400">Franc D'nis</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px] text-slate-500">
-              <span>Feijó-AC</span>
-              <span className="text-white/10">|</span>
-              <span>© {year}</span>
-            </div>
+          <div className="text-[13px] font-medium text-[var(--text-tertiary)] flex items-center gap-2">
+            <span>© {year} PreçoCerto. Todos os direitos reservados.</span>
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterLink({ to, children }: { to: string; children: React.ReactNode }) {
+  return (
+    <Link 
+      to={to} 
+      className="transition-colors hover:text-[var(--brand-primary)]"
+    >
+      {children}
+    </Link>
+  );
+}
+
+function SocialLink({ Icon }: { Icon: any }) {
+  return (
+    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)]">
+      <Icon className="h-4.5 w-4.5" />
+    </button>
   );
 }

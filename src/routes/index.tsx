@@ -150,96 +150,86 @@ function HomePage() {
     <div className="min-h-dvh overflow-x-hidden bg-[var(--bg-base)] pb-20 text-[var(--text-primary)] selection:bg-[var(--brand-primary)]/30 lg:pb-0">
       <SiteHeader variant="overlay" />
 
-      {/* Floating Hero Search - Extreme Top Priority */}
-      <section className="relative isolate pt-28 pb-16 px-4 md:px-8">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="relative z-50 mx-auto max-w-2xl mb-20">
+      {/* Modern Hero Section */}
+      <section className="relative isolate min-h-[85vh] flex flex-col items-center justify-center pt-20 overflow-hidden">
+        {/* Immersive Background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/40 via-transparent to-[var(--bg-base)] z-10" />
+          <motion.img 
+            initial={{ scale: 1.1, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
+            alt="Supermercado realista background"
+            className="h-full w-full object-cover brightness-[0.25] saturate-[0.8] blur-[1px]"
+          />
+        </div>
+
+        <div className="mx-auto max-w-[1440px] px-4 md:px-8 w-full flex flex-col items-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-4xl"
+          >
+            <h1 className="t-hero text-balance mb-6">
+              Compre melhor.{" "}
+              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
+            </h1>
+            <p className="mt-4 max-w-2xl mx-auto text-pretty text-[18px] md:text-[22px] leading-relaxed text-[var(--text-secondary)]">
+              Compare preços reais dos mercados da sua cidade, monte sua cesta e descubra onde comprar cada produto pagando menos.
+            </p>
+          </motion.div>
+
+          {/* Centralized Search Bar */}
+          <div className="relative z-50 w-full max-w-3xl mt-12 mb-10">
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
               <SmartSearchBar />
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
-                <div className="flex items-center gap-2 rounded-full bg-[var(--bg-surface)]/30 backdrop-blur-md border border-[var(--border-subtle)] px-4 py-1.5 text-[12px] font-bold text-[var(--text-secondary)] shadow-sm">
-                   <div className="h-2 w-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-                   <span>Monitoramento inteligente ativo</span>
+              
+              {/* Trust Badges */}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-8">
+                <div className="flex items-center gap-2 group cursor-help">
+                  <div className="h-2 w-2 rounded-full bg-[var(--success)] animate-pulse" />
+                  <span className="text-[13px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
+                    Preços Verificados
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 rounded-full bg-[var(--bg-surface)]/30 backdrop-blur-md border border-[var(--border-subtle)] px-4 py-1.5 text-[12px] font-bold text-[var(--text-secondary)] shadow-sm">
-                   <Zap className="h-3.5 w-3.5 text-amber-500" />
-                   <span>Preços reais em Feijó</span>
+                <div className="h-1 w-1 rounded-full bg-[var(--border-strong)] hidden md:block" />
+                <div className="flex items-center gap-2 group cursor-help">
+                  <Zap className="h-4 w-4 text-[var(--brand-accent)]" />
+                  <span className="text-[13px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
+                    Atualizações frequentes
+                  </span>
+                </div>
+                <div className="h-1 w-1 rounded-full bg-[var(--border-strong)] hidden md:block" />
+                <div className="flex items-center gap-2 group cursor-help">
+                  <Store className="h-4 w-4 text-[var(--brand-primary)]" />
+                  <span className="text-[13px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider group-hover:text-[var(--text-primary)] transition-colors">
+                    Mercados locais
+                  </span>
                 </div>
               </div>
             </motion.div>
           </div>
         </div>
-
-        {/* Hero Content Grid */}
-        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          {/* Background Image Container */}
-          <div className="absolute inset-0 -z-10 overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
-              alt="Supermercado realista background"
-              className="h-full w-full object-cover brightness-[0.22] saturate-[0.7] blur-[2px] scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-transparent to-[var(--bg-base)]" />
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
-          </div>
-
-
-        <div className="max-w-4xl relative z-10">
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-balance text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
-            >
-              Compre melhor.{" "}
-              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-4 max-w-xl text-pretty text-[18px] md:text-[20px] leading-relaxed text-[var(--text-secondary)]"
-            >
-              O PreçoCerto acompanha os preços reais dos supermercados da sua cidade, monta a
-              cesta mais barata para você e diz exatamente onde comprar.
-            </motion.p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full ml-auto"
-          >
-            <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)]/5 px-6 py-8 backdrop-blur-md">
-              <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-xl bg-[var(--brand-primary)]/20 flex items-center justify-center">
-                  <TrendingDown className="h-6 w-6 text-[var(--brand-primary)]" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-[var(--text-primary)]">15.1%</div>
-                  <div className="text-xs text-[var(--text-secondary)] uppercase tracking-wider font-semibold">Economia Média</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
       </section>
 
-
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-0">
-        {/* Trust bar integrated into hero flow */}
-        <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <TrustStat label="Preços Verificados" value={stats?.priceRecords} />
-          <TrustStat label="Itens no Catálogo" value={stats?.totalItems} />
-          <TrustStat label="Economia Direta" value={economy?.avgSavingsPct || 15.1} suffix="%" />
-          <TrustStat label="Lojas Conectadas" value={stats?.establishments} />
-        </div>
+      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 relative z-0">
+        {/* Platform Stats Section */}
+        <section className="relative -mt-16 mb-20 z-20">
+          <div className="mx-auto max-w-5xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-[var(--border-subtle)] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl">
+              <StatCard label="Preços Verificados" value={stats?.priceRecords || "3.064"} icon={ShieldCheck} />
+              <StatCard label="Itens no Catálogo" value={stats?.totalItems || "20.262"} icon={Zap} />
+              <StatCard label="Economia Média" value={`${economy?.avgSavingsPct || "15.1"}%`} icon={TrendingDown} />
+              <StatCard label="Lojas Conectadas" value={stats?.establishments || "12"} icon={Store} />
+            </div>
+          </div>
+        </section>
 
         {/* Value props */}
         <section aria-labelledby="how-it-works" className="mb-12">
@@ -304,26 +294,26 @@ function HomePage() {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-           <div className="space-y-12 lg:col-span-8">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+           <div className="space-y-16 lg:col-span-8">
               <section id="baskets-section" aria-label="Cesta inteligente" className="scroll-mt-24">
                 <OptimizedBasketSection />
               </section>
 
               <section aria-labelledby="live-prices" className="scroll-mt-24">
-                <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-[var(--border-subtle)] pb-4">
+                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
                   <div className="min-w-0">
-                    <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
+                    <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
                       Monitoramento ao vivo
                     </p>
                     <h2
                       id="live-prices"
-                      className="text-[22px] font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
+                      className="text-[28px] font-bold tracking-tight text-[var(--text-primary)]"
                     >
                       Últimos preços registrados
                     </h2>
                   </div>
-                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
+                  <div className="flex w-fit rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1.5 shadow-sm">
                     {[
                       { id: "recent", label: "Recentes" },
                       { id: "price", label: "Menor Preço" },
@@ -333,10 +323,10 @@ function HomePage() {
                         onClick={() => setSort(s.id as any)}
                         aria-pressed={sort === s.id}
                         className={cn(
-                          "min-h-8 rounded-[var(--radius-sm)] px-3 text-[11px] font-bold uppercase tracking-wider transition-all",
+                          "min-h-10 rounded-[var(--radius-md)] px-5 text-[12px] font-bold uppercase tracking-wider transition-all",
                           sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-sm"
-                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
+                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
+                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
                         )}
                       >
                         {s.label}
@@ -344,7 +334,7 @@ function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {filteredProducts.map((p, i) => (
                     <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
                   ))}
@@ -353,17 +343,18 @@ function HomePage() {
            </div>
            
            <aside className="lg:col-span-4">
-              <div className="sticky top-24 space-y-8">
-                <section aria-labelledby="partners" className="pc-card !bg-[var(--bg-surface)]/30 !p-5">
-                   <h2 id="partners" className="mb-4 text-[13px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+              <div className="sticky top-28 space-y-10">
+                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-sm">
+                   <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="flex flex-col gap-4">
                       <RegisteredStoresCarousel />
                     </div>
                  </section>
+
                  
-                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-sm">
+                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-lg transition-transform hover:scale-[1.02] duration-300">
                    <PromoBanner />
                  </section>
               </div>
@@ -437,6 +428,22 @@ function HomePage() {
 
       <Footer />
       <MobileBottomNav />
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon: Icon }: { label: string; value: string | number; icon: any }) {
+  return (
+    <div className="flex flex-col items-center justify-center p-6 text-center transition-colors hover:bg-[var(--bg-surface-hover)] md:border-r md:border-[var(--border-subtle)] last:border-0">
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[color-mix(in_oklab,var(--brand-primary)_12%,transparent)] text-[var(--brand-primary)]">
+        <Icon className="h-6 w-6" />
+      </div>
+      <div className="text-[28px] font-extrabold tracking-tight text-[var(--text-primary)]">
+        {value}
+      </div>
+      <div className="mt-1 text-[13px] font-semibold uppercase tracking-wider text-[var(--text-tertiary)]">
+        {label}
+      </div>
     </div>
   );
 }

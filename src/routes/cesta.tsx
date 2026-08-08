@@ -3,14 +3,16 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
-import { MobileNav } from "@/components/nav/MobileNav";
-import { ProductImage } from "@/components/product/ProductImage";
-import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw } from "lucide-react";
+import { ProductImage } from "@/components/ds/ProductImage";
+import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { getCart, removeFromCart, type Cart } from "@/lib/cart.functions";
-import { PageHeader, SectionCard, EmptyState, LoadingSkeleton } from "@/components/layout";
+import { cn } from "@/lib/utils";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { Footer } from "@/components/brand/Footer";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { Button } from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Price } from "@/components/ds/Price";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +27,10 @@ import {
 export const Route = createFileRoute("/cesta")({
   head: () => ({
     meta: [
-      { title: "Minha cesta — PreçoCerto" },
+      { title: "Minha Cesta — PreçoCerto" },
       {
         name: "description",
-        content: "Produtos que você adicionou à cesta para comparar preços.",
+        content: "Produtos adicionados à sua cesta para comparação de preços.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -46,7 +48,6 @@ function CestaPage() {
   const fetchCart = useServerFn(getCart);
   const removeFn = useServerFn(removeFromCart);
   const qc = useQueryClient();
-  const isMobile = useIsMobile();
   const [pending, setPending] = useState<PendingRemoval>(null);
 
   const { data, isLoading, isFetching } = useQuery<Cart>({
@@ -67,14 +68,6 @@ function CestaPage() {
     },
   });
 
-  const requestRemove = (id: string, name: string) => {
-    if (isMobile) {
-      setPending({ id, name });
-      return;
-    }
-    removeMutation.mutate(id);
-  };
-
   const confirmRemove = () => {
     if (!pending) return;
     removeMutation.mutate(pending.id);
@@ -82,13 +75,13 @@ function CestaPage() {
   };
 
   const handleRefreshPrices = async () => {
-    const toastId = toast.loading("Atualizando preços da cesta...");
+    const toastId = toast.loading("Atualizando preços...");
     try {
       await qc.invalidateQueries({ queryKey: ["cart"] });
       await qc.refetchQueries({ queryKey: ["cart"] });
       toast.success("Preços atualizados", { id: toastId });
     } catch {
-      toast.error("Não foi possível atualizar agora", { id: toastId });
+      toast.error("Erro ao atualizar", { id: toastId });
     }
   };
 
@@ -96,136 +89,148 @@ function CestaPage() {
   const totalItems = items.reduce((s, it) => s + it.quantity, 0);
 
   return (
-    <div className="min-h-[100svh] bg-[var(--bg-base)] pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
-      <div className="mx-auto max-w-4xl px-4 md:px-6">
-        <PageHeader
-          breadcrumbs={[{ label: "Painel", to: "/app" }, { label: "Minha cesta" }]}
-          title="Minha cesta"
-          description="Acompanhe o valor total e veja onde sua compra sai mais barata."
-          actions={
-            <div className="flex items-center gap-2">
-              <Button
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+      <SiteHeader variant="solid" />
+      
+      <main className="mx-auto max-w-[1440px] px-4 md:px-8 py-12">
+        <header className="mb-12">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8">
+            <ChevronLeft size={18} />
+            Início
+          </Link>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-subtle)] pb-8">
+            <div className="space-y-3">
+              <h1 className="text-[clamp(2rem,5vw,3rem)] font-black tracking-tighter uppercase leading-none">Minha Cesta</h1>
+              <p className="text-[var(--text-secondary)] text-[15px] font-bold">Gerencie os itens da sua lista de compras.</p>
+            </div>
+            <div className="flex items-center gap-3">
+               <Button
                 variant="outline"
-                size="sm"
                 onClick={handleRefreshPrices}
                 disabled={isFetching || items.length === 0}
-                className="rounded-xl border-[var(--border-subtle)] bg-[var(--bg-surface)]"
+                className="h-12 rounded-2xl bg-[var(--bg-surface)] border-[var(--border-subtle)] px-6 font-black uppercase tracking-widest text-[12px]"
               >
                 <RefreshCw
-                  className={`mr-1.5 h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`}
-                  strokeWidth={2.2}
+                  className={cn("mr-2 h-4 w-4", isFetching && "animate-spin")}
                 />
-                Atualizar
+                Sincronizar
               </Button>
               {items.length > 0 && (
-                <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[var(--brand-primary)]/10 px-4 text-[13px] font-black uppercase tracking-wider text-[var(--brand-primary)]">
-                  {totalItems} {totalItems === 1 ? "item" : "itens"}
-                </span>
+                <div className="h-12 flex items-center px-6 rounded-2xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 font-black uppercase tracking-widest text-[12px]">
+                  {totalItems} {totalItems === 1 ? "Item" : "Itens"}
+                </div>
               )}
             </div>
-          }
-        />
+          </div>
+        </header>
 
         {isLoading ? (
-          <div className="space-y-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-24 animate-pulse rounded-[32px] border border-[var(--border-subtle)] bg-[var(--bg-surface)]" />
+          <div className="grid gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-32 animate-pulse rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)]" />
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-[32px] border border-dashed border-border bg-[var(--bg-surface)] p-12 text-center">
-            <ShoppingBag
-              className="mx-auto h-12 w-12 text-muted-foreground opacity-20"
-              aria-hidden
-            />
-            <h3 className="mt-4 font-display text-lg font-bold text-foreground">Sua cesta está vazia</h3>
-            <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">
-              Adicione produtos para comparar o valor total entre os mercados de Feijó.
-            </p>
-            <Button asChild className="mt-6 rounded-xl px-8" size="lg">
-              <Link to="/app/produtos">Buscar produtos</Link>
+          <div className="py-32 flex flex-col items-center text-center rounded-[var(--radius-2xl)] border-2 border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/30">
+            <div className="h-24 w-24 bg-[var(--bg-surface-elevated)] rounded-full flex items-center justify-center mb-8 border border-[var(--border-subtle)]">
+              <ShoppingBag size={48} className="text-[var(--text-tertiary)]" />
+            </div>
+            <h3 className="text-2xl font-black mb-4 uppercase tracking-tight">Cesta vazia</h3>
+            <p className="text-[var(--text-secondary)] font-bold text-lg max-w-sm mb-10">Adicione produtos do catálogo para comparar os preços entre os mercados.</p>
+            <Button asChild className="pc-button-primary h-14 px-10">
+              <Link to="/precos">Buscar Produtos</Link>
             </Button>
           </div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-            <div className="space-y-4">
-               <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Itens Selecionados</h2>
-               <div className="space-y-3">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="lg:col-span-8 space-y-6">
+               <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Itens Selecionados</h2>
+               <div className="grid gap-4">
                  {items.map((it) => (
-                   <div key={it.id} className="pc-card flex items-center gap-4 p-4 md:p-5">
-                      <ProductImage
-                        src={it.imageUrl}
-                        alt={it.displayName}
-                        width={64}
-                        height={64}
-                        fallbackIcon={Package}
-                        fallbackLabel={it.displayName}
-                        className="h-16 w-16 shrink-0 rounded-2xl bg-white p-1 shadow-sm"
-                        imageClassName="object-contain"
-                      />
+                   <div key={it.id} className="group relative flex items-center gap-6 p-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/40 transition-all duration-300">
+                      <div className="h-24 w-24 shrink-0 rounded-2xl bg-[var(--bg-surface-elevated)]/50 p-2 border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
+                        <ProductImage
+                          name={it.displayName}
+                          alt={it.displayName}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
                       <div className="min-w-0 flex-1">
                         <Link
                           to="/produto-publico/$slug"
                           params={{ slug: it.catalogId || "" }}
-                          className="line-clamp-2 font-display text-base font-bold text-foreground hover:text-[var(--brand-primary)] transition-colors"
+                          className="line-clamp-2 text-lg font-black uppercase tracking-tight text-[var(--text-primary)] hover:text-[var(--brand-primary)] transition-colors"
                         >
                           {it.displayName}
                         </Link>
-                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] font-black uppercase tracking-widest text-muted-foreground">
-                          {it.brand && <span>{it.brand}</span>}
-                          {it.brand && <span aria-hidden>·</span>}
-                          <span className="text-[var(--brand-primary)]">Qtd: {it.quantity}</span>
+                        <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">
+                          {it.brand && <span className="text-[var(--text-secondary)]">{it.brand}</span>}
+                          <div className="flex items-center gap-1.5 text-[var(--brand-primary)]">
+                            <Package size={14} />
+                            <span>Quantidade: {it.quantity}</span>
+                          </div>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => requestRemove(it.id, it.displayName)}
-                        disabled={removeMutation.isPending}
-                        className="rounded-full p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
+                      <div className="flex items-center gap-4">
+                        <button
+                          onClick={() => setPending({ id: it.id, name: it.displayName })}
+                          className="h-11 w-11 rounded-xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-red-500 hover:text-white transition-all border border-[var(--border-subtle)] shadow-sm"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
                    </div>
                  ))}
                </div>
             </div>
 
-            <div className="space-y-6">
-               <h2 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Resumo</h2>
-               <div className="pc-card sticky top-24 space-y-4 p-6">
-                 <div className="space-y-2">
-                   <p className="text-[13px] text-muted-foreground">Compare os preços da sua cesta em cada mercado cadastrado para economizar.</p>
-                 </div>
-                 <Button asChild className="w-full rounded-xl" size="lg">
-                    <Link to="/lista">
-                      Ver Melhores Preços
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                 </Button>
+            <div className="lg:col-span-4">
+               <div className="sticky top-32 space-y-8">
+                  <div className="rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/40 p-8 border border-[var(--border-subtle)] shadow-sm">
+                    <h2 className="text-[14px] font-black uppercase tracking-widest mb-6 border-b border-[var(--border-subtle)] pb-4">Resumo da Cesta</h2>
+                    <div className="space-y-4 mb-8">
+                      <p className="text-[14px] font-bold text-[var(--text-secondary)] leading-relaxed">Localizamos os melhores preços para estes {totalItems} itens em todos os mercados de Feijó.</p>
+                    </div>
+                    <Button asChild className="pc-button-primary w-full h-14 text-[13px] shadow-xl shadow-[var(--brand-primary)]/20">
+                        <Link to="/lista">
+                          Ver Melhores Ofertas
+                          <ArrowRight className="ml-3 h-5 w-5" />
+                        </Link>
+                    </Button>
+                  </div>
+                  
+                  <div className="rounded-[var(--radius-xl)] bg-[var(--brand-primary)]/5 p-6 border border-[var(--brand-primary)]/10">
+                     <div className="flex items-start gap-4">
+                        <RefreshCw className="h-5 w-5 text-[var(--brand-primary)] shrink-0 mt-1" />
+                        <p className="text-[12px] font-bold text-[var(--text-secondary)]">Os preços são atualizados conforme os mercados enviam novos dados para a plataforma.</p>
+                     </div>
+                  </div>
                </div>
             </div>
           </div>
         )}
-      </div>
-      <MobileNav />
+      </main>
+
+      <Footer />
+      <MobileBottomNav />
 
       <AlertDialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-[var(--radius-2xl)] border-[var(--border-subtle)] bg-[var(--bg-surface)]">
           <AlertDialogHeader>
-            <AlertDialogTitle>Remover da cesta?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-xl font-black uppercase tracking-tight">Remover da Cesta?</AlertDialogTitle>
+            <AlertDialogDescription className="text-base font-medium text-[var(--text-secondary)]">
               {pending?.name
-                ? `“${pending.name}” será retirado da sua cesta.`
-                : "O item será retirado da sua cesta."}
+                ? `O produto “${pending.name}” será retirado da sua lista de monitoramento.`
+                : "Este item será retirado da sua cesta."}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogFooter className="mt-6 gap-3">
+            <AlertDialogCancel className="h-12 rounded-xl border-[var(--border-subtle)] font-bold uppercase tracking-widest text-[11px]">Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmRemove}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="h-12 rounded-xl bg-red-600 text-white hover:bg-red-700 font-bold uppercase tracking-widest text-[11px] px-8"
             >
-              Remover
+              Remover Item
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

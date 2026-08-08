@@ -27,35 +27,35 @@ export function RegisteredStoresCarousel() {
   }
 
   return (
-    <>
-      {stores.slice(0, 9).map((store) => (
+    <div className="grid grid-cols-3 gap-4">
+      {stores.slice(0, 12).map((store) => (
+
         <Link
           key={store.id}
           to="/loja/$id"
           params={{ id: store.id }}
           search={{ q: "", from: "" }}
-          className="pc-card group flex flex-col items-center justify-center p-2 gap-1 text-center h-auto min-h-[64px] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/30 transition-all shadow-none hover:shadow-sm"
+          className="group relative flex flex-col items-center justify-center p-3 gap-2 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 transition-all duration-300"
         >
-          <div className="h-6 w-6 flex items-center justify-center rounded-[var(--radius-sm)] bg-white p-0.5 shadow-sm group-hover:scale-105 transition-transform overflow-hidden relative">
+          <div className="relative z-10 h-10 w-10 flex items-center justify-center rounded-[var(--radius-md)] bg-white p-1.5 shadow-sm group-hover:scale-110 transition-transform duration-300">
             {store.name.includes("Contamigos") ? (
-              <ContamigosLogo size="xs" hideName />
+              <ContamigosLogo size="sm" hideName />
             ) : (
               <StoreLogoThumb 
                 src={store.logoUrl} 
                 name={store.name} 
                 className="h-full w-full border-none p-0 bg-transparent"
                 imgClassName="object-contain"
-                initialsClassName="text-slate-900 font-bold text-[8px]"
+                initialsClassName="text-slate-900 font-bold text-[10px]"
               />
             )}
-            {/* Overlay sutil para garantir que o fundo branco não suma se a imagem falhar */}
-            <div className="absolute inset-0 -z-10 bg-slate-50/50" />
           </div>
-          <span className="text-[8px] font-bold uppercase tracking-tight text-[var(--text-secondary)] group-hover:text-[var(--brand-primary)] transition-colors truncate w-full px-1">
+          <span className="relative z-10 text-[10px] font-bold uppercase tracking-wider text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)] transition-colors truncate w-full px-1 text-center">
             {store.name.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
           </span>
         </Link>
       ))}
-    </>
+    </div>
+
   );
 }

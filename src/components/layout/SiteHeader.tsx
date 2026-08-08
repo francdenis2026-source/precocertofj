@@ -80,12 +80,15 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
             className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105 md:h-11 md:w-11"
           />
           <span className="hidden flex-col leading-none sm:flex">
-            <span className="text-[19px] font-semibold tracking-[-0.02em] text-[var(--text-primary)] md:text-[21px]">
+            <span className="text-[20px] font-black tracking-tight text-[var(--text-primary)]">
               Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
-            <span className="mt-1 text-[12px] font-medium text-[var(--text-tertiary)]">
-              Feijó · Acre
-            </span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)] animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
+                Feijó · AC
+              </span>
+            </div>
           </span>
         </Link>
 
@@ -95,23 +98,23 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
         {/* Navigation & Actions */}
         <div className="flex shrink-0 items-center gap-2 md:gap-4">
           {showNav && (
-            <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
+            <nav aria-label="Principal" className="hidden items-center gap-1.5 lg:flex">
               {NAV_LINKS.map((l) => (
                 <Link
                   key={l.to}
                   to={l.to}
                   activeProps={{ "data-active": "true" } as any}
                   className={cn(
-                    "group relative rounded-[var(--radius-md)] px-3 py-2 text-[15px] font-medium text-[var(--text-secondary)]",
-                    "transition-colors duration-200 hover:text-[var(--text-primary)]",
+                    "group relative rounded-xl px-4 py-2 text-[14px] font-bold uppercase tracking-wider text-[var(--text-secondary)]",
+                    "transition-all duration-200 hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
-                    "data-[active=true]:text-[var(--text-primary)]",
+                    "data-[active=true]:text-[var(--brand-primary)] data-[active=true]:bg-[var(--brand-primary)]/5",
                   )}
                 >
                   {l.label}
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-[var(--brand-primary)] transition-transform duration-300 ease-out group-hover:scale-x-100 group-data-[active=true]:scale-x-100"
+                    className="pointer-events-none absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 bg-[var(--brand-primary)] transition-transform duration-300 ease-out group-hover:scale-x-100 group-data-[active=true]:scale-x-100"
                   />
                 </Link>
               ))}
