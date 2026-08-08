@@ -94,9 +94,9 @@ export function MobileNav() {
                 "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
                 active
                   ? it.accent
-                    ? "text-accent-strong"
-                    : "text-primary"
-                  : "text-muted-foreground",
+                    ? "text-[var(--brand-accent)]"
+                    : "text-[var(--brand-primary)]"
+                  : "text-[var(--text-tertiary)]",
               )}
             >
               {active && (
