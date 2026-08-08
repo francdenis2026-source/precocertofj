@@ -117,7 +117,7 @@ export function MobileNav() {
                   strokeWidth={active ? 2.4 : 2}
                 />
                 {showBadge && (
-                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold leading-none text-accent-foreground ring-2 ring-background">
+                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[11px] font-bold leading-none text-[var(--text-on-brand)] ring-2 ring-[var(--bg-surface)]">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
