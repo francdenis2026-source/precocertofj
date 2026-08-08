@@ -70,7 +70,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "PreçoCerto" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "application-name", content: "PreçoCerto" },
-      { property: "og:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
+      { property: "og:title", content: "PreçoCerto — O comparador oficial de Feijó" },
       {
         property: "og:description",
         content:
