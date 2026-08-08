@@ -79,7 +79,7 @@ const RULES: Array<[FoodCategory, RegExp]> = [
 export function detectFoodCategory(text: string): FoodCategory {
   if (!text) return "generic";
   for (const [cat, re] of RULES) if (re.test(text)) return cat;
-  return "graos"; // fallback alimentar neutro
+  return "generic"; // fallback neutro
 }
 
 type IconProps = SVGProps<SVGSVGElement>;
