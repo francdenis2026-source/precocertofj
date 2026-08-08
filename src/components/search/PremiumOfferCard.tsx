@@ -149,7 +149,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
     return group.prices.filter(p => p.marketKind === marketFilter);
   }, [group.prices, marketFilter]);
 
-  const handleExportPDF = () => {
+  const handleExportPDF = (previewOnly = false) => {
     try {
       const doc = new jsPDF({
         orientation: "portrait",
@@ -174,7 +174,9 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
       doc.text("INTELIGÊNCIA EM ECONOMIA", 15, 28);
       
       doc.setFontSize(10);
-      doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`, 150, 20);
+      const dateStr = new Date().toLocaleDateString('pt-BR');
+      const timeStr = new Date().toLocaleTimeString('pt-BR');
+      doc.text(`Data: ${dateStr} ${timeStr}`, 150, 20);
       doc.text(`ID Consulta: #${Math.random().toString(36).substr(2, 9).toUpperCase()}`, 150, 28);
 
       // Product Info Section
@@ -236,6 +238,23 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
         margin: { top: 95, left: 15, right: 15 }
       });
 
+      // QR Code and Link Section
+      const finalY = (doc as any).lastAutoTable.finalY + 10;
+      if (finalY < 250) {
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("ACESSE ONLINE:", 15, finalY);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(59, 130, 246);
+        doc.text(shareUrl, 15, finalY + 5);
+        
+        // Add QR code image if possible (usually needs conversion to dataURL)
+        // For simplicity in this env, we'll add the text description
+        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        doc.text("Escaneie o QR Code no app para atualizar estes preços em tempo real.", 15, finalY + 10);
+      }
+
       // Footer
       const pageCount = (doc as any).internal.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
@@ -246,12 +265,25 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
         doc.text("Os preços podem sofrer alteração conforme a disponibilidade dos estabelecimentos.", 105, 290, { align: "center" });
       }
 
+      if (previewOnly) {
+        return doc.output('bloburl');
+      }
+
       doc.save(`comparativo-${group.productName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
       toast.success("PDF profissional gerado!");
     } catch (error) {
       console.error(error);
       toast.error("Erro ao gerar PDF");
     }
+  };
+
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleOpenPreview = () => {
+    const url = handleExportPDF(true) as string;
+    setPdfPreviewUrl(url);
+    setShowPreview(true);
   };
 
   const handlePrint = () => {
@@ -388,6 +420,16 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               variant="ghost" 
                               size="sm" 
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handleOpenPreview}
+                              title="Pré-visualizar Documento"
+                              aria-label="Pré-visualizar Documento"
+                            >
+                              <BarChart3 size={14} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
                               onClick={handlePrint}
                               title="Imprimir Comparação"
                               aria-label="Imprimir Comparação"
@@ -412,8 +454,8 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                                 isSaved ? "text-green-500" : "text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
                               )}
                               onClick={handleSaveComparison}
-                              title="Salvar Comparação"
-                              aria-label="Salvar Comparação"
+                              title="Salvar Comparação na Conta"
+                              aria-label="Salvar Comparação na Conta"
                             >
                               {isSaved ? <Check size={14} /> : <Bookmark size={14} />}
                             </Button>
@@ -431,7 +473,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               variant="ghost" 
                               size="sm" 
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
-                              onClick={handleExportPDF}
+                              onClick={() => handleExportPDF()}
                               title="Exportar PDF"
                               aria-label="Exportar PDF"
                             >
@@ -599,6 +641,38 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                           </div>
                         </div>
                       </div>
+
+                      {/* PDF Preview Dialog */}
+                      <Dialog open={showPreview} onOpenChange={setShowPreview}>
+                        <DialogContent className="max-w-4xl h-[90vh] bg-slate-900 border-slate-800 p-0 overflow-hidden flex flex-col">
+                          <DialogHeader className="p-4 bg-slate-800 border-b border-slate-700 flex flex-row items-center justify-between">
+                            <DialogTitle className="text-white">Pré-visualização do Documento (A4)</DialogTitle>
+                            <div className="flex items-center gap-2">
+                              <Button variant="outline" size="sm" onClick={() => {
+                                setShowPreview(false);
+                                handleExportPDF();
+                              }}>
+                                <Download className="mr-2" size={14} /> Baixar PDF
+                              </Button>
+                              <Button variant="secondary" size="sm" onClick={() => {
+                                setShowPreview(false);
+                                handlePrint();
+                              }}>
+                                <Printer className="mr-2" size={14} /> Imprimir
+                              </Button>
+                            </div>
+                          </DialogHeader>
+                          <div className="flex-1 bg-slate-900 overflow-auto p-4 md:p-8 flex justify-center">
+                            {pdfPreviewUrl && (
+                              <iframe 
+                                src={pdfPreviewUrl} 
+                                className="w-full max-w-[210mm] aspect-[1/1.414] bg-white shadow-2xl rounded-sm"
+                                title="PDF Preview"
+                              />
+                            )}
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </DialogContent>
                   </Dialog>
                 </div>
