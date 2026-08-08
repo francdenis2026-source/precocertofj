@@ -111,6 +111,7 @@ export function RecentProductsCarousel() {
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-[240px] w-[180px] shrink-0 animate-pulse rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/50" />
           ))}
+        </div>
       </section>
     );
   }
