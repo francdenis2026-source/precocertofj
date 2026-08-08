@@ -168,7 +168,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
   const showPanel = open && (canQuery || (trending?.length ?? 0) > 0);
 
   return (
-    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto">
+    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto isolate">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -241,13 +241,20 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
       <AnimatePresence>
         {showPanel && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.98 }}
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute left-0 right-0 top-[calc(100%+12px)] z-[60] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-left shadow-[0_28px_70px_-24px_rgba(11,30,58,0.45)] min-w-[300px] lg:min-w-[400px]"
+            className="absolute left-[-12px] right-[-12px] top-[-12px] z-[70] overflow-hidden rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)] text-left shadow-[0_32px_80px_-16px_rgba(11,30,58,0.6)] min-w-[320px] lg:min-w-[440px]"
           >
+            <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] px-5 py-3.5 flex items-center justify-between">
+               <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Inteligência de Busca</span>
+               {loading && <Loader2 className="h-3 w-3 animate-spin text-[var(--brand-primary)]" />}
+            </div>
+
+            <div className="p-1">
             {!canQuery ? (
+
               <div className="p-4">
                 <p className="mb-3 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
                   <TrendingUp className="h-3 w-3" /> Pesquisas em alta
@@ -301,7 +308,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                 id={LISTBOX_ID}
                 role="listbox"
                 aria-label="Sugestões de produtos"
-                className="max-h-[340px] overflow-y-auto overscroll-contain py-1"
+                className="max-h-[480px] overflow-y-auto overscroll-contain py-1"
               >
                 {items.map((s, i) => (
                   <li key={s.id} role="none">
@@ -361,9 +368,12 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                 </li>
               </ul>
             )}
+            </div>
+
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+
   );
 }
