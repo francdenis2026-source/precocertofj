@@ -163,7 +163,7 @@ function HomePage() {
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
         </div>
 
-        <div className="mx-auto max-w-[1440px] w-full">
+        <div className="mx-auto max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -181,7 +181,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="text-balance text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
+              className="text-balance text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
             >
               Compre melhor.{" "}
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
@@ -196,19 +196,22 @@ function HomePage() {
               O PreçoCerto acompanha os preços reais dos supermercados da sua cidade, monta a
               cesta mais barata para você e diz exatamente onde comprar.
             </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-8 max-w-2xl"
-            >
-              <div className="relative z-20">
-                <SmartSearchBar />
-              </div>
-            </motion.div>
           </div>
 
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-20 w-full lg:max-w-md ml-auto"
+          >
+            <div className="bg-[var(--bg-surface)]/10 backdrop-blur-md border border-[var(--border-subtle)] rounded-3xl p-6 shadow-2xl">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Encontre o melhor preço</h2>
+              <SmartSearchBar />
+              <p className="mt-4 text-xs text-[var(--text-tertiary)] text-center">
+                Pesquise por produtos, marcas ou categorias.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
