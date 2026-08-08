@@ -208,13 +208,6 @@ function HomePage() {
             </motion.div>
           </div>
 
-          {/* Trust bar integrated into hero flow */}
-          <div className="mt-20 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
-            <TrustStat label="Registros de preço" value={stats?.priceRecords} />
-            <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
-            <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
-            <TrustStat label="Mercados parceiros" value={stats?.establishments} />
-          </div>
         </div>
       </section>
 
