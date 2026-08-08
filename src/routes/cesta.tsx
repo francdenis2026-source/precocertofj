@@ -169,7 +169,7 @@ function CestaPage() {
                       <h3 className="text-sm font-black uppercase tracking-[0.2em] opacity-80">Economia Estimada</h3>
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-black tracking-tighter">
-                          <Price value={totalSavings} showSymbol={true} className="text-white" />
+                          <Price value={totalSavings} className="text-white" />
                         </span>
                         <span className="text-[12px] font-bold uppercase tracking-widest opacity-70">nesta compra</span>
                       </div>
