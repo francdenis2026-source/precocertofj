@@ -37,21 +37,28 @@ export function RealtimeMonitoringDashboard() {
 
   if (error) {
     return (
-      <div className="p-8 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--danger)]/20 text-center">
-        <ShieldAlert className="h-10 w-10 text-[var(--danger)] mx-auto mb-4 opacity-50" />
-        <h4 className="text-[16px] font-bold text-[var(--text-primary)] mb-2">Acesso Restrito</h4>
-        <p className="text-[13px] text-[var(--text-tertiary)] max-w-sm mx-auto">
+      <div className="p-12 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center shadow-2xl">
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[var(--danger)]/10 mb-6">
+          <ShieldAlert className="h-8 w-8 text-[var(--danger)] opacity-80" />
+        </div>
+        <h4 className="t-h3 mb-3">Acesso Restrito</h4>
+        <p className="t-small max-w-sm mx-auto mb-8">
           {error.message || "Você não tem permissão para acessar esta funcionalidade de monitoramento."}
         </p>
+        <button 
+          onClick={() => window.location.href = '/'}
+          className="pc-button-secondary"
+        >
+          Voltar para o Início
+        </button>
       </div>
     );
   }
 
   if (isLoading) {
-
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse shadow-2xl shadow-blue-500/5">
           <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
           <span className="text-[11px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">Iniciando Varredura...</span>
         </div>
@@ -63,6 +70,7 @@ export function RealtimeMonitoringDashboard() {
       </div>
     );
   }
+
 
   return (
     <div className="space-y-8">
@@ -124,21 +132,22 @@ export function RealtimeMonitoringDashboard() {
               {/* Card Header: Store Info */}
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-10 w-10 shrink-0 rounded-[var(--radius-md)] bg-white border border-[var(--border-subtle)] p-1.5 flex items-center justify-center shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                  <div className="h-10 w-10 shrink-0 rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] p-1.5 flex items-center justify-center shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
                     {store.storeName.includes("Contamigos") ? (
                       <ContamigosLogo size="sm" hideName />
                     ) : (
                       <StoreLogoThumb 
                         src={store.storeLogoUrl} 
                         name={store.storeName} 
-                        className="h-full w-full border-none p-0 bg-transparent"
-                        imgClassName="object-contain filter-none mix-blend-multiply"
+                        className="h-full w-full border-none p-0 bg-transparent brightness-90 contrast-125 saturate-0 group-hover:saturate-100 group-hover:brightness-100 transition-all duration-500"
+                        imgClassName="object-contain filter-none"
+
                         initialsClassName="text-slate-900 font-bold text-[10px]"
                       />
                     )}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-[13px] font-bold text-[var(--text-primary)] leading-tight truncate">
+                    <h4 className="text-[13px] font-bold text-[var(--text-primary)] leading-tight truncate group-hover:text-[var(--brand-primary)] transition-colors">
                       {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
@@ -155,7 +164,7 @@ export function RealtimeMonitoringDashboard() {
               </div>
 
               {/* Card Body: Recent Scan Result */}
-              <div className="flex-1 bg-[var(--bg-base)]/40 rounded-[var(--radius-lg)] p-3 border border-[var(--border-subtle)]/50 group-hover:border-[var(--brand-primary)]/20 transition-colors">
+              <div className="flex-1 bg-[var(--bg-surface-elevated)]/30 rounded-[var(--radius-lg)] p-3 border border-[var(--border-subtle)] group-hover:border-[var(--brand-primary)]/20 transition-all duration-300">
                 {store.insights && store.insights.length > 0 ? (
                   <div className="space-y-2">
                     {store.insights.slice(0, 1).map((insight: any, idx: number) => (
