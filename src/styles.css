@@ -89,7 +89,7 @@
   --text-tertiary: var(--text-tertiary);
   
   --brand-primary: var(--brand-primary);
-  --brand-secondary: var(--brand-secondary);
+  --brand-accent: var(--brand-accent);
 
   --animate-spin-slow: spin 8s linear infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
