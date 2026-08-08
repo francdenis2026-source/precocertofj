@@ -284,10 +284,10 @@ function LoginPage() {
                   className="space-y-8"
                 >
                   <div className="space-y-2">
-                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-slate-900 font-display">
+                    <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-[var(--text-primary)] font-display">
                       Bem-vindo <span className="text-[var(--brand-primary)]">de volta</span>
                     </h1>
-                    <p className="text-sm text-slate-500 font-medium">
+                    <p className="text-sm text-[var(--text-secondary)] font-medium">
                       Acesse sua conta para continuar economizando.
                     </p>
                   </div>
