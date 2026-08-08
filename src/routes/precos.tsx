@@ -125,8 +125,8 @@ function SearchPage() {
                 >
                   <div className="flex gap-5">
                     <div className={cn(
-                      "h-16 w-16 shrink-0 rounded-2xl bg-white p-2 border flex items-center justify-center overflow-hidden transition-all duration-300",
-                      activeMarketId === m.id ? "border-[var(--brand-primary)] shadow-inner" : "border-[var(--border-subtle)]"
+                      "h-16 w-16 shrink-0 rounded-[var(--radius-xl)] bg-white p-2 border flex items-center justify-center overflow-hidden transition-all duration-300",
+                      activeMarketId === m.id ? "border-[var(--brand-primary)] shadow-[var(--shadow-sm)]" : "border-[var(--border-subtle)]"
                     )}>
                       {m.logoUrl ? (
                          <img src={m.logoUrl} alt={m.name} className="h-full w-full object-contain" />
@@ -183,7 +183,7 @@ function SearchPage() {
               </div>
               <div className="px-10 pb-12 -mt-16 relative z-10">
                 <div className="flex flex-col md:flex-row items-end gap-8 mb-10">
-                  <div className="h-36 w-36 rounded-[32px] bg-white p-3 border-4 border-[var(--bg-base)] shadow-2xl flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="h-36 w-36 rounded-[32px] bg-white p-3 border-4 border-[var(--bg-base)] shadow-[var(--shadow-lg)] flex items-center justify-center overflow-hidden shrink-0">
                     {activeMarket.logoUrl ? (
                       <img src={activeMarket.logoUrl} alt="" className="h-full w-full object-contain" />
                     ) : (
@@ -211,7 +211,7 @@ function SearchPage() {
                       to="/loja/$id" 
                       params={{ id: activeMarket.id }}
                       search={{ q: "", from: "" }}
-                      className="pc-button-primary h-14 px-10 shadow-xl shadow-[var(--brand-primary)]/20 text-[14px] uppercase tracking-widest"
+                      className="pc-button-primary h-14 px-10 shadow-[var(--shadow-lg)] shadow-[var(--brand-primary)]/20 text-[14px] uppercase tracking-widest"
                     >
                       Entrar na Loja <ChevronRight className="h-5 w-5" />
                     </Link>
@@ -242,7 +242,7 @@ function SearchPage() {
                 </h3>
               </div>
               <div className="flex items-center gap-3">
-                <button className="h-12 px-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[13px] font-black uppercase tracking-wider flex items-center gap-2 hover:bg-[var(--bg-surface-elevated)] transition-all">
+                <button className="h-12 px-6 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[13px] font-black uppercase tracking-wider flex items-center gap-2 hover:bg-[var(--bg-surface-elevated)] transition-all">
                   <LayoutGrid size={18} /> Galeria
                 </button>
               </div>
@@ -302,7 +302,7 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
   const savings = Math.round(((group.max - priceObj.price) / group.max) * 100);
   
   return (
-    <article className="group relative flex flex-col bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-2xl hover:border-[var(--brand-primary)]/30 hover:-translate-y-2">
+    <article className="group relative flex flex-col bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-[var(--shadow-lg)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2">
       <div className="aspect-square bg-[var(--bg-surface-elevated)]/30 p-8 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface-elevated)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <ProductImage 
@@ -312,7 +312,7 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
         />
         {savings > 5 && (
           <div className="absolute top-4 right-4 z-20">
-             <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-xl shadow-lg shadow-emerald-500/30">
+             <span className="bg-[var(--success)] text-[var(--text-on-brand)] text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-[var(--radius-xl)] shadow-[var(--shadow-lg)] shadow-[var(--success)]/30">
                -{savings}% OFF
              </span>
           </div>
@@ -339,7 +339,7 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
              )}
              <Price value={priceObj.price} size="lg" className="text-2xl font-black tracking-tighter" />
            </div>
-           <button className="h-12 w-12 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-white hover:rotate-45 transition-all duration-300 border border-[var(--border-subtle)] shadow-sm">
+           <button className="h-12 w-12 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] hover:rotate-45 transition-all duration-[var(--dur-base)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
              <ArrowRight className="h-5 w-5" />
            </button>
         </div>

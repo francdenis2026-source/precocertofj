@@ -242,9 +242,9 @@ function Perfil() {
           description="Aqui você troca sua foto, ajusta seus dados e escolhe como quer ver os preços."
         />
         <div className="grid gap-3 pb-4 md:grid-cols-[1fr_2fr]">
-          <div className="rounded-2xl border border-border bg-card p-4 text-center">
+          <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 text-center">
             <div className="relative mx-auto h-24 w-24">
-              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-[oklch(0.36_0.11_255)] font-display text-4xl text-primary-foreground shadow-[0_10px_24px_-12px_oklch(0.44_0.12_252/0.55)] ring-1 ring-inset ring-accent/30">
+              <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[var(--brand-primary)] to-[var(--bg-surface-elevated)] font-display text-4xl text-[var(--text-on-brand)] shadow-[var(--shadow-lg)] ring-1 ring-inset ring-white/10">
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Foto de perfil" className="h-full w-full object-cover" />
                 ) : (
@@ -256,7 +256,7 @@ function Perfil() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
                 aria-label="Trocar foto de perfil"
-                className="absolute bottom-0 right-0 grid h-8 w-8 place-items-center rounded-full bg-accent text-accent-foreground shadow-md ring-2 ring-card transition-transform hover:scale-105 disabled:opacity-60"
+                className="absolute bottom-0 right-0 grid h-8 w-8 place-items-center rounded-full bg-[var(--brand-accent)] text-[var(--bg-base)] shadow-[var(--shadow-md)] ring-2 ring-[var(--bg-surface)] transition-transform hover:scale-105 disabled:opacity-60"
               >
                 {uploadingAvatar ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
               </button>
@@ -277,7 +277,7 @@ function Perfil() {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
-                className="text-[11px] font-semibold uppercase tracking-widest text-primary hover:underline disabled:opacity-50"
+                className="text-[11px] font-semibold uppercase tracking-widest text-[var(--brand-primary)] hover:underline disabled:opacity-50"
               >
                 {avatarPath ? "Trocar foto" : "Enviar foto"}
               </button>
@@ -286,26 +286,26 @@ function Perfil() {
                   type="button"
                   onClick={handleRemoveAvatar}
                   disabled={uploadingAvatar}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium text-destructive hover:underline disabled:opacity-50"
+                  className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--danger)] hover:underline disabled:opacity-50"
                 >
                   <Trash2 className="h-3 w-3" /> Remover foto
                 </button>
               )}
               {!avatarPath && (
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-[11px] text-[var(--text-tertiary)]">
                   Sem foto — usamos as iniciais do seu nome.
                 </p>
               )}
             </div>
-            <p className="mt-4 font-display text-2xl text-foreground">
+            <p className="mt-4 font-display text-2xl text-[var(--text-primary)]">
               {fullName || "Sua conta"}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-[var(--text-secondary)]">
               {digits ? maskCpf(digits) : "sem CPF cadastrado"}
             </p>
             {/* status real de assinatura fica no SubscriptionStatusCard abaixo */}
             {(address.city || address.state) && (
-              <p className="mt-6 flex items-center justify-center gap-1 text-xs text-muted-foreground">
+              <p className="mt-6 flex items-center justify-center gap-1 text-xs text-[var(--text-tertiary)]">
                 <MapPin className="h-3 w-3" /> {address.city}
                 {address.state ? ` · ${address.state}` : ""}
               </p>

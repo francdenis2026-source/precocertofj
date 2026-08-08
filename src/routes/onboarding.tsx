@@ -91,21 +91,21 @@ function OnboardingPage() {
       className="min-h-svh w-full px-4 py-10"
       style={{
         background:
-          "radial-gradient(ellipse at top, #1e3a5f 0%, #0f1b3d 45%, #0a1631 100%)",
+          "radial-gradient(ellipse at top, var(--bg-surface-elevated) 0%, var(--bg-surface) 45%, var(--bg-base) 100%)",
       }}
     >
       <div className="mx-auto flex max-w-lg flex-col items-center">
-        <Logo className="text-white" />
+        <Logo className="text-[var(--text-primary)]" />
 
-        <div className="mt-6 flex items-center gap-2 rounded-full border border-[#e6c97740] bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[#e6c977]">
+        <div className="mt-6 flex items-center gap-2 rounded-full border border-[var(--brand-accent)]/20 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--brand-accent)]">
           <ShieldCheck className="h-3 w-3" />
           Falta menos de 1 minuto
         </div>
 
-        <h1 className="mt-4 text-center font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
+        <h1 className="mt-4 text-center font-display text-3xl font-semibold leading-tight text-[var(--text-primary)] sm:text-4xl">
           Só mais alguns dados para começar
         </h1>
-        <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-white/85">
+        <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-[var(--text-secondary)]">
           A gente usa seu bairro para mostrar os mercados perto de você e avisar
           quando o preço dos seus produtos cair.
         </p>
@@ -115,7 +115,7 @@ function OnboardingPage() {
             e.preventDefault();
             if (canSubmit) mut.mutate();
           }}
-          className="mt-8 w-full space-y-4 rounded-2xl border border-white/10 bg-white/95 p-6 text-[#0a1631] shadow-2xl backdrop-blur"
+          className="mt-8 w-full space-y-4 rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-[var(--text-primary)] shadow-[var(--shadow-lg)] backdrop-blur"
         >
           <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
             <Input
@@ -172,7 +172,7 @@ function OnboardingPage() {
           <Button
             type="submit"
             disabled={!canSubmit || mut.isPending}
-            className="mt-2 h-12 w-full gap-2 bg-[#0f1b3d] text-white hover:bg-[#132347]"
+            className="mt-2 h-12 w-full gap-2 bg-[var(--brand-primary)] text-[var(--text-on-brand)] hover:bg-[var(--brand-primary)]/90"
           >
             {mut.isPending ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -203,7 +203,7 @@ function FieldRow({
 }) {
   return (
     <div>
-      <Label className="flex items-center gap-1.5 text-xs font-semibold text-[#0a1631]">
+      <Label className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-primary)]">
         {icon}
         {label}
       </Label>

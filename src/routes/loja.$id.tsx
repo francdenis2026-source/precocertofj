@@ -177,14 +177,14 @@ function StorePage() {
 
           <div className="flex flex-col md:flex-row gap-8 items-end">
             <div className="relative">
-              <div className="h-32 w-32 md:h-40 md:w-40 rounded-[var(--radius-2xl)] bg-white p-3 shadow-2xl border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
+              <div className="h-32 w-32 md:h-40 md:w-40 rounded-[var(--radius-2xl)] bg-white p-3 shadow-[var(--shadow-lg)] border border-[var(--border-subtle)] flex items-center justify-center overflow-hidden">
                 {store.logoUrl ? (
                   <img src={store.logoUrl} alt={store.name} className="h-full w-full object-contain" />
                 ) : (
-                  <StoreIcon size={64} className="text-slate-200" />
+                  <StoreIcon size={64} className="text-[var(--text-tertiary)]" />
                 )}
               </div>
-              <div className="absolute -bottom-2 -right-2 bg-[var(--success)] text-white p-2 rounded-xl shadow-lg border-4 border-[var(--bg-base)]">
+              <div className="absolute -bottom-2 -right-2 bg-[var(--success)] text-[var(--text-on-brand)] p-2 rounded-[var(--radius-xl)] shadow-[var(--shadow-md)] border-4 border-[var(--bg-base)]">
                 <ShieldCheck size={20} strokeWidth={2.5} />
               </div>
             </div>
@@ -192,7 +192,7 @@ function StorePage() {
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-4 mb-3">
                 <h1 className="text-[clamp(2rem,5vw,3rem)] font-black tracking-tight leading-none uppercase">{store.name}</h1>
-                <div className="flex items-center gap-1.5 bg-[var(--brand-accent)] text-black px-3 py-1 rounded-xl text-[12px] font-black uppercase tracking-wider">
+                <div className="flex items-center gap-1.5 bg-[var(--brand-accent)] text-[var(--bg-base)] px-3 py-1 rounded-[var(--radius-xl)] text-[12px] font-black uppercase tracking-wider">
                   <Star size={12} className="fill-current" />
                   4.8 PREMIUM
                 </div>
@@ -237,7 +237,7 @@ function StorePage() {
               <input 
                 value={q} 
                 onChange={e => setQ(e.target.value)}
-                className="w-full bg-[var(--bg-surface)] rounded-2xl py-4 pl-12 pr-12 text-[15px] font-bold text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 border border-[var(--border-subtle)] focus:border-[var(--brand-primary)]/40 transition-all"
+                className="w-full bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] py-4 pl-12 pr-12 text-[15px] font-bold text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 border border-[var(--border-subtle)] focus:border-[var(--brand-primary)]/40 transition-all"
                 placeholder="Pesquisar neste mercado..."
               />
               {q && (
@@ -254,9 +254,9 @@ function StorePage() {
                       key={g.label} 
                       href={`#cat-${g.label.replace(/\s+/g, '-')}`} 
                       className={cn(
-                        "shrink-0 px-6 py-2.5 rounded-xl text-[12px] font-bold uppercase tracking-widest transition-all border",
+                        "shrink-0 px-6 py-2.5 rounded-[var(--radius-xl)] text-[12px] font-bold uppercase tracking-widest transition-all border",
                         activeCategory === g.label 
-                          ? "bg-[var(--brand-primary)] text-white border-[var(--brand-primary)] shadow-lg shadow-[var(--brand-primary)]/20" 
+                          ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] border-[var(--brand-primary)] shadow-[var(--shadow-md)]" 
                           : "bg-[var(--bg-surface)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--brand-primary)]/30 hover:text-[var(--text-primary)]"
                       )}
                     >
@@ -296,7 +296,7 @@ function StorePage() {
              >
                 <div className="flex items-center justify-between mb-10 border-b border-[var(--border-subtle)] pb-6">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] rounded-2xl flex items-center justify-center border border-[var(--brand-primary)]/20">
+                    <div className="h-12 w-12 bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] rounded-[var(--radius-2xl)] flex items-center justify-center border border-[var(--brand-primary)]/20">
                       <Tag size={24} />
                     </div>
                     <h2 className="text-3xl font-black uppercase tracking-tight">
@@ -349,7 +349,7 @@ function ProductCardItem({ p, storeId, allItems }: { p: PublicStoreProduct; stor
         <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-1">
           <div className="flex items-center justify-between">
             <Price value={p.price} size="md" className="text-lg md:text-xl font-black tracking-tighter" />
-            <button className="h-8 md:h-10 w-8 md:w-10 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all shadow-sm">
+            <button className="h-8 md:h-10 w-8 md:w-10 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] transition-all shadow-[var(--shadow-sm)]">
               <PlusCircleIcon size={16} />
             </button>
           </div>

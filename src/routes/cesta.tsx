@@ -160,7 +160,7 @@ function CestaPage() {
             {/* Resumo de Economia no Topo (Mobile/Desktop) */}
             {totalSavings > 0 && (
               <div className="lg:col-span-12 animate-in fade-in slide-in-from-top-4 duration-700">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 rounded-[var(--radius-2xl)] bg-gradient-to-r from-[var(--brand-primary)] to-[#2563EB] text-white shadow-2xl shadow-[var(--brand-primary)]/20 border border-white/10">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 rounded-[var(--radius-2xl)] bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-primary-soft)] text-[var(--text-on-brand)] shadow-[var(--shadow-lg)] shadow-[var(--brand-primary)]/20 border border-white/10">
                   <div className="flex items-center gap-6">
                     <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md">
                       <TrendingDown size={32} className="text-white" />
@@ -183,7 +183,7 @@ function CestaPage() {
                     <p className="text-[11px] font-black uppercase tracking-widest text-white/60">Baseado no menor valor verificado hoje</p>
                   </div>
 
-                  <Button asChild className="bg-white text-[var(--brand-primary)] hover:bg-white/90 h-14 px-8 rounded-xl font-black uppercase tracking-widest text-[12px] shadow-lg shadow-black/10 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                  <Button asChild className="bg-white text-[var(--brand-primary)] hover:bg-white/90 h-14 px-8 rounded-[var(--radius-xl)] font-black uppercase tracking-widest text-[12px] shadow-[var(--shadow-md)] shadow-black/10 transition-all hover:scale-[1.02] active:scale-[0.98]">
                     <Link to="/lista">
                       Ver Ofertas
                       <ArrowRight className="ml-3 h-5 w-5" />
@@ -239,7 +239,7 @@ function CestaPage() {
                       <div className="flex items-center gap-4">
                         <button
                           onClick={() => setPending({ id: it.id, name: it.displayName })}
-                          className="h-11 w-11 rounded-xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-red-500 hover:text-white transition-all border border-[var(--border-subtle)] shadow-sm"
+                          className="h-11 w-11 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--danger)] hover:text-[var(--text-on-brand)] transition-all border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]"
                         >
                           <Trash2 size={20} />
                         </button>
@@ -259,7 +259,7 @@ function CestaPage() {
                         <Price value={totalMinPrice + totalSavings} size="sm" />
                       </div>
                       {totalSavings > 0 && (
-                        <div className="flex justify-between items-center text-[13px] font-black text-[var(--success)] bg-[var(--success)]/5 p-3 rounded-xl border border-[var(--success)]/10">
+                        <div className="flex justify-between items-center text-[13px] font-black text-[var(--success)] bg-[var(--success)]/5 p-3 rounded-[var(--radius-xl)] border border-[var(--success)]/10">
                           <span>Economia Aplicada</span>
                           <span className="flex items-center gap-1">
                             -<Price value={totalSavings} size="sm" />
@@ -312,10 +312,10 @@ function CestaPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-6 gap-3">
-            <AlertDialogCancel className="h-12 rounded-xl border-[var(--border-subtle)] font-bold uppercase tracking-widest text-[11px]">Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="h-12 rounded-[var(--radius-xl)] border-[var(--border-subtle)] font-bold uppercase tracking-widest text-[11px]">Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmRemove}
-              className="h-12 rounded-xl bg-red-600 text-white hover:bg-red-700 font-bold uppercase tracking-widest text-[11px] px-8"
+              className="h-12 rounded-[var(--radius-xl)] bg-[var(--danger)] text-[var(--text-on-brand)] hover:bg-[var(--danger)]/90 font-bold uppercase tracking-widest text-[11px] px-8"
             >
               Remover Item
             </AlertDialogAction>
