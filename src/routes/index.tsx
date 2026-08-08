@@ -218,10 +218,10 @@ function HomePage() {
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-10">
         {/* Trust bar integrated into hero flow */}
         <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <TrustStat label="Registros de preço" value={stats?.priceRecords} />
-          <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
-          <TrustStat label="Economia média" value={economy?.avgSavingsPct || 15.1} suffix="%" />
-          <TrustStat label="Mercados parceiros" value={stats?.establishments} />
+          <TrustStat label="Preços Verificados" value={stats?.priceRecords} />
+          <TrustStat label="Itens no Catálogo" value={stats?.totalItems} />
+          <TrustStat label="Economia Direta" value={economy?.avgSavingsPct || 15.1} suffix="%" />
+          <TrustStat label="Lojas Conectadas" value={stats?.establishments} />
         </div>
 
         {/* Value props */}
