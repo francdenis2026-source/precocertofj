@@ -13,6 +13,7 @@ import {
   completeMyOnboarding,
 } from "@/lib/admin-security.functions";
 import { useSession } from "@/hooks/useSession";
+import { LoginShell } from "@/components/auth/LoginShell";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,
