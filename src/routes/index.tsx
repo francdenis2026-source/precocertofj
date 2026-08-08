@@ -404,7 +404,7 @@ function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button size="lg" className="rounded-xl px-8 font-bold shadow-lg shadow-[var(--brand-primary)]/20 active:scale-95 transition-transform" asChild>
-                <Link to="/cadastro">Começar a economizar</Link>
+                <Link to="/cadastro" search={{ from: "/" }}>Começar a economizar</Link>
               </Button>
             </div>
           </div>

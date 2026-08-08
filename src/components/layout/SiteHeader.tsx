@@ -167,7 +167,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                 <Link to="/login" className="pc-button-ghost hidden sm:inline-flex">
                   Entrar
                 </Link>
-                <Link to="/cadastro" search={{}} className="pc-button-primary">
+                <Link to="/cadastro" search={{ from: "/" }} className="pc-button-primary">
                   Começar
                 </Link>
               </>
