@@ -376,9 +376,7 @@ function PlansPage() {
                       disabled={buying === plan.id}
                       data-loading={buying === plan.id ? "true" : undefined}
                       className={dsx(
-                        ds.btn.base,
-                        "btn-state-safe pc-focus mt-3 h-11 w-full px-3",
-                        tc.control,
+                        "inline-flex items-center justify-center gap-2 pc-focus mt-3 h-11 w-full px-3 rounded-xl transition-all font-bold text-sm",
                         isRecommended
                           ? "bg-brand-accent text-bg-base hover:bg-brand-accent-soft shadow-lg shadow-brand-accent/10"
                           : "border border-subtle bg-surface text-primary hover:border-brand-accent hover:text-brand-accent",
