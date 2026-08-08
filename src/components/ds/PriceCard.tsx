@@ -69,9 +69,9 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
   const TrendIcon = inferredTrend === "down" ? TrendingDown : inferredTrend === "up" ? TrendingUp : Minus;
   const trendClass =
     inferredTrend === "down"
-      ? "text-savings"
+        ? "text-[var(--pc-brand-accent)]"
       : inferredTrend === "up"
-        ? "text-destructive"
+        ? "text-[var(--danger)]"
         : "text-muted-foreground";
 
   const interactive = typeof onClick === "function";
@@ -94,8 +94,8 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
         }
       }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elev-1 transition-shadow hover:shadow-elev-2",
-        compact ? "gap-2 p-2.5" : "gap-3 p-3",
+        "group relative flex flex-col overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-sm)] transition-all hover:shadow-[var(--pc-shadow-md)]",
+        compact ? "gap-2 p-3" : "gap-3 p-4",
         interactive &&
           "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
@@ -119,14 +119,14 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
 
         {highlight ? (
           <span className="absolute left-2 top-2">
-            <Badge variant="savings" size="sm">
+            <Badge variant="primary" size="sm">
               {highlight}
             </Badge>
           </span>
         ) : null}
         {savings > 0 ? (
           <span className="absolute right-2 top-2">
-            <Badge variant="savings" size="sm">
+            <Badge variant="primary" size="sm">
               <Price value={savings} size="xs" tone="savings" prefix="−R$" />
             </Badge>
           </span>
