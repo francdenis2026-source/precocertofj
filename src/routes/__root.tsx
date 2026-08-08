@@ -148,8 +148,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children:
-          // PreçoCerto ships dark-only: pin the document before first paint.
-          "try{var r=document.documentElement;r.classList.add('dark');r.classList.remove('light');r.dataset.theme='dark';r.style.colorScheme='dark';localStorage.setItem('pc-theme','dark');}catch(e){}",
+          // PreçoCerto default: light theme by default, supports toggling.
+          "try{var r=document.documentElement;var t=localStorage.getItem('pc-theme')||'light';r.classList.add(t);r.classList.remove(t==='dark'?'light':'dark');r.dataset.theme=t;r.style.colorScheme=t;if(!localStorage.getItem('pc-theme'))localStorage.setItem('pc-theme','light');}catch(e){}",
       },
       {
         children:
