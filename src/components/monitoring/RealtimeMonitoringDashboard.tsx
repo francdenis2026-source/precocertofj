@@ -68,8 +68,8 @@ export function RealtimeMonitoringDashboard() {
             </div>
             <span className="t-kicker text-[var(--brand-primary)]">Inteligência de Mercado</span>
           </div>
-          <h3 className="t-h3 !leading-none">Monitoramento Ativo</h3>
-          <p className="t-caption max-w-md">Varredura automática de preços em todos os estabelecimentos cadastrados a cada 60 minutos.</p>
+          <h3 className="t-h3 !leading-none text-[var(--text-primary)]">Monitoramento Ativo</h3>
+          <p className="t-caption max-w-md text-[var(--text-secondary)]">Varredura automática de preços em todos os estabelecimentos cadastrados a cada 60 minutos.</p>
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
@@ -112,7 +112,7 @@ export function RealtimeMonitoringDashboard() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3, delay: i * 0.03, ease: [0.16, 1, 0.3, 1] }}
-              className="pc-card !p-4 flex flex-col gap-4 group h-full"
+              className="pc-card !p-5 flex flex-col gap-4 group h-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:bg-[var(--bg-surface-elevated)]"
             >
               {/* Card Header: Store Info */}
               <div className="flex items-start justify-between gap-3">
@@ -133,7 +133,7 @@ export function RealtimeMonitoringDashboard() {
                   </div>
                   <div className="min-w-0">
                     <h4 className="text-[13px] font-bold text-[var(--text-primary)] leading-tight truncate group-hover:text-[var(--brand-primary)] transition-colors">
-                      {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA)\s+/i, '')}
+                      {store.storeName.split(/\s+·\s+|\s+-\s+|,\s+/)[0].replace(/^(MERCEARIA|SUPERMERCADO|PANIFICADORA|ACOUGUE|DISTRIBUIDORA|FARMÁCIA|PADARIA)\s+/i, '')}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <div className={cn("h-1.5 w-1.5 rounded-full", store.status === 'online' ? "bg-[var(--success)]" : "bg-[var(--danger)]")} />

@@ -281,8 +281,8 @@ export function AppSidebar() {
                 className={cn(
                   "pcsb-row group/row h-10 px-3 rounded-xl transition-all duration-300",
                   active 
-                    ? "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]" 
-                    : "hover:bg-[var(--bg-surface-elevated)]"
+                    ? "bg-[var(--brand-primary)] text-white shadow-lg" 
+                    : "hover:bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)]"
                 )}
               >
                 <Link

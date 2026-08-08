@@ -155,7 +155,7 @@ function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl shadow-navy/5 overflow-hidden"
+          className="bg-white border border-[var(--border-subtle)] rounded-[var(--radius-2xl)] shadow-xl shadow-navy/5 overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border-subtle)]">
             <StatItem label="Produtos cadastrados" value={stats?.totalItems ? stats.totalItems.toLocaleString('pt-BR') : "..."} />

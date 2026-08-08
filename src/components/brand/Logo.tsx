@@ -29,7 +29,7 @@ export function Logo({
       {...props}
     >
       <div className={cn(
-        "relative flex items-center justify-center rounded-xl transition-all duration-500 group-hover:rotate-[10deg] group-hover:scale-110",
+        "relative flex items-center justify-center rounded-[var(--radius-lg)] transition-all duration-500 group-hover:rotate-[10deg] group-hover:scale-110",
         compact ? "h-8 w-8" : "h-10 w-10",
         isDark ? "bg-white text-[var(--brand-primary)]" : "bg-[var(--brand-primary)] text-white shadow-lg shadow-[var(--brand-primary)]/20"
       )}>

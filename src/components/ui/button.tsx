@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   [
-    "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-[13px] font-black uppercase tracking-wider cursor-pointer",
+    "relative inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-[var(--radius-xl)] text-[13px] font-black uppercase tracking-wider cursor-pointer",
     "transition-all duration-300 ease-[var(--ease-out-smooth)]",
     // Foco: anel dourado (navy/gold) consistente em light/dark — WCAG AA
     "outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)]",
