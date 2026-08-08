@@ -412,7 +412,7 @@ async function runPriceSearch(data: {
     byProduct.set(key, cur);
   }
 
-  const groups: ProductGroup[] = Array.from(byProduct.values())
+  const allGroups = Array.from(byProduct.values())
     .map((g) => {
       const ps = g.rows.map((x) => x.price);
       const gMin = Math.min(...ps);
@@ -451,7 +451,7 @@ async function runPriceSearch(data: {
   const page = data.page ?? 1;
   const limit = data.limit ?? 40;
   const paginatedGroups = allGroups.slice((page - 1) * limit, page * limit);
-  const groups = paginatedGroups.map(({ _score: _s, ...g }) => g);
+  const groups: ProductGroup[] = paginatedGroups.map(({ _score: _s, ...g }: any) => g);
 
   const eqIdx = groups.length > 0
     ? selectCheapestEquivalentIndexes(
