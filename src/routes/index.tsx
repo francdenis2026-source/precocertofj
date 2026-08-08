@@ -107,8 +107,9 @@ function HomePage() {
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=2000" 
-            alt="Corredor de supermercado realista"
+            src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
+            alt="Interior de supermercado profissional e moderno"
+
 
             className="h-full w-full object-cover"
           />
