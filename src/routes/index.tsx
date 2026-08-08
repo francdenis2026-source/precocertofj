@@ -148,7 +148,7 @@ function HomePage() {
           {stats?.generatedAt && (
             <div className="mt-4 pb-4 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-80">
               <Clock className="h-3.5 w-3.5 text-primary" />
-              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+              <span>Dados apurados em: {new Date(stats.generatedAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })} • Sincronizado</span>
             </div>
           )}
         </div>
