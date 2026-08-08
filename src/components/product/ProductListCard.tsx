@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { formatShortDate, formatAbsoluteTooltip } from "@/components/product/TrustIndicator";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
+import { ProductImage } from "@/components/ds/ProductImage";
 
 const brl = (n: number) =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "BRL" }).format(n);
@@ -44,6 +45,9 @@ export function ProductListCard({
   return (
     <Card interactive tabIndex={0} className={cn("group h-full", className)}>
       <CardContent className="flex h-full flex-col gap-2 p-4">
+        <div className="mb-2 h-24 w-full overflow-hidden rounded-lg border border-border bg-muted/20">
+          <ProductImage src={null} name={name} alt={name} size="md" />
+        </div>
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-medium leading-tight transition-colors group-hover:text-primary">
             {name}
