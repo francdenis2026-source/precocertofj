@@ -423,6 +423,7 @@ function PlansPage() {
                     ["Alertas de preço", false, true, true, true],
                     ["Análises de IA / mês", "1", "30", "150", "150"],
                     ["Ranking de bairros", true, true, true, true],
+
                     ["Exportar CSV/PDF", false, true, true, true],
                     ["Prioridade de suporte", false, false, true, true],
                   ].map(([label, ...cols], i) => (
