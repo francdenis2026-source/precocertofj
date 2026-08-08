@@ -171,7 +171,7 @@ function DashboardPage() {
                 </div>
               </div>
               <div className="space-y-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Meta de Notas</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">Meta de Notas</p>
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-bold text-[var(--text-primary)]">8 / 10 Notas</p>
                   <span className="text-[10px] font-black text-muted-foreground uppercase">80%</span>
