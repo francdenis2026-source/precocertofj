@@ -27,8 +27,9 @@ export function RegisteredStoresCarousel() {
   }
 
   return (
-    <>
+    <div className="grid grid-cols-3 gap-4">
       {stores.slice(0, 12).map((store) => (
+
         <Link
           key={store.id}
           to="/loja/$id"
@@ -54,6 +55,7 @@ export function RegisteredStoresCarousel() {
           </span>
         </Link>
       ))}
-    </>
+    </div>
+
   );
 }
