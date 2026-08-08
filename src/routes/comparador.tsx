@@ -14,7 +14,8 @@ import {
   Plus,
   ArrowRight,
   ChevronRight,
-  ArrowUpRight
+  ArrowUpRight,
+  Filter,
 } from "lucide-react";
 import { memo, useMemo, useRef, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -324,6 +325,23 @@ function ComparadorPage() {
                 <option value="name">Nome (A-Z)</option>
               </select>
             </div>
+
+            <div className="flex items-center gap-2">
+               <Button 
+                 variant="outline" 
+                 size="sm" 
+                 className="rounded-full text-[11px] font-black uppercase tracking-wider h-10 px-6 border-border/40 hover:border-brand-primary/50"
+                 onClick={() => {
+                    const params = new URLSearchParams(window.location.search);
+                    const q = params.get('q') || '';
+                    const cat = params.get('cat') || '';
+                    window.open(`/api/export/comparison?q=${encodeURIComponent(q)}&cat=${encodeURIComponent(cat)}`, '_blank');
+                 }}
+               >
+                 <ArrowUpRight className="mr-2 h-4 w-4" />
+                 Exportar PDF
+               </Button>
+            </div>
           </div>
 
           {isLoading ? (
@@ -376,9 +394,9 @@ function ComparadorPage() {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-6"
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-6 pointer-events-none"
             >
-              <div className="bg-brand-secondary/95 backdrop-blur-xl rounded-[var(--radius-2xl)] p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-6">
+              <div className="bg-brand-secondary/95 backdrop-blur-xl rounded-[var(--radius-2xl)] p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-6 pointer-events-auto">
                 <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-1">
                   {compareList.map((item) => (
                     <motion.div 
