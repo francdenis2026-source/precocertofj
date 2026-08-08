@@ -81,8 +81,6 @@ import { Price } from "@/components/ds/Price";
 import { ShareButton } from "@/components/ds/ShareButton";
 
 
-const brl = (v: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
 type SortKey = "price-asc" | "price-desc" | "ppu-asc" | "name" | "recent";
 const SORT_LABEL: Record<SortKey, string> = {
