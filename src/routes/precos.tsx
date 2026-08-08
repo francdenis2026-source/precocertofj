@@ -249,7 +249,7 @@ function SearchPage() {
 
 function StatCard({ label, value, icon, tone = "default" }: { label: string; value: string; icon: React.ReactNode; tone?: "default" | "savings" | "offers" }) {
   return (
-    <div className="pc-stat-card flex flex-col justify-between h-full">
+    <div className="flex flex-col justify-between h-full bg-[var(--bg-surface-elevated)]/30 rounded-[var(--radius-lg)] p-5 border border-[var(--border-subtle)]">
       <div className="flex items-center justify-between mb-3">
         <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">{label}</span>
         <div className={cn(
