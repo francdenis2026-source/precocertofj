@@ -276,7 +276,7 @@ function HomePage() {
 
         {/* Final CTA */}
         <section className="relative overflow-hidden rounded-[40px] bg-[var(--navy-900)] text-white py-24 px-8 text-center shadow-2xl shadow-navy/20">
-          <div className="absolute inset-0 z-0 opacity-10">
+          <div className="absolute inset-0 z-0 opacity-20">
             <img 
               src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
               alt="" 
