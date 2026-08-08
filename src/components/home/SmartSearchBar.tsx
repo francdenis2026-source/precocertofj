@@ -2,7 +2,7 @@ import * as React from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { Search, ArrowRight, Store, Loader2, TrendingUp, X, CornerDownLeft } from "lucide-react";
+import { Search, ArrowRight, Store, Loader2, TrendingUp, X, CornerDownLeft, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
@@ -169,18 +169,18 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)]/80 backdrop-blur-xl pl-4 pr-1.5 shadow-2xl transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)]",
-          compact ? "h-12" : "h-14 sm:h-[72px]",
+          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)]/90 backdrop-blur-2xl pl-4 pr-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] focus-within:scale-[1.02]",
+          compact ? "h-12" : "h-14 sm:h-[80px]",
           open ? "z-[101]" : "z-auto"
         )}
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] transition-transform duration-500 group-focus-within:scale-110 group-focus-within:bg-[var(--brand-primary)] group-focus-within:text-white">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
           <Search
             aria-hidden="true"
             className={cn(
-              "transition-colors",
-              compact ? "h-4 w-4" : "h-5 w-5",
+              "transition-transform group-focus-within:rotate-12",
+              compact ? "h-5 w-5" : "h-6 w-6",
             )}
           />
         </div>
@@ -199,15 +199,15 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="Qual produto você busca hoje?"
+          placeholder="O que você quer economizar hoje?"
           aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] placeholder:font-medium",
-            compact ? "text-[14px]" : "text-base sm:text-lg",
+            "flex-1 min-w-0 bg-transparent outline-none font-bold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
+            compact ? "text-[15px]" : "text-lg sm:text-xl",
           )}
         />
         {q && (
@@ -220,45 +220,47 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             aria-label="Limpar pesquisa"
             className="shrink-0 rounded-full p-2 text-[var(--text-tertiary)] transition-all hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)]"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         )}
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-6 font-bold tracking-tight text-[var(--text-on-brand)] shadow-[0_4px_12px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.4)] active:scale-[0.96]",
-            compact ? "h-9 text-[14px]" : "h-12 text-[16px] sm:h-14",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_8px_20px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] active:scale-[0.96]",
+            compact ? "h-9 text-[12px]" : "h-14 text-[14px] sm:h-16 sm:text-[15px]",
           )}
         >
-          Buscar agora
+          Pesquisar
         </button>
       </form>
 
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {showPanel && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/60 backdrop-blur-sm lg:backdrop-blur-md"
+              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/80 backdrop-blur-md"
               onMouseDown={() => setOpen(false)}
             />
             
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-[-16px] right-[-16px] top-[-16px] z-[100] overflow-hidden rounded-[24px] border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)] text-left shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] min-w-[340px] lg:min-w-[500px]"
+              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]"
             >
-              <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 px-6 py-4 flex items-center justify-between">
-                 <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Motor de Busca Inteligente</span>
+              <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-4 flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
+                       <Zap className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Inteligência PreçoCerto Ativa</span>
                  </div>
-                 {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--brand-primary)]" />}
+                 {loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--brand-primary)]" />}
               </div>
 
               <div className="p-1">
@@ -328,62 +330,67 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                           onMouseEnter={() => setActive(i)}
                           onClick={() => go(s.displayName)}
                           className={cn(
-                            "group/item flex w-full items-center gap-3 border-l-[3px] px-4 py-3.5 text-left transition-all duration-300",
+                            "group/item relative flex w-full items-center gap-4 border-l-[4px] px-6 py-4 text-left transition-all duration-300",
                             active === i
-                              ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 scale-[1.02] translate-x-1"
-                              : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]",
+                              ? "border-l-[var(--brand-primary)] bg-gradient-to-r from-[var(--brand-primary)]/10 to-transparent scale-[1.01] translate-x-1"
+                              : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]/50",
                           )}
                         >
                           <div className={cn(
-                            "grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-300",
+                            "relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-500",
                             active === i 
-                              ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/5 shadow-lg shadow-[var(--brand-primary)]/10" 
+                              ? "border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 shadow-lg shadow-[var(--brand-primary)]/20 rotate-3" 
                               : "border-[var(--border-subtle)] bg-[var(--bg-base)]"
                           )}>
                             {s.imageUrl ? (
-                              <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+                              <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover transition-transform group-hover/item:scale-110" />
                             ) : (
-                              <span aria-hidden="true" className="text-xs font-black text-[var(--brand-primary)]">
-                                {(s.displayName || "?").trim().charAt(0).toUpperCase()}
-                              </span>
+                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-base)]">
+                                <span aria-hidden="true" className="text-sm font-black text-[var(--brand-primary)]">
+                                  {(s.displayName || "?").trim().charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                            )}
+                            {active === i && (
+                               <div className="absolute inset-0 bg-[var(--brand-primary)]/10 animate-pulse" />
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
                             <span className={cn(
-                              "block truncate text-sm font-bold transition-colors",
+                              "block truncate text-base font-bold tracking-tight transition-colors",
                               active === i ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
                             )}>
                               {s.displayName}
                             </span>
-                            <div className="mt-1 flex items-center gap-1.5 truncate">
+                            <div className="mt-1 flex items-center gap-2 truncate">
                               {s.market ? (
                                 <span className={cn(
-                                  "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all",
+                                  "inline-flex items-center gap-1.5 rounded-lg px-2 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all",
                                   active === i 
-                                    ? "bg-[var(--brand-primary)] text-white" 
+                                    ? "bg-[var(--brand-primary)] text-white shadow-md shadow-[var(--brand-primary)]/20" 
                                     : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                                 )}>
-                                  <Store className="h-2.5 w-2.5" /> {s.market}
+                                  <Store className="h-3 w-3" /> {s.market}
                                 </span>
                               ) : (
-                                <span className="text-[11px] font-medium text-[var(--text-tertiary)]">{s.category ?? "Catálogo"}</span>
+                                <span className="text-[12px] font-semibold text-[var(--text-tertiary)]">{s.category ?? "Produtos Disponíveis"}</span>
                               )}
                             </div>
                           </div>
                           {typeof s.minPrice === "number" ? (
                             <div className="shrink-0 text-right">
                               <div className={cn(
-                                "text-sm font-black transition-transform duration-300",
+                                "text-lg font-black tracking-tighter transition-all duration-500",
                                 active === i ? "scale-110 text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
                               )}>
                                 {BRL(s.minPrice)}
                               </div>
                               {i === 0 && (
-                                <div className="text-[9px] font-black uppercase tracking-wider text-[var(--pc-brand-accent)]">Melhor Oferta</div>
+                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--pc-brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
                               )}
                             </div>
                           ) : loading ? (
-                            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[var(--text-tertiary)]" />
+                            <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[var(--text-tertiary)]" />
                           ) : null}
                         </button>
                       </li>

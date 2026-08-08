@@ -151,23 +151,23 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Floating Hero Search - Extreme Top Priority */}
-      <section className="relative isolate pt-24 pb-12 px-4 md:px-8">
+      <section className="relative isolate pt-28 pb-16 px-4 md:px-8">
         <div className="mx-auto max-w-[1440px]">
-          <div className="relative z-50 mx-auto max-w-2xl mb-16">
+          <div className="relative z-50 mx-auto max-w-2xl mb-20">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               <SmartSearchBar />
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
-                <div className="flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)]/40 backdrop-blur-sm border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-medium text-[var(--text-secondary)]">
-                   <Sparkles className="h-3 w-3 text-[var(--brand-primary)]" />
-                   <span>Inteligência de preços ativa em Feijó</span>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
+                <div className="flex items-center gap-2 rounded-full bg-[var(--bg-surface)]/30 backdrop-blur-md border border-[var(--border-subtle)] px-4 py-1.5 text-[12px] font-bold text-[var(--text-secondary)] shadow-sm">
+                   <div className="h-2 w-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
+                   <span>Monitoramento inteligente ativo</span>
                 </div>
-                <div className="flex items-center gap-1.5 rounded-full bg-[var(--bg-surface)]/40 backdrop-blur-sm border border-[var(--border-subtle)] px-3 py-1 text-[11px] font-medium text-[var(--text-secondary)]">
-                   <Zap className="h-3 w-3 text-amber-500" />
-                   <span>Atualização real-time</span>
+                <div className="flex items-center gap-2 rounded-full bg-[var(--bg-surface)]/30 backdrop-blur-md border border-[var(--border-subtle)] px-4 py-1.5 text-[12px] font-bold text-[var(--text-secondary)] shadow-sm">
+                   <Zap className="h-3.5 w-3.5 text-amber-500" />
+                   <span>Preços reais em Feijó</span>
                 </div>
               </div>
             </motion.div>
