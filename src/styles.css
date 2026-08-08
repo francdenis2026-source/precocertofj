@@ -21,7 +21,7 @@
  */
 :root,
 :root[data-theme='light'] {
-  color-scheme: light;
+  color-scheme: light dark;
 
   /* --- Design Tokens: Colors (Light Professional Theme) --- */
   --brand-primary: #2563EB; /* Vibrant Blue */
