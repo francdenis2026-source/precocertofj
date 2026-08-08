@@ -320,7 +320,7 @@ function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
           </div>
           <h2 className="t-h2 mb-4">Economia inteligente</h2>
-          <h3 className="text-xl font-bold mb-6 text-[var(--brand-primary)]">Antes de comprar, compare.</h3>
+          <h3 className="text-xl font-bold mb-6 text-primary">Antes de comprar, compare.</h3>
           <p className="text-slate-300 max-w-xl mx-auto mb-8">Veja onde sua lista fica mais barata e economize em cada ida ao mercado.</p>
           <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-xl shadow-[var(--brand-primary)]/20">
             <Link to="/cadastro">Começar a economizar</Link>
@@ -348,7 +348,7 @@ function HomePage() {
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="px-6 py-8 text-center">
-      <div className="text-3xl font-black text-[var(--brand-primary)] mb-1">{value}</div>
+      <div className="text-3xl font-black text-primary mb-1">{value}</div>
       <div className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">{label}</div>
     </div>
   );
