@@ -361,22 +361,40 @@ function HomePage() {
         <ComparisonStickyBar />
 
         {/* Closing CTA */}
-        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] shadow-[0_0_50px_-12px_rgba(0,0,0,0.5)]">
-          <img
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=2000"
-            alt="Produtos de supermercado realistas"
-            aria-hidden="true"
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover saturate-[1.2] brightness-[0.4]"
-          />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-[var(--bg-base)]/60 to-transparent" />
-          <div className="relative flex flex-col items-center px-6 py-24 text-center md:py-32">
-            <h2 className="max-w-2xl text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-[-0.025em] text-[var(--text-primary)]">
+        <section className="relative mt-20 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50">
+          <div className="absolute inset-0 -z-10">
+            <img
+              src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000"
+              alt="Corredor de supermercado moderno e organizado"
+              aria-hidden="true"
+              loading="lazy"
+              className="h-full w-full object-cover saturate-[0.8] brightness-[0.2] blur-[1px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-base)] via-transparent to-[var(--bg-base)]/80" />
+          </div>
+          
+          <div className="relative flex flex-col items-center px-6 py-16 text-center md:py-20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="mb-6 rounded-full bg-[var(--brand-primary)]/10 px-4 py-1.5 border border-[var(--brand-primary)]/20"
+            >
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--brand-primary)]">Economia Inteligente</span>
+            </motion.div>
+            <h2 className="max-w-2xl text-balance text-[clamp(1.5rem,3vw,2.25rem)] font-semibold leading-tight tracking-[-0.025em] text-[var(--text-primary)]">
               Transparência real em cada ida ao mercado
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-[18px] leading-relaxed text-[var(--text-secondary)]">
+            <p className="mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-[var(--text-secondary)]">
               Junte-se a quem, em Feijó, consulta o PreçoCerto antes de comprar.
             </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Button size="lg" className="rounded-xl px-8 font-bold shadow-lg shadow-[var(--brand-primary)]/20 active:scale-95 transition-transform" asChild>
+                <Link to="/cadastro">Começar a economizar</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="pc-button-primary">
                 <Link to="/buscar">
