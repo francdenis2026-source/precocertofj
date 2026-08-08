@@ -12,7 +12,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { hubForCanonical } from "@/lib/category-hub";
 import { categoryIcon } from "@/lib/category-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, brl } from "@/lib/utils";
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,6 +34,7 @@ import {
   TrendingDown,
   TrendingUp,
   Clock,
+  X,
 } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
