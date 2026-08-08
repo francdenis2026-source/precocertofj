@@ -229,7 +229,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-[var(--radius-md)] bg-[var(--brand-primary)] px-5 font-semibold tracking-[-0.01em] text-[var(--text-on-brand)] transition-all hover:bg-[var(--pc-brand-gold-soft)] active:scale-[0.98]",
+            "shrink-0 rounded-[var(--radius-md)] bg-[var(--brand-primary)] px-5 font-semibold tracking-[-0.01em] text-[var(--text-on-brand)] transition-all hover:bg-[var(--pc-brand-primary-soft)] active:scale-[0.98]",
             compact ? "h-9 text-[14px]" : "h-11 text-[15px] sm:h-12",
           )}
         >

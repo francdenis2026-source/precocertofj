@@ -8,9 +8,9 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "bg-secondary text-secondary-foreground",
-        primary: "bg-primary/10 text-[color:var(--badge-primary-fg)] ring-1 ring-inset ring-primary/25",
-        savings: "bg-savings text-savings-foreground shadow-elev-1",
-        savingsSoft: "bg-savings/10 text-savings ring-1 ring-inset ring-savings/25",
+        primary: "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] border border-[var(--brand-primary)]/20 shadow-sm",
+        savings: "bg-[var(--pc-brand-accent)]/10 text-[var(--pc-brand-accent)] border border-[var(--pc-brand-accent)]/20 shadow-sm",
+        savingsSoft: "bg-[var(--pc-brand-accent)]/10 text-[var(--pc-brand-accent)] border border-[var(--pc-brand-accent)]/20",
         warning: "bg-warning/15 text-[color:var(--badge-warning-fg)] ring-1 ring-inset ring-warning/30",
         destructive: "bg-destructive/10 text-destructive ring-1 ring-inset ring-destructive/25",
         outline: "border border-border bg-background text-foreground",

@@ -56,7 +56,7 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       if (currentScan) {
         insights.push({
           type: 'price',
-          message: `Oferta: ${currentScan.product_name} por R$ ${currentScan.price_captured?.toFixed(2)}`,
+          message: `Destaque: ${currentScan.product_name} por R$ ${currentScan.price_captured?.toFixed(2)}`,
           intensity: 'medium'
         });
         
@@ -69,7 +69,7 @@ export const getRealtimeMonitoringStats = createServerFn({ method: "GET" })
       } else {
         insights.push({
           type: 'stock',
-          message: 'Monitorando novas atualizações de preços...',
+          message: 'Verificando novas atualizações de preços...',
           intensity: 'low'
         });
       }
