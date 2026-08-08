@@ -79,13 +79,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
             aria-hidden="true"
             className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105 md:h-11 md:w-11"
           />
-          <span className="hidden flex-col leading-none sm:flex">
-            <span className="text-[20px] font-black tracking-tight text-[var(--text-primary)]">
+          <span className="flex flex-col leading-none">
+            <span className="text-[18px] md:text-[20px] font-black tracking-tight text-[var(--text-primary)]">
               Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
+              <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
                 Feijó · AC
               </span>
             </div>
