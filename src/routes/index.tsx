@@ -205,18 +205,6 @@ function HomePage() {
               <div className="relative z-20">
                 <SmartSearchBar />
               </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {CATEGORIES.slice(0, 5).map((cat) => (
-                  <Link
-                    key={cat.slug}
-                    to="/buscar"
-                    search={{ c: cat.value } as any}
-                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2 text-[14px] font-medium text-[var(--text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[var(--brand-primary)]/40 hover:text-[var(--text-primary)]"
-                  >
-                    {cat.label}
-                  </Link>
-                ))}
-              </div>
             </motion.div>
           </div>
 
