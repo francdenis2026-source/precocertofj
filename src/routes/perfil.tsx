@@ -342,8 +342,8 @@ function Perfil() {
                 </div>
               </div>
             </div>
-              <AdminPanel />
-            </div>
+            
+            <AdminPanel />
 
             {/* Nova Seção de Métricas Premium */}
             <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-sm">
