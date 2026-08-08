@@ -322,10 +322,10 @@ function PlansPage() {
                       </span>
                     )}
 
-                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || savings) && "pr-24")}>
+                    <span className={cn("text-[10px] font-bold uppercase tracking-widest text-tertiary mb-1 block", (isRecommended || savings) && "pr-24")}>
                       {isRecommended ? "Mais escolhido" : isFree ? "Comece por aqui" : "Plano"}
                     </span>
-                    <h2 className={cn(tc.sectionTitle, "pr-24")}>{plan.name}</h2>
+                    <h2 className={cn("text-xl font-black text-primary pr-24 leading-tight")}>{plan.name}</h2>
 
                     <div className="mt-3">
                       <div className="flex items-baseline gap-2">
