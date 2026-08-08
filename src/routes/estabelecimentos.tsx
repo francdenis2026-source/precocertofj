@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 
+
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import {
   humanizeCategory,
