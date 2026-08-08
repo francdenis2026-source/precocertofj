@@ -427,9 +427,10 @@ function PlansPage() {
                     ["Prioridade de suporte", false, false, true, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
-                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")}>
+                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")} scope="row">
                         {label as string}
                       </th>
+
                       {cols.map((c, j) => (
                         <td key={j} className="py-2 text-center">
                           {typeof c === "boolean" ? (
