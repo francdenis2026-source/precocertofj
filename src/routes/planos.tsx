@@ -209,7 +209,7 @@ function PlansPage() {
     >
       <main className="flex min-h-0 flex-1 flex-col">
         {/* Cabeçalho compacto com atalhos à direita */}
-        <section className={dsx(ds.container, "shrink-0 pt-2 pb-1.5")}>
+        <section className="pc-shell shrink-0 pt-2 pb-1.5">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <InternalPageHeader
               title="Planos e preços"
@@ -257,7 +257,7 @@ function PlansPage() {
         {/* Planos — ocupam toda a altura disponível */}
         <section
           id="detalhes"
-          className={dsx(ds.container, "min-h-0 flex-1 overflow-hidden pb-1.5")}
+          className="pc-shell min-h-0 flex-1 overflow-hidden pb-1.5"
           aria-label="Planos disponíveis"
         >
           {isLoading ? (
@@ -342,7 +342,7 @@ function PlansPage() {
                             </span>
                           )}
                       </div>
-                      <p className={cn(tc.meta, "mt-1.5")}>
+                      <p className="text-[12px] text-tertiary font-bold uppercase tracking-wider mt-1.5">
                         {isFree
                           ? `${plan.days} dias · sem cartão`
                           : perMonth
