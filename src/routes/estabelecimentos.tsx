@@ -327,6 +327,7 @@ function EstablishmentsPage() {
                              <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-tertiary">Departamentos em Destaque</h3>
                                 <div className="text-[11px] font-bold text-tertiary/40">POR VOLUME DE ITENS</div>
+
                              </div>
                              <div className="grid gap-5">
                                 {selected.topCategories.slice(0, 5).map((c, i) => {
