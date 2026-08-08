@@ -90,7 +90,7 @@ function FooterLink({ to, children }: { to: string; children: React.ReactNode })
 
 function SocialLink({ Icon }: { Icon: any }) {
   return (
-    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-white hover:border-[var(--brand-primary)]">
+    <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] hover:border-[var(--brand-primary)]">
       <Icon className="h-4.5 w-4.5" />
     </button>
   );
