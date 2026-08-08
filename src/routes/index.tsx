@@ -246,7 +246,7 @@ function HomePage() {
             <ValueCard
               Icon={Zap}
               title="Cestas otimizadas"
-              body="Adicione sua lista e o PricePal calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
+              body="Adicione sua lista e o PreçoCerto calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
             />
           </div>
         </section>
