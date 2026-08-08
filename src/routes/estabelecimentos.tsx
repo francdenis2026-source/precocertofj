@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -22,11 +22,6 @@ import {
   Star,
   ArrowUpDown,
 } from "lucide-react";
-
-
-
-
-
 
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import {
@@ -100,7 +95,7 @@ function EstablishmentsPage() {
   const [qDraft, setQDraft] = useState(search.q);
   useEffect(() => {
     const t = setTimeout(() => updateSearch({ q: qDraft }), 300);
-    return () => clearTimeout(t);
+    return () => setTimeout(() => clearTimeout(t));
   }, [qDraft, updateSearch]);
 
   const filtered = useMemo(() => {
@@ -123,7 +118,6 @@ function EstablishmentsPage() {
     
     return list;
   }, [data, search.kind, search.q, search.sort]);
-
 
   const selected = useMemo(() => {
     return filtered.find(e => e.id === search.sel) || filtered[0] || null;
@@ -237,15 +231,15 @@ function EstablishmentsPage() {
                         <div className="p-12 text-center text-tertiary bg-surface rounded-3xl border border-dashed border-subtle">Nenhum mercado encontrado</div>
                     ) : (
                         <AutoSizer>
-                            {({ height, width }) => (
-                                <ReactWindow.FixedSizeList
+                            {({ height, width }: Size) => (
+                                <List
                                     height={height}
                                     width={width}
                                     itemCount={filtered.length}
                                     itemSize={92}
                                     className="no-scrollbar"
                                 >
-                                    {({ index, style }) => {
+                                    {({ index, style }: { index: number; style: CSSProperties }) => {
                                         const e = filtered[index];
                                         const meta = kindMeta(e.kind);
                                         const active = search.sel === e.id;
@@ -280,12 +274,11 @@ function EstablishmentsPage() {
                                             </div>
                                         );
                                     }}
-                                </ReactWindow.FixedSizeList>
+                                </List>
                             )}
                         </AutoSizer>
                     )}
                 </div>
-
             </div>
 
             {/* Right Column: Detail */}
@@ -331,7 +324,7 @@ function EstablishmentsPage() {
                         <div className="space-y-6">
                              <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-tertiary">Departamentos em Destaque</h3>
-                                <div className="text-[11px] font-bold text-text-tertiary/40">POR VOLUME DE ITENS</div>
+                                <div className="text-[11px] font-bold text-tertiary/40">POR VOLUME DE ITENS</div>
                              </div>
                              <div className="grid gap-5">
                                 {selected.topCategories.slice(0, 5).map((c, i) => {
@@ -372,8 +365,11 @@ function EstablishmentsPage() {
                      </div>
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                        <Store className="w-16 h-16 text-surface-elevated" />
-                        <div className="text-tertiary font-medium">Selecione um comércio ao lado para<br/>ver estatísticas e economia.</div>
+                        <Store className="w-16 h-16 text-tertiary/20" />
+                        <div>
+                            <div className="text-xl font-bold text-primary">Selecione um Comércio</div>
+                            <div className="text-secondary max-w-xs mx-auto">Escolha um dos estabelecimentos ao lado para ver detalhes e economia potencial.</div>
+                        </div>
                     </div>
                 )}
             </div>
