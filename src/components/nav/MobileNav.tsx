@@ -137,11 +137,11 @@ export function MobileNav() {
             aria-current={isAppActive ? "page" : undefined}
             className={cn(
               "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
-              isAppActive ? "text-primary" : "text-muted-foreground",
+              isAppActive ? "text-[var(--brand-primary)]" : "text-[var(--text-tertiary)]",
             )}
           >
             {isAppActive && (
-              <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 rounded-b-full bg-primary" />
+              <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 rounded-b-full bg-[var(--brand-primary)]" />
             )}
             <User className="h-[22px] w-[22px]" strokeWidth={isAppActive ? 2.4 : 2} />
             <span className="text-[11px] font-semibold leading-none tracking-tight">Painel</span>
@@ -150,7 +150,7 @@ export function MobileNav() {
           <a
             href={loginHref}
             aria-label="Entrar"
-            className="pc-nav-link group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground"
+            className="pc-nav-link group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-[var(--text-tertiary)]"
           >
             <User className="h-[22px] w-[22px]" strokeWidth={2} />
             <span className="text-[11px] font-semibold leading-none tracking-tight">Entrar</span>
