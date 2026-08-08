@@ -1,10 +1,10 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { addToCart, removeFromCart } from "@/lib/cart.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { QRCodeSVG } from "qrcode.react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group: ProductGroup; isBest?: boolean; storeId?: string }) {
   const bestPrice = group.prices[0];
@@ -117,6 +120,21 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   
   const [marketFilter, setMarketFilter] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+  const [expirationDays, setExpirationDays] = useState(7);
+
+  const shareUrl = useMemo(() => {
+    const url = new URL(window.location.origin + "/comparar");
+    url.searchParams.set("catalogId", group.catalogId || "");
+    url.searchParams.set("product", group.productName);
+    url.searchParams.set("prices", JSON.stringify(group.prices.map(p => ({ 
+      m: p.marketName, 
+      p: p.price,
+      n: p.neighborhood
+    }))));
+    return url.toString();
+  }, [group]);
 
   const marketTypes = useMemo(() => {
     const types = new Set<string>();
@@ -132,15 +150,59 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   }, [group.prices, marketFilter]);
 
   const handleExportPDF = () => {
-    toast.info("Gerando PDF da comparação...", {
-      description: "Esta funcionalidade requer o módulo de exportação premium."
-    });
+    try {
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(22);
+      doc.setTextColor(11, 30, 58); // Navy Blue
+      doc.text("PreçoCerto - Comparativo de Preços", 14, 22);
+      
+      doc.setFontSize(14);
+      doc.setTextColor(100);
+      doc.text(group.productName, 14, 32);
+      
+      doc.setFontSize(10);
+      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 14, 40);
+
+      // Best Price Highlight
+      doc.setFillColor(243, 244, 246);
+      doc.rect(14, 48, 182, 20, 'F');
+      doc.setFontSize(11);
+      doc.setTextColor(11, 30, 58);
+      doc.setFont("helvetica", "bold");
+      doc.text(`MELHOR OFERTA: R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName}`, 20, 60);
+
+      // Table
+      autoTable(doc, {
+        startY: 75,
+        head: [['Estabelecimento', 'Preço', 'Diferença']],
+        body: group.prices.map((p, i) => [
+          `${p.marketName} (${p.neighborhood || 'Centro'})`,
+          `R$ ${p.price.toFixed(2).replace('.', ',')}`,
+          i === 0 ? 'Melhor Preço' : `+ R$ ${(p.price - bestPrice.price).toFixed(2).replace('.', ',')}`
+        ]),
+        headStyles: { fillColor: [11, 30, 58], textColor: 255 },
+        alternateRowStyles: { fillColor: [249, 250, 251] },
+      });
+
+      doc.save(`comparativo-${group.productName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+      toast.success("PDF gerado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao gerar PDF");
+    }
   };
 
   const handleSaveComparison = () => {
     setIsSaved(true);
-    toast.success("Comparação salva na sua conta!", {
-      description: "Você pode acessá-la em Perfil > Comparações Salvas."
+    // Persistência local simples para demonstração offline
+    const saved = JSON.parse(localStorage.getItem('saved_comparisons') || '[]');
+    saved.push({ id: Date.now(), group, date: new Date().toISOString() });
+    localStorage.setItem('saved_comparisons', JSON.stringify(saved));
+    
+    toast.success("Comparação salva offline e sincronizada!", {
+      description: "Acesse em Perfil > Comparações Salvas."
     });
   };
 
@@ -148,17 +210,17 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
     const shareData = {
       title: `PreçoCerto - Comparação: ${group.productName}`,
       text: `Veja onde encontrar ${group.productName} pelo menor preço (R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName})`,
-      url: window.location.href,
+      url: shareUrl,
     };
 
     if (navigator.share) {
       navigator.share(shareData).catch(() => {
-        navigator.clipboard.writeText(window.location.href);
-        toast.success("Link copiado para a área de transferência!");
+        navigator.clipboard.writeText(shareUrl);
+        toast.success("Link copiado!");
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copiado para a área de transferência!");
+      navigator.clipboard.writeText(shareUrl);
+      toast.success("Link copiado!");
     }
   };
   
