@@ -339,24 +339,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                               : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]/50",
                           )}
                         >
-                          <div className={cn(
-                            "relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-500",
-                            active === i 
-                              ? "border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 shadow-lg shadow-[var(--brand-primary)]/20 rotate-3" 
-                              : "border-[var(--border-subtle)] bg-[var(--bg-base)]"
-                          )}>
-                            {s.imageUrl ? (
-                              <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover transition-transform group-hover/item:scale-110" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-base)]">
-                                <span aria-hidden="true" className="text-sm font-black text-[var(--brand-primary)]">
-                                  {(s.displayName || "?").trim().charAt(0).toUpperCase()}
-                                </span>
-                              </div>
-                            )}
-                            {active === i && (
-                               <div className="absolute inset-0 bg-[var(--brand-primary)]/10 animate-pulse" />
-                            )}
+                          <div className="hidden">
+                            {/* Imagem removida conforme solicitação do usuário */}
                           </div>
                           <div className="min-w-0 flex-1">
                             <span className={cn(

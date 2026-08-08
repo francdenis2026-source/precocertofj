@@ -96,13 +96,8 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
       >
         <PlusCircle className="h-4 w-4" />
       </button>
-      <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]">
-        <ProductImage 
-          src={null} // Forçando ilustração representativa para produtos sem imagem confirmada
-          name={p.name}
-          alt={p.name}
-          className="h-full w-full"
-        />
+      <div className="hidden">
+        {/* Imagem removida conforme solicitação do usuário */}
       </div>
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-center gap-2">

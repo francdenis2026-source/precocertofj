@@ -24,30 +24,8 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
         search={{ q: "", from: "" }}
         className="group flex flex-col h-full pc-card p-0 overflow-hidden bg-[var(--bg-surface)] ring-1 ring-[var(--border-subtle)] hover:ring-[var(--brand-primary)]/30 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] transition-all duration-500"
       >
-        <div className="relative aspect-square bg-gradient-to-b from-[var(--bg-base)]/80 to-[var(--bg-base)]/40 flex items-center justify-center p-6 sm:p-8 transition-all duration-500 group-hover:bg-[var(--bg-surface-elevated)]/30">
-          <ProductImage 
-            name={group.productName} 
-            alt={group.productName}
-            className="object-contain w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.25)] transition-transform duration-700 ease-out group-hover:scale-110" 
-          />
-          
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          
-          {isBest && (
-            <div className="absolute top-4 left-4 z-10">
-               <span className="pc-badge bg-[var(--success)] text-white shadow-[0_4px_12px_rgba(16,185,129,0.3)] font-black text-[10px] uppercase tracking-wider py-1 px-3">
-                  Melhor Preço
-               </span>
-            </div>
-          )}
-
-          {savingsPct > 0 && (
-             <div className="absolute top-4 right-4 z-10">
-                <span className="pc-badge bg-[var(--brand-primary)] text-white shadow-[0_4px_12px_rgba(59,130,246,0.3)] font-black text-[10px] uppercase tracking-wider py-1 px-3">
-                   Economia {savingsPct}%
-                </span>
-             </div>
-          )}
+        <div className="hidden">
+          {/* Imagem removida conforme solicitação do usuário */}
         </div>
 
         <div className="p-6 flex flex-col flex-1 bg-[var(--bg-surface)]">
