@@ -343,7 +343,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                         <span className="shrink-0 text-right">
                           <span className="block text-sm font-black text-[var(--brand-primary)]">{BRL(s.minPrice)}</span>
                           {i === 0 && (
-                            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500">Menor preço</span>
+                            <span className="text-[9px] font-black uppercase tracking-wider text-[var(--pc-brand-accent)]">Menor preço</span>
                           )}
                         </span>
                       ) : loading ? (
