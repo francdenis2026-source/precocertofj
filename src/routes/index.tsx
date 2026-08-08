@@ -157,7 +157,7 @@ function HomePage() {
           <img 
             src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
             alt="Supermercado realista background"
-            className="h-full w-full object-cover brightness-[0.25] saturate-[0.8]"
+            className="h-full w-full object-cover brightness-[0.22] saturate-[0.7] blur-[2px] scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-transparent to-[var(--bg-base)]" />
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
