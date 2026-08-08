@@ -43,13 +43,13 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "PricePal — Seu assistente inteligente de compras" },
+      { title: "PreçoCerto — Seu assistente inteligente de compras" },
       {
         name: "description",
         content:
-          "O PricePal acompanha os preços reais dos supermercados de Feijó, monta a melhor cesta para você e mostra exatamente onde comprar para economizar.",
+          "O PreçoCerto acompanha os preços reais dos supermercados de Feijó, monta a melhor cesta para você e mostra exatamente onde comprar para economizar.",
       },
-      { property: "og:title", content: "PricePal — Seu assistente inteligente de compras" },
+      { property: "og:title", content: "PreçoCerto — Seu assistente inteligente de compras" },
       {
         property: "og:description",
         content: "Inteligência de preços em tempo real para Feijó. Compare mercados, monte uma cesta inteligente e economize em cada compra.",
@@ -187,7 +187,7 @@ function HomePage() {
               transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="mx-auto mt-6 max-w-xl text-pretty text-[18px] leading-relaxed text-[var(--text-secondary)]"
             >
-              O PricePal acompanha os preços reais dos supermercados da sua cidade, monta a
+              O PreçoCerto acompanha os preços reais dos supermercados da sua cidade, monta a
               cesta mais barata para você e diz exatamente onde comprar.
             </motion.p>
 
@@ -228,7 +228,7 @@ function HomePage() {
         <section aria-labelledby="how-it-works" className="mb-24">
           <SectionHeading
             id="how-it-works"
-            kicker="Por que o PricePal"
+            kicker="Por que o PreçoCerto"
             title="Um assistente, não apenas uma lista de preços"
             description="Cada preço é auditado, datado e ranqueado para você confiar na recomendação antes de sair de casa."
           />
@@ -246,7 +246,7 @@ function HomePage() {
             <ValueCard
               Icon={Zap}
               title="Cestas otimizadas"
-              body="Adicione sua lista e o PricePal calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
+              body="Adicione sua lista e o PreçoCerto calcula a divisão mais barata entre os mercados, inclusive em uma única parada."
             />
           </div>
         </section>
@@ -358,7 +358,7 @@ function HomePage() {
               Transparência real em cada ida ao mercado
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-[18px] leading-relaxed text-[var(--text-secondary)]">
-              Junte-se a quem, em Feijó, consulta o PricePal antes de comprar.
+              Junte-se a quem, em Feijó, consulta o PreçoCerto antes de comprar.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <Button asChild className="pc-button-primary">

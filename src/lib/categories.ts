@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 /**
- * Canonical category set for PricePal.
+ * Canonical category set for PreçoCerto.
  *
  * `value` is the Portuguese label stored in the catalog (and expected by the
  * `c` search param / database filter) — it must not be translated.

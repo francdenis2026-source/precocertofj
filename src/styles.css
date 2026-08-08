@@ -16,7 +16,7 @@
 }
 
 /*
- * PricePal design system — dark only.
+ * PreçoCerto design system — dark only.
  * Both :root and [data-theme='light'] resolve to the same values on purpose:
  * the product ships a single, refined dark surface. Legacy components that
  * still toggle the theme attribute therefore render identically.
