@@ -235,7 +235,7 @@ function PlansPage() {
               <button
                 type="button"
                 onClick={() => setOpenSheet("compare")}
-                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
               >
                 <Sparkles className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Comparar
@@ -243,14 +243,14 @@ function PlansPage() {
               <button
                 type="button"
                 onClick={() => setOpenSheet("faq")}
-                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-subtle bg-surface px-3 text-[12px] font-semibold text-secondary transition-colors hover:border-brand-accent hover:text-brand-accent"
               >
                 <ChevronDown className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Perguntas
               </button>
               <Link
                 to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-gold-ink hover:underline"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-brand-accent hover:underline"
               >
                 Já tenho código →
               </Link>

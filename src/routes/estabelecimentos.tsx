@@ -147,7 +147,7 @@ function EstablishmentsPage() {
                 { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-emerald-500", bg: "bg-emerald-500/10" },
                 { label: "Economia", value: data?.totalMaxSavings ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "R$ 0,00", icon: PiggyBank, color: "text-brand-accent", bg: "bg-brand-accent/10" },
             ].map((stat, i) => (
-                <div key={i} className="bg-surface p-6 rounded-3xl shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-md hover:bg-surface-elevated">
+                <div key={i} className="bg-surface p-6 rounded-3xl shadow-sm flex items-center gap-5 border border-white/5 transition-all hover:shadow-md hover:bg-surface-elevated">
                     <div className={cn("p-4 rounded-2xl", stat.bg, stat.color)}>
                         <stat.icon className="w-6 h-6" />
                     </div>
