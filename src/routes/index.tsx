@@ -221,7 +221,7 @@ function HomePage() {
         </div>
 
         {/* Value props */}
-        <section aria-labelledby="how-it-works" className="mb-24">
+        <section aria-labelledby="how-it-works" className="mb-16">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
               <SectionHeading
