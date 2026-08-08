@@ -39,7 +39,7 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-2 rounded-xl border border-border bg-card p-4",
+        "group relative flex flex-col gap-2 rounded-[var(--radius-xl)] border border-border bg-card p-4",
         "shadow-[0_10px_30px_-20px_color-mix(in_oklab,var(--color-primary)_50%,transparent)]",
         "transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_16px_40px_-20px_color-mix(in_oklab,var(--color-primary)_65%,transparent)]",
         className,

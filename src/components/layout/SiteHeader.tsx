@@ -105,7 +105,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
                   to={l.to}
                   activeProps={{ "data-active": "true" } as any}
                   className={cn(
-                    "group relative rounded-xl px-4 py-2 text-[14px] font-bold uppercase tracking-wider text-[var(--text-secondary)]",
+                    "group relative rounded-[var(--radius-xl)] px-4 py-2 text-[14px] font-bold uppercase tracking-wider text-[var(--text-secondary)]",
                     "transition-all duration-200 hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]",
                     "data-[active=true]:text-[var(--brand-primary)] data-[active=true]:bg-[var(--brand-primary)]/5",

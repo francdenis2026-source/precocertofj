@@ -36,7 +36,7 @@ export function RealtimeMonitoringDashboard() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
+        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse">
           <Activity className="h-4 w-4 text-[var(--brand-primary)] animate-spin-slow" />
           <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest">Iniciando Varredura dos Comércios...</span>
         </div>
@@ -70,13 +70,13 @@ export function RealtimeMonitoringDashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filtrar por produto (ex: arroz)..."
-              className="w-full h-9 pl-9 pr-3 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[12px] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
+              className="w-full h-9 pl-9 pr-3 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[12px] font-medium focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
             />
           </div>
           <button 
             onClick={() => refetch()} 
             className={cn(
-              "shrink-0 p-2 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] hover:bg-[var(--bg-surface)] transition-all shadow-sm",
+              "shrink-0 p-2 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] hover:bg-[var(--bg-surface)] transition-all shadow-[var(--shadow-sm)]",
               isFetching && "animate-spin"
             )}
           >
@@ -93,14 +93,14 @@ export function RealtimeMonitoringDashboard() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="group relative flex flex-col gap-2 p-3 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-sm)] hover:shadow-[var(--pc-shadow-md)] transition-all duration-300 overflow-hidden min-h-[130px]"
+            className="group relative flex flex-col gap-2 p-3 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-[var(--pc-shadow-sm)] hover:shadow-[var(--pc-shadow-md)] transition-all duration-300 overflow-hidden min-h-[130px]"
           >
             {/* Subtle Gradient Accent */}
             <div className="absolute top-0 right-0 -mr-6 -mt-6 w-16 h-16 bg-[var(--brand-primary)]/10 rounded-full blur-xl group-hover:scale-125 transition-transform duration-500" />
             
             <div className="flex items-center justify-between relative z-10">
               <div className="flex items-center gap-3 overflow-hidden">
-                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-white p-1.5 shadow-sm border border-border/10 shrink-0 group-hover:scale-105 transition-transform duration-500 overflow-hidden relative">
+                <div className="h-10 w-10 flex items-center justify-center rounded-[var(--radius-xl)] bg-white p-1.5 shadow-[var(--shadow-sm)] border border-border/10 shrink-0 group-hover:scale-105 transition-transform duration-500 overflow-hidden relative">
                   <div className="absolute inset-0 bg-white z-0" />
 
                   {store.storeName.includes("Contamigos") ? (

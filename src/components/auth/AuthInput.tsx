@@ -29,7 +29,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
     <div className="relative w-full">
       <div
         className={`
-          relative flex items-center gap-3 w-full min-h-[56px] px-4 rounded-2xl border-2 transition-all duration-300
+          relative flex items-center gap-3 w-full min-h-[56px] px-4 rounded-[var(--radius-2xl)] border-2 transition-all duration-300
           ${
             isFocused
               ? "border-[var(--brand-primary)] bg-[var(--bg-surface)] shadow-[0_0_20px_rgba(212,175,55,0.1)]"

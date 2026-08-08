@@ -60,7 +60,7 @@ export const AuthSidebar: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3 mb-12"
         >
-          <div className="p-2 rounded-xl bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+          <div className="p-2 rounded-[var(--radius-xl)] bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
             <img src="/logo-mark.png?v=5" alt="Logo" className="w-8 h-8" />
           </div>
           <div>
@@ -91,7 +91,7 @@ export const AuthSidebar: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
-                className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group"
+                className="p-4 rounded-[var(--radius-2xl)] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group"
               >
                 <stat.icon className={`w-5 h-5 mb-3 ${stat.color} group-hover:scale-110 transition-transform`} />
                 <div className="text-lg font-bold text-white">{stat.value}</div>
@@ -107,7 +107,7 @@ export const AuthSidebar: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm"
+          className="flex items-center gap-4 p-4 rounded-[var(--radius-2xl)] bg-white/5 border border-white/10 backdrop-blur-sm"
         >
           <div className="relative">
             <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
