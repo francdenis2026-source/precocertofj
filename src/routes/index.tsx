@@ -266,26 +266,27 @@ function HomePage() {
         </section>
 
         {/* Final CTA */}
-        <section className="relative overflow-hidden rounded-[40px] bg-navy text-white py-20 px-8 text-center">
-          <div className="absolute inset-0 z-0 opacity-20">
+        <section className="relative overflow-hidden rounded-[40px] bg-[var(--navy-900)] text-white py-24 px-8 text-center shadow-2xl shadow-navy/20">
+          <div className="absolute inset-0 z-0 opacity-10">
             <img 
               src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=2000" 
               alt="" 
               className="w-full h-full object-cover" 
             />
-            <div className="absolute inset-0 bg-navy" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--navy-900)]" />
           </div>
           <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="t-h2 mb-4">Economia inteligente todos os dias</h2>
-            <h3 className="text-xl font-bold mb-8 text-primary">Antes de comprar, compare com o PreçoCerto.</h3>
-            <p className="text-white/60 mb-10 text-lg">
+            <div className="t-kicker mb-4 text-[var(--brand-primary)]">Junte-se à Economia Real</div>
+            <h2 className="t-h2 text-white mb-6">Economia inteligente todos os dias</h2>
+            <p className="text-white/60 mb-10 text-lg leading-relaxed">
               Junte-se a milhares de feijoenses e economize em cada ida ao mercado. Gratuito para sempre para consumidores.
             </p>
-            <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-2xl shadow-primary/20">
-              <Link to="/cadastro">Criar minha conta gratuita</Link>
+            <Button asChild className="pc-button-primary rounded-full px-12 h-14 text-lg shadow-2xl shadow-[var(--brand-primary)]/40 hover:scale-105 transition-transform">
+              <Link to="/cadastro">Começar a economizar agora</Link>
             </Button>
           </div>
         </section>
+
 
         {/* Professional Monitoring for Merchants */}
         <section id="monitoramento" className="pt-10 border-t border-[var(--border-base)]">
