@@ -95,11 +95,13 @@ function ProductImageBase({
   return (
     <div
       className={cn(
-        "relative flex h-full w-full items-center justify-center overflow-hidden",
+        "relative flex h-full w-full items-center justify-center overflow-hidden transition-all duration-500",
+        !showImage && "bg-[var(--bg-secondary)] border border-[var(--border-subtle)]",
         className,
       )}
       style={!showImage ? { backgroundColor: bg, color: fg } : undefined}
     >
+
       {showImage && !isLoaded && (
         <Skeleton className="absolute inset-0 z-0 bg-muted/20" />
       )}
