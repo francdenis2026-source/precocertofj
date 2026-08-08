@@ -262,8 +262,8 @@ function HomePage() {
                 className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]"
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Produtos frescos de qualidade premium"
+                  src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 
+                  alt="Análise técnica de preços e tecnologia"
                   className="h-full w-full object-cover saturate-[1.1] hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/30 to-transparent pointer-events-none" />
