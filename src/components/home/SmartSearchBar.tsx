@@ -210,8 +210,9 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-bold text-white group-focus-within:text-[var(--text-primary)] placeholder:text-white/70 group-focus-within:placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight capitalize",
+            "flex-1 min-w-0 bg-transparent outline-none font-bold text-white group-focus-within:text-[var(--text-primary)] placeholder:text-white/90 group-focus-within:placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight capitalize",
             compact ? "text-[15px]" : "text-base sm:text-lg",
+
           )}
         />
         {q && (
