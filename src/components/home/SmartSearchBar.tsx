@@ -169,8 +169,8 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)]/90 backdrop-blur-2xl pl-4 pr-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.02]",
+          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)] bg-[var(--bg-surface)] pl-4 pr-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)] md:focus-within:scale-[1.01]",
           compact ? "h-12" : "h-14 sm:h-[80px]",
           open ? "z-[101]" : "z-auto",
           "touch-none"
