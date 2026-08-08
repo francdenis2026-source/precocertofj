@@ -135,7 +135,7 @@ function StoresPage() {
                   <Link
                     key={s.id}
                     to="/loja/$id"
-                    search={{ q: "" }}
+                    search={{ q: "", from: "list" } as any}
                     params={{ id: s.id }}
                     className="pc-card group flex flex-col items-start gap-4 p-5"
                   >

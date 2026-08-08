@@ -150,18 +150,25 @@ function HomePage() {
       <SiteHeader variant="overlay" />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden px-4 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+      <section className="relative isolate min-h-[650px] md:min-h-[750px] flex items-center overflow-hidden px-4 pb-20 pt-32 md:px-8 md:pb-28">
+        {/* Background Image Container */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80&w=2000" 
+            alt="Supermercado realista background"
+            className="h-full w-full object-cover brightness-[0.25] saturate-[0.8]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-base)]/60 via-transparent to-[var(--bg-base)]" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)]/30 to-transparent" />
         </div>
 
-        <div className="mx-auto max-w-[1440px] grid lg:grid-cols-2 gap-12 items-center">
-          <div className="max-w-3xl text-center lg:text-left">
+        <div className="mx-auto max-w-[1440px] w-full">
+          <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2"
+              className="mb-8 inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2"
             >
               <Sparkles className="h-3.5 w-3.5 text-[var(--brand-primary)]" aria-hidden="true" />
               <span className="text-[13px] font-medium text-[var(--text-secondary)]">
@@ -173,7 +180,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="text-balance text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
+              className="text-balance text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)]"
             >
               Compre melhor.{" "}
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
@@ -183,7 +190,7 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="mx-auto lg:mx-0 mt-6 max-w-xl text-pretty text-[18px] leading-relaxed text-[var(--text-secondary)]"
+              className="mt-6 max-w-xl text-pretty text-[18px] md:text-[20px] leading-relaxed text-[var(--text-secondary)]"
             >
               O PreçoCerto acompanha os preços reais dos supermercados da sua cidade, monta a
               cesta mais barata para você e diz exatamente onde comprar.
@@ -193,16 +200,18 @@ function HomePage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-              className="mx-auto lg:mx-0 mt-10 max-w-2xl"
+              className="mt-10 max-w-2xl"
             >
-              <SmartSearchBar />
-              <div className="mt-6 flex flex-wrap justify-center lg:justify-start gap-2">
+              <div className="relative z-20">
+                <SmartSearchBar />
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
                 {CATEGORIES.slice(0, 5).map((cat) => (
                   <Link
                     key={cat.slug}
                     to="/buscar"
                     search={{ c: cat.value } as any}
-                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-4 py-2 text-[14px] font-medium text-[var(--text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[var(--brand-primary)]/40 hover:text-[var(--text-primary)]"
+                    className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/40 backdrop-blur-sm px-4 py-2 text-[14px] font-medium text-[var(--text-secondary)] transition-all hover:-translate-y-0.5 hover:border-[var(--brand-primary)]/40 hover:text-[var(--text-primary)]"
                   >
                     {cat.label}
                   </Link>
@@ -211,51 +220,8 @@ function HomePage() {
             </motion.div>
           </div>
 
-          {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, x: 20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative hidden lg:block"
-          >
-            <div className="relative z-10 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-lg)]">
-              <img 
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200&h=800" 
-                alt="Smartphone mostrando comparação de preços em supermercado"
-                className="w-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/40 to-transparent pointer-events-none" />
-              
-              {/* Floating elements to emphasize app connection */}
-              <div className="absolute -left-6 top-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <TrendingDown className="h-4 w-4 text-emerald-500" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-tight">Economia</p>
-                    <p className="text-sm font-bold text-[var(--text-primary)]">-24% na cesta</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -right-4 bottom-1/4 bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 rounded-xl shadow-xl">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-[var(--brand-primary)]/20 flex items-center justify-center">
-                    <Zap className="h-4 w-4 text-[var(--brand-primary)]" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-tight">Status</p>
-                    <p className="text-sm font-bold text-[var(--text-primary)]">Preços ao vivo</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-          </motion.div>
-
-          {/* Trust bar */}
-          <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4 lg:col-span-2">
+          {/* Trust bar integrated into hero flow */}
+          <div className="mt-20 grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
             <TrustStat label="Registros de preço" value={stats?.priceRecords} />
             <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
             <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
