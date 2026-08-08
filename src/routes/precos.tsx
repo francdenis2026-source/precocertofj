@@ -281,6 +281,10 @@ function SearchPage() {
       </div>
       
       <Footer />
+      <div className="hidden">
+        {/* Placeholder for future global stats sync if needed on this specific view */}
+        <span data-stats-version={new Date().toISOString()} />
+      </div>
       <MobileBottomNav />
     </div>
   );

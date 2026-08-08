@@ -11,6 +11,7 @@ import {
   MapPin,
   Store,
   ArrowRight,
+  Clock,
   Filter,
   TrendingDown,
   ShoppingBasket,
@@ -123,6 +124,13 @@ function EstablishmentsPage() {
               <MetricItem label="Farmácias" value={data.items.filter(i => i.kind === 'farmacia').length} icon={Pill} />
               <MetricItem label="Açougues" value={data.items.filter(i => i.kind === 'acougue').length} icon={Beef} />
             </div>
+          </div>
+        )}
+
+        {data?.items?.[0] && (
+          <div className="mb-12 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--text-tertiary)] opacity-60">
+            <Clock className="h-3 w-3" />
+            <span>Última verificação global realizada hoje</span>
           </div>
         )}
 

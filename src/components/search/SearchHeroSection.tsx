@@ -77,6 +77,10 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
                 </div>
               </div>
           </div>
+          <div className="mt-8 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)] opacity-50">
+            <Clock className="h-3 w-3" />
+            <span>Resultados em tempo real · {new Date().toLocaleDateString('pt-BR')}</span>
+          </div>
 
           <div className="flex flex-wrap gap-4 pt-8 border-t border-[var(--border-subtle)]">
             <button className="h-12 px-8 rounded-2xl bg-[var(--brand-primary)] text-white font-black text-[13px] uppercase tracking-widest shadow-[0_8px_20px_-6px_rgba(59,130,246,0.4)] hover:bg-[var(--pc-brand-primary-soft)] hover:-translate-y-0.5 transition-all active:translate-y-0">
