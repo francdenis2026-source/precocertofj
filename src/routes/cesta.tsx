@@ -7,6 +7,7 @@ import { ProductImage } from "@/components/ds/ProductImage";
 import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import { getCart, removeFromCart, type Cart } from "@/lib/cart.functions";
+import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Footer } from "@/components/brand/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";

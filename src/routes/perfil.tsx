@@ -312,36 +312,76 @@ function Perfil() {
             )}
           </div>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-3">
-              <MetricBox
-                icon={Award}
-                label="Contribuições"
-                value={s ? s.contributionsCount.toLocaleString("pt-BR") : "…"}
-                note={s ? (s.contributionsCount > 0 ? "scans + denúncias" : "envie sua 1ª nota") : "carregando"}
-              />
-              <MetricBox
-                icon={Heart}
-                label="Favoritos"
-                value={s ? s.favoritesCount.toLocaleString("pt-BR") : "…"}
-                note={s && s.favoritesCount > 0 ? "produtos salvos" : "nada favoritado"}
-              />
-              <MetricBox
-                icon={Sparkles}
-                label="Economia (90d)"
-                value={s ? fmtBrl(s.totalSavings) : "…"}
-                note={
-                  s
-                    ? s.totalSavings > 0
-                      ? "escolhendo o menor preço"
-                      : s.potentialSavings > 0
-                        ? `poderia poupar ${fmtBrl(s.potentialSavings)}`
-                        : "sem dados suficientes"
-                    : "carregando"
-                }
-              />
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex flex-col justify-between p-6 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm hover:border-[var(--brand-primary)]/30 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Contribuições</span>
+                  <Award size={18} className="text-[var(--brand-primary)] group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-2xl font-black text-[var(--text-primary)] tracking-tight">
+                  {s ? s.contributionsCount.toLocaleString("pt-BR") : "…"}
+                </div>
+              </div>
+              <div className="flex flex-col justify-between p-6 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm hover:border-[var(--brand-primary)]/30 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Favoritos</span>
+                  <Heart size={18} className="text-red-500 group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-2xl font-black text-[var(--text-primary)] tracking-tight">
+                  {s ? s.favoritesCount.toLocaleString("pt-BR") : "…"}
+                </div>
+              </div>
+              <div className="flex flex-col justify-between p-6 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-sm hover:border-[var(--brand-primary)]/30 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Economia</span>
+                  <Sparkles size={18} className="text-[var(--brand-accent)] group-hover:scale-110 transition-transform" />
+                </div>
+                <div className="text-2xl font-black text-emerald-500 tracking-tight">
+                  {s ? fmtBrl(s.totalSavings) : "…"}
+                </div>
+              </div>
+            </div>
               <AdminPanel />
+            </div>
 
+            {/* Nova Seção de Métricas Premium */}
+            <div className="rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-8 shadow-sm">
+              <div className="flex items-center justify-between mb-8 border-b border-[var(--border-subtle)] pb-6">
+                <div className="flex flex-col">
+                  <h3 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Inteligência Financeira</h3>
+                  <p className="text-[18px] font-black tracking-tight mt-1">Sua Economia no PreçoCerto</p>
+                </div>
+                <div className="h-12 w-12 rounded-2xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] flex items-center justify-center border border-[var(--brand-primary)]/20 shadow-sm">
+                  <BarChart3 size={24} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 rounded-xl bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
+                  <p className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mb-2">Potencial de Economia</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-emerald-500">{s ? fmtBrl(s.potentialSavings || 0) : "—"}</span>
+                    <span className="text-[11px] font-bold text-[var(--text-secondary)]">disponível</span>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-[11px] font-bold text-[var(--text-tertiary)] bg-[var(--bg-base)] p-2 rounded-lg border border-[var(--border-subtle)]">
+                    <TrendingUp size={14} className="text-emerald-500" />
+                    <span>Baseado na diferença entre preços de hoje</span>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-xl bg-[var(--bg-surface-elevated)]/30 border border-[var(--border-subtle)]">
+                  <p className="text-[10px] font-black text-[var(--text-tertiary)] uppercase tracking-widest mb-2">Monitoramento de Itens</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[var(--brand-primary)]">{s ? s.favoritesCount : "0"}</span>
+                    <span className="text-[11px] font-bold text-[var(--text-secondary)]">itens salvos</span>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-[11px] font-bold text-[var(--text-tertiary)] bg-[var(--bg-base)] p-2 rounded-lg border border-[var(--border-subtle)]">
+                    <Database size={14} className="text-[var(--brand-primary)]" />
+                    <span>Alertas ativos para flutuações</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* CPF */}
