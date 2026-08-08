@@ -37,7 +37,7 @@ import { useSession } from "@/hooks/useSession";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { normalizeSearchText } from "@/lib/text-normalize";
-import { tc } from "@/lib/typeclear";
+
 import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
@@ -58,10 +58,10 @@ const KIND_META: Record<
   string,
   { label: string; icon: typeof Store; color: string }
 > = {
-  mercado: { label: "Supermercado", icon: ShoppingBasket, color: "bg-blue-500/10 text-blue-400 border-blue-500/20" },
-  farmacia: { label: "Farmácia", icon: Pill, color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  mercado: { label: "Supermercado", icon: ShoppingBasket, color: "bg-brand-primary/10 text-brand-primary border-brand-primary/20" },
+  farmacia: { label: "Farmácia", icon: Pill, color: "bg-success/10 text-success border-success/20" },
   padaria: { label: "Padaria", icon: Croissant, color: "bg-brand-accent/10 text-brand-accent border-brand-accent/20" },
-  acougue: { label: "Açougue", icon: Beef, color: "bg-orange-500/10 text-orange-400 border-orange-500/20" },
+  acougue: { label: "Açougue", icon: Beef, color: "bg-warning/10 text-warning border-warning/20" },
   outro: { label: "Outro", icon: Store, color: "bg-tertiary/10 text-tertiary border-subtle" },
 };
 
@@ -118,7 +118,7 @@ function EstablishmentsPage() {
 
   return (
     <IsolatedPage className="bg-base" contentClassName="!pb-0 font-sans">
-      <header className="sticky top-0 z-10 border-b border-subtle bg-surface/80 backdrop-blur-md px-6 py-4">
+      <header className="sticky top-0 z-50 border-b border-subtle bg-base/80 backdrop-blur-md px-6 py-4">
         <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <BackButton fallbackTo="/" variant="ghost" className="text-tertiary hover:text-primary" />
@@ -144,7 +144,7 @@ function EstablishmentsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
                 { label: "Comércios", value: data?.totalEstablishments || 0, icon: Store, color: "text-brand-primary", bg: "bg-brand-primary/10" },
-                { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+                { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-success", bg: "bg-success/10" },
                 { label: "Economia", value: data?.totalMaxSavings ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "R$ 0,00", icon: PiggyBank, color: "text-brand-accent", bg: "bg-brand-accent/10" },
             ].map((stat, i) => (
                 <div key={i} className="bg-surface p-6 rounded-3xl shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-md hover:bg-surface-elevated">
@@ -264,7 +264,7 @@ function EstablishmentsPage() {
                              {[
                                 { label: "Produtos monitorados", value: selected.productsCount, icon: Package, color: "bg-brand-primary/10 text-brand-primary" },
                                 { label: "Potencial de economia", value: `R$ ${selected.maxSavings.toFixed(2).replace(".", ",")}`, icon: PiggyBank, color: "bg-brand-accent/10 text-brand-accent" },
-                                { label: "Categorias", value: selected.topCategories.length, icon: Store, color: "bg-purple-500/10 text-purple-400" }
+                                { label: "Categorias", value: selected.topCategories.length, icon: Store, color: "bg-brand-accent/10 text-brand-accent" }
                             ].map((s, i) => (
                                 <div key={i} className="p-5 rounded-2xl bg-surface-elevated border border-subtle transition-transform hover:scale-[1.02]">
                                     <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4", s.color)}>
