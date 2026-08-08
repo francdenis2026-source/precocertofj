@@ -97,10 +97,11 @@ export function FavoriteMarketButton({
           aria-label={label}
           title={label}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+            "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
             isFav
-              ? "border-brand-gold bg-brand-gold text-brand-navy"
-              : "border-border bg-card text-foreground hover:border-brand-gold/60",
+              ? "border-brand-accent bg-brand-accent text-bg-base"
+              : "border-subtle bg-surface text-secondary hover:border-brand-accent/60",
+
             mutation.isPending && "opacity-60",
             className,
           )}
@@ -127,10 +128,11 @@ export function FavoriteMarketButton({
         aria-label={label}
         title={label}
         className={cn(
-          "inline-grid h-8 w-8 place-items-center rounded-full border shadow-sm backdrop-blur transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+          "inline-grid h-8 w-8 place-items-center rounded-full border shadow-sm backdrop-blur transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent",
           isFav
-            ? "border-brand-gold bg-brand-gold text-brand-navy"
-            : "border-border/70 bg-background/90 text-muted-foreground hover:border-brand-gold hover:text-gold-ink",
+            ? "border-brand-accent bg-brand-accent text-bg-base"
+            : "border-subtle/70 bg-base/90 text-secondary hover:border-brand-accent hover:text-brand-accent",
+
           mutation.isPending && "opacity-60",
           className,
         )}

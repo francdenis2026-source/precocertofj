@@ -408,12 +408,13 @@ function PlansPage() {
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-subtle/70">
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")}>Recurso</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Degustação</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Mensal</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")}>Trimestral</th>
-                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")}>Anual</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-left")} scope="col">Recurso</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Degustação</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Mensal</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center")} scope="col">Trimestral</th>
+                    <th className={cn("text-[11px] font-bold uppercase tracking-wider text-tertiary", "py-2 text-center text-brand-accent")} scope="col">Anual</th>
                   </tr>
+
                 </thead>
                 <tbody className="divide-y divide-border/60">
                   {[
@@ -422,13 +423,15 @@ function PlansPage() {
                     ["Alertas de preço", false, true, true, true],
                     ["Análises de IA / mês", "1", "30", "150", "150"],
                     ["Ranking de bairros", true, true, true, true],
+
                     ["Exportar CSV/PDF", false, true, true, true],
                     ["Prioridade de suporte", false, false, true, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
-                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")}>
+                      <th className={cn("text-sm", "py-2 text-left font-medium text-primary")} scope="row">
                         {label as string}
                       </th>
+
                       {cols.map((c, j) => (
                         <td key={j} className="py-2 text-center">
                           {typeof c === "boolean" ? (
@@ -736,7 +739,7 @@ function ComparisonMatrix({
           {rows.map((row, i) => (
             <tr
               key={row.label}
-              className={i % 2 === 0 ? "bg-muted/25" : "bg-transparent"}
+              className={i % 2 === 0 ? "bg-surface-elevated/25" : "bg-transparent"}
             >
               <th
                 scope="row"

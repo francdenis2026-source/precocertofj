@@ -1,9 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import { FixedSizeList as List } from "react-window";
+import AutoSizer, { type Size } from "react-virtualized-auto-sizer";
 import {
   Beef,
   ChevronRight,
@@ -18,6 +20,7 @@ import {
   Store,
   X,
   Star,
+  ArrowUpDown,
 } from "lucide-react";
 
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
@@ -95,6 +98,7 @@ function EstablishmentsPage() {
     return () => clearTimeout(t);
   }, [qDraft, updateSearch]);
 
+
   const filtered = useMemo(() => {
     if (!data) return [];
     const term = normalizeSearchText(search.q);
@@ -103,8 +107,18 @@ function EstablishmentsPage() {
     if (term) {
       list = list.filter(e => normalizeSearchText(e.name).includes(term) || normalizeSearchText(e.neighborhood || "").includes(term));
     }
+    
+    // Sort
+    list.sort((a, b) => {
+      if (search.sort === "name") return a.name.localeCompare(b.name);
+      if (search.sort === "neighborhood") return (a.neighborhood || "").localeCompare(b.neighborhood || "");
+      if (search.sort === "items") return b.productsCount - a.productsCount;
+      if (search.sort === "savings") return b.maxSavings - a.maxSavings;
+      return 0; // relevance or default
+    });
+    
     return list;
-  }, [data, search.kind, search.q]);
+  }, [data, search.kind, search.q, search.sort]);
 
   const selected = useMemo(() => {
     return filtered.find(e => e.id === search.sel) || filtered[0] || null;
@@ -193,47 +207,79 @@ function EstablishmentsPage() {
                             );
                         })}
                     </div>
+                    <div className="flex flex-wrap gap-2">
+                        <select 
+                            value={search.sort}
+                            onChange={e => updateSearch({ sort: e.target.value })}
+                            className="bg-surface border-subtle text-secondary text-xs font-bold rounded-full px-4 py-2 focus:ring-brand-accent focus:border-brand-accent"
+                            aria-label="Ordenar estabelecimentos"
+                        >
+                            <option value="relevance">Mais relevantes</option>
+                            <option value="name">Nome (A-Z)</option>
+                            <option value="neighborhood">Bairro</option>
+                            <option value="items">Mais produtos</option>
+                            <option value="savings">Melhor economia</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 no-scrollbar">
+                <div className="h-[500px] w-full pr-2">
                     {isLoading ? (
                         Array.from({ length: 5 }).map((_, i) => (
-                            <div key={i} className="h-20 bg-surface-elevated rounded-2xl animate-pulse" />
+                            <div key={i} className="h-20 bg-surface-elevated rounded-2xl animate-pulse mb-3" />
                         ))
                     ) : filtered.length === 0 ? (
                         <div className="p-12 text-center text-tertiary bg-surface rounded-3xl border border-dashed border-subtle">Nenhum mercado encontrado</div>
-                    ) : filtered.map((e) => {
-                        const meta = kindMeta(e.kind);
-                        const active = search.sel === e.id;
-                        return (
-                            <button 
-                                key={e.id} 
-                                onClick={() => updateSearch({ sel: e.id })} 
-                                className={cn(
-                                    "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300",
-                                    active 
-                                        ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
-                                        : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"
-                                )}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <StoreLogoThumb src={e.logoUrl} name={e.name} className="h-14 w-14 rounded-xl shadow-inner bg-surface-elevated border border-subtle" />
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-bold text-primary group-hover:text-brand-accent transition-colors">{e.name}</div>
-                                        <div className="text-[12px] text-secondary font-medium flex items-center gap-1.5 mt-0.5">
-                                            <span className={cn("px-2 py-0.5 rounded-md border text-[10px] font-bold uppercase", meta.color)}>{meta.label}</span>
-                                            <span className="opacity-20">·</span>
-                                            <span className="truncate">{e.neighborhood || "Feijó"}</span>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-sm font-black text-brand-accent">{e.productsCount}</div>
-                                        <div className="text-[10px] text-tertiary font-bold uppercase">Itens</div>
-                                    </div>
-                                </div>
-                            </button>
-                        );
-                    })}
+                    ) : (
+                        <AutoSizer>
+                            {({ height, width }) => (
+
+                                <List
+                                    height={height}
+                                    width={width}
+                                    itemCount={filtered.length}
+                                    itemSize={92}
+                                    className="no-scrollbar"
+                                >
+                                    {({ index, style }: { index: number; style: CSSProperties }) => {
+                                        const e = filtered[index];
+                                        const meta = kindMeta(e.kind);
+                                        const active = search.sel === e.id;
+                                        return (
+                                            <div style={{ ...style, paddingBottom: 12 }}>
+                                                <button 
+                                                    onClick={() => updateSearch({ sel: e.id })} 
+                                                    className={cn(
+                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300 h-[80px] flex items-center",
+                                                        active 
+                                                            ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
+                                                            : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"
+                                                    )}
+                                                    aria-pressed={active}
+                                                    aria-label={`Selecionar ${e.name}`}
+                                                >
+                                                    <div className="flex items-center gap-4 w-full">
+                                                        <StoreLogoThumb src={e.logoUrl} name={e.name} className="h-10 w-10 rounded-xl shadow-inner bg-surface-elevated border border-subtle" />
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="font-bold text-primary group-hover:text-brand-accent transition-colors text-sm truncate">{e.name}</div>
+                                                            <div className="text-[10px] text-secondary font-medium flex items-center gap-1.5 mt-0.5">
+                                                                <span className={cn("px-1.5 py-0.5 rounded-md border text-[8px] font-bold uppercase shrink-0", meta.color)}>{meta.label}</span>
+                                                                <span className="truncate">{e.neighborhood || "Feijó"}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right shrink-0">
+                                                            <div className="text-xs font-black text-brand-accent">{e.productsCount}</div>
+                                                            <div className="text-[8px] text-tertiary font-bold uppercase">Itens</div>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        );
+                                    }}
+                                </List>
+                            )}
+                        </AutoSizer>
+                    )}
                 </div>
             </div>
 
@@ -280,7 +326,8 @@ function EstablishmentsPage() {
                         <div className="space-y-6">
                              <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-tertiary">Departamentos em Destaque</h3>
-                                <div className="text-[11px] font-bold text-text-tertiary/40">POR VOLUME DE ITENS</div>
+                                <div className="text-[11px] font-bold text-tertiary/40">POR VOLUME DE ITENS</div>
+
                              </div>
                              <div className="grid gap-5">
                                 {selected.topCategories.slice(0, 5).map((c, i) => {
@@ -321,8 +368,11 @@ function EstablishmentsPage() {
                      </div>
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                        <Store className="w-16 h-16 text-surface-elevated" />
-                        <div className="text-tertiary font-medium">Selecione um comércio ao lado para<br/>ver estatísticas e economia.</div>
+                        <Store className="w-16 h-16 text-tertiary/20" />
+                        <div>
+                            <div className="text-xl font-bold text-primary">Selecione um Comércio</div>
+                            <div className="text-secondary max-w-xs mx-auto">Escolha um dos estabelecimentos ao lado para ver detalhes e economia potencial.</div>
+                        </div>
                     </div>
                 )}
             </div>
