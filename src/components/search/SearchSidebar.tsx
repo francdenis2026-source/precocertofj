@@ -157,7 +157,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       {/* Mercados parceiros */}
       <SidebarSection
         icon={<StoreIcon className="h-4 w-4" />}
-        title="Mercados parceiros"
+        title="Estabelecimentos"
         action={
           <Link
             to="/estabelecimentos"

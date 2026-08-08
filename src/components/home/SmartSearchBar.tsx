@@ -207,7 +207,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-bold text-white group-focus-within:text-[var(--text-primary)] placeholder:text-white/70 group-focus-within:placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
+            "flex-1 min-w-0 bg-transparent outline-none font-bold text-white group-focus-within:text-[var(--text-primary)] placeholder:text-white/70 group-focus-within:placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight capitalize",
             compact ? "text-[15px]" : "text-base sm:text-lg",
           )}
         />
@@ -344,10 +344,10 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                           </div>
                           <div className="min-w-0 flex-1">
                             <span className={cn(
-                              "block truncate text-base font-bold tracking-tight transition-colors",
+                              "block truncate text-base font-bold tracking-tight transition-colors capitalize",
                               active === i ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
                             )}>
-                              {s.displayName}
+                              {s.displayName.toLowerCase()}
                             </span>
                             <div className="mt-1 flex items-center gap-2 truncate">
                               {s.market ? (

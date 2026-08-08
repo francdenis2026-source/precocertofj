@@ -209,9 +209,9 @@ function CestaPage() {
                         <Link
                           to="/produto-publico/$slug"
                           params={{ slug: it.catalogId || "" }}
-                          className="line-clamp-2 text-lg font-black uppercase tracking-tight text-[var(--text-primary)] hover:text-[var(--brand-primary)] transition-colors"
+                          className="line-clamp-2 text-lg font-black uppercase tracking-tight text-[var(--text-primary)] hover:text-[var(--brand-primary)] transition-colors capitalize"
                         >
-                          {it.displayName}
+                          {it.displayName.toLowerCase()}
                         </Link>
                         <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">
                           {it.brand && <span className="text-[var(--text-secondary)]">{it.brand}</span>}

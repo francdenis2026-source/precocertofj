@@ -138,12 +138,11 @@ function HomePage() {
 
       {/* Metrics Bar - Compact container */}
       <div className="mx-auto max-w-[1280px] px-4 -mt-12 relative z-20 mb-20">
-        <div className="bg-[var(--bg-surface)] border border-[var(--border-base)] rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[var(--border-base)]">
-            <StatItem label="Preços verificados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
-            <StatItem label="Produtos" value={stats?.totalItems?.toLocaleString('pt-BR') || "..."} />
-            <StatItem label="Economia média" value={economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "..."} />
-            <StatItem label="Lojas parceiras" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
+        <div className="bg-white border border-[var(--border-subtle)] rounded-2xl shadow-xl overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--border-base)]">
+            <StatItem label="Produtos cadastrados" value={stats?.totalItems?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Preços monitorados" value={stats?.priceRecords?.toLocaleString('pt-BR') || "..."} />
+            <StatItem label="Estabelecimentos" value={stats?.establishments?.toLocaleString('pt-BR') || "..."} />
           </div>
         </div>
       </div>
@@ -226,7 +225,7 @@ function HomePage() {
         {/* Partner Stores */}
         <section>
           <div className="text-center mb-12">
-            <h2 className="t-h3 uppercase tracking-widest text-[var(--text-tertiary)]">Mercados Monitorados</h2>
+            <h2 className="t-h3 uppercase tracking-widest text-[var(--text-tertiary)]">Estabelecimentos Monitorados</h2>
           </div>
           <RegisteredStoresCarousel />
         </section>
@@ -277,7 +276,7 @@ function HomePage() {
           <div className="mb-12">
             <div className="inline-block px-3 py-1 rounded-lg bg-navy text-white text-[10px] font-black uppercase tracking-widest mb-4">Área Profissional</div>
             <h2 className="t-h2 mb-4">Painel de Inteligência de Mercado</h2>
-            <p className="text-[var(--text-secondary)] max-w-3xl">Visão estratégica e monitoramento de concorrência em tempo real para estabelecimentos parceiros de Feijó.</p>
+            <p className="text-[var(--text-secondary)] max-w-3xl">Visão estratégica e monitoramento de concorrência em tempo real para todos os estabelecimentos cadastrados em Feijó.</p>
           </div>
           <RealtimeMonitoringDashboard />
         </section>
@@ -291,8 +290,8 @@ function HomePage() {
 
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="px-6 py-10 text-center">
-      <div className="text-3xl font-black text-primary mb-1 tracking-tighter">{value}</div>
+    <div className="px-6 py-8 md:py-10 text-center">
+      <div className="text-3xl font-black text-[var(--brand-primary)] mb-1 tracking-tighter">{value}</div>
       <div className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--text-tertiary)]">{label}</div>
     </div>
   );

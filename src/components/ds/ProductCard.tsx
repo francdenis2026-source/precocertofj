@@ -64,7 +64,7 @@ export function ProductCard({
       <div className="p-4 flex flex-1 flex-col">
         <div className="flex items-center justify-between gap-2 mb-1">
           <span className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider truncate">
-            {brand || "Genérico"} {unit ? `· ${unit}` : ""}
+            {brand} {unit ? `· ${unit}` : ""}
           </span>
           {lastUpdate && (
             <div className="flex items-center gap-1 text-[9px] font-bold text-[var(--text-tertiary)] uppercase shrink-0">
@@ -74,8 +74,8 @@ export function ProductCard({
           )}
         </div>
 
-        <h3 className="text-[14px] font-bold text-[var(--text-primary)] leading-tight mb-3 line-clamp-2 min-h-[2.5rem] group-hover:text-[var(--brand-primary)] transition-colors">
-          {name}
+        <h3 className="text-[14px] font-bold text-[var(--text-primary)] leading-tight mb-3 line-clamp-2 min-h-[2.5rem] group-hover:text-[var(--brand-primary)] transition-colors capitalize">
+          {name.toLowerCase()}
         </h3>
 
         <div className="mt-auto space-y-3">

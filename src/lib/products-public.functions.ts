@@ -136,8 +136,6 @@ export const getEconomyStat = createServerFn({ method: "GET" }).handler(
       const best = Math.max(...savings);
 
       return {
-        // Uma casa decimal: "13,4%" comunica precisão de medição real,
-        // diferente do "10%" arredondado que parecia estimativa de marketing.
         avgSavingsPct: Number(avg.toFixed(1)),
         productsWithComparison: sample.length,
         bestSavingsPct: Math.round(best),

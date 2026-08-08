@@ -70,7 +70,7 @@ export function SearchHeroSection({ query, isCategory }: { query: string; isCate
                 <Price value={avgPrice} size="xl" className="font-black text-[var(--text-primary)]" />
               </div>
               <div className="pc-stat-card border-[var(--success)]/30 bg-[var(--success)]/5 ring-1 ring-[var(--success)]/10">
-                <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--success)] mb-2 block">Economia Direta</span>
+                <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--success)] mb-2 block">Diferença</span>
                 <div className="flex items-baseline gap-2">
                   <Price value={potentialSavings} size="xl" className="font-black text-[var(--success)]" />
                   <span className="text-[13px] font-black text-[var(--success)]">(-{savingsPct}%)</span>
