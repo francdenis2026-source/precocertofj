@@ -339,7 +339,7 @@ function HomePage() {
            
            <aside className="lg:col-span-4">
               <div className="sticky top-28 space-y-10">
-                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl p-8 shadow-sm">
+                <section aria-labelledby="partners" className="rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-xl p-8 shadow-sm">
                    <h2 id="partners" className="mb-6 text-[12px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)] border-b border-[var(--border-subtle)] pb-4">
                      Mercados Parceiros
                    </h2>
