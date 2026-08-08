@@ -330,62 +330,67 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
                           onMouseEnter={() => setActive(i)}
                           onClick={() => go(s.displayName)}
                           className={cn(
-                            "group/item flex w-full items-center gap-3 border-l-[3px] px-4 py-3.5 text-left transition-all duration-300",
+                            "group/item relative flex w-full items-center gap-4 border-l-[4px] px-6 py-4.5 text-left transition-all duration-300",
                             active === i
-                              ? "border-l-[var(--brand-primary)] bg-[var(--brand-primary)]/10 scale-[1.02] translate-x-1"
-                              : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]",
+                              ? "border-l-[var(--brand-primary)] bg-gradient-to-r from-[var(--brand-primary)]/10 to-transparent scale-[1.01] translate-x-1"
+                              : "border-l-transparent hover:bg-[var(--bg-surface-elevated)]/50",
                           )}
                         >
                           <div className={cn(
-                            "grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-300",
+                            "relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border transition-all duration-500",
                             active === i 
-                              ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/5 shadow-lg shadow-[var(--brand-primary)]/10" 
+                              ? "border-[var(--brand-primary)] bg-[var(--brand-primary)]/10 shadow-lg shadow-[var(--brand-primary)]/20 rotate-3" 
                               : "border-[var(--border-subtle)] bg-[var(--bg-base)]"
                           )}>
                             {s.imageUrl ? (
-                              <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+                              <img src={s.imageUrl} alt="" loading="lazy" className="h-full w-full object-cover transition-transform group-hover/item:scale-110" />
                             ) : (
-                              <span aria-hidden="true" className="text-xs font-black text-[var(--brand-primary)]">
-                                {(s.displayName || "?").trim().charAt(0).toUpperCase()}
-                              </span>
+                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-base)]">
+                                <span aria-hidden="true" className="text-sm font-black text-[var(--brand-primary)]">
+                                  {(s.displayName || "?").trim().charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                            )}
+                            {active === i && (
+                               <div className="absolute inset-0 bg-[var(--brand-primary)]/10 animate-pulse" />
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
                             <span className={cn(
-                              "block truncate text-sm font-bold transition-colors",
+                              "block truncate text-base font-bold tracking-tight transition-colors",
                               active === i ? "text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
                             )}>
                               {s.displayName}
                             </span>
-                            <div className="mt-1 flex items-center gap-1.5 truncate">
+                            <div className="mt-1 flex items-center gap-2 truncate">
                               {s.market ? (
                                 <span className={cn(
-                                  "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all",
+                                  "inline-flex items-center gap-1.5 rounded-lg px-2 py-0.5 text-[10px] font-black uppercase tracking-wider transition-all",
                                   active === i 
-                                    ? "bg-[var(--brand-primary)] text-white" 
+                                    ? "bg-[var(--brand-primary)] text-white shadow-md shadow-[var(--brand-primary)]/20" 
                                     : "bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]"
                                 )}>
-                                  <Store className="h-2.5 w-2.5" /> {s.market}
+                                  <Store className="h-3 w-3" /> {s.market}
                                 </span>
                               ) : (
-                                <span className="text-[11px] font-medium text-[var(--text-tertiary)]">{s.category ?? "Catálogo"}</span>
+                                <span className="text-[12px] font-semibold text-[var(--text-tertiary)]">{s.category ?? "Produtos Disponíveis"}</span>
                               )}
                             </div>
                           </div>
                           {typeof s.minPrice === "number" ? (
                             <div className="shrink-0 text-right">
                               <div className={cn(
-                                "text-sm font-black transition-transform duration-300",
+                                "text-lg font-black tracking-tighter transition-all duration-500",
                                 active === i ? "scale-110 text-[var(--brand-primary)]" : "text-[var(--text-primary)]"
                               )}>
                                 {BRL(s.minPrice)}
                               </div>
                               {i === 0 && (
-                                <div className="text-[9px] font-black uppercase tracking-wider text-[var(--pc-brand-accent)]">Melhor Oferta</div>
+                                <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[var(--pc-brand-accent)] animate-bounce mt-0.5">Melhor Preço</div>
                               )}
                             </div>
                           ) : loading ? (
-                            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[var(--text-tertiary)]" />
+                            <Loader2 className="h-4 w-4 shrink-0 animate-spin text-[var(--text-tertiary)]" />
                           ) : null}
                         </button>
                       </li>
