@@ -212,9 +212,9 @@ function HomePage() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-8 relative z-10">
-        {/* Trust bar integrated into hero flow - moved from inside section to below it if needed, or kept inside */}
-        <div className="mb-16 grid grid-cols-2 gap-4 md:grid-cols-4">
+      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-10">
+        {/* Trust bar integrated into hero flow */}
+        <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
           <TrustStat label="Registros de preço" value={stats?.priceRecords} />
           <TrustStat label="Produtos monitorados" value={stats?.totalItems} />
           <TrustStat label="Economia média" value={economy?.avgSavingsPct} suffix="%" />
@@ -222,7 +222,7 @@ function HomePage() {
         </div>
 
         {/* Value props */}
-        <section aria-labelledby="how-it-works" className="mb-16">
+        <section aria-labelledby="how-it-works" className="mb-12">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
               <SectionHeading
@@ -277,38 +277,38 @@ function HomePage() {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
-           <div className="space-y-16 lg:col-span-8">
-              <section id="baskets-section" aria-label="Cesta inteligente">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+           <div className="space-y-12 lg:col-span-8">
+              <section id="baskets-section" aria-label="Cesta inteligente" className="scroll-mt-24">
                 <OptimizedBasketSection />
               </section>
 
-              <section aria-labelledby="live-prices">
-                <div className="mb-8 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+              <section aria-labelledby="live-prices" className="scroll-mt-24">
+                <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-[var(--border-subtle)] pb-4">
                   <div className="min-w-0">
-                    <p className="mb-2 text-[13px] font-medium uppercase tracking-[0.14em] text-[var(--brand-primary)]">
+                    <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--brand-primary)]">
                       Monitoramento ao vivo
                     </p>
                     <h2
                       id="live-prices"
-                      className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
+                      className="text-[22px] font-semibold tracking-[-0.02em] text-[var(--text-primary)]"
                     >
-                      Últimos preços perto de você
+                      Últimos preços registrados
                     </h2>
                   </div>
-                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1 shadow-sm">
+                  <div className="flex w-fit rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-1">
                     {[
                       { id: "recent", label: "Recentes" },
-                      { id: "price", label: "Mais baratos" },
+                      { id: "price", label: "Menor Preço" },
                     ].map((s) => (
                       <button
                         key={s.id}
                         onClick={() => setSort(s.id as any)}
                         aria-pressed={sort === s.id}
                         className={cn(
-                          "min-h-9 rounded-[var(--radius-sm)] px-4 text-[13px] font-bold uppercase tracking-wider transition-all",
+                          "min-h-8 rounded-[var(--radius-sm)] px-3 text-[11px] font-bold uppercase tracking-wider transition-all",
                           sort === s.id
-                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-md"
+                            ? "bg-[var(--brand-primary)] text-[var(--text-on-brand)] shadow-sm"
                             : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
                         )}
                       >
@@ -317,7 +317,7 @@ function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {filteredProducts.map((p, i) => (
                     <ProductCardItem key={`${p.name}-${p.when}`} p={p} i={i} onSelect={setSelectedProduct} />
                   ))}
@@ -325,22 +325,25 @@ function HomePage() {
               </section>
            </div>
            
-           <aside className="space-y-12 lg:col-span-4">
-              <section aria-labelledby="partners">
-                 <h2 id="partners" className="mb-6 text-[15px] font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
-                   Mercados parceiros
-                 </h2>
-                  <div className="grid grid-cols-2 gap-3">
-                    <RegisteredStoresCarousel />
-                  </div>
-               </section>
-               <section className="sticky top-24">
-                 <PromoBanner />
-               </section>
+           <aside className="lg:col-span-4">
+              <div className="sticky top-24 space-y-8">
+                <section aria-labelledby="partners" className="pc-card !bg-[var(--bg-surface)]/30 !p-5">
+                   <h2 id="partners" className="mb-4 text-[13px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                     Mercados Parceiros
+                   </h2>
+                    <div className="grid grid-cols-3 gap-2">
+                      <RegisteredStoresCarousel />
+                    </div>
+                 </section>
+                 
+                 <section className="overflow-hidden rounded-[var(--radius-xl)] shadow-sm">
+                   <PromoBanner />
+                 </section>
+              </div>
             </aside>
         </div>
 
-        <section aria-labelledby="realtime" className="mt-16 border-t border-[var(--border-subtle)] pt-12">
+        <section aria-labelledby="realtime" className="mt-12 border-t border-[var(--border-subtle)] pt-12">
           <SectionHeading
             id="realtime"
             kicker="Painel vivo"
