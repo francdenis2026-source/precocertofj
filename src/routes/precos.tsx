@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Footer } from "@/components/brand/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { Button } from "@/components/ui/button";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
