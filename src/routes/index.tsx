@@ -449,11 +449,21 @@ function ValueCard({ Icon, title, body }: { Icon: any; title: string; body: stri
 function TrustStat({ label, value, suffix = "" }: { label: string; value?: number | null; suffix?: string }) {
   const display = typeof value === "number" && Number.isFinite(value) ? value : null;
   return (
-    <div className="rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-6 text-center">
-      <p className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)]">
+    <div className="group relative rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-5 py-6 text-center transition-all hover:border-[var(--brand-primary)]/30 hover:shadow-lg">
+      <p className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.02em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">
         {display === null ? "—" : `${display.toLocaleString("pt-BR")}${suffix}`}
       </p>
-      <p className="mt-2 text-[14px] text-[var(--text-tertiary)]">{label}</p>
+      <p className="mt-2 text-[14px] font-medium text-[var(--text-tertiary)]">{label}</p>
+      
+      {/* Tooltip explicativo discreto */}
+      <div className="absolute inset-x-0 -bottom-8 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none">
+        <span className="bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] px-3 py-1 rounded-md text-[10px] text-[var(--text-secondary)] whitespace-nowrap shadow-sm">
+          {label === "Registros de preço" && "Total de etiquetas verificadas"}
+          {label === "Produtos monitorados" && "Itens únicos catalogados"}
+          {label === "Economia média" && "Desconto médio na cesta"}
+          {label === "Mercados parceiros" && "Lojas ativas em Feijó"}
+        </span>
+      </div>
     </div>
   );
 }
