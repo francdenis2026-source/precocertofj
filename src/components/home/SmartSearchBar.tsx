@@ -168,7 +168,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
   const showPanel = open && (canQuery || (trending?.length ?? 0) > 0);
 
   return (
-    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto isolate">
+    <div ref={wrapRef} className="relative w-full max-w-2xl mx-auto isolate z-50">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -245,7 +245,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute left-[-12px] right-[-12px] top-[-12px] z-[70] overflow-hidden rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)] text-left shadow-[0_32px_80px_-16px_rgba(11,30,58,0.6)] min-w-[320px] lg:min-w-[440px]"
+            className="absolute left-[-12px] right-[-12px] top-[-12px] z-[100] overflow-hidden rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)] text-left shadow-[0_32px_80px_-16px_rgba(11,30,58,0.7)] min-w-[320px] lg:min-w-[440px]"
           >
             <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] px-5 py-3.5 flex items-center justify-between">
                <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[var(--brand-primary)]">Inteligência de Busca</span>
