@@ -339,25 +339,28 @@ function ProductCardItem({ p, storeId, allItems }: { p: PublicStoreProduct; stor
         />
         {isLowest && (
           <div className="absolute top-4 right-4 z-10">
-            <span className="bg-[var(--success)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-lg">
+            <span className="bg-[var(--success)] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl shadow-lg shadow-[var(--success)]/30">
               Melhor Preço
             </span>
           </div>
         )}
+
       </div>
       
-      <div className="p-5 flex flex-col flex-1 border-t border-[var(--border-subtle)]">
-        <h4 className="font-bold text-[15px] leading-tight line-clamp-2 group-hover:text-[var(--brand-primary)] transition-colors mb-4 min-h-[2.5rem]">
+      <div className="p-5 flex flex-col flex-1 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]">
+        <h4 className="font-black text-[15px] leading-tight line-clamp-2 uppercase tracking-tight group-hover:text-[var(--brand-primary)] transition-colors mb-4 min-h-[2.5rem]">
           {p.productName}
         </h4>
+
         
         <div className="mt-auto pt-4 flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <Price value={p.price} size="lg" className="font-black" />
-            <button className="h-10 w-10 rounded-xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all">
+            <Price value={p.price} size="lg" className="text-xl font-black tracking-tighter" />
+            <button className="h-10 w-10 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-tertiary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all shadow-sm">
               <PlusCircleIcon size={18} />
             </button>
           </div>
+
           <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-widest mt-2">
             <Clock size={12} />
             <span>Atualizado {formatDate(p.lastDate)}</span>
