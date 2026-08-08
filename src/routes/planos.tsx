@@ -312,10 +312,10 @@ function PlansPage() {
                       <span
                         className={dsx(
                           tc.eyebrow,
-                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5",
+                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
                           isRecommended
-                            ? "badge-gold text-brand-navy"
-                            : "border border-brand-gold/40 bg-brand-gold/10 text-[var(--pc-gold-ink)]",
+                            ? "bg-brand-accent text-bg-base"
+                            : "border border-brand-accent/40 bg-brand-accent/10 text-brand-accent",
                         )}
                       >
                         {isRecommended ? "Recomendado" : `-${savings}%`}
