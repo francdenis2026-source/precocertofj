@@ -393,7 +393,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleManualAdd}
-                    className="h-8 md:h-10 w-8 md:w-10 rounded-xl bg-[var(--brand-primary)] text-white flex items-center justify-center hover:bg-[var(--brand-primary)]/90 transition-all duration-300 shadow-sm"
+                    className="h-8 md:h-10 w-8 md:w-10 rounded-[var(--radius-xl)] bg-[var(--brand-primary)] text-white flex items-center justify-center hover:bg-[var(--brand-primary)]/90 transition-all duration-300 shadow-[var(--shadow-sm)]"
                     aria-label="Adicionar à cesta"
                   >
                     <ShoppingBag size={16} />
@@ -402,7 +402,7 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                     <DialogTrigger asChild>
                       <button 
                         onClick={(e) => e.stopPropagation()}
-                        className="h-8 md:h-10 px-3 md:px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] transition-all duration-300"
+                        className="h-8 md:h-10 px-3 md:px-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[10px] md:text-[12px] font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] transition-all duration-300"
                       >
                         <BarChart3 size={14} className="text-[var(--brand-primary)]" />
                         <span className="hidden sm:inline">Comparar</span>

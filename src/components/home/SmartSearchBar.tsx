@@ -176,7 +176,7 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           "touch-none"
         )}
       >
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
           <Search
             aria-hidden="true"
             className={cn(

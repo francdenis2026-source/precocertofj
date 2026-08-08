@@ -28,9 +28,9 @@ export function SearchMarketsSection() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {establishments?.map((market, i) => (
-          <div key={market.id} className="group bg-card border border-border/60 rounded-2xl p-5 hover:border-primary/30 transition-all">
+          <div key={market.id} className="group bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-[var(--radius-2xl)] p-5 hover:border-[var(--brand-primary)]/30 transition-all shadow-[var(--shadow-sm)]">
              <div className="flex items-start justify-between mb-4">
-                <div className="h-12 w-12 bg-white rounded-xl shadow-sm border border-border/40 p-2 flex items-center justify-center overflow-hidden">
+                <div className="h-12 w-12 bg-white rounded-[var(--radius-xl)] shadow-[var(--shadow-sm)] border border-[var(--border-subtle)]/40 p-2 flex items-center justify-center overflow-hidden">
                   {logoUrls[i] ? (
                     <img src={logoUrls[i]} alt={market.name} className="h-full w-full object-contain" />
                   ) : (

@@ -110,7 +110,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
         }
       }}
       className={cn(
-        "flex flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-elev-1",
+        "flex flex-col gap-3 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 shadow-[var(--shadow-sm)]",
         interactive &&
           "cursor-pointer transition-shadow hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
@@ -118,7 +118,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
       {...rest}
     >
       <header className="flex items-center gap-3">
-        <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-muted/40 ring-1 ring-border/60 sm:h-16 sm:w-16">
+        <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] ring-1 ring-[var(--border-subtle)]/60 sm:h-16 sm:w-16">
           <ProductImage src={productImage} alt={productName} name={productName} size="md" fit="contain" imgClassName="p-1.5" />
         </div>
 
@@ -139,7 +139,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
         ) : null}
       </header>
 
-      <ul className="divide-y divide-border/70 rounded-xl border border-border/70 bg-background/50">
+      <ul className="divide-y divide-[var(--border-subtle)]/70 rounded-[var(--radius-xl)] border border-[var(--border-subtle)]/70 bg-[var(--bg-surface)]/50">
         {sorted.map((row) => {
           const isBest = row.marketId === bestId;
           const freshness = formatFreshness(row.lastSeenAt);

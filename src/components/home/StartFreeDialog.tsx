@@ -33,7 +33,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
-        className="max-w-md rounded-2xl border p-0 sm:max-w-lg"
+        className="max-w-md rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-0 sm:max-w-lg shadow-[var(--shadow-2xl)]"
         onOpenAutoFocus={(e) => {
           // Deixa o Radix rodar o foco padrão, mas força no CTA primário
           // para que leitores de tela anunciem a ação principal primeiro.
@@ -108,7 +108,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
             <Link
               id="start-free-primary"
               to={signupHref}
-              className="group inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-5 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0"
+              className="group inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[var(--radius-xl)] px-5 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-[var(--shadow-sm)] transition-[transform,box-shadow] duration-150 hover:-translate-y-[1px] hover:shadow-[var(--shadow-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0"
               style={{
                 background: "var(--pc-home-gold)",
                 color: "var(--pc-home-navy)",
@@ -122,7 +122,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
 
             <Link
               to={loginHref}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border px-5 py-2.5 text-[14px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] px-5 py-2.5 text-[14px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 hover:bg-[var(--bg-surface-elevated)]"
               style={{
                 borderColor: "var(--pc-home-line)",
                 color: "var(--pc-home-heading)",

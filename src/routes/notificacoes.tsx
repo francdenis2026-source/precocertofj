@@ -212,11 +212,11 @@ function NotificacoesPage() {
       </div>
 
       {isLoading ? (
-        <div className="rounded-2xl border border-border bg-card p-2">
+        <div className="rounded-[var(--radius-2xl)] border border-border bg-card p-2">
           <ListRowsSkeleton rows={5} />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+        <div className="rounded-[var(--radius-2xl)] border border-dashed border-border bg-card p-10 text-center">
           <Inbox className="mx-auto h-8 w-8 text-muted-foreground" />
           <p className="mt-2 text-sm font-semibold text-foreground">
             Nenhuma notificação {filter !== "all" ? "neste filtro" : "por enquanto"}.
@@ -233,7 +233,7 @@ function NotificacoesPage() {
             return (
               <li
                 key={n.id}
-                className={`rounded-2xl border bg-card p-4 shadow-sm transition-colors ${
+                className={`rounded-[var(--radius-2xl)] border bg-card p-4 shadow-sm transition-colors ${
                   unread ? "border-primary/30" : "border-border opacity-80"
                 }`}
               >

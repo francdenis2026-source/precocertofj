@@ -94,7 +94,7 @@ export function PageHeader({
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-4">
             {icon && (
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground md:h-12 md:w-12">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] md:h-12 md:w-12 shadow-[var(--shadow-sm)]">
                 {icon}
               </div>
             )}

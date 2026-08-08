@@ -167,7 +167,7 @@ export function HomeShowcaseSection() {
   if (!hasProducts && !hasComparisons) {
     return (
       <section aria-label="Vitrine vazia" className="mt-3">
-        <div className="rounded-2xl border border-dashed border-border bg-surface p-6 text-center text-[13px] text-muted-foreground">
+        <div className="rounded-[var(--radius-2xl)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-center text-[13px] text-[var(--text-tertiary)] shadow-[var(--shadow-sm)]">
           Nossa vitrine ainda está sendo construída — os melhores preços aparecerão aqui em breve.
         </div>
       </section>

@@ -29,7 +29,7 @@ export function QuickStoreCompare({
   const stats = q.data;
 
   return (
-    <div className="rounded-xl border border-primary/20 bg-card/95 p-4 shadow-xl backdrop-blur-md">
+    <div className="rounded-[var(--radius-xl)] border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)]/95 p-4 shadow-[var(--shadow-xl)] backdrop-blur-md">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Scale className="h-5 w-5 text-primary" />

@@ -120,7 +120,7 @@ const ComparisonCard = memo(({
           <button 
             onClick={onCompare}
             className={cn(
-              "p-2 rounded-xl border backdrop-blur-md transition-all",
+              "p-2 rounded-[var(--radius-xl)] border backdrop-blur-md transition-all",
               isComparing 
                 ? "bg-brand-primary border-brand-primary text-white scale-110 shadow-lg" 
                 : "bg-surface/80 border-border/20 text-muted-foreground hover:bg-surface hover:text-brand-primary"
@@ -254,7 +254,7 @@ function ComparadorPage() {
               onSubmit={handleSearch}
               className="max-w-3xl mx-auto relative group"
             >
-              <div className="relative flex items-center p-2 bg-surface border border-border/40 rounded-[32px] shadow-2xl shadow-black/5 ring-4 ring-transparent group-focus-within:ring-brand-primary/5 transition-all">
+              <div className="relative flex items-center p-2 bg-surface border border-border/40 rounded-[var(--radius-3xl)] shadow-2xl shadow-black/5 ring-4 ring-transparent group-focus-within:ring-brand-primary/5 transition-all">
                 <Search className="absolute left-6 h-5 w-5 text-muted-foreground" />
                 <input 
                   type="text"
@@ -298,7 +298,7 @@ function ComparadorPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1 bg-surface border border-border/20 p-1 rounded-xl">
+              <div className="flex items-center gap-1 bg-surface border border-border/20 p-1 rounded-[var(--radius-xl)]">
                  <button 
                    onClick={() => navigate({ search: (prev: any) => ({ ...prev, view: "grid" }) })}
                    className={cn("p-2 rounded-lg transition-all", viewMode === "grid" ? "bg-brand-primary/10 text-brand-primary" : "text-muted-foreground hover:bg-muted")}
@@ -316,7 +316,7 @@ function ComparadorPage() {
               <select 
                 value={sortKey}
                 onChange={(e) => navigate({ search: (prev: any) => ({ ...prev, sort: e.target.value }) })}
-                className="bg-surface border border-border/20 rounded-xl px-4 py-2.5 text-xs font-black uppercase tracking-widest outline-none cursor-pointer hover:border-brand-primary/50 transition-colors"
+                className="bg-surface border border-border/20 rounded-[var(--radius-xl)] px-4 py-2.5 text-xs font-black uppercase tracking-widest outline-none cursor-pointer hover:border-brand-primary/50 transition-colors"
               >
                 <option value="relevance">Relevância</option>
                 <option value="price-asc">Menor Preço</option>
@@ -329,7 +329,7 @@ function ComparadorPage() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                {Array.from({ length: 8 }).map((_, i) => (
-                 <div key={i} className="h-[420px] rounded-[32px] bg-muted/20 animate-pulse" />
+                 <div key={i} className="h-[420px] rounded-[var(--radius-3xl)] bg-muted/20 animate-pulse" />
                ))}
             </div>
           ) : filteredRows.length > 0 ? (
@@ -378,7 +378,7 @@ function ComparadorPage() {
               exit={{ y: 100, opacity: 0 }}
               className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-6"
             >
-              <div className="bg-brand-secondary/95 backdrop-blur-xl rounded-[24px] p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-6">
+              <div className="bg-brand-secondary/95 backdrop-blur-xl rounded-[var(--radius-2xl)] p-4 border border-white/10 shadow-2xl flex items-center justify-between gap-6">
                 <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-1">
                   {compareList.map((item) => (
                     <motion.div 
@@ -386,7 +386,7 @@ function ComparadorPage() {
                       layout
                       className="relative group shrink-0"
                     >
-                      <div className="h-12 w-12 rounded-xl bg-white/10 border border-white/10 p-1.5">
+                      <div className="h-12 w-12 rounded-[var(--radius-xl)] bg-white/10 border border-white/10 p-1.5">
                         <ProductImage src={item.image_url} alt={item.display_name} className="h-full w-full object-contain" />
                       </div>
                       <button 
@@ -398,7 +398,7 @@ function ComparadorPage() {
                     </motion.div>
                   ))}
                   {Array.from({ length: Math.max(0, 2 - compareList.length) }).map((_, i) => (
-                    <div key={i} className="h-12 w-12 rounded-xl border border-white/5 border-dashed flex items-center justify-center text-white/20">
+                    <div key={i} className="h-12 w-12 rounded-[var(--radius-xl)] border border-white/5 border-dashed flex items-center justify-center text-white/20">
                       <Plus className="h-4 w-4" />
                     </div>
                   ))}

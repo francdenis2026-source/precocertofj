@@ -92,7 +92,7 @@ export function SearchResultsList() {
 
        {displayCount < result.groups.length && (
          <div ref={ref} className="flex justify-center py-12">
-           <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]">
+           <div className="flex items-center gap-3 px-6 py-3 rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
              <Loader2 className="h-5 w-5 animate-spin text-[var(--brand-primary)]" />
              <span className="text-sm font-bold text-[var(--text-secondary)]">Carregando mais ofertas...</span>
            </div>

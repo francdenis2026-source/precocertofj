@@ -91,7 +91,7 @@ function ProductCardItem({ p, i, onSelect }: { p: any; i: number; onSelect: (p: 
           e.stopPropagation();
           addItem({ id: p.name, name: p.name, price: p.price, marketName: p.marketName || "" });
         }}
-        className="absolute right-3 top-3 z-10 rounded-xl bg-[var(--bg-surface-elevated)] p-2 text-[var(--brand-primary)] opacity-0 transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] focus-visible:opacity-100 group-hover:opacity-100"
+        className="absolute right-3 top-3 z-10 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] p-2 text-[var(--brand-primary)] opacity-0 transition-all hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] focus-visible:opacity-100 group-hover:opacity-100 shadow-[var(--shadow-sm)]"
         aria-label={`Adicionar ${p.name} à comparação`}
       >
         <PlusCircle className="h-4 w-4" />
@@ -217,7 +217,7 @@ function HomePage() {
         {/* Platform Stats Section */}
         <section className="relative -mt-10 md:-mt-16 mb-12 md:mb-20 z-20">
           <div className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-white/5 overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl shadow-2xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-px md:bg-white/5 overflow-hidden rounded-[var(--radius-2xl)] border border-white/10 bg-[var(--bg-surface)]/60 backdrop-blur-xl shadow-[var(--shadow-2xl)]">
               <StatCard label="Preços Verificados" value={stats?.priceRecords || "3.064"} icon={ShieldCheck} />
               <StatCard label="Itens no Catálogo" value={stats?.totalItems || "20.262"} icon={Zap} />
               <StatCard label="Economia Média" value={`${economy?.avgSavingsPct || "15.1"}%`} icon={TrendingDown} />
@@ -261,7 +261,7 @@ function HomePage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-slate-900 shadow-[var(--pc-shadow-lg)]"
+                className="relative aspect-square overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border-strong)] bg-slate-900 shadow-[var(--shadow-lg)]"
               >
                 <img 
                   src="https://images.unsplash.com/photo-1543083477-4f7f45ad7d15?auto=format&fit=crop&q=80&w=1000" 

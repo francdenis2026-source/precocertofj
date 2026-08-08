@@ -111,7 +111,7 @@ function AuthGate() {
   return (
     <section
       role="status"
-      className="mx-auto max-w-md rounded-xl border border-border bg-card p-5 text-center shadow-elev-1"
+      className="mx-auto max-w-md rounded-[var(--radius-xl)] border border-border bg-card p-5 text-center shadow-[var(--shadow-sm)]"
     >
       <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/30">
         <LogIn className="h-5 w-5" strokeWidth={2.2} />
@@ -193,7 +193,7 @@ function CollaboratorWorkspace() {
       {/* Painel de status — token + progresso do mês */}
       <section className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* Token */}
-        <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+        <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
           <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-gold-ink">
             <KeyRound className="h-3 w-3" strokeWidth={2.6} aria-hidden />
             Seu token
@@ -207,7 +207,7 @@ function CollaboratorWorkspace() {
         </div>
 
         {/* Progresso */}
-        <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+        <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gold-ink">
               Progresso do mês
@@ -247,7 +247,7 @@ function CollaboratorWorkspace() {
       {capReached && (
         <div
           role="status"
-          className="flex items-start gap-2.5 rounded-xl border border-emerald-600/35 bg-emerald-500/8 p-3.5"
+          className="flex items-start gap-2.5 rounded-[var(--radius-xl)] border border-emerald-600/35 bg-emerald-500/8 p-3.5"
         >
           <CheckCircle2
             className="mt-0.5 h-4 w-4 flex-none text-emerald-700 dark:text-emerald-400"
@@ -269,7 +269,7 @@ function CollaboratorWorkspace() {
       {/* Layout em 2 colunas: envio à esquerda, histórico + regras à direita */}
       <section className="grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
         {/* Coluna 1 — Enviar nota */}
-        <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+        <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
           <div className="mb-2.5 flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
               <h2 className="text-[14.5px] font-semibold tracking-tight text-foreground">
@@ -304,7 +304,7 @@ function CollaboratorWorkspace() {
         {/* Coluna 2 — Envios + regras */}
         <div className="space-y-3">
           {/* Envios recentes */}
-          <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+          <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
                 <Receipt className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
@@ -357,7 +357,7 @@ function CollaboratorWorkspace() {
           </div>
 
           {/* Regras compactas */}
-          <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+          <div className="rounded-[var(--radius-xl)] border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
             <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
               Como funciona

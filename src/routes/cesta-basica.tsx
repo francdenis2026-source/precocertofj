@@ -221,7 +221,7 @@ function CestaBasicaPage() {
           >
             <ArrowLeft className="h-3.5 w-3.5" />
           </Link>
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary/10 text-primary">
+          <span className="grid h-8 w-8 place-items-center rounded-[var(--radius-lg)] bg-primary/10 text-primary">
             <BasketMark className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">

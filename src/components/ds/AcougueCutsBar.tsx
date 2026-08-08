@@ -40,7 +40,7 @@ export function AcougueCutsBar({
       className={
         (compact
           ? "rounded-lg border border-brand-gold/40 bg-[color-mix(in_oklab,var(--brand-gold)_8%,transparent)] px-2.5 py-2"
-          : "rounded-xl border border-brand-gold/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2.5") +
+          : "rounded-[var(--radius-xl)] border border-[var(--brand-gold)]/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2.5 shadow-[var(--shadow-sm)]") +
         " " +
         className
       }

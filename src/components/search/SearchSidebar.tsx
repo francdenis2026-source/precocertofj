@@ -142,7 +142,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               <button
                 type="button"
                 onClick={() => onPickQuery(p)}
-                className="group flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left text-[14px] font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--brand-primary)]"
+                className="group flex w-full items-center gap-3 rounded-[var(--radius-xl)] px-2 py-2 text-left text-[14px] font-bold text-[var(--text-primary)] transition-colors hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--brand-primary)]"
               >
                 <span className="grid h-6 w-6 place-items-center rounded-lg bg-[var(--brand-primary)] text-[11px] font-black tabular-nums text-black shadow-sm">
                   {i + 1}
@@ -234,7 +234,7 @@ function SidebarSection({
     <section className="pc-card">
       <header className="mb-4 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="grid h-8 w-8 flex-none place-items-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
+          <span className="grid h-8 w-8 flex-none place-items-center rounded-[var(--radius-xl)] bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]">
             {icon}
           </span>
           <h3 className="truncate text-[11px] font-black uppercase tracking-[0.15em] text-[var(--text-secondary)]">

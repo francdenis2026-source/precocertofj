@@ -99,7 +99,7 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/25 bg-destructive/5 p-5 text-[13px] sm:text-sm leading-relaxed text-foreground sm:flex-row sm:items-center shadow-lg shadow-destructive/5",
+        "flex flex-col items-start gap-3 rounded-[var(--radius-2xl)] border border-destructive/25 bg-destructive/5 p-5 text-[13px] sm:text-sm leading-relaxed text-[var(--text-primary)] sm:flex-row sm:items-center shadow-[var(--shadow-lg)] shadow-destructive/5",
         className,
       )}
     >
@@ -276,7 +276,7 @@ export function EmptyState({
       role={role}
       aria-live={ariaLive ?? (role === "status" ? "polite" : undefined)}
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/60 text-center shadow-xl shadow-black/20",
+        "flex flex-col items-center justify-center rounded-[var(--radius-xl)] border border-dashed border-[var(--border-subtle)] bg-[var(--bg-surface)]/60 text-center shadow-[var(--shadow-xl)] shadow-black/20",
         isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
@@ -330,7 +330,7 @@ export function LoadingList({
       {Array.from({ length: count }).map((_, i) => (
         <Skeleton
           key={i}
-          className={cn("h-16 w-full rounded-2xl", itemClassName)}
+          className={cn("h-16 w-full rounded-[var(--radius-2xl)]", itemClassName)}
         />
       ))}
     </div>

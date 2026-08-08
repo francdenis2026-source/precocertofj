@@ -21,7 +21,7 @@ export function SectionSkeleton({
       role="status"
       aria-busy="true"
       aria-live="polite"
-      className={cn("space-y-2 rounded-xl border border-border/70 bg-card p-2.5", className)}
+      className={cn("space-y-2 rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2.5", className)}
     >
       <span className="sr-only">{label}…</span>
       <div className="flex items-center gap-2">

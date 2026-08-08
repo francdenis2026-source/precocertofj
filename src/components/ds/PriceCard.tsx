@@ -94,7 +94,7 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
         }
       }}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-sm)] transition-all hover:shadow-[var(--pc-shadow-md)]",
+        "group relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[var(--pc-shadow-sm)] transition-all hover:shadow-[var(--pc-shadow-md)]",
         compact ? "gap-2 p-3" : "gap-3 p-4",
         interactive &&
           "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -104,7 +104,7 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
     >
       <div
         className={cn(
-          "relative flex items-center justify-center overflow-hidden rounded-xl bg-muted/40",
+          "relative flex items-center justify-center overflow-hidden rounded-[var(--radius-xl)] bg-muted/40",
           compact ? "aspect-[4/3]" : "aspect-square",
         )}
       >
