@@ -42,10 +42,18 @@ function parse(raw: string | null): Theme | null {
  * aparelho), herda o valor global legado — sem sobrescrever nada.
  */
 function readStored(userId: string | null): Theme {
-  void userId;
-  void parse;
-  void storageKeyFor;
-  return "dark";
+  if (typeof window === "undefined") return "light";
+  const raw = window.localStorage.getItem(storageKeyFor(userId));
+  const parsed = parse(raw);
+  if (parsed) return parsed;
+
+  // Se for primeiro acesso do usuário, tenta ler o legado
+  if (userId) {
+    const legacy = parse(window.localStorage.getItem(LEGACY_KEY));
+    if (legacy) return legacy;
+  }
+
+  return "light";
 }
 
 function writeStored(theme: Theme, userId: string | null) {
