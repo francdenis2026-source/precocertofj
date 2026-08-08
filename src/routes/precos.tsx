@@ -339,7 +339,7 @@ function MarketProductCard({ group, marketId }: { group: ProductGroup; marketId:
              )}
              <Price value={priceObj.price} size="lg" className="text-2xl font-black tracking-tighter" />
            </div>
-           <button className="h-12 w-12 rounded-2xl bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-white hover:rotate-45 transition-all duration-300 border border-[var(--border-subtle)] shadow-sm">
+           <button className="h-12 w-12 rounded-[var(--radius-xl)] bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--brand-primary)] hover:text-[var(--text-on-brand)] hover:rotate-45 transition-all duration-[var(--dur-base)] border border-[var(--border-subtle)] shadow-[var(--shadow-sm)]">
              <ArrowRight className="h-5 w-5" />
            </button>
         </div>
