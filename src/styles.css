@@ -179,7 +179,7 @@ h1, h2, h3, h4, h5, h6 {
 @utility t-caption {
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 /* The single sanctioned uppercase treatment — used sparingly, for kickers. */
 @utility t-kicker {
@@ -188,7 +188,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.3;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 
 /* Layout: 1440px shell with generous, consistent gutters */
@@ -298,7 +298,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-md);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   transition: all var(--dur-base) var(--ease-smooth);
   &:hover {
     color: var(--text-primary);
