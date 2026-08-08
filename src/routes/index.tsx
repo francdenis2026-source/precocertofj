@@ -199,10 +199,6 @@ function HomePage() {
               <span className="text-[var(--brand-primary)]">Gaste menos.</span>
             </motion.h1>
 
-              Compre melhor.{" "}
-              <span className="text-[var(--brand-primary)]">Gaste menos.</span>
-            </motion.h1>
-
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -232,9 +228,9 @@ function HomePage() {
               </div>
             </div>
           </motion.div>
-
         </div>
       </section>
+
 
       <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-0">
         {/* Trust bar integrated into hero flow */}
