@@ -1,7 +1,7 @@
 import { memo, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState } from "react";
+
 
 import {
   ProductCategoryIcon,
@@ -100,8 +100,12 @@ function ProductImageBase({
       )}
       style={!showImage ? { backgroundColor: bg, color: fg } : undefined}
     >
+      {showImage && !isLoaded && (
+        <Skeleton className="absolute inset-0 z-0 bg-muted/20" />
+      )}
       {showImage ? (
         <img
+
           src={src!}
           alt={alt}
           loading={priority ? "eager" : "lazy"}
