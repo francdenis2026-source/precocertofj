@@ -332,9 +332,6 @@ function HomePage() {
                    <RegisteredStoresCarousel />
                  </div>
               </section>
-              <section>
-                <PromoBanner />
-              </section>
             </aside>
         </div>
 
