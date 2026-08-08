@@ -329,10 +329,13 @@ function HomePage() {
                  <h2 id="partners" className="mb-6 text-[15px] font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
                    Mercados parceiros
                  </h2>
-                 <div className="grid grid-cols-2 gap-3">
-                   <RegisteredStoresCarousel />
-                 </div>
-              </section>
+                  <div className="grid grid-cols-2 gap-3">
+                    <RegisteredStoresCarousel />
+                  </div>
+               </section>
+               <section className="sticky top-24">
+                 <PromoBanner />
+               </section>
             </aside>
         </div>
 
