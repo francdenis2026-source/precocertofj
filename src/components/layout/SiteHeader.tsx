@@ -80,12 +80,15 @@ export function SiteHeader({ variant = "solid", showNav = true, showBack = true 
             className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-105 md:h-11 md:w-11"
           />
           <span className="hidden flex-col leading-none sm:flex">
-            <span className="text-[19px] font-semibold tracking-[-0.02em] text-[var(--text-primary)] md:text-[21px]">
+            <span className="text-[20px] font-black tracking-tight text-[var(--text-primary)]">
               Preço<span className="text-[var(--brand-primary)]">Certo</span>
             </span>
-            <span className="mt-1 text-[12px] font-medium text-[var(--text-tertiary)]">
-              Feijó · Acre
-            </span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)] animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-tertiary)]">
+                Feijó · AC
+              </span>
+            </div>
           </span>
         </Link>
 
