@@ -252,8 +252,6 @@ function HomePage() {
               </div>
             </div>
             
-            {/* Background Glow for image */}
-            <div className="absolute -inset-4 -z-10 bg-[var(--brand-primary)]/10 blur-[100px] rounded-full" />
           </motion.div>
 
           {/* Trust bar */}
