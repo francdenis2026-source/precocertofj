@@ -161,7 +161,7 @@ function EstablishmentsPage() {
                 { label: "Produtos", value: data?.totalProducts.toLocaleString("pt-BR") || 0, icon: Package, color: "text-secondary", bg: "bg-surface-elevated/80", description: "Itens sob monitoramento" },
                 { label: "Economia", value: data?.totalMaxSavings ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "R$ 0,00", icon: PiggyBank, color: "text-success", bg: "bg-success/10", description: "Potencial médio poupado" },
             ].map((stat, i) => (
-                <div key={i} className="bg-surface p-6 rounded-3xl shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-lg hover:bg-surface-elevated hover:-translate-y-1 duration-300">
+                <div key={i} className="bg-surface p-6 rounded-[32px] shadow-sm flex items-center gap-5 border border-subtle transition-all hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] hover:bg-surface-elevated hover:border-brand-accent/20 hover:-translate-y-1.5 duration-500">
                     <div className={cn("p-4 rounded-2xl flex items-center justify-center w-14 h-14", stat.bg, stat.color)}>
                         <stat.icon className="w-6 h-6" />
                     </div>
@@ -252,7 +252,8 @@ function EstablishmentsPage() {
                                                 <button 
                                                     onClick={() => updateSearch({ sel: e.id })} 
                                                     className={cn(
-                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-300 h-[80px] flex items-center",
+                                                        "group w-full text-left p-4 bg-surface rounded-2xl shadow-sm border transition-all duration-500 h-[80px] flex items-center",
+
                                                         active 
                                                             ? "border-brand-accent ring-4 ring-brand-accent/5 shadow-md bg-surface-elevated" 
                                                             : "border-subtle hover:border-brand-accent/40 hover:shadow-md hover:bg-surface-elevated"

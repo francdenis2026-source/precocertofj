@@ -299,11 +299,14 @@ function PlansPage() {
                     tabIndex={0}
                     aria-pressed={isSelected}
                     aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
-                    className={cn(
-                      "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-5 rounded-3xl",
-                      isRecommended ? "bg-surface-elevated border-brand-accent/30" : "bg-surface border-subtle",
-                      isSelected && "ring-2 ring-brand-accent/50",
-                    )}
+                      className={cn(
+                        "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-6 rounded-[32px] transition-all duration-500",
+                        isRecommended 
+                          ? "bg-surface-elevated border-brand-accent/20 hover:border-brand-accent/40 shadow-[0_20px_40px_-15px_rgba(234,179,8,0.1)] hover:shadow-[0_25px_50px_-12px_rgba(234,179,8,0.2)]" 
+                          : "bg-surface border-subtle hover:border-brand-primary/30 shadow-sm",
+                        isSelected && "ring-2 ring-brand-accent/40 bg-surface-elevated",
+                      )}
+
                   >
                     {(isRecommended || savings) && (
                       <span
