@@ -17,16 +17,19 @@ import { getRealtimeMonitoringStats } from "@/lib/monitoring.functions";
 import { cn } from "@/lib/utils";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { ContamigosLogo } from "@/components/brand/ContamigosLogo";
+import { useMyProfile } from "@/hooks/useMyProfile";
 
 export function RealtimeMonitoringDashboard() {
+  const { session, loading: isAuthLoading } = useMyProfile();
   const fetchStats = useServerFn(getRealtimeMonitoringStats);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 12;
   
   const { data, isLoading, refetch, isFetching, error } = useQuery({
-    queryKey: ["realtime-monitoring-stats", searchQuery, page],
+    queryKey: ["realtime-monitoring-stats", searchQuery, page, !!session],
     queryFn: () => fetchStats({ data: { query: searchQuery, page, pageSize } }),
+    enabled: !!session,
     refetchInterval: 60000,
     staleTime: 30000,
   });
@@ -35,9 +38,9 @@ export function RealtimeMonitoringDashboard() {
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / pageSize);
 
-  if (error) return null; // Não renderizar componente de erro/unauthorized na home para visitantes
-
-  if (isLoading) {
+  if (!session) return null;
+  
+  if (isLoading || isAuthLoading) {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-3 p-4 rounded-[var(--radius-xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] animate-pulse shadow-lg shadow-[var(--brand-primary)]/5">
