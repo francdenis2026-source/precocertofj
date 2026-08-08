@@ -181,7 +181,7 @@ function SearchPage() {
           
           {/* Market Hero Card */}
           {activeMarket && (
-            <section className="bg-[var(--bg-surface)] rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] overflow-hidden shadow-[var(--shadow-2xl)] relative">
+            <section className="bg-[var(--bg-surface)] rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] overflow-hidden shadow-[var(--pc-shadow-xl)] relative">
               <div className="h-48 bg-[var(--bg-surface-elevated)] relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1400" 

@@ -37,7 +37,7 @@ export function MarketCard({
       to="/estabelecimento/$slug"
       params={{ slug: id }} // Simplificado, ideal usar slugifyEstablishment
       className={cn(
-        "group block bg-[var(--bg-surface)] rounded-[32px] border border-[var(--border-subtle)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-xl)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2",
+        "group block bg-[var(--bg-surface)] rounded-[var(--radius-3xl)] border border-[var(--border-subtle)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-xl)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-2",
         className
       )}
     >

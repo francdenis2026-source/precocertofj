@@ -1,5 +1,8 @@
 import { memo, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+
 import {
   ProductCategoryIcon,
   detectFoodCategory,

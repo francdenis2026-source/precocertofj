@@ -114,8 +114,8 @@ function CestaPage() {
           </Link>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[var(--border-subtle)] pb-8">
             <div className="space-y-3">
-              <h1 className="text-[clamp(2rem,5vw,3rem)] font-black tracking-tighter uppercase leading-none">Minha Cesta</h1>
-              <p className="text-[var(--text-secondary)] text-[15px] font-bold">Gerencie os itens da sua lista de compras.</p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.9] text-[var(--text-primary)]">Minha Cesta</h1>
+              <p className="text-[var(--text-secondary)] text-[16px] font-bold">Gerencie os itens da sua lista de compras.</p>
             </div>
             <div className="flex items-center gap-3">
                <Button

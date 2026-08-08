@@ -41,7 +41,7 @@ export function ProductCard({
     <article
       onClick={onClick}
       className={cn(
-        "group flex flex-col bg-[var(--bg-surface)] rounded-[24px] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-[var(--shadow-lg)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-1.5 cursor-pointer",
+        "group flex flex-col bg-[var(--bg-surface)] rounded-[var(--radius-2xl)] border border-[var(--border-subtle)] overflow-hidden transition-all duration-500 hover:shadow-[var(--shadow-lg)] hover:border-[var(--brand-primary)]/30 hover:-translate-y-1.5 cursor-pointer",
         className
       )}
     >

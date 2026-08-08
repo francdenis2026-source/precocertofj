@@ -32,32 +32,40 @@ export function PriceHistoryChart({ productName, compact = false }: { productNam
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
-        {!compact && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#88888820" />}
+        {!compact && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-subtle)" opacity={0.5} />}
         <XAxis 
           dataKey="date" 
           hide={compact}
           fontSize={10}
           tickLine={false}
           axisLine={false}
-          stroke="#888888"
+          stroke="var(--text-tertiary)"
+          dy={10}
         />
         <YAxis 
           hide={compact} 
           fontSize={10}
           tickLine={false}
           axisLine={false}
-          stroke="#888888"
+          stroke="var(--text-tertiary)"
           domain={['auto', 'auto']}
+          dx={-10}
         />
         <Tooltip 
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
               const value = Number(payload[0].value);
               return (
-                <div className="rounded-lg border bg-background p-2 shadow-md text-[10px] space-y-1">
-                  <p className="font-bold">{payload[0].payload.date}</p>
-                  <p className="text-primary">R$ {value?.toFixed(2)}</p>
-                  <p className="text-muted-foreground truncate max-w-[120px]">{payload[0].payload.market}</p>
+                <div className="pc-card p-3 shadow-xl ring-1 ring-[var(--border-subtle)] bg-[var(--bg-surface)] min-w-[140px] animate-in fade-in zoom-in-95 duration-200">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-1.5">{payload[0].payload.date}</p>
+                  <div className="flex items-baseline gap-1.5 mb-1">
+                    <span className="text-sm font-black text-[var(--brand-primary)]">R$</span>
+                    <span className="text-lg font-black text-[var(--text-primary)] tracking-tighter">{value?.toFixed(2).replace('.', ',')}</span>
+                  </div>
+                  <p className="text-[10px] font-bold text-[var(--text-secondary)] truncate flex items-center gap-1.5">
+                    <div className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)]" />
+                    {payload[0].payload.market}
+                  </p>
                 </div>
               );
             }
@@ -67,10 +75,11 @@ export function PriceHistoryChart({ productName, compact = false }: { productNam
         <Line 
           type="monotone" 
           dataKey="price" 
-          stroke="var(--color-primary)" 
-          strokeWidth={compact ? 2 : 3} 
-          dot={!compact}
-          activeDot={{ r: 4 }}
+          stroke="var(--brand-primary)" 
+          strokeWidth={compact ? 2.5 : 4} 
+          dot={!compact ? { r: 4, fill: "var(--brand-primary)", strokeWidth: 2, stroke: "var(--bg-surface)" } : false}
+          activeDot={{ r: 6, fill: "var(--brand-primary)", strokeWidth: 3, stroke: "var(--bg-surface)" }}
+          animationDuration={1500}
         />
       </LineChart>
     </ResponsiveContainer>

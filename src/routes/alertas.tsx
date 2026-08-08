@@ -247,10 +247,10 @@ function Alertas() {
                     <li
                       key={a.id}
                       className={
-                        "flex gap-4 rounded-xl border p-4 transition-colors " +
+                        "flex gap-4 rounded-[var(--radius-xl)] border p-4 transition-colors " +
                         (!a.readAt
-                          ? "border-savings/30 bg-savings/[0.06]"
-                          : "border-border/60 bg-card")
+                          ? "border-[var(--brand-primary)]/30 bg-[var(--brand-primary)]/[0.06]"
+                          : "border-[var(--border-subtle)] bg-[var(--bg-surface)]")
                       }
                     >
                       <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-savings text-savings-foreground">

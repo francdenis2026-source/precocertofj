@@ -54,7 +54,7 @@ function SearchResultsPage() {
 
       <main className="mx-auto w-full max-w-[1600px] flex flex-col md:flex-row min-h-[calc(100vh-80px)]">
         {/* Sidebar oculta em mobile conforme solicitação */}
-        <aside className="hidden md:flex w-[400px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex-col shrink-0">
+        <aside className="hidden md:flex w-full md:w-[400px] bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] flex-col shrink-0">
           <div className="p-8 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] sticky top-0 z-20">
             <div className="flex flex-col mb-6">
               <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Filtros Avançados</h2>
