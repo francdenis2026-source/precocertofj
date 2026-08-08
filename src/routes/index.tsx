@@ -281,6 +281,11 @@ function HomePage() {
             <Link to="/cadastro">Começar a economizar</Link>
           </Button>
         </section>
+
+        {/* Monitoramento em Tempo Real - Apenas se não houver erro de permissão */}
+        <section id="monitoramento" className="pt-20 border-t border-[var(--border-subtle)]">
+          <RealtimeMonitoringDashboard />
+        </section>
       </main>
 
       <Footer />

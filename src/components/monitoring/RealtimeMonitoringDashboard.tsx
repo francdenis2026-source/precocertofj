@@ -35,25 +35,7 @@ export function RealtimeMonitoringDashboard() {
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / pageSize);
 
-  if (error) {
-    return (
-      <div className="p-12 rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-center shadow-2xl">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[var(--danger)]/10 mb-6">
-          <ShieldAlert className="h-8 w-8 text-[var(--danger)] opacity-80" />
-        </div>
-        <h4 className="t-h3 mb-3">Acesso Restrito</h4>
-        <p className="t-small max-w-sm mx-auto mb-8">
-          {error.message || "Você não tem permissão para acessar esta funcionalidade de monitoramento."}
-        </p>
-        <button 
-          onClick={() => window.location.href = '/'}
-          className="pc-button-secondary"
-        >
-          Voltar para o Início
-        </button>
-      </div>
-    );
-  }
+  if (error) return null; // Não renderizar componente de erro/unauthorized na home para visitantes
 
   if (isLoading) {
     return (
