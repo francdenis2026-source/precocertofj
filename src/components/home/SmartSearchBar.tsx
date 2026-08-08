@@ -169,18 +169,18 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
         }}
         role="search"
         className={cn(
-          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/20 bg-[var(--bg-surface)]/80 backdrop-blur-xl pl-4 pr-1.5 shadow-2xl transition-all duration-500",
-          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/10 focus-within:bg-[var(--bg-surface)]",
-          compact ? "h-12" : "h-14 sm:h-[72px]",
+          "group relative flex items-center gap-2 rounded-2xl border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)]/90 backdrop-blur-2xl pl-4 pr-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500",
+          "focus-within:border-[var(--brand-primary)] focus-within:ring-4 focus-within:ring-[var(--brand-primary)]/20 focus-within:bg-[var(--bg-surface)] focus-within:scale-[1.02]",
+          compact ? "h-12" : "h-14 sm:h-[80px]",
           open ? "z-[101]" : "z-auto"
         )}
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--brand-primary)]/10 text-[var(--brand-primary)] transition-transform duration-500 group-focus-within:scale-110 group-focus-within:bg-[var(--brand-primary)] group-focus-within:text-white">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-[var(--pc-brand-primary-soft)] text-white shadow-lg transition-transform duration-500 group-focus-within:scale-110">
           <Search
             aria-hidden="true"
             className={cn(
-              "transition-colors",
-              compact ? "h-4 w-4" : "h-5 w-5",
+              "transition-transform group-focus-within:rotate-12",
+              compact ? "h-5 w-5" : "h-6 w-6",
             )}
           />
         </div>
@@ -199,15 +199,15 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
           onKeyDown={onKeyDown}
           type="text"
           autoComplete="off"
-          placeholder="Qual produto você busca hoje?"
+          placeholder="O que você quer economizar hoje?"
           aria-label="Pesquisar produtos"
           aria-expanded={showPanel}
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
           role="combobox"
           className={cn(
-            "flex-1 min-w-0 bg-transparent outline-none font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] placeholder:font-medium",
-            compact ? "text-[14px]" : "text-base sm:text-lg",
+            "flex-1 min-w-0 bg-transparent outline-none font-bold text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]/70 placeholder:font-semibold tracking-tight",
+            compact ? "text-[15px]" : "text-lg sm:text-xl",
           )}
         />
         {q && (
@@ -220,45 +220,47 @@ export function SmartSearchBar({ compact = false, onFocusChange }: { compact?: b
             aria-label="Limpar pesquisa"
             className="shrink-0 rounded-full p-2 text-[var(--text-tertiary)] transition-all hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)]"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         )}
         <button
           type="submit"
           className={cn(
-            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-6 font-bold tracking-tight text-[var(--text-on-brand)] shadow-[0_4px_12px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.4)] active:scale-[0.96]",
-            compact ? "h-9 text-[14px]" : "h-12 text-[16px] sm:h-14",
+            "shrink-0 rounded-xl bg-[var(--brand-primary)] px-8 font-black uppercase tracking-tighter text-[var(--text-on-brand)] shadow-[0_8px_20px_rgba(59,130,246,0.3)] transition-all hover:bg-[var(--pc-brand-primary-soft)] hover:shadow-[0_10px_25px_rgba(59,130,246,0.4)] active:scale-[0.96]",
+            compact ? "h-9 text-[12px]" : "h-14 text-[14px] sm:h-16 sm:text-[15px]",
           )}
         >
-          Buscar agora
+          Pesquisar
         </button>
       </form>
 
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {showPanel && (
           <>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/60 backdrop-blur-sm lg:backdrop-blur-md"
+              className="fixed inset-0 z-[60] bg-[var(--bg-base)]/80 backdrop-blur-md"
               onMouseDown={() => setOpen(false)}
             />
             
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              initial={{ opacity: 0, y: 10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-[-16px] right-[-16px] top-[-16px] z-[100] overflow-hidden rounded-[24px] border border-[var(--brand-primary)]/30 bg-[var(--bg-surface)] text-left shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] min-w-[340px] lg:min-w-[500px]"
+              className="absolute left-0 right-0 top-full mt-4 z-[100] overflow-hidden rounded-[24px] border border-[var(--border-strong)] bg-[var(--bg-surface)] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]"
             >
-              <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/50 px-6 py-4 flex items-center justify-between">
-                 <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--brand-primary)]">Motor de Busca Inteligente</span>
+              <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/30 px-6 py-4 flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]">
+                       <Zap className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Inteligência PreçoCerto Ativa</span>
                  </div>
-                 {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--brand-primary)]" />}
+                 {loading && <Loader2 className="h-4 w-4 animate-spin text-[var(--brand-primary)]" />}
               </div>
 
               <div className="p-1">
