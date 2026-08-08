@@ -1,6 +1,6 @@
 import { type ProductGroup } from "@/lib/price-search.functions";
 import { Price } from "@/components/ds/Price";
-import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe } from "lucide-react";
+import { Clock, Store, ArrowRight, ShoppingBag, ChevronDown, ChevronUp, Tag, BarChart3, Medal, Download, Share2, Filter, Bookmark, Check, QrCode, Lock, Globe, Printer } from "lucide-react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -320,6 +320,16 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                             Comparativo de Preços
                           </div>
                           <div className="flex items-center gap-2 mr-8">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handlePrint}
+                              title="Imprimir Comparação"
+                              aria-label="Imprimir Comparação"
+                            >
+                              <Printer size={14} />
+                            </Button>
                             <Button 
                               variant="ghost" 
                               size="sm" 
