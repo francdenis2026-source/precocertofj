@@ -711,7 +711,7 @@ function ComparisonMatrix({
                     />
                   )}
                   {isRec && (
-                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-accent px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-bg-base">
                       <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
                     </span>
                   )}
@@ -778,7 +778,7 @@ function ComparisonMatrix({
                     className={cn(
                       "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent disabled:cursor-wait disabled:opacity-70",
                       isRec
-                        ? "bg-brand-accent text-brand-navy shadow-elev-1 hover:brightness-105"
+                        ? "bg-brand-accent text-bg-base shadow-elev-1 hover:brightness-105"
                         : "border border-subtle bg-base text-primary hover:border-brand-accent hover:text-brand-accent",
                     )}
                   >
