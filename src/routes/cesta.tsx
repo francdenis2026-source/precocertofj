@@ -53,7 +53,8 @@ function CestaPage() {
   const { data, isLoading, isFetching } = useQuery<Cart>({
     queryKey: ["cart"],
     queryFn: () => fetchCart(),
-    staleTime: 30_000,
+    staleTime: 1000 * 60 * 60, // 60 minutos de cache persistente no cliente
+    gcTime: 1000 * 60 * 60 * 24, // 24 horas no garbage collector
   });
 
   const removeMutation = useMutation({
@@ -87,6 +88,19 @@ function CestaPage() {
 
   const items = data?.items ?? [];
   const totalItems = items.reduce((s, it) => s + it.quantity, 0);
+
+  // Cálculo de economia total estimada
+  const totalSavings = items.reduce((acc, it) => {
+    if (it.minPrice && it.avgPrice && it.avgPrice > it.minPrice) {
+      return acc + (it.avgPrice - it.minPrice) * it.quantity;
+    }
+    return acc;
+  }, 0);
+
+  const totalMinPrice = items.reduce((acc, it) => {
+    if (it.minPrice) return acc + it.minPrice * it.quantity;
+    return acc;
+  }, 0);
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
@@ -143,6 +157,42 @@ function CestaPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            {/* Resumo de Economia no Topo (Mobile/Desktop) */}
+            {totalSavings > 0 && (
+              <div className="lg:col-span-12 animate-in fade-in slide-in-from-top-4 duration-700">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 rounded-[var(--radius-2xl)] bg-gradient-to-r from-[var(--brand-primary)] to-[#2563EB] text-white shadow-2xl shadow-[var(--brand-primary)]/20 border border-white/10">
+                  <div className="flex items-center gap-6">
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md">
+                      <TrendingDown size={32} className="text-white" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-black uppercase tracking-[0.2em] opacity-80">Economia Estimada</h3>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-black tracking-tighter">
+                          <Price value={totalSavings} className="text-white" />
+                        </span>
+                        <span className="text-[12px] font-bold uppercase tracking-widest opacity-70">nesta compra</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="hidden md:block h-12 w-px bg-white/20" />
+
+                  <div className="flex flex-col items-center md:items-start gap-1">
+                    <p className="text-[13px] font-bold text-white/90">Sua lista está otimizada com os melhores preços de Feijó.</p>
+                    <p className="text-[11px] font-black uppercase tracking-widest text-white/60">Baseado no menor valor verificado hoje</p>
+                  </div>
+
+                  <Button asChild className="bg-white text-[var(--brand-primary)] hover:bg-white/90 h-14 px-8 rounded-xl font-black uppercase tracking-widest text-[12px] shadow-lg shadow-black/10 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <Link to="/lista">
+                      Ver Ofertas
+                      <ArrowRight className="ml-3 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className="lg:col-span-8 space-y-6">
                <h2 className="text-[12px] font-black uppercase tracking-[0.25em] text-[var(--brand-primary)]">Itens Selecionados</h2>
                <div className="grid gap-4">
@@ -204,11 +254,33 @@ function CestaPage() {
                   <div className="rounded-[var(--radius-2xl)] bg-[var(--bg-surface-elevated)]/40 p-8 border border-[var(--border-subtle)] shadow-sm">
                     <h2 className="text-[14px] font-black uppercase tracking-widest mb-6 border-b border-[var(--border-subtle)] pb-4">Resumo da Cesta</h2>
                     <div className="space-y-4 mb-8">
-                      <p className="text-[14px] font-bold text-[var(--text-secondary)] leading-relaxed">Localizamos os melhores preços para estes {totalItems} itens em todos os mercados de Feijó.</p>
+                      <div className="flex justify-between items-center text-[13px] font-bold text-[var(--text-secondary)]">
+                        <span>Subtotal Estimado</span>
+                        <Price value={totalMinPrice + totalSavings} size="sm" />
+                      </div>
+                      {totalSavings > 0 && (
+                        <div className="flex justify-between items-center text-[13px] font-black text-[var(--success)] bg-[var(--success)]/5 p-3 rounded-xl border border-[var(--success)]/10">
+                          <span>Economia Aplicada</span>
+                          <span className="flex items-center gap-1">
+                            -<Price value={totalSavings} size="sm" />
+                          </span>
+                        </div>
+                      )}
+                      <div className="pt-4 border-t border-[var(--border-subtle)] flex justify-between items-end">
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[var(--text-tertiary)]">Total Estimado</span>
+                          <div className="text-2xl font-black tracking-tighter">
+                            <Price value={totalMinPrice} />
+                          </div>
+                        </div>
+                        <div className="text-right">
+                           <span className="text-[10px] font-black uppercase tracking-widest text-[var(--success)] px-2 py-1 bg-[var(--success)]/10 rounded-lg">Melhor Valor</span>
+                        </div>
+                      </div>
                     </div>
                     <Button asChild className="pc-button-primary w-full h-14 text-[13px] shadow-xl shadow-[var(--brand-primary)]/20">
                         <Link to="/lista">
-                          Ver Melhores Ofertas
+                          Gerar Lista de Compras
                           <ArrowRight className="ml-3 h-5 w-5" />
                         </Link>
                     </Button>
