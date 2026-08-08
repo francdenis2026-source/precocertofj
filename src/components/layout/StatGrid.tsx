@@ -46,7 +46,7 @@ export function StatGrid({ stats, className }: { stats: Stat[]; className?: stri
                     className={cn(
                       "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-bold uppercase tracking-wider text-[10px]",
                       s.delta.direction === "down" ? "bg-[var(--danger)]/10 text-[var(--danger)]" : 
-                      s.delta.direction === "flat" ? "bg-muted text-[var(--text-tertiary)]" : 
+                      s.delta.direction === "flat" ? "bg-[var(--bg-surface-elevated)] text-[var(--text-tertiary)]" : 
                       "bg-[var(--success)]/10 text-[var(--success)]"
                     )}
                   >
