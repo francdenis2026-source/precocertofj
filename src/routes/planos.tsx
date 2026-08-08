@@ -738,7 +738,7 @@ function ComparisonMatrix({
           {rows.map((row, i) => (
             <tr
               key={row.label}
-              className={i % 2 === 0 ? "bg-muted/25" : "bg-transparent"}
+              className={i % 2 === 0 ? "bg-surface-elevated/25" : "bg-transparent"}
             >
               <th
                 scope="row"
