@@ -13,64 +13,71 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
   return (
     <motion.div
       layout
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3 }}
+      whileHover={{ y: -6, scale: 1.01 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       className="h-full"
     >
       <Link 
         to="/loja/$id/produto/$slug" 
         params={{ id: bestPrice.establishmentId || storeId, slug: group.productName.toLowerCase().replace(/\s+/g, '-') }}
         search={{ q: "", from: "" }}
-        className="group flex flex-col h-full pc-card p-0 overflow-hidden bg-[var(--bg-surface)]"
+        className="group flex flex-col h-full pc-card p-0 overflow-hidden bg-[var(--bg-surface)] ring-1 ring-[var(--border-subtle)] hover:ring-[var(--brand-primary)]/30 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] transition-all duration-500"
       >
-        <div className="relative aspect-square bg-[var(--bg-base)]/50 flex items-center justify-center p-8 transition-colors group-hover:bg-[var(--bg-surface-elevated)]/50">
+        <div className="relative aspect-square bg-gradient-to-b from-[var(--bg-base)]/80 to-[var(--bg-base)]/40 flex items-center justify-center p-6 sm:p-8 transition-all duration-500 group-hover:bg-[var(--bg-surface-elevated)]/30">
           <ProductImage 
             name={group.productName} 
             alt={group.productName}
-            className="object-contain w-full h-full drop-shadow-sm transition-transform duration-500 group-hover:scale-105" 
+            className="object-contain w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.25)] transition-transform duration-700 ease-out group-hover:scale-110" 
           />
           
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          
           {isBest && (
-            <div className="absolute top-3 left-3 z-10">
-               <span className="pc-badge bg-[var(--success)] text-white shadow-sm">
+            <div className="absolute top-4 left-4 z-10">
+               <span className="pc-badge bg-[var(--success)] text-white shadow-[0_4px_12px_rgba(16,185,129,0.3)] font-black text-[10px] uppercase tracking-wider py-1 px-3">
                   Melhor Preço
                </span>
             </div>
           )}
 
-          {savingsPct > 10 && (
-             <div className="absolute top-3 right-3 z-10">
-                <span className="pc-badge bg-[var(--brand-primary)] text-white shadow-sm">
-                   -{savingsPct}%
+          {savingsPct > 0 && (
+             <div className="absolute top-4 right-4 z-10">
+                <span className="pc-badge bg-[var(--brand-primary)] text-white shadow-[0_4px_12px_rgba(59,130,246,0.3)] font-black text-[10px] uppercase tracking-wider py-1 px-3">
+                   Economia {savingsPct}%
                 </span>
              </div>
           )}
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
-          <div className="flex-1 mb-4">
-            <h3 className="text-[16px] font-bold text-[var(--text-primary)] leading-snug line-clamp-2 mb-2 group-hover:text-[var(--brand-primary)] transition-colors">
+        <div className="p-6 flex flex-col flex-1 bg-[var(--bg-surface)]">
+          <div className="flex-1 mb-5">
+            <h3 className="text-[17px] font-bold text-[var(--text-primary)] leading-snug line-clamp-2 mb-3 group-hover:text-[var(--brand-primary)] transition-colors duration-300">
               {group.productName}
             </h3>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[11px] font-bold text-[var(--text-secondary)] flex items-center gap-1">
-                <Store className="h-3 w-3" /> {bestPrice.marketName}
-              </span>
-              <div className="w-1 h-1 rounded-full bg-[var(--border-subtle)]" />
-              <span className="text-[11px] font-bold text-[var(--text-tertiary)] flex items-center gap-1">
-                <Clock className="h-3 w-3" /> Hoje
-              </span>
+              <div className="flex items-center gap-2 px-2 py-1 rounded-md bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] shadow-sm">
+                <Store className="h-3.5 w-3.5 text-[var(--brand-primary)]" />
+                <span className="text-[12px] font-bold text-[var(--text-secondary)] whitespace-nowrap">
+                  {bestPrice.marketName}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-tertiary)]">
+                <Clock className="h-3.5 w-3.5" />
+                <span>Hoje</span>
+              </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-tertiary)]">A partir de</span>
-              <Price value={bestPrice.price} size="lg" className="text-[20px] font-bold text-[var(--text-primary)]" />
+          <div className="pt-5 border-t border-[var(--border-subtle)] flex items-end justify-between gap-4">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">Menor Preço Local</span>
+              <Price value={bestPrice.price} size="lg" className="text-[22px] font-black text-[var(--text-primary)] tracking-tight" />
             </div>
-            <div className="h-9 w-9 rounded-[var(--radius-md)] bg-[var(--bg-surface-elevated)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white transition-all">
-              <ArrowRight size={18} />
-            </div>
+            
+            <button className="h-10 px-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center gap-2 text-[12px] font-bold text-[var(--text-secondary)] group-hover:bg-[var(--brand-primary)] group-hover:text-white group-hover:border-[var(--brand-primary)] transition-all duration-300">
+              Detalhes <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </button>
           </div>
         </div>
       </Link>

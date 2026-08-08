@@ -50,10 +50,10 @@ function SearchResultsPage() {
       <SiteHeader variant="solid" />
 
       
-      <main className="mx-auto max-w-[1600px] px-4 py-8 md:px-8">
-        <div ref={anchorRef} className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr,380px]">
+      <main className="mx-auto max-w-[1600px] px-4 py-12 md:px-8">
+        <div ref={anchorRef} className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr,400px]">
           {/* Main Content Area */}
-          <div className="space-y-12 min-h-[640px] [overflow-anchor:none]">
+          <div className="space-y-16 min-h-[640px] [overflow-anchor:none]">
             {isPending && !result ? (
               <div className="space-y-8" aria-busy="true">
                 <Skeleton className="h-[320px] w-full rounded-[40px]" />
