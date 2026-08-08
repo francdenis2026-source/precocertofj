@@ -94,7 +94,7 @@ function PriceBase({
       className={cn("pc-price", SIZE_CLASS[size], TONE_CLASS[tone], layoutClass, className)}
       aria-label={srLabel ?? `${digits.replace(",", " reais e ")} centavos`}
     >
-      {prefix !== false && <span className="pc-price__prefix mr-0.5" aria-hidden="true">{prefix}</span>}
+      {prefix !== false && <span className="pc-price__prefix mr-0.5 select-none" aria-hidden="true">{prefix}</span>}
       <span className="pc-price__value tabular-nums">{digits}</span>
 
       {suffix ? (

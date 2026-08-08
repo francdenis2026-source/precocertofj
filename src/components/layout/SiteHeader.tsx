@@ -55,7 +55,7 @@ export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
           <div className="flex items-center gap-8">
             <Logo 
               variant={isOverlay ? "on-dark" : "on-light"} 
-              className="[&_img]:h-9 [&_img]:w-9 [&_span]:text-[20px]" 
+              className="[&_.pcsb-logo-mark]:h-9 [&_.pcsb-logo-mark]:w-9" 
             />
 
             <nav className="hidden lg:flex items-center gap-6">
@@ -153,7 +153,7 @@ export function SiteHeader({ variant = "solid" }: SiteHeaderProps) {
               className="fixed right-0 top-0 bottom-0 z-[120] w-[280px] bg-white shadow-2xl lg:hidden flex flex-col"
             >
               <div className="h-[68px] px-6 flex items-center justify-between border-b border-[var(--border-base)]">
-                <Logo compact className="[&_img]:h-8 [&_img]:w-8" />
+                <Logo compact className="[&_.pcsb-logo-mark]:h-8 [&_.pcsb-logo-mark]:w-8" />
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-[var(--text-primary)]">
                   <X size={24} />
                 </button>
