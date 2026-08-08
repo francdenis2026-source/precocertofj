@@ -143,6 +143,24 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
       description: "Você pode acessá-la em Perfil > Comparações Salvas."
     });
   };
+
+  const handleShareComparison = () => {
+    const shareData = {
+      title: `PreçoCerto - Comparação: ${group.productName}`,
+      text: `Veja onde encontrar ${group.productName} pelo menor preço (R$ ${bestPrice.price.toFixed(2).replace('.', ',')} no ${bestPrice.marketName})`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {
+        navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copiado para a área de transferência!");
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copiado para a área de transferência!");
+    }
+  };
   
   return (
     <div className="relative overflow-hidden rounded-[var(--radius-xl)]">
@@ -252,7 +270,17 @@ export function PremiumOfferCard({ group, isBest, storeId = "general" }: { group
                               variant="ghost" 
                               size="sm" 
                               className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
+                              onClick={handleShareComparison}
+                              title="Compartilhar Link"
+                            >
+                              <Share2 size={14} />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 px-2 text-[var(--text-tertiary)] hover:text-[var(--brand-primary)]"
                               onClick={handleExportPDF}
+                              title="Exportar PDF"
                             >
                               <Download size={14} />
                             </Button>
