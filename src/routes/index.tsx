@@ -356,14 +356,8 @@ function HomePage() {
             </aside>
         </div>
 
-        <section aria-labelledby="realtime" className="mt-12 border-t border-[var(--border-subtle)] pt-12">
-          <SectionHeading
-            id="realtime"
-            kicker="Painel vivo"
-            title="Monitoramento dos mercados em tempo real"
-            description="Uma visão rotativa do que cada mercado cadastrado está ofertando agora."
-          />
-          <div className="mx-auto max-w-4xl">
+        <section id="realtime" aria-labelledby="realtime" className="mt-20 border-t border-[var(--border-subtle)] pt-20">
+          <div className="mx-auto max-w-7xl">
             <RealtimeMonitoringDashboard />
           </div>
         </section>
