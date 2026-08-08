@@ -215,7 +215,7 @@ function HomePage() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-10">
+      <main className="mx-auto max-w-[1440px] px-4 pb-24 md:px-8 -mt-12 relative z-0">
         {/* Trust bar integrated into hero flow */}
         <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
           <TrustStat label="Preços Verificados" value={stats?.priceRecords} />
